@@ -88,7 +88,7 @@ class QtImg(QtWidgets.QWidget, Ui_Img):
         self.graphicsView.setRenderHints(QPainter.Antialiasing | QPainter.HighQualityAntialiasing |
                                          QPainter.SmoothPixmapTransform)
         self.graphicsView.setCacheMode(self.graphicsView.CacheBackground)
-        self.graphicsView.setViewportUpdateMode(self.graphicsView.SmartViewportUpdate)
+        # self.graphicsView.setViewportUpdateMode(self.graphicsView.SmartViewportUpdate)
 
         self.graphicsItem = QGraphicsPixmapItem()
         self.graphicsItem.setFlags(QGraphicsPixmapItem.ItemIsFocusable |

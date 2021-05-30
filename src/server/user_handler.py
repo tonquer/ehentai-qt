@@ -71,14 +71,16 @@ class GetIndexInfoReqHandler(object):
     def __call__(self, task: Task):
         bookList = []
         maxPages = 1
+        st = Status.NetError
         try:
             bookList, maxPages = ToolUtil.ParseBookIndex(task.res.raw.text)
             from src.book.book import BookMgr
             BookMgr().UpdateBookInfoList(bookList)
+            st = Status.Ok
         except Exception as es:
             Log.Error(es)
         if task.backParam:
-            QtTask().taskBack.emit(task.backParam, json.dumps({"bookList": [i.baseInfo.id for i in bookList], "pages": maxPages}))
+            QtTask().taskBack.emit(task.backParam, json.dumps({"st": st, "bookList": [i.baseInfo.id for i in bookList], "pages": maxPages}))
 
 
 @handler(req.BookInfoReq)

@@ -212,13 +212,6 @@ class QtBookInfo(QtWidgets.QWidget, Ui_BookInfo):
     def LoadHistory(self):
         return
 
-    def ClickCategoriesItem(self, item):
-        text = item.text()
-        self.owner().userForm.listWidget.setCurrentRow(1)
-        self.owner().searchForm.searchEdit.setText("")
-        self.owner().searchForm.OpenSearchCategories(text)
-        return
-
     def ClickTagsItem(self, item):
         text = item.text()
         self.owner().userForm.listWidget.setCurrentRow(1)

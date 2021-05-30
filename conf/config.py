@@ -30,7 +30,7 @@ Encode = 0
 Waifu2xThread = 2
 Format = "jpg"
 Waifu2xPath = "waifu2x"
-IsOpenWaifu = True
+IsOpenWaifu = False
 
 LookModel = 0       # 默认值
 DownloadModel = 0   # 默认值

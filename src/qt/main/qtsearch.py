@@ -8,6 +8,7 @@ from src.qt.com.qtlistwidget import QtBookList, QtIntLimit, QtCategoryList
 from src.server import Server, req, Log, json
 
 from src.qt.util.qttask import QtTask
+from src.util.status import Status
 from ui.search import Ui_search
 
 
@@ -68,51 +69,29 @@ class QtSearch(QtWidgets.QWidget, Ui_search):
     def SendSearch(self, data, page):
         self.owner().loadingForm.show()
         self.index = 1
-        sort = ["dd", "da", "ld", "vd"]
-        sortId = sort[self.comboBox.currentIndex()]
         QtTask().AddHttpTask(req.GetIndexInfoReq(page, data), self.SendSearchBack, page)
-
-    def OpenSearchCategories(self, categories):
-        self.bookList.clear()
-        self.categories = categories
-        self.searchEdit.setPlaceholderText(categories)
-        self.bookList.UpdatePage(1, 1)
-        self.bookList.UpdateState()
-        self.SendSearchCategories(1)
-
-    def SendSearchCategories(self, page):
-        self.owner().loadingForm.show()
-        # TODO 搜索和分类检索不太一样，切页时会有点问题
-        sort = ["dd", "da", "ld", "vd"]
-        sortId = sort[self.comboBox.currentIndex()]
-        self.owner().qtTask.AddHttpTask(
-            lambda x: Server().Send(req.CategoriesSearchReq(page, self.categories, sortId), bakParam=x),
-            self.SendSearchBack)
-
-    def InitKeyWord(self):
-        self.owner().qtTask.AddHttpTask(
-            lambda x: Server().Send(req.GetKeywords(), bakParam=x), self.SendKeywordBack)
 
     def SendSearchBack(self, raw, page):
         self.owner().loadingForm.close()
         try:
             self.bookList.UpdateState()
             data = json.loads(raw)
-            pages =  data.get("pages")
-            self.bookList.UpdatePage(page, pages)
-            self.jumpLine.setValidator(QtIntLimit(1, pages, self))
-            pageText = "页：" + str(self.bookList.page) + "/" + str(self.bookList.pages)
-            self.label.setText(pageText)
-            for bookId in data.get("bookList"):
-                _id = bookId
-                info = BookMgr().GetBook(bookId)
-                title = info.baseInfo.title
-                url = info.baseInfo.imgUrl
-                self.bookList.AddBookItem(_id, title, "", url, "", "")
-            # self.CheckCategoryShowItem()
-            # else:
-                # QtWidgets.QMessageBox.information(self, '未搜索到结果', "未搜索到结果", QtWidgets.QMessageBox.Yes)
-                # self.owner().msgForm.ShowError("未搜索到结果")
+            st = data.get("st")
+            if st == Status.Ok:
+                pages =  data.get("pages")
+                self.bookList.UpdatePage(page, pages)
+                self.jumpLine.setValidator(QtIntLimit(1, pages, self))
+                pageText = "页：" + str(self.bookList.page) + "/" + str(self.bookList.pages)
+                self.label.setText(pageText)
+                for bookId in data.get("bookList"):
+                    _id = bookId
+                    info = BookMgr().GetBook(bookId)
+                    title = info.baseInfo.title
+                    url = info.baseInfo.imgUrl
+                    self.bookList.AddBookItem(_id, title, "", url, "", "")
+                # self.CheckCategoryShowItem()
+            else:
+                self.owner().msgForm.ShowError(st)
         except Exception as es:
             Log.Error(es)
         pass
@@ -150,26 +129,17 @@ class QtSearch(QtWidgets.QWidget, Ui_search):
             return
         self.bookList.page = page
         self.bookList.clear()
-        if not self.categories:
-            self.SendSearch(self.data, page)
-        else:
-            self.SendSearchCategories(page)
+        self.SendSearch(self.data, page)
         return
 
     def LoadNextPage(self):
-        if not self.categories:
-            self.SendSearch(self.data, self.bookList.page + 1)
-        else:
-            self.SendSearchCategories(self.bookList.page + 1)
+        self.SendSearch(self.data, self.bookList.page + 1)
         return
 
     def ChangeSort(self, pos):
         self.bookList.page = 1
         self.bookList.clear()
-        if not self.categories:
-            self.SendSearch(self.data, 1)
-        else:
-            self.SendSearchCategories(1)
+        self.SendSearch(self.data, 1)
 
     def ClickCategoryListItem(self, item):
         isClick = self.categoryList.ClickItem(item)
