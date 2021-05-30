@@ -1,4 +1,4 @@
-# ehentai-windows | [picacg-windows](https://github.com/tonquer/picacg-windows)
+# [picacg-windows](https://github.com/tonquer/picacg-windows) | ehentai-windows
 - E站window客户端（现已支持Linux和macOS），界面使用QT。
 - 该项目仅供技术研究使用，请勿用于其他用途。
 - 如果觉得本项目对你有所帮助，请点个star关注，感谢支持
