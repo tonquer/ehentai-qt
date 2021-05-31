@@ -6,7 +6,6 @@
 ## waifu2x功能
 - waifu2x是用来提高图片分辨率和去噪点的功能， 介绍 "https://github.com/nagadomi/waifu2x"
 - waifu2x-python，修改了waifu2x-ncnn-vulkan部分功能
-- 由于bika限制上传图片的大小，所以部分图片（尤其是彩图）放在电脑大屏幕上观看会非常糊，所有通过waifu2x功能让图片在电脑上有更好的观感。
 - waifu2x功能使用的是 "https://github.com/tonquer/waifu2x-ncnn-vulkan-python" 改进而来，打包成lib目录下的waifu2x.pyd。
 
 ## 如何使用
