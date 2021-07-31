@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Favorite_Info</class>
+ <widget class="QWidget" name="Favorite_Info">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>542</width>
+    <height>423</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <layout class="QGridLayout" name="gridLayout_2">
+   <item row="1" column="0">
+    <widget class="QLineEdit" name="lineEdit">
+     <property name="minimumSize">
+      <size>
+       <width>0</width>
+       <height>200</height>
+      </size>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="0">
+    <widget class="QComboBox" name="comboBox">
+     <item>
+      <property name="text">
+       <string>收藏夹0</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>收藏夹1</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>收藏夹2</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>收藏夹3</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>收藏夹4</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>收藏夹5</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>收藏夹6</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>收藏夹7</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>收藏夹8</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>收藏夹9</string>
+      </property>
+     </item>
+    </widget>
+   </item>
+   <item row="3" column="0">
+    <widget class="QPushButton" name="pushButton">
+     <property name="text">
+      <string>保存</string>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="0">
+    <widget class="QLabel" name="nameLabel">
+     <property name="text">
+      <string>TextLabel</string>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="0">
+    <spacer name="verticalSpacer">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>40</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>pushButton</sender>
+   <signal>clicked()</signal>
+   <receiver>Favorite_Info</receiver>
+   <slot>SaveFavorite()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>292</x>
+     <y>272</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>635</x>
+     <y>277</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>SaveFavorite()</slot>
+ </slots>
+</ui>

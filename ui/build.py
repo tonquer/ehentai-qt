@@ -1,5 +1,4 @@
 import os
-import subprocess
 
 for root, dirs, filenames in os.walk("./"):
     for name in filenames:

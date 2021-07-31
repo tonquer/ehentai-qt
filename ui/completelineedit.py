@@ -1,8 +1,7 @@
-import json
 import re
 
-from PySide2.QtCore import Qt, QStringListModel, QPoint, QEvent
-from PySide2.QtWidgets import QApplication, QLineEdit, QListView, QCompleter, QWidget, QHBoxLayout
+from PySide2.QtCore import Qt, QStringListModel, QPoint
+from PySide2.QtWidgets import QLineEdit, QListView
 
 
 class CompleteLineEdit(QLineEdit):

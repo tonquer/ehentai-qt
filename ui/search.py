@@ -13,26 +13,23 @@ from PySide2.QtGui import *
 from PySide2.QtWidgets import *
 
 from .completelineedit import CompleteLineEdit
+from .qtlistwidget import QtBookList
 
 
 class Ui_search(object):
     def setupUi(self, search):
         if not search.objectName():
             search.setObjectName(u"search")
-        search.resize(613, 585)
+        search.resize(827, 585)
         self.gridLayout_2 = QGridLayout(search)
         self.gridLayout_2.setObjectName(u"gridLayout_2")
-        self.bookLayout = QGridLayout()
-        self.bookLayout.setObjectName(u"bookLayout")
-
-        self.gridLayout_2.addLayout(self.bookLayout, 0, 0, 1, 1)
-
         self.horizontalLayout = QHBoxLayout()
         self.horizontalLayout.setObjectName(u"horizontalLayout")
         self.searchEdit = CompleteLineEdit(search)
         self.searchEdit.setObjectName(u"searchEdit")
         self.searchEdit.setMinimumSize(QSize(0, 30))
         self.searchEdit.setMaximumSize(QSize(16777215, 30))
+        self.searchEdit.setStyleSheet(u"QLineEdit {background-color:transparent;}")
 
         self.horizontalLayout.addWidget(self.searchEdit)
 
@@ -52,27 +49,67 @@ class Ui_search(object):
 
         self.horizontalLayout.addWidget(self.searchButton)
 
+        self.horizontalSpacer_2 = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
+
+        self.horizontalLayout.addItem(self.horizontalSpacer_2)
+
+        self.line_4 = QFrame(search)
+        self.line_4.setObjectName(u"line_4")
+        self.line_4.setFrameShape(QFrame.VLine)
+        self.line_4.setFrameShadow(QFrame.Sunken)
+
+        self.horizontalLayout.addWidget(self.line_4)
+
         self.label = QLabel(search)
         self.label.setObjectName(u"label")
-        self.label.setMinimumSize(QSize(0, 30))
+        self.label.setMinimumSize(QSize(60, 30))
         self.label.setMaximumSize(QSize(16777215, 30))
 
         self.horizontalLayout.addWidget(self.label)
 
-        self.jumpLine = QLineEdit(search)
-        self.jumpLine.setObjectName(u"jumpLine")
+        self.line_5 = QFrame(search)
+        self.line_5.setObjectName(u"line_5")
+        self.line_5.setFrameShape(QFrame.VLine)
+        self.line_5.setFrameShadow(QFrame.Sunken)
 
-        self.horizontalLayout.addWidget(self.jumpLine)
+        self.horizontalLayout.addWidget(self.line_5)
+
+        self.spinBox = QSpinBox(search)
+        self.spinBox.setObjectName(u"spinBox")
+        self.spinBox.setMinimumSize(QSize(50, 0))
+        self.spinBox.setStyleSheet(u"background-color:transparent;")
+        self.spinBox.setMinimum(1)
+        self.spinBox.setMaximum(1)
+
+        self.horizontalLayout.addWidget(self.spinBox)
+
+        self.line_6 = QFrame(search)
+        self.line_6.setObjectName(u"line_6")
+        self.line_6.setFrameShape(QFrame.VLine)
+        self.line_6.setFrameShadow(QFrame.Sunken)
+
+        self.horizontalLayout.addWidget(self.line_6)
 
         self.jumpPage = QPushButton(search)
         self.jumpPage.setObjectName(u"jumpPage")
-        self.jumpPage.setMinimumSize(QSize(0, 30))
+        self.jumpPage.setMinimumSize(QSize(60, 30))
         self.jumpPage.setMaximumSize(QSize(16777215, 30))
 
         self.horizontalLayout.addWidget(self.jumpPage)
 
 
         self.gridLayout_2.addLayout(self.horizontalLayout, 1, 0, 1, 1)
+
+        self.bookLayout = QGridLayout()
+        self.bookLayout.setObjectName(u"bookLayout")
+        self.bookList = QtBookList(search)
+        self.bookList.setObjectName(u"bookList")
+        self.bookList.setStyleSheet(u"QListWidget {background-color:transparent;}")
+
+        self.bookLayout.addWidget(self.bookList, 0, 0, 1, 1)
+
+
+        self.gridLayout_2.addLayout(self.bookLayout, 0, 0, 1, 1)
 
 
         self.retranslateUi(search)

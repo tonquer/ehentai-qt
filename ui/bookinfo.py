@@ -12,6 +12,8 @@ from PySide2.QtCore import *
 from PySide2.QtGui import *
 from PySide2.QtWidgets import *
 
+from .qtlistwidget import QtBookList
+
 
 class Ui_BookInfo(object):
     def setupUi(self, BookInfo):
@@ -102,14 +104,10 @@ class Ui_BookInfo(object):
 
         self.horizontalLayout_2.addWidget(self.updateTick)
 
-        self.isFinished = QLabel(self.page)
-        self.isFinished.setObjectName(u"isFinished")
-        self.isFinished.setMinimumSize(QSize(80, 0))
-        self.isFinished.setMaximumSize(QSize(80, 20))
-        self.isFinished.setTextFormat(Qt.AutoText)
-        self.isFinished.setAlignment(Qt.AlignCenter)
+        self.pushButton = QPushButton(self.page)
+        self.pushButton.setObjectName(u"pushButton")
 
-        self.horizontalLayout_2.addWidget(self.isFinished)
+        self.horizontalLayout_2.addWidget(self.pushButton)
 
         self.startRead = QPushButton(self.page)
         self.startRead.setObjectName(u"startRead")
@@ -135,15 +133,59 @@ class Ui_BookInfo(object):
 
         self.tabWidget = QTabWidget(self.page)
         self.tabWidget.setObjectName(u"tabWidget")
+        self.tabWidget.setStyleSheet(u"QTabWidget:pane {border-top:0px solid #e8f3f9;background:  transparent; }")
         self.epsWidget = QWidget()
         self.epsWidget.setObjectName(u"epsWidget")
         self.epsLayout = QGridLayout(self.epsWidget)
         self.epsLayout.setObjectName(u"epsLayout")
+        self.epsListWidget = QListWidget(self.epsWidget)
+        self.epsListWidget.setObjectName(u"epsListWidget")
+        self.epsListWidget.setStyleSheet(u"QListWidget {background-color:transparent;}\n"
+"QListWidget::item {\n"
+"    background-color:rgb(251, 239, 243);\n"
+"    color: rgb(196, 95, 125);\n"
+"	border:2px solid red;\n"
+"    border-radius: 10px;\n"
+"	border-color:rgb(196, 95, 125);\n"
+"}\n"
+"/* \u9f20\u6807\u5728\u6309\u94ae\u4e0a\u65f6\uff0c\u6309\u94ae\u989c\u8272 */\n"
+" QListWidget::item:hover \n"
+"{\n"
+"    background-color:rgb(21, 85, 154);\n"
+"    border-radius: 10px;\n"
+"    color: rgb(0, 0, 0);\n"
+"}")
+
+        self.epsLayout.addWidget(self.epsListWidget, 0, 0, 1, 1)
+
         self.tabWidget.addTab(self.epsWidget, "")
         self.commentWidget = QWidget()
         self.commentWidget.setObjectName(u"commentWidget")
         self.commentLayout = QGridLayout(self.commentWidget)
         self.commentLayout.setObjectName(u"commentLayout")
+        self.listWidget = QtBookList(self.commentWidget)
+        self.listWidget.setObjectName(u"listWidget")
+        self.listWidget.setStyleSheet(u"QListWidget {background-color:transparent;}\n"
+"QListWidget::item { border-bottom: 1px solid black; }")
+
+        self.commentLayout.addWidget(self.listWidget, 0, 0, 1, 1)
+
+        self.horizontalLayout_4 = QHBoxLayout()
+        self.horizontalLayout_4.setObjectName(u"horizontalLayout_4")
+        self.commentLine = QLineEdit(self.commentWidget)
+        self.commentLine.setObjectName(u"commentLine")
+        self.commentLine.setStyleSheet(u"background-color:transparent;")
+
+        self.horizontalLayout_4.addWidget(self.commentLine)
+
+        self.commentButton = QPushButton(self.commentWidget)
+        self.commentButton.setObjectName(u"commentButton")
+
+        self.horizontalLayout_4.addWidget(self.commentButton)
+
+
+        self.commentLayout.addLayout(self.horizontalLayout_4, 1, 0, 1, 1)
+
         self.tabWidget.addTab(self.commentWidget, "")
 
         self.verticalLayout.addWidget(self.tabWidget)
@@ -161,6 +203,7 @@ class Ui_BookInfo(object):
 
         self.retranslateUi(BookInfo)
         self.startRead.clicked.connect(BookInfo.StartRead)
+        self.pushButton.clicked.connect(BookInfo.SaveFavorite)
 
         self.tabWidget.setCurrentIndex(0)
 
@@ -178,9 +221,10 @@ class Ui_BookInfo(object):
         self.label_7.setText(QCoreApplication.translate("BookInfo", u"\u6536\u85cf\u6570", None))
         self.views.setText(QCoreApplication.translate("BookInfo", u"\u6536\u85cf\u6570", None))
         self.updateTick.setText(QCoreApplication.translate("BookInfo", u"TextLabel", None))
-        self.isFinished.setText(QCoreApplication.translate("BookInfo", u"\u5b8c\u672c", None))
+        self.pushButton.setText(QCoreApplication.translate("BookInfo", u"\u6536\u85cf", None))
         self.startRead.setText(QCoreApplication.translate("BookInfo", u"\u5f00\u59cb\u9605\u8bfb", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.epsWidget), QCoreApplication.translate("BookInfo", u"Tags", None))
+        self.commentButton.setText(QCoreApplication.translate("BookInfo", u"\u53d1\u9001\u8bc4\u8bba", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.commentWidget), QCoreApplication.translate("BookInfo", u"\u8bc4\u8bba", None))
     # retranslateUi
 
