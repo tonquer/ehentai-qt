@@ -1,19 +1,15 @@
+import hmac
 import json
 import os
 import re
 import time
 import uuid
-
-import hmac
 from hashlib import sha256
 from urllib.parse import quote
 
-from bs4 import BeautifulSoup
-
-from src.util import Log
 from conf import config
-
-
+from src.util import Log
+from bs4 import BeautifulSoup, Tag
 
 
 class CTime(object):
@@ -67,6 +63,8 @@ class ToolUtil(object):
     @staticmethod
     def ParseFromData(desc, src):
         try:
+            if not src:
+                return
             if isinstance(src, str):
                 src = json.loads(src)
             for k, v in src.items():
@@ -88,6 +86,24 @@ class ToolUtil(object):
         now = int(time.time())
         day = int((int(now - time.timezone) / 86400) - (int(tick - time.timezone) / 86400))
         return time.localtime(tick), day
+
+    @staticmethod
+    def GetUpdateStr(createdTime):
+        timeArray = time.strptime(createdTime, "%Y-%m-%dT%H:%M:%S.%f%z")
+        now = int(time.time())
+        tick = int(time.mktime(timeArray)-time.timezone)
+        day = (now - tick) // (24*3600)
+        hour = (now - tick) // 3600
+        minute = (now - tick) // 60
+        second = (now - tick)
+        if day > 0:
+            return "{}天前".format(day)
+        elif hour > 0:
+            return "{}小时前".format(hour)
+        elif minute > 0:
+            return "{}分钟前".format(minute)
+        else:
+            return "{}秒前".format(second)
 
     @staticmethod
     def GetDownloadSize(downloadLen):
@@ -120,13 +136,8 @@ class ToolUtil(object):
             return 2, 3
 
     @staticmethod
-    def GetLookScaleModel(w, h, category):
-        dot = w * h
-        # 条漫不放大
-
-        if max(w, h) >= 2561:
-            return ToolUtil.GetModelByIndex(0)
-        return ToolUtil.GetModelByIndex(ToolUtil.GetLookModel(category))
+    def GetLookScaleModel(category):
+        return ToolUtil.GetModelByIndex(config.LookNoise, config.LookScale, ToolUtil.GetLookModel(category))
 
     @staticmethod
     def GetDownloadScaleModel(w, h):
@@ -135,9 +146,7 @@ class ToolUtil(object):
         if not config.CanWaifu2x:
             return {}
         import waifu2x
-        if max(w, h) >= 2561:
-            return {"model": waifu2x.MODEL_ANIME_STYLE_ART_RGB_NOISE3, "scale": 1, "index": 0}
-        return ToolUtil.GetModelByIndex(config.DownloadModel)
+        return ToolUtil.GetModelByIndex(config.DownloadNoise, config.DownloadScale, config.DownloadModel)
 
     @staticmethod
     def GetPictureFormat(data):
@@ -216,41 +225,41 @@ class ToolUtil(object):
         else:
             return config.LookModel
 
-    @staticmethod
-    def GetDownloadModel():
-        if config.DownloadModel == 0:
-            return config.Model1
-        return getattr(config, "Model"+str(config.DownloadModel), config.Model1)
 
     @staticmethod
     def GetModelAndScale(model):
         if not model:
-            return 0, 1, 1
-        model = model.get('index', 0)
-        if model == 0:
-            return 0, 3, 1
-        elif model == 1:
-            return 1, 3, 2
-        elif model == 2:
-            return 2, 3, 2
-        elif model == 3:
-            return 3, 3, 2
-        return 0, 1, 1
+            return "cunet", 1, 1
+        index = model.get('index', 0)
+        scale = model.get('scale', 0)
+        noise = model.get('noise', 0)
+        if index == 0:
+            model = "anime_style_art_rgb"
+        elif index == 1:
+            model = "cunet"
+        elif index == 2:
+            model = "photo"
+        else:
+            model = "anime_style_art_rgb"
+        return  model, noise, scale
+
 
     @staticmethod
-    def GetModelByIndex(index):
+    def GetModelByIndex(noise, scale, index):
         if not config.CanWaifu2x:
             return {}
+        if noise < 0:
+            noise = 3
         import waifu2x
         if index == 0:
-            return {"model": waifu2x.MODEL_CUNET_NO_SCALE_NOISE3, "scale": 1, "index": index}
+            return {"model": getattr(waifu2x, "MODEL_ANIME_STYLE_ART_RGB_NOISE"+str(noise)), "noise":noise, "scale": scale, "index": index}
         elif index == 1:
-            return {"model": waifu2x.MODEL_CUNET_NOISE3, "scale": 2, "index": index}
+            return {"model": getattr(waifu2x, "MODEL_CUNET_NOISE"+str(noise)), "noise":noise, "scale": scale, "index": index}
         elif index == 2:
-            return {"model": waifu2x.MODEL_PHOTO_NOISE3, "scale": 2, "index": index}
+            return {"model": getattr(waifu2x, "MODEL_PHOTO_NOISE"+str(noise)), "noise":noise, "scale": scale, "index": index}
         elif index == 3:
-            return {"model": waifu2x.MODEL_ANIME_STYLE_ART_RGB_NOISE3, "scale": 2, "index": index}
-        return {"model": waifu2x.MODEL_CUNET_NOISE3, "scale": 2, "index": index}
+            return {"model": getattr(waifu2x, "MODEL_ANIME_STYLE_ART_RGB_NOISE"+str(noise)), "noise":noise, "scale": scale, "index": index}
+        return {"model": getattr(waifu2x, "MODEL_CUNET_NOISE"+str(noise)), "noise":noise, "scale": scale, "index": index}
 
     @staticmethod
     def GetCanSaveName(name):
@@ -272,6 +281,37 @@ class ToolUtil(object):
             Log.Error(es)
         return None
 
+    @staticmethod
+    def SetIcon(self):
+        from PySide2.QtGui import QIcon, QPixmap
+        icon = QIcon()
+        pic = QPixmap()
+        from resources import resources
+        pic.loadFromData(resources.DataMgr.GetData("logo_round"))
+        icon.addPixmap(pic, QIcon.Normal, QIcon.Off)
+        self.setWindowIcon(icon)
+
+    @staticmethod
+    def DiffDays(d1, d2):
+        return (int(d1 - time.timezone) // 86400) - (int(d2 - time.timezone) // 86400)
+
+    @staticmethod
+    def GetCurZeroDatatime(tick):
+        from datetime import timedelta
+        from datetime import datetime
+        now = datetime.fromtimestamp(tick)
+        delta = timedelta(hours=now.hour, minutes=now.minute, seconds=now.second)
+        zeroDatetime = now - delta
+        return int(time.mktime(zeroDatetime.timetuple()))
+
+    @staticmethod
+    def GetTimeTickEx(strDatetime):
+        if not strDatetime:
+            return 0
+        timeArray = time.strptime(strDatetime, "%Y-%m-%d %H:%M:%S")
+        tick = int(time.mktime(timeArray))
+        return tick
+    
     @staticmethod
     def ParseBookIndex(data):
         soup = BeautifulSoup(data, features="lxml")
@@ -309,6 +349,9 @@ class ToolUtil(object):
                     pass
                 elif className == "gl4c glhide":
                     pass
+            mo = re.search("(?<={}/)\w*".format(baseInfo.id), baseInfo.bookUrl)
+            if mo:
+                baseInfo.token = mo.group()
 
         table = soup.find("table", class_="ptt")
         maxPage = 1
@@ -389,3 +432,55 @@ class ToolUtil(object):
             url += "{}={}".format(key, value)
             url += "&"
         return url.strip("&")
+
+    # 解析添加收藏
+    @staticmethod
+    def ParseAddFavorite(data):
+        soup = BeautifulSoup(data, features="lxml")
+        tag = soup.find("textarea")
+        note = tag.text
+        table = soup.find_all("input")
+        favorite = {}
+        isUpdate = False
+        for tr in table:
+            if tr.attrs.get("type") == "radio":
+                favorite[tr.attrs.get("value")] = tr.attrs.get("checked") == "checked"
+            elif tr.attrs.get("type") == "submit":
+                if tr.attrs.get("value") == "Apply Changes":
+                    isUpdate = True
+        return note, favorite, isUpdate
+
+    # 解析添加收藏夹
+    @staticmethod
+    def ParseFavorite(data):
+        soup = BeautifulSoup(data, features="lxml")
+        table = soup.find_all("div", class_="fp")
+        favorite = {}
+        for index, tr in enumerate(table):
+            count = 0
+            for tag in tr.children:
+                if isinstance(tag, Tag):
+                    if len(tag.attrs) == 1 and tag.attrs.get("style"):
+                        mo = re.search(r"\d+", tag.text)
+                        if mo:
+                            count = int(mo.group())
+                            break
+
+            favorite[index] = count
+        return favorite
+
+    @staticmethod
+    def ParseLoginUserName(data):
+        soup = BeautifulSoup(data, features="lxml")
+        table = soup.find("div", id="userlinks")
+        if not table:
+            return "", ""
+        tag = table.find("a")
+        if not tag:
+            return "", ""
+        name = tag.text
+        userId = "", ""
+        mo = re.search("(?<=showuser=)\w+", tag.attrs.get("href", ""))
+        if mo:
+            userId = mo.group()
+        return userId, name

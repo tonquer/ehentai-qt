@@ -1,17 +1,17 @@
-import os
 import threading
-import time
-import weakref
-import json
+from queue import Queue
+
+import threading
 from queue import Queue
 
 import requests
-import src.server.req as req
-import src.server.res as res
-from src.util import ToolUtil, Singleton, Log
-from conf import config
-from src.util.status import Status
 import urllib3
+
+import src.server.res as res
+from conf import config
+from src.util import ToolUtil, Singleton, Log
+from src.util.status import Status
+
 urllib3.disable_warnings()
 
 
@@ -32,6 +32,12 @@ class Task(object):
         self.cacheAndLoadPath = cacheAndLoadPath
         self.loadPath = loadPath
 
+    def GetText(self):
+        if not self.res:
+            return ""
+        if hasattr(self.res, "raw"):
+            getattr(self.res.raw, "text", "")
+        return ""
 
 class Server(Singleton, threading.Thread):
     def __init__(self) -> None:

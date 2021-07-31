@@ -1,9 +1,7 @@
-import os
 import re
 
 from src.server import Server
-from src.util import Singleton, Log
-from src.server import req
+from src.util import Singleton
 
 
 class BookBaseInfo(object):
@@ -11,6 +9,7 @@ class BookBaseInfo(object):
         self.id = 0
         self.title = ""
         self.bookUrl = ""
+        self.token = ""       # 收藏和下载使用
         self.category = ""
         self.timeStr = ""
         self.imgData = None
@@ -71,6 +70,7 @@ class BookMgr(Singleton):
         for info in bookList:
             assert isinstance(info, BookInfo)
             if info.baseInfo.id in self.books:
+                # TODO
                 continue
             self.books[info.baseInfo.id] = info
 

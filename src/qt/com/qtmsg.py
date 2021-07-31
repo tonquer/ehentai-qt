@@ -2,10 +2,10 @@
 # -*- coding: utf-8 -*-
 import sys
 
-from PySide2.QtCore import QRectF, Qt, QPropertyAnimation, pyqtProperty, \
+from PySide2.QtCore import QRectF, Qt, QPropertyAnimation, Property, \
     QPoint, QParallelAnimationGroup, QEasingCurve
 from PySide2.QtGui import QPainter, QPainterPath, QColor, QPen
-from PySide2.QtWidgets import QLabel, QWidget, QVBoxLayout, QApplication,\
+from PySide2.QtWidgets import QLabel, QWidget, QVBoxLayout, QApplication, \
     QLineEdit, QPushButton
 
 
@@ -116,7 +116,7 @@ class BubbleLabel(QWidget):
         super(BubbleLabel, self).setWindowOpacity(opacity)
 
     # 由于opacity属性不在QWidget中需要重新定义一个
-    opacity = pyqtProperty(float, windowOpacity, setWindowOpacity)
+    opacity = Property(float, windowOpacity, setWindowOpacity)
 
 
 class TestWidget(QWidget):

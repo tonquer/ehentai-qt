@@ -1,6 +1,8 @@
 from PySide2.QtGui import QCursor, Qt
 from PySide2.QtWidgets import QMenu, QApplication
 
+from src.qt.qt_main import QtOwner
+
 
 class QtBookListMenu(object):
     def __init__(self):
@@ -11,8 +13,6 @@ class QtBookListMenu(object):
         action.triggered.connect(self.CopyHandler)
         action = self.popMenu.addAction("刪除")
         action.triggered.connect(self.DelHandler)
-        action = self.popMenu.addAction("下载")
-        action.triggered.connect(self.DownloadHandler)
 
         self.bookList.setContextMenuPolicy(Qt.CustomContextMenu)
 
@@ -25,18 +25,11 @@ class QtBookListMenu(object):
             self.popMenu.exec_(QCursor.pos())
         pass
 
-    def DownloadHandler(self):
-        selected = self.bookList.selectedItems()
-        for item in selected:
-            widget = self.bookList.itemWidget(item)
-            self.owner().epsInfoForm.OpenEpsInfo(widget.GetId())
-        pass
-
     def OpenBookInfoHandler(self):
         selected = self.bookList.selectedItems()
         for item in selected:
             widget = self.bookList.itemWidget(item)
-            self.owner().bookInfoForm.OpenBook(widget.GetId())
+            QtOwner().owner.bookInfoForm.OpenBook(widget.GetId())
             return
 
     def CopyHandler(self):
@@ -74,4 +67,4 @@ class QtBookListMenu(object):
         bookId = widget.id
         if not bookId:
             return
-        self.owner().bookInfoForm.OpenBook(bookId)
+        QtOwner().owner.bookInfoForm.OpenBook(bookId)

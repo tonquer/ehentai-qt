@@ -1,5 +1,4 @@
 # 目录管理
-import src.server.res as res
 from src.server import Server, req
 from src.util import Singleton, ToolUtil, Log
 

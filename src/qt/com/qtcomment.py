@@ -13,33 +13,42 @@ class QtComment(QtWidgets.QWidget, Ui_Comment):
         Ui_Comment.__init__(self)
         self.setupUi(self)
         self.id = ""
-        p = QPixmap()
-        p.loadFromData(DataMgr.GetData("placeholder_avatar"))
-        self.picIcon.setPixmap(p)
-        self.picIcon.setCursor(Qt.PointingHandCursor)
-        self.picIcon.setScaledContents(True)
-        self.picIcon.setWordWrap(True)
-        p = QPixmap()
-        p.loadFromData(DataMgr.GetData("icon_comment_like"))
-        q = QPixmap()
-        q.loadFromData(DataMgr.GetData("icon_comment_reply"))
+        self.url = ""
+        self.path = ""
+        self.picIcon.SetPicture(DataMgr.GetData("placeholder_avatar"))
+        # p = QPixmap()
+        # p.loadFromData(DataMgr.GetData("placeholder_avatar"))
+        # self.picIcon.setPixmap(p)
+        # self.picIcon.setCursor(Qt.PointingHandCursor)
+        # self.picIcon.setScaledContents(True)
+        # self.picIcon.setWordWrap(True)
+        # p = QPixmap()
+        # p.loadFromData(DataMgr.GetData("icon_comment_like"))
+        # q = QPixmap()
+        # q.loadFromData(DataMgr.GetData("icon_comment_reply"))
         self.pictureData = None
-        self.starPic.setPixmap(p)
-        self.starPic.setCursor(Qt.PointingHandCursor)
-        self.starPic.setScaledContents(True)
-        self.numPic.setPixmap(q)
-        self.numPic.setCursor(Qt.PointingHandCursor)
-        self.numPic.setScaledContents(True)
+        self.headData = None
+        # self.starPic.setPixmap(p)
+        # self.starPic.setCursor(Qt.PointingHandCursor)
+        # self.starPic.setScaledContents(True)
+        # self.numPic.setPixmap(q)
+        # self.numPic.setCursor(Qt.PointingHandCursor)
+        # self.numPic.setScaledContents(True)
         self.picIcon.installEventFilter(self)
+
+        self.nameLabel.setTextInteractionFlags(Qt.TextSelectableByMouse)
         self.commentLabel.setWordWrap(True)
-        self.commentLabel.setTextInteractionFlags(Qt.TextSelectableByKeyboard)
+        self.commentLabel.setTextInteractionFlags(Qt.TextSelectableByMouse)
+
         # self.nameLabel.setTextInteractionFlags(Qt.TextSelectableByMouse)
 
     def SetPicture(self, data):
-        p = QPixmap()
-        p.loadFromData(data)
         self.pictureData = data
-        self.picIcon.setPixmap(p)
+        self.picIcon.SetPicture(self.pictureData, self.headData)
+
+    def SetHeadData(self, data):
+        self.headData = data
+        self.picIcon.SetPicture(self.pictureData, self.headData)
 
     def eventFilter(self, obj, event):
         if event.type() == QEvent.MouseButtonPress:

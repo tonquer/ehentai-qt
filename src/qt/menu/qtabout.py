@@ -1,5 +1,3 @@
-import weakref
-
 from PySide2 import QtWidgets
 from PySide2.QtCore import QUrl
 from PySide2.QtGui import QDesktopServices
@@ -14,7 +12,6 @@ class QtAbout(QtWidgets.QWidget, Ui_AboutForm):
         Ui_AboutForm.__init__(self)
         self.setupUi(self)
         self.setWindowTitle("关于")
-        self.owner = weakref.ref(owner)
         self.label.setText("E-hentai漫画{}".format(config.UpdateVersion))
         self.label_3.linkActivated.connect(self.OpenUrl)
 

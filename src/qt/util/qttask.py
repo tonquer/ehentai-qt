@@ -1,8 +1,8 @@
 import hashlib
 import os
+import pickle
 import threading
 import time
-import weakref
 from queue import Queue
 
 from PySide2.QtCore import Signal, QObject
@@ -10,11 +10,11 @@ from PySide2.QtCore import Signal, QObject
 from conf import config
 from src.util import Singleton, Log
 from src.util.status import Status
-from src.util.tool import time_me, CTime, ToolUtil
+from src.util.tool import CTime, ToolUtil
 
 
 class QtTaskQObject(QObject):
-    taskBack = Signal(int, str)
+    taskBack = Signal(int, bytes)
     downloadBack = Signal(int, int, bytes)
     convertBack = Signal(int)
 
@@ -29,6 +29,42 @@ class QtHttpTask(object):
         self.backParam = None
         self.cleanFlag = ""
 
+
+class QtTaskBase:
+    Id = 1
+
+    def __init__(self):
+        self.__taskFlagId = QtTaskBase.Id
+        QtTaskBase.Id += 1
+
+    @property
+    def req(self):
+        return
+
+    # callBack(data)
+    # callBack(data, backParam)
+    def AddHttpTask(self, req, callBack=None, backParam=None):
+        QtTask().AddHttpTask(req, callBack, backParam, cleanFlag=self.__taskFlagId)
+
+    # downloadCallBack(data, laveFileSize, backParam)
+    # downloadCallBack(data, laveFileSize)
+    # downloadCompleteBack(data, st)
+    # downloadCompleteBack(data, st, backParam)
+    def AddDownloadTask(self, url, path, downloadCallBack=None, completeCallBack=None, isSaveData=True, backParam=None, isSaveCache=True, filePath=""):
+        QtTask().AddDownloadTask(url, path, downloadCallBack, completeCallBack, isSaveData, backParam, isSaveCache, self.__taskFlagId, filePath)
+
+    # completeCallBack(saveData, taskId, backParam, tick)
+    def AddConvertTask(self, path, imgData, model, completeCallBack, backParam=None, filePath=""):
+        QtTask().AddConvertTask(path, imgData, model, completeCallBack, backParam, self.__taskFlagId, filePath)
+
+    def ClearTask(self):
+        QtTask().CancelTasks(self.__taskFlagId)
+
+    def ClearConvert(self):
+        QtTask().CancelConver(self.__taskFlagId)
+
+    def ClearWaitConvertIds(self, taskIds):
+        return QtTask().ClearWaitConvertIds(taskIds)
 
 class QtDownloadTask(object):
     def __init__(self, downloadId=0):
@@ -64,7 +100,6 @@ class QtTask(Singleton, threading.Thread):
         Singleton.__init__(self)
         threading.Thread.__init__(self)
         self._inQueue = Queue()
-        self._owner = None
         self.taskObj = QtTaskQObject()
         self.taskObj.taskBack.connect(self.HandlerTask2)
         self.taskObj.downloadBack.connect(self.HandlerDownloadTask)
@@ -96,24 +131,15 @@ class QtTask(Singleton, threading.Thread):
     def downloadBack(self):
         return self.taskObj.downloadBack
 
-    @property
-    def owner(self):
-        from src.qt.qt_main import QtMainWindow
-        assert isinstance(self._owner(), QtMainWindow)
-        return self._owner()
-
     def GetDownloadData(self, downloadId):
         if downloadId not in self.downloadTask:
             return b""
         return self.downloadTask[downloadId].saveData
 
-    def SetOwner(self, owner):
-        self._owner = weakref.ref(owner)
-
     # def PutTask(self, task):
     #     self._inQueue.put(task)
 
-    def AddHttpTask(self, req, callBack=None, backParam=None, cleanFlag=""):
+    def AddHttpTask(self, req, callBack=None, backParam=None, cleanFlag=None):
         self.taskId += 1
         info = QtHttpTask(self.taskId)
         info.callBack = callBack
@@ -128,7 +154,7 @@ class QtTask(Singleton, threading.Thread):
         Server().Send(req, backParam=self.taskId)
         return
 
-    def AddDownloadTask(self, url, path, downloadCallBack=None, completeCallBack=None, isSaveData=True, backParam=None, isSaveCache=True, cleanFlag="", filePath=""):
+    def AddDownloadTask(self, url, path, downloadCallBack=None, completeCallBack=None, isSaveData=True, backParam=None, isSaveCache=True, cleanFlag=None, filePath=""):
         self.taskId += 1
         data = QtDownloadTask(self.taskId)
         data.downloadCallBack = downloadCallBack
@@ -163,6 +189,7 @@ class QtTask(Singleton, threading.Thread):
     def HandlerTask2(self, taskId, data):
         try:
             info = self.tasks.get(taskId)
+            data = pickle.loads(data)
             if not info:
                 Log.Warn("[Task] not find taskId:{}, {}".format(taskId, data))
                 return
@@ -241,7 +268,7 @@ class QtTask(Singleton, threading.Thread):
                 del self.downloadTask[taskId]
         self.flagToIds.pop(cleanFlag)
 
-    def AddConvertTask(self, path, imgData, model, completeCallBack, backParam=None, cleanFlag="", filePath=""):
+    def AddConvertTask(self, path, imgData, model, completeCallBack, backParam=None, cleanFlag=None, filePath=""):
         info = QtDownloadTask()
         info.downloadCompleteBack = completeCallBack
         info.backParam = backParam
@@ -362,4 +389,15 @@ class QtTask(Singleton, threading.Thread):
         self.convertFlag.pop(cleanFlag)
         if config.CanWaifu2x:
             import waifu2x
-            waifu2x.delete(list(taskIds))
+            waifu2x.remove(list(taskIds))
+
+    def ClearWaitConvertIds(self, taskIds):
+        if not taskIds:
+            return
+        for taskId in taskIds:
+            if taskId in self.convertLoad:
+                del self.convertLoad[taskId]
+        Log.Info("cancel wait convert taskId, {}".format(taskIds))
+        if config.CanWaifu2x:
+            import waifu2x
+            waifu2x.removeWaitProc(list(taskIds))
