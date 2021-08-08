@@ -11,6 +11,8 @@ from conf import config
 from src.util import Log
 from bs4 import BeautifulSoup, Tag
 
+from src.util.status import Status
+
 
 class CTime(object):
     def __init__(self):
@@ -42,6 +44,19 @@ def time_me(fn):
 
 
 class ToolUtil(object):
+    Category = dict()
+    Category["doujinshi"] = "同人志"
+    Category["manga"] = "漫画"
+    Category["artist cg"] = "艺术CG"
+    Category["game cg"] = "游戏CG"
+    Category["western"] = "西方"
+    Category["non-h"] = "无H"
+    Category["image set"] = "图集"
+    Category["cosplay"] = "COSPLAY"
+    Category["asian porn"] = "亚洲色情"
+    Category["misc"] = "杂项"
+
+
     @classmethod
     def GetHeader(cls, _url: str, method: str) -> dict:
         header = {
@@ -381,6 +396,10 @@ class ToolUtil(object):
         mo = re.search(r'\d+', info.kv.get("Length"))
         if mo:
             info.pages = int(mo.group())
+        mo = re.search(r"\d+", info.kv.get("Favorited", ""))
+        if mo:
+            info.favorites = int(mo.group())
+
         for tag in soup.find_all("div", class_="gdtm"):
             url = tag.a.attrs.get('href')
             index = int(tag.a.img.attrs.get('alt'))
@@ -484,3 +503,15 @@ class ToolUtil(object):
         if mo:
             userId = mo.group()
         return userId, name
+
+    @staticmethod
+    def ParseLoginResult(data):
+        soup = BeautifulSoup(data, features="lxml")
+        table = soup.find("div", class_="tablepad")
+        if not table:
+            return ""
+        if "captcha" in table.text:
+            return Status.NeedGoogle
+        elif "password incorrect" in table.text:
+            return Status.UserError
+        return Status.Error

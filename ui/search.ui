@@ -36,30 +36,6 @@
       </widget>
      </item>
      <item>
-      <widget class="QComboBox" name="comboBox">
-       <item>
-        <property name="text">
-         <string>新到旧</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>旧到新</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>最多爱心</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>最多绅士指数</string>
-        </property>
-       </item>
-      </widget>
-     </item>
-     <item>
       <widget class="QPushButton" name="searchButton">
        <property name="minimumSize">
         <size>
@@ -183,20 +159,64 @@
        </property>
       </widget>
      </item>
+     <item row="1" column="0">
+      <layout class="QHBoxLayout" name="horizontalLayout_2">
+       <item>
+        <widget class="QLabel" name="label_2">
+         <property name="text">
+          <string>分类：</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QtCategoryList" name="categoryList">
+         <property name="maximumSize">
+          <size>
+           <width>16777215</width>
+           <height>50</height>
+          </size>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QListWidget {background-color:transparent;}
+QListWidget::item {
+    background-color:rgb(251, 239, 243);
+    color: rgb(196, 95, 125);
+	border:2px solid red;
+	border-color:rgb(196, 95, 125);
+	border-radius: 15px;
+}
+/* 鼠标在按钮上时，按钮颜色 */
+ QListWidget::item:hover 
+{
+    background-color:rgb(21, 85, 154);
+    border-radius: 15px;
+    color: rgb(0, 0, 0);
+}
+</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
     </layout>
    </item>
   </layout>
  </widget>
  <customwidgets>
   <customwidget>
-   <class>CompleteLineEdit</class>
-   <extends>QLineEdit</extends>
-   <header>.completelineedit.h</header>
-  </customwidget>
-  <customwidget>
    <class>QtBookList</class>
    <extends>QListWidget</extends>
    <header location="global">.qtlistwidget.h</header>
+  </customwidget>
+  <customwidget>
+   <class>QtCategoryList</class>
+   <extends>QListWidget</extends>
+   <header location="global">.qtlistwidget.h</header>
+  </customwidget>
+  <customwidget>
+   <class>CompleteLineEdit</class>
+   <extends>QLineEdit</extends>
+   <header>.completelineedit.h</header>
   </customwidget>
  </customwidgets>
  <resources/>
@@ -230,22 +250,6 @@
     <hint type="destinationlabel">
      <x>515</x>
      <y>613</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>comboBox</sender>
-   <signal>currentIndexChanged(int)</signal>
-   <receiver>search</receiver>
-   <slot>ChangeSort()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>306</x>
-     <y>569</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>637</x>
-     <y>175</y>
     </hint>
    </hints>
   </connection>

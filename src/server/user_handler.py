@@ -60,6 +60,7 @@ class LoginReqHandler(object):
     def __call__(self, task: Task):
         data = {"st": task.status}
         try:
+            parseSt = ToolUtil.ParseLoginUserName(task.res.raw.text)
             from requests import Response
             assert isinstance(task.res.raw, Response)
             cookies = requests.utils.dict_from_cookiejar(task.res.raw.cookies)
@@ -76,7 +77,7 @@ class LoginReqHandler(object):
                 st = Status.Ok
             else:
                 Log.Info("login error, {}".format(cookies))
-                st = Status.UserError
+                st = parseSt
             # cookies = task.res.raw.headers.get("Set-Cookie", "")
             # print(cookies)
             data["st"] = st
@@ -102,6 +103,7 @@ class HomeReqHandler(object):
 
 
 @handler(req.GetIndexInfoReq)
+@handler(req.GetCategoryInfoReq)
 class GetIndexInfoReqHandler(object):
     def __call__(self, task: Task):
         data = {"st": task.status}
@@ -146,15 +148,15 @@ class BookInfoReqHandler(object):
         try:
             info, maxPage = ToolUtil.ParseBookInfo(task.res.raw.text)
             from src.book.book import BookMgr
-            BookMgr().UpdateBookInfo(task.req.bookId, info)
+            BookMgr().UpdateBookInfo(task.req.bookId, info, task.req.page, maxPage)
 
             if task.req.page == 1:
                 # TODO 预加载第一页
                 Server().Send(req.GetBookImgUrl(task.req.bookId, 1), isASync=False)
 
                 # TODO 加载剩余分页
-                for i in range(1+1, maxPage+1):
-                    Server().Send(req.BookInfoReq(task.req.bookId, i), isASync=False)
+                # for i in range(1+1, maxPage+1):
+                #     Server().Send(req.BookInfoReq(task.req.bookId, i), isASync=False)
             data["maxPages"] = maxPage
             data["st"] = Status.Ok
         except Exception as es:

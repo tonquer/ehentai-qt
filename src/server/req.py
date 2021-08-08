@@ -155,6 +155,22 @@ class GetIndexInfoReq(ServerReq):
                                              {}, method)
 
 
+# 获得分类
+class GetCategoryInfoReq(ServerReq):
+    def __init__(self, page=1, category=""):
+        url = config.Url + "/" + category.replace(" ", "").lower()
+        data = {}
+        if page > 1:
+            data['page'] = str(page - 1)
+
+        data["inline_set"] = "dm_l"
+        param = ToolUtil.DictToUrl(data)
+        if param:
+            url += "/?" + param
+        method = "GET"
+        super(self.__class__, self).__init__(url, ToolUtil.GetHeader(url, method),
+                                             {}, method)
+
 # 获得收藏
 class GetFavoritesReq(ServerReq):
     def __init__(self, favcat="", page=1):

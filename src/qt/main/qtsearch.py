@@ -4,6 +4,7 @@ from src.book.book import BookMgr
 from src.qt.qt_main import QtOwner
 from src.qt.util.qttask import QtTaskBase
 from src.server import req, Log
+from src.util import ToolUtil
 from src.util.status import Status
 from ui.search import Ui_search
 
@@ -22,30 +23,44 @@ class QtSearch(QtWidgets.QWidget, Ui_search, QtTaskBase):
         self.isInit = False
         self.searchEdit.words = QtOwner().owner.words
 
+        for value in ToolUtil.Category.values():
+            self.categoryList.AddItem(value)
+        self.categoryList.itemClicked.connect(self.ClickKeywordListItem)
+
     def SwitchCurrent(self):
         if not self.isInit:
             self.isInit = True
             self.Search()
         pass
 
-    def Search(self, categories=None):
+    def Search(self, categories=""):
         data = self.searchEdit.text()
-        self.data = data
         if not categories:
-            self.categories = []
+            self.data = data
+            self.categories = ""
         else:
-            pass
-        self.categories = ""
+            self.categories = categories
         self.bookList.clear()
         self.bookList.UpdatePage(1, 1)
         self.bookList.UpdateState()
-        self.searchEdit.setPlaceholderText("")
-        self.SendSearch(self.data, 1)
+        if self.categories:
+            self.searchEdit.setText("")
+            self.searchEdit.setPlaceholderText(categories)
+            self.SendSearch(self.categories, 1, True)
+        else:
+            self.searchEdit.setPlaceholderText("")
+            self.SendSearch(self.data, 1)
 
-    def SendSearch(self, data, page):
+    def SendSearch(self, data, page, isCategory=False):
         QtOwner().owner.loadingForm.show()
         self.index = 1
-        self.AddHttpTask(req.GetIndexInfoReq(page, data), self.SendSearchBack, page)
+        if not isCategory:
+            self.AddHttpTask(req.GetIndexInfoReq(page, data), self.SendSearchBack, page)
+        else:
+            for k, v in ToolUtil.Category.items():
+                if v == data:
+                    self.AddHttpTask(req.GetCategoryInfoReq(page, k), self.SendSearchBack, page)
+                    break
 
     def SendSearchBack(self, data, page):
         QtOwner().owner.loadingForm.close()
@@ -62,7 +77,8 @@ class QtSearch(QtWidgets.QWidget, Ui_search, QtTaskBase):
                     _id = info.baseInfo.id
                     title = info.baseInfo.title
                     url = info.baseInfo.imgUrl
-                    self.bookList.AddBookItem(_id, title, "", url, "", "")
+                    category = QtOwner().owner.GetCategoryName(info.baseInfo.category)
+                    self.bookList.AddBookItem(_id, title, "分类："+category, url, "", "")
                 # self.CheckCategoryShowItem()
             else:
                 QtOwner().owner.msgForm.ShowError(st)
@@ -89,11 +105,17 @@ class QtSearch(QtWidgets.QWidget, Ui_search, QtTaskBase):
             return
         self.bookList.page = page
         self.bookList.clear()
-        self.SendSearch(self.data, page)
+        if self.categories:
+            self.SendSearch(self.categories, page, True)
+        else:
+            self.SendSearch(self.data, page, False)
         return
 
     def LoadNextPage(self):
-        self.SendSearch(self.data, self.bookList.page + 1)
+        if self.categories:
+            self.SendSearch(self.categories, self.bookList.page + 1, True)
+        else:
+            self.SendSearch(self.data, self.bookList.page + 1, False)
         return
 
     def ChangeSort(self, pos):
@@ -101,30 +123,8 @@ class QtSearch(QtWidgets.QWidget, Ui_search, QtTaskBase):
         self.bookList.clear()
         self.SendSearch(self.data, 1)
 
-    def ClickCategoryListItem(self, item):
-        isClick = self.categoryList.ClickItem(item)
-        data = item.text()
-        if isClick:
-            QtOwner().owner.msgForm.ShowMsg("屏蔽" + data)
-        else:
-            QtOwner().owner.msgForm.ShowMsg("取消屏蔽" + data)
-        self.CheckCategoryShowItem()
-
-    def CheckCategoryShowItem(self):
-        data = self.categoryList.GetAllSelectItem()
-        for i in range(self.bookList.count()):
-            item = self.bookList.item(i)
-            widget = self.bookList.itemWidget(item)
-            isHidden = False
-            for name in data:
-                if name in widget.param:
-                    item.setHidden(True)
-                    isHidden = True
-                    break
-            if not isHidden:
-                item.setHidden(False)
 
     def ClickKeywordListItem(self, item):
         data = item.text()
-        self.searchEdit.setText(data)
-        self.Search()
+        self.searchEdit.setText("")
+        self.Search(data)

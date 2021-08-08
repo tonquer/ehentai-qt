@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>999</width>
+    <width>758</width>
     <height>808</height>
    </rect>
   </property>
@@ -66,6 +66,75 @@
                   </layout>
                  </item>
                  <item>
+                  <layout class="QHBoxLayout" name="horizontalLayout_6">
+                   <item>
+                    <widget class="QLabel" name="label_3">
+                     <property name="maximumSize">
+                      <size>
+                       <width>40</width>
+                       <height>20</height>
+                      </size>
+                     </property>
+                     <property name="text">
+                      <string>分类：</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QtCategoryList" name="categoryList">
+                     <property name="maximumSize">
+                      <size>
+                       <width>16777215</width>
+                       <height>40</height>
+                      </size>
+                     </property>
+                     <property name="styleSheet">
+                      <string notr="true">QListWidget {background-color:transparent;}
+QListWidget::item {
+    background-color:rgb(251, 239, 243);
+    color: rgb(196, 95, 125);
+	border:2px solid red;
+    border-radius: 10px;
+	border-color:rgb(196, 95, 125);
+}
+/* 鼠标在按钮上时，按钮颜色 */
+ QListWidget::item:hover 
+{
+    background-color:rgb(21, 85, 154);
+    border-radius: 10px;
+    color: rgb(0, 0, 0);
+}
+</string>
+                     </property>
+                    </widget>
+                   </item>
+                  </layout>
+                 </item>
+                 <item>
+                  <layout class="QHBoxLayout" name="horizontalLayout_5">
+                   <item>
+                    <widget class="QLabel" name="label_2">
+                     <property name="maximumSize">
+                      <size>
+                       <width>40</width>
+                       <height>20</height>
+                      </size>
+                     </property>
+                     <property name="text">
+                      <string>语言：</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QLabel" name="languageLabel">
+                     <property name="text">
+                      <string/>
+                     </property>
+                    </widget>
+                   </item>
+                  </layout>
+                 </item>
+                 <item>
                   <layout class="QHBoxLayout" name="horizontalLayout_8">
                    <item>
                     <widget class="QLabel" name="label_6">
@@ -76,7 +145,7 @@
                       </size>
                      </property>
                      <property name="text">
-                      <string>页数:</string>
+                      <string>页数：</string>
                      </property>
                     </widget>
                    </item>
@@ -106,7 +175,7 @@
                       </size>
                      </property>
                      <property name="text">
-                      <string>收藏数</string>
+                      <string>收藏数：</string>
                      </property>
                     </widget>
                    </item>
@@ -140,7 +209,7 @@
                      </property>
                      <property name="maximumSize">
                       <size>
-                       <width>80</width>
+                       <width>160</width>
                        <height>20</height>
                       </size>
                      </property>
@@ -149,14 +218,14 @@
                      </property>
                     </widget>
                    </item>
-                   <item>
+                   <item alignment="Qt::AlignHCenter|Qt::AlignVCenter">
                     <widget class="QPushButton" name="pushButton">
                      <property name="text">
                       <string>收藏</string>
                      </property>
                     </widget>
                    </item>
-                   <item>
+                   <item alignment="Qt::AlignHCenter|Qt::AlignVCenter">
                     <widget class="QPushButton" name="startRead">
                      <property name="maximumSize">
                       <size>
@@ -274,6 +343,11 @@ QListWidget::item { border-bottom: 1px solid black; }</string>
  <customwidgets>
   <customwidget>
    <class>QtBookList</class>
+   <extends>QListWidget</extends>
+   <header location="global">.qtlistwidget.h</header>
+  </customwidget>
+  <customwidget>
+   <class>QtCategoryList</class>
    <extends>QListWidget</extends>
    <header location="global">.qtlistwidget.h</header>
   </customwidget>

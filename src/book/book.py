@@ -51,6 +51,8 @@ class BookInfo(object):
     def __init__(self):
         self.baseInfo = BookBaseInfo()
         self.pageInfo = BookPageInfo()
+        self.curPage = 1
+        self.maxPage = 1
 
 
 # 书的管理器
@@ -74,11 +76,13 @@ class BookMgr(Singleton):
                 continue
             self.books[info.baseInfo.id] = info
 
-    def UpdateBookInfo(self, bookId, info):
+    def UpdateBookInfo(self, bookId, info, curPage, maxPage):
         book = self.GetBook(bookId)
         if not book:
             return
         book.pageInfo.Copy(info)
+        book.maxPage = maxPage
+        book.curPage = curPage
         return
 
     def UpdateImgUrl(self, bookId, index, url):

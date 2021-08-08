@@ -50,7 +50,8 @@ class QtFavorite(QtWidgets.QWidget, Ui_favorite, QtTaskBase):
                 _id = info.baseInfo.id
                 title = info.baseInfo.title
                 url = info.baseInfo.imgUrl
-                self.bookList.AddBookItem(_id, title, "", url, "", "")
+                category = QtOwner().owner.GetCategoryName(info.baseInfo.category)
+                self.bookList.AddBookItem(_id, title, "分类："+category, url, "", "")
         else:
             QtBubbleLabel().ShowErrorEx(self, data['st'])
         pass

@@ -86,7 +86,8 @@ class QtReadImg(QtWidgets.QWidget, QtTaskBase):
         if not bookId:
             return
         self.Clear()
-
+        self.bookId = bookId
+        self.CheckGetBookPage()
         self.qtTool.checkBox.setChecked(config.IsOpenWaifu)
         self.qtTool.SetData(isInit=True)
         # self.graphicsGroup.setPixmap(QPixmap())
@@ -94,7 +95,6 @@ class QtReadImg(QtWidgets.QWidget, QtTaskBase):
         self.frame.UpdatePixMap()
         self.qtTool.SetData()
         # self.qtTool.show()
-        self.bookId = bookId
         self.AddHistory()
 
         if not self.isInit:
@@ -237,47 +237,36 @@ class QtReadImg(QtWidgets.QWidget, QtTaskBase):
             self.AddDownload(index, bookInfo.pageInfo.picRealUrl.get(index+1))
         else:
             p.SetData(data, self.category)
-            if index == self.curIndex:
-                self.ShowImg()
-            elif self.isStripModel and self.curIndex < index <= self.curIndex + 2:
-                self.ShowOtherPage()
-                self.CheckLoadPicture()
-            else:
-                self.CheckLoadPicture()
-            return
+            self.AddQImageTask(data, self.ConvertQImageBack, index)
+            self.CheckLoadPicture()
+            # if index == self.curIndex:
+            #     self.ShowImg()
+            # elif self.isStripModel and self.curIndex < index <= self.curIndex + 2:
+            #     self.ShowOtherPage()
+            #     self.CheckLoadPicture()
+            # else:
+            #     self.CheckLoadPicture()
+            # return
 
     @time_me
     def ShowOtherPage(self, isShowWaifu=True):
-        for index in range(self.curIndex + 1, self.curIndex + 3):
+        for index in range(self.curIndex+1, self.curIndex+3):
             p = self.pictureData.get(index)
-            if not p or (not p.data):
-                self.frame.SetPixIem(index - self.curIndex, None)
-                return
+            if not p or (not p.data) or (not p.cacheImage):
+                self.frame.SetPixIem(index-self.curIndex, QPixmap())
+                continue
 
             assert isinstance(p, QtFileData)
             if not isShowWaifu:
-                p2 = p.data
-                if not p.cacheImage or p.cacheWaifu2x:
-                    p.cacheImage = QImage()
-                    p.cacheWaifu2x = False
-                    p.cacheImage.loadFromData(p2)
+                p2 = p.cacheImage
 
-            elif p.waifuData:
-                p2 = p.waifuData
-                if not p.cacheImage or not p.cacheWaifu2x:
-                    p.cacheImage = QImage()
-                    p.cacheWaifu2x = True
-                    p.cacheImage.loadFromData(p2)
+            elif p.cacheWaifu2xImage:
+                p2 = p.cacheWaifu2xImage
             else:
-                p2 = p.data
-                if not p.cacheImage:
-                    p.cacheImage = QImage()
-                    p.cacheWaifu2x = False
-                    p.cacheImage.loadFromData(p2)
+                p2 = p.cacheImage
 
-            pixMap = QPixmap(p.cacheImage)
-
-            self.frame.SetPixIem(index - self.curIndex, pixMap)
+            pixMap = QPixmap(p2)
+            self.frame.SetPixIem(index-self.curIndex, pixMap)
         # self.frame.ScalePicture()
         return True
 
@@ -285,9 +274,13 @@ class QtReadImg(QtWidgets.QWidget, QtTaskBase):
     def ShowImg(self, isShowWaifu=True):
         p = self.pictureData.get(self.curIndex)
 
-        if not p or (not p.data):
-            self.qtTool.SetData(state=QtFileData.Downloading)
-            self.frame.SetPixIem(0, None)
+        if not p or (not p.data) or (not p.cacheImage):
+            if not p or (not p.data):
+                self.qtTool.SetData(state=QtFileData.Downloading)
+            else:
+                self.qtTool.SetData(state=QtFileData.Converting)
+
+            self.frame.SetPixIem(0, QPixmap())
 
             self.qtTool.modelBox.setEnabled(False)
             self.frame.UpdateProcessBar(None)
@@ -299,41 +292,27 @@ class QtReadImg(QtWidgets.QWidget, QtTaskBase):
             self.qtTool.modelBox.setEnabled(True)
         assert isinstance(p, QtFileData)
         if not isShowWaifu:
-            p2 = p.data
             self.frame.waifu2xProcess.hide()
             self.qtTool.SetData(waifuSize=QSize(0, 0), waifuDataLen=0)
-            if not p.cacheImage or p.cacheWaifu2x:
-                p.cacheImage = QImage()
-                p.cacheWaifu2x = False
-                p.cacheImage.loadFromData(p2)
+            p2 = p.cacheImage
 
-        elif p.waifuData:
-            p2 = p.waifuData
+        elif p.cacheWaifu2xImage:
+            p2 = p.cacheWaifu2xImage
             self.frame.waifu2xProcess.hide()
             self.qtTool.SetData(waifuSize=p.waifuQSize, waifuDataLen=p.waifuDataSize,
                                 waifuTick=p.waifuTick)
-            if not p.cacheImage or not p.cacheWaifu2x:
-                p.cacheImage = QImage()
-                p.cacheWaifu2x = True
-                p.cacheImage.loadFromData(p2)
 
         else:
-            p2 = p.data
+            p2 = p.cacheImage
             if config.IsOpenWaifu:
                 self.frame.waifu2xProcess.show()
             else:
                 self.frame.waifu2xProcess.hide()
-            if not p.cacheImage:
-                p.cacheImage = QImage()
-                p.cacheWaifu2x = False
-                p.cacheImage.loadFromData(p2)
 
         self.qtTool.SetData(pSize=p.qSize, dataLen=p.size, state=p.state, waifuState=p.waifuState)
         self.qtTool.UpdateText(p.model)
-        t = CTime()
-        pixMap = QPixmap(p.cacheImage)
 
-        t.Refresh(self.__class__.__name__)
+        pixMap = QPixmap(p2)
         self.frame.SetPixIem(0, pixMap)
         # self.graphicsView.setSceneRect(QRectF(QPointF(0, 0), QPointF(pixMap.width(), pixMap.height())))
         # self.frame.ScalePicture()
@@ -434,14 +413,29 @@ class QtReadImg(QtWidgets.QWidget, QtTaskBase):
             Log.Error("Not found waifu2xId ：{}, index: {}".format(str(waifu2xId), str(index)))
             return
         p.SetWaifuData(data, round(tick, 2))
+        self.AddQImageTask(data, self.ConvertQImageWaifu2xBack, index)
+        self.CheckLoadPicture()
+        # if index == self.curIndex:
+        #     self.qtTool.SetData(waifuState=p.waifuState)
+        #     self.ShowImg()
+        # elif self.isStripModel and self.curIndex < index <= self.curIndex + 2:
+        #     self.ShowOtherPage()
+        #     self.CheckLoadPicture()
+        # else:
+        #     self.CheckLoadPicture()
+
+    def ConvertQImageWaifu2xBack(self, data, index):
+        assert isinstance(data, QImage)
+        p = self.pictureData.get(index)
+        if not p:
+            return
+        assert isinstance(p, QtFileData)
+        p.cacheWaifu2xImage = data
         if index == self.curIndex:
-            self.qtTool.SetData(waifuState=p.waifuState)
             self.ShowImg()
         elif self.isStripModel and self.curIndex < index <= self.curIndex + 2:
             self.ShowOtherPage()
-            self.CheckLoadPicture()
-        else:
-            self.CheckLoadPicture()
+        return
 
     def AddCovertData(self, imgUrl, i):
         info = self.pictureData[i]
@@ -466,7 +460,33 @@ class QtReadImg(QtWidgets.QWidget, QtTaskBase):
         self.qtTool.SetData(state=self.pictureData[i].state)
 
     def GetPictureUrl(self, i):
+        info = BookMgr().GetBook(self.bookId)
+        if not info.pageInfo.GetImgKey(i):
+            return
         self.AddHttpTask(req.GetBookImgUrl2(self.bookId, i+1), self.GetPictureUrlBack, i)
 
     def GetPictureUrlBack(self, msg, i):
         self.CheckLoadPicture()
+
+    def CheckGetBookPage(self):
+        info = BookMgr().GetBook(self.bookId)
+        if info.curPage >= info.maxPage:
+            return
+        self.AddHttpTask(req.BookInfoReq(self.bookId, info.curPage+1), self.GetBookPageBack)
+
+    def GetBookPageBack(self, data):
+        self.CheckGetBookPage()
+        self.CheckLoadPicture()
+
+    def ConvertQImageBack(self, data, index):
+        assert isinstance(data, QImage)
+        p = self.pictureData.get(index)
+        if not p:
+            return
+        assert isinstance(p, QtFileData)
+        p.cacheImage = data
+        if index == self.curIndex:
+            self.ShowImg()
+        elif self.isStripModel and self.curIndex < index <= self.curIndex + 2:
+            self.ShowOtherPage()
+        return

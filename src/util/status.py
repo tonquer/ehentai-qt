@@ -10,4 +10,5 @@ class Status(object):
     RegisterError = "注册失败"
     NotFoundBook = "未找到书籍"
     ParseError = "解析出错了"
+    NeedGoogle = "需要谷歌验证"
 

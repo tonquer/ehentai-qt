@@ -14,6 +14,8 @@ class QtLoginWeb(QWebEngineView):
         self.page().profile().clearHttpCache()
         self.page().profile().cookieStore().deleteAllCookies()
         self.page().profile().cookieStore().cookieAdded.connect(self.OnCookieAdd)
+        self.page().profile().setHttpUserAgent("Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.198 Safari/537.36")
+        self.page().profile().setHttpAcceptLanguage("zh-CN,zh;q=0.9")
         self.loadFinished.connect(self.LoadFinished)
         self.cookies = {}
         self.userName = ""

@@ -44,7 +44,9 @@ class QtBookInfo(QtWidgets.QWidget, Ui_BookInfo, QtTaskBase):
         self.tags = QtOwner().owner.tags
         desktop = QDesktopWidget()
         self.resize(desktop.width()//4*1, desktop.height()//4*3)
-        self.move(desktop.width()//8*3, desktop.height()//4*1)
+        self.move(desktop.width()//8*3, desktop.height()//8*1)
+        self.epsListWidget.itemClicked.connect(self.ClickTagsItem)
+        self.nameToTag = {}
 
     def closeEvent(self, a0: QtGui.QCloseEvent) -> None:
         if self.stackedWidget.currentIndex() == 1:
@@ -64,8 +66,10 @@ class QtBookInfo(QtWidgets.QWidget, Ui_BookInfo, QtTaskBase):
 
     def Clear(self):
         self.stackedWidget.setCurrentIndex(0)
+        self.categoryList.clear()
         self.ClearTask()
         self.epsListWidget.clear()
+        self.nameToTag.clear()
         self.listWidget.clear()
 
     def OpenBook(self, bookId):
@@ -102,7 +106,15 @@ class QtBookInfo(QtWidgets.QWidget, Ui_BookInfo, QtTaskBase):
             self.updateTick.setText(info.pageInfo.posted)
             self.views.setText(str(info.pageInfo.favorites))
             self.likes.setText(str(info.pageInfo.pages))
+            self.languageLabel.setText(info.pageInfo.language)
+            self.categoryList.AddItem(QtOwner().owner.GetCategoryName(info.baseInfo.category))
             for tag in info.baseInfo.tags:
+                tagData = tag.split(":")
+                if len(tagData) >= 2:
+                    tagName = tagData[0]
+                    if not tagName:
+                        tag = "misc" + tag
+
                 label = QLabel(tag)
                 label.setAlignment(Qt.AlignCenter)
                 label.setStyleSheet("color: rgb(196, 95, 125);")
@@ -110,19 +122,22 @@ class QtBookInfo(QtWidgets.QWidget, Ui_BookInfo, QtTaskBase):
                 font.setPointSize(12)
                 font.setBold(True)
                 label.setFont(font)
+
                 item = QListWidgetItem(self.epsListWidget)
                 item.setSizeHint(label.sizeHint() + QSize(20, 20))
 
                 tagData = tag.split(":")
                 if len(tagData) >= 2:
-                    if tagData[0] in self.tags:
-                        if tagData[1] in self.tags[tagData[0]].get("data"):
-                            tagInfo = self.tags[tagData[0]].get("data").get(tagData[1], {})
-                            label.setText(self.tags[tagData[0]].get("name", "") + ":" + tagInfo.get("dest", ""))
+                    tagName = tagData[0]
+                    if tagName in self.tags:
+                        if tagData[1] in self.tags.get(tagName, {}).get("data"):
+                            tagInfo = self.tags.get(tagName, {}).get("data", {}).get(tagData[1], {})
+                            label.setText(self.tags.get(tagName, {}).get("name", "") + ":" + tagInfo.get("dest", ""))
                             item.setToolTip(tagInfo.get('description', ""))
 
                 # item.setToolTip(epsInfo.title)
                 self.epsListWidget.setItemWidget(item, label)
+                self.nameToTag[label.text()] = tag
 
             if config.IsLoadingPicture:
                 self.AddDownloadTask(self.url, "", completeCallBack=self.UpdatePicture)
@@ -152,7 +167,7 @@ class QtBookInfo(QtWidgets.QWidget, Ui_BookInfo, QtTaskBase):
             self.tabWidget.setTabText(1, "评论({})".format(str(len(data))))
             for index, v in enumerate(data):
                 createdTime, content = v
-                self.listWidget.AddUserItem("", 0, 0, content, "", createdTime, index+1, "",
+                self.listWidget.AddUserItem("", 0, 0, content, createdTime, "", index+1, "",
                                             "", "", "", 0)
             return
         except Exception as es:
@@ -192,8 +207,9 @@ class QtBookInfo(QtWidgets.QWidget, Ui_BookInfo, QtTaskBase):
         return
 
     def ClickTagsItem(self, item):
-        text = item.text()
-        QtOwner().owner.userForm.listWidget.setCurrentRow(1)
+        widget = self.epsListWidget.itemWidget(item)
+        text = self.nameToTag.get(widget.text())
+        QtOwner().owner.userForm.toolButton0.click()
         QtOwner().owner.searchForm.searchEdit.setText(text)
         QtOwner().owner.searchForm.Search()
         return

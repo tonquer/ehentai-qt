@@ -22,14 +22,10 @@ class QtLogin(QtWidgets.QWidget, Ui_Login, QtTaskBase):
         self.setWindowTitle("登陆")
         self.speedTest = []
         self.speedIndex = 0
-        # self.page = QWebEnginePage()
-        # self.view.setPage(self.page)
-        # self.page.setUrl()
-        # QWebEngineProfile.defaultProfile().cookieStore().deleteAllCookies()
-        # QWebEngineProfile.defaultProfile().cookieStore().cookieAdded.connect(self.SaveCookie)
         self.cookieList = ["ipb_session_id", "ipb_member_id", "ipb_pass_hash"]
         self.cookie = {}
         self.isLogin = False
+        self.isTestLogin = False
 
     def OpenLoginUrl(self):
         QtOwner().owner.stackedWidget.setCurrentIndex(2)
@@ -64,6 +60,7 @@ class QtLogin(QtWidgets.QWidget, Ui_Login, QtTaskBase):
 
     def Login(self):
         userId = self.userIdEdit.text()
+        passwd = self.passwdEdit.text()
         lastUserId = QtOwner().owner.settingForm.GetSettingV("userId", "")
         memberId = QtOwner().owner.settingForm.GetSettingV("ipb_member_id", "")
         passHash = QtOwner().owner.settingForm.GetSettingV("ipb_pass_hash", "")
@@ -76,26 +73,23 @@ class QtLogin(QtWidgets.QWidget, Ui_Login, QtTaskBase):
             }
             self.LoginByCookie(load_cookies)
         else:
-            # self.AddHttpTask(req.LoginReq(userId, passwd), self.LoginBack)
-            self.OpenLoginUrl()
 
-        # self.close()
-        # self.owner().show()
+            if self.isTestLogin:
+                self.OpenLoginUrl()
+            else:
+                QtOwner().owner.loadingForm.show()
+                self.AddHttpTask(req.LoginReq(userId, passwd), self.LoginBack)
 
     def GetUserBack(self, data):
-        # userId = self.userIdEdit.text()
-        # passwd = self.passwdEdit.text()
         if data["st"] != Status.Ok:
             Log.Warn("login fail, relogin")
             self.cookie.clear()
+            self.isLogin = False
             QtBubbleLabel().ShowErrorEx(self, "登陆失败")
-            # Server().session.cookies = requests.utils.cookiejar_from_dict({}, cookiejar=None, overwrite=True)
-            # self.AddHttpTask(req.LoginReq(userId, passwd), self.LoginBack)
         else:
             Log.Warn("login success, {}".format(data))
             userName = data.get("userName", "")
             if self.cookie:
-
                 QtOwner().owner.settingForm.SetSettingV("userId", userName)
                 QtOwner().owner.settingForm.SetSettingV("ipb_member_id", self.cookie.get("ipb_member_id", ""))
                 QtOwner().owner.settingForm.SetSettingV("ipb_pass_hash", self.cookie.get("ipb_pass_hash"))
@@ -104,21 +98,23 @@ class QtLogin(QtWidgets.QWidget, Ui_Login, QtTaskBase):
             self.SkipLogin(userName)
         return
 
-    # def LoginBack(self, data):
-    #     QtOwner().owner.loadingForm.close()
-    #     st = data["st"]
-    #     if st == Status.Ok:
-    #         # self.close()
-    #         self.SkipLogin()
-    #         QtOwner().owner.settingForm.SetSettingV(self.__class__.__name__, "userId", self.userIdEdit.text())
-    #         QtOwner().owner.settingForm.SetSettingV(self.__class__.__name__, "ipb_member_id", data["ipb_member_id"])
-    #         QtOwner().owner.settingForm.SetSettingV(self.__class__.__name__, "ipb_pass_hash", data["ipb_pass_hash"])
-    #         QtOwner().owner.settingForm.SetSettingV(self.__class__.__name__, "ipb_session_id", data["ipb_session_id"])
-    #         QtOwner().owner.settingForm.SetSettingV(self.__class__.__name__, "ipb_coppa", data["ipb_coppa"])
-    #         self.AddHttpTask(req.HomeReq(), self.UpdateUserBack)
-    #     else:
-    #         # QtWidgets.QMessageBox.information(self, '登陆失败', msg, QtWidgets.QMessageBox.Yes)
-    #         QtOwner().owner.msgForm.ShowError("登陆失败, " + data)
+    def LoginBack(self, data):
+        QtOwner().owner.loadingForm.close()
+        st = data["st"]
+        if st == Status.Ok:
+            QtOwner().owner.settingForm.SetSettingV("userId", self.userIdEdit.text())
+            QtOwner().owner.settingForm.SetSettingV("ipb_member_id", data["ipb_member_id"])
+            QtOwner().owner.settingForm.SetSettingV("ipb_pass_hash", data["ipb_pass_hash"])
+            QtOwner().owner.settingForm.SetSettingV("ipb_session_id", data["ipb_session_id"])
+            QtOwner().owner.settingForm.SetSettingV("ipb_coppa", data["ipb_coppa"])
+            self.AddHttpTask(req.GetUserIdReq(), self.GetUserBack)
+            self.isTestLogin = True
+        elif st == Status.UserError:
+            QtBubbleLabel.ShowErrorEx(self, st)
+        else:
+            self.isTestLogin = True
+            self.isLogin = False
+            self.OpenLoginUrl()
 
     def UpdateUserBack(self, msg):
         return

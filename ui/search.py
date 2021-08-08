@@ -12,8 +12,9 @@ from PySide2.QtCore import *
 from PySide2.QtGui import *
 from PySide2.QtWidgets import *
 
-from .completelineedit import CompleteLineEdit
 from .qtlistwidget import QtBookList
+from .qtlistwidget import QtCategoryList
+from .completelineedit import CompleteLineEdit
 
 
 class Ui_search(object):
@@ -32,15 +33,6 @@ class Ui_search(object):
         self.searchEdit.setStyleSheet(u"QLineEdit {background-color:transparent;}")
 
         self.horizontalLayout.addWidget(self.searchEdit)
-
-        self.comboBox = QComboBox(search)
-        self.comboBox.addItem("")
-        self.comboBox.addItem("")
-        self.comboBox.addItem("")
-        self.comboBox.addItem("")
-        self.comboBox.setObjectName(u"comboBox")
-
-        self.horizontalLayout.addWidget(self.comboBox)
 
         self.searchButton = QPushButton(search)
         self.searchButton.setObjectName(u"searchButton")
@@ -108,6 +100,38 @@ class Ui_search(object):
 
         self.bookLayout.addWidget(self.bookList, 0, 0, 1, 1)
 
+        self.horizontalLayout_2 = QHBoxLayout()
+        self.horizontalLayout_2.setObjectName(u"horizontalLayout_2")
+        self.label_2 = QLabel(search)
+        self.label_2.setObjectName(u"label_2")
+
+        self.horizontalLayout_2.addWidget(self.label_2)
+
+        self.categoryList = QtCategoryList(search)
+        self.categoryList.setObjectName(u"categoryList")
+        self.categoryList.setMaximumSize(QSize(16777215, 50))
+        self.categoryList.setStyleSheet(u"QListWidget {background-color:transparent;}\n"
+"QListWidget::item {\n"
+"    background-color:rgb(251, 239, 243);\n"
+"    color: rgb(196, 95, 125);\n"
+"	border:2px solid red;\n"
+"	border-color:rgb(196, 95, 125);\n"
+"	border-radius: 15px;\n"
+"}\n"
+"/* \u9f20\u6807\u5728\u6309\u94ae\u4e0a\u65f6\uff0c\u6309\u94ae\u989c\u8272 */\n"
+" QListWidget::item:hover \n"
+"{\n"
+"    background-color:rgb(21, 85, 154);\n"
+"    border-radius: 15px;\n"
+"    color: rgb(0, 0, 0);\n"
+"}\n"
+"")
+
+        self.horizontalLayout_2.addWidget(self.categoryList)
+
+
+        self.bookLayout.addLayout(self.horizontalLayout_2, 1, 0, 1, 1)
+
 
         self.gridLayout_2.addLayout(self.bookLayout, 0, 0, 1, 1)
 
@@ -115,23 +139,18 @@ class Ui_search(object):
         self.retranslateUi(search)
         self.searchButton.clicked.connect(search.Search)
         self.jumpPage.clicked.connect(search.JumpPage)
-        self.comboBox.currentIndexChanged.connect(search.ChangeSort)
 
         QMetaObject.connectSlotsByName(search)
     # setupUi
 
     def retranslateUi(self, search):
         search.setWindowTitle(QCoreApplication.translate("search", u"Form", None))
-        self.comboBox.setItemText(0, QCoreApplication.translate("search", u"\u65b0\u5230\u65e7", None))
-        self.comboBox.setItemText(1, QCoreApplication.translate("search", u"\u65e7\u5230\u65b0", None))
-        self.comboBox.setItemText(2, QCoreApplication.translate("search", u"\u6700\u591a\u7231\u5fc3", None))
-        self.comboBox.setItemText(3, QCoreApplication.translate("search", u"\u6700\u591a\u7ec5\u58eb\u6307\u6570", None))
-
         self.searchButton.setText(QCoreApplication.translate("search", u"\u641c\u7d22", None))
 #if QT_CONFIG(shortcut)
         self.searchButton.setShortcut(QCoreApplication.translate("search", u"Return", None))
 #endif // QT_CONFIG(shortcut)
         self.label.setText(QCoreApplication.translate("search", u"\u9875\uff1a0/0", None))
         self.jumpPage.setText(QCoreApplication.translate("search", u"\u8df3\u8f6c", None))
+        self.label_2.setText(QCoreApplication.translate("search", u"\u5206\u7c7b\uff1a", None))
     # retranslateUi
 

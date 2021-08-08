@@ -13,13 +13,14 @@ from PySide2.QtGui import *
 from PySide2.QtWidgets import *
 
 from .qtlistwidget import QtBookList
+from .qtlistwidget import QtCategoryList
 
 
 class Ui_BookInfo(object):
     def setupUi(self, BookInfo):
         if not BookInfo.objectName():
             BookInfo.setObjectName(u"BookInfo")
-        BookInfo.resize(999, 808)
+        BookInfo.resize(758, 808)
         self.gridLayout_2 = QGridLayout(BookInfo)
         self.gridLayout_2.setObjectName(u"gridLayout_2")
         self.stackedWidget = QStackedWidget(BookInfo)
@@ -59,6 +60,55 @@ class Ui_BookInfo(object):
 
 
         self.verticalLayout_2.addLayout(self.horizontalLayout_3)
+
+        self.horizontalLayout_6 = QHBoxLayout()
+        self.horizontalLayout_6.setObjectName(u"horizontalLayout_6")
+        self.label_3 = QLabel(self.page)
+        self.label_3.setObjectName(u"label_3")
+        self.label_3.setMaximumSize(QSize(40, 20))
+
+        self.horizontalLayout_6.addWidget(self.label_3)
+
+        self.categoryList = QtCategoryList(self.page)
+        self.categoryList.setObjectName(u"categoryList")
+        self.categoryList.setMaximumSize(QSize(16777215, 40))
+        self.categoryList.setStyleSheet(u"QListWidget {background-color:transparent;}\n"
+"QListWidget::item {\n"
+"    background-color:rgb(251, 239, 243);\n"
+"    color: rgb(196, 95, 125);\n"
+"	border:2px solid red;\n"
+"    border-radius: 10px;\n"
+"	border-color:rgb(196, 95, 125);\n"
+"}\n"
+"/* \u9f20\u6807\u5728\u6309\u94ae\u4e0a\u65f6\uff0c\u6309\u94ae\u989c\u8272 */\n"
+" QListWidget::item:hover \n"
+"{\n"
+"    background-color:rgb(21, 85, 154);\n"
+"    border-radius: 10px;\n"
+"    color: rgb(0, 0, 0);\n"
+"}\n"
+"")
+
+        self.horizontalLayout_6.addWidget(self.categoryList)
+
+
+        self.verticalLayout_2.addLayout(self.horizontalLayout_6)
+
+        self.horizontalLayout_5 = QHBoxLayout()
+        self.horizontalLayout_5.setObjectName(u"horizontalLayout_5")
+        self.label_2 = QLabel(self.page)
+        self.label_2.setObjectName(u"label_2")
+        self.label_2.setMaximumSize(QSize(40, 20))
+
+        self.horizontalLayout_5.addWidget(self.label_2)
+
+        self.languageLabel = QLabel(self.page)
+        self.languageLabel.setObjectName(u"languageLabel")
+
+        self.horizontalLayout_5.addWidget(self.languageLabel)
+
+
+        self.verticalLayout_2.addLayout(self.horizontalLayout_5)
 
         self.horizontalLayout_8 = QHBoxLayout()
         self.horizontalLayout_8.setObjectName(u"horizontalLayout_8")
@@ -100,20 +150,20 @@ class Ui_BookInfo(object):
         self.updateTick.setObjectName(u"updateTick")
         self.updateTick.setEnabled(True)
         self.updateTick.setMinimumSize(QSize(80, 0))
-        self.updateTick.setMaximumSize(QSize(80, 20))
+        self.updateTick.setMaximumSize(QSize(160, 20))
 
         self.horizontalLayout_2.addWidget(self.updateTick)
 
         self.pushButton = QPushButton(self.page)
         self.pushButton.setObjectName(u"pushButton")
 
-        self.horizontalLayout_2.addWidget(self.pushButton)
+        self.horizontalLayout_2.addWidget(self.pushButton, 0, Qt.AlignHCenter|Qt.AlignVCenter)
 
         self.startRead = QPushButton(self.page)
         self.startRead.setObjectName(u"startRead")
         self.startRead.setMaximumSize(QSize(16777215, 20))
 
-        self.horizontalLayout_2.addWidget(self.startRead)
+        self.horizontalLayout_2.addWidget(self.startRead, 0, Qt.AlignHCenter|Qt.AlignVCenter)
 
         self.horizontalSpacer = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
 
@@ -216,9 +266,12 @@ class Ui_BookInfo(object):
         self.picture.setText(QCoreApplication.translate("BookInfo", u"TextLabel", None))
         self.label.setText(QCoreApplication.translate("BookInfo", u"\u6807\u9898\uff1a", None))
         self.title.setText(QCoreApplication.translate("BookInfo", u"\u6807\u9898", None))
-        self.label_6.setText(QCoreApplication.translate("BookInfo", u"\u9875\u6570:", None))
+        self.label_3.setText(QCoreApplication.translate("BookInfo", u"\u5206\u7c7b\uff1a", None))
+        self.label_2.setText(QCoreApplication.translate("BookInfo", u"\u8bed\u8a00\uff1a", None))
+        self.languageLabel.setText("")
+        self.label_6.setText(QCoreApplication.translate("BookInfo", u"\u9875\u6570\uff1a", None))
         self.likes.setText(QCoreApplication.translate("BookInfo", u"\u7231\u5fc3\u6570", None))
-        self.label_7.setText(QCoreApplication.translate("BookInfo", u"\u6536\u85cf\u6570", None))
+        self.label_7.setText(QCoreApplication.translate("BookInfo", u"\u6536\u85cf\u6570\uff1a", None))
         self.views.setText(QCoreApplication.translate("BookInfo", u"\u6536\u85cf\u6570", None))
         self.updateTick.setText(QCoreApplication.translate("BookInfo", u"TextLabel", None))
         self.pushButton.setText(QCoreApplication.translate("BookInfo", u"\u6536\u85cf", None))

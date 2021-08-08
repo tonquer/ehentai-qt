@@ -1,6 +1,6 @@
 import json
 
-from PySide2 import QtWidgets  # 导入PySide2部件
+from PySide2 import QtWidgets, QtGui  # 导入PySide2部件
 from PySide2.QtGui import QDesktopServices
 
 from conf import config
@@ -93,6 +93,13 @@ class QtMainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     def app(self):
         return self._app()
 
+    def closeEvent(self, a0: QtGui.QCloseEvent) -> None:
+        super().closeEvent(a0)
+        userId = self.loginForm.userIdEdit.text()
+        passwd = self.loginForm.passwdEdit.text()
+        self.bookInfoForm.close()
+        self.settingForm.ExitSaveSetting(self.size(), self.bookInfoForm.size(), self.qtReadImg.size(), userId, passwd)
+
     def InitWords(self):
         try:
             f = open("database/translate.json", "r")
@@ -105,6 +112,7 @@ class QtMainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                 for info in data.get('data', {}).values():
                     words.append(data.get('key', "") + ":" + info.get('src') + "|" + info.get('dest'))
             self.words = words
+
         except Exception as es:
             Log.Error(es)
 
@@ -179,6 +187,9 @@ class QtMainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
         self.InitUpdate()
         self.loginForm.Init()
+
+    def GetCategoryName(self, category):
+        return ToolUtil.Category.get(category.lower())
 
     def OpenAbout(self, action):
         from src.qt.com.qtimg import QtImgMgr

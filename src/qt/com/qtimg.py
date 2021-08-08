@@ -1,7 +1,7 @@
 import os
 import time
 
-from PySide2 import QtWidgets, QtCore
+from PySide2 import QtWidgets, QtCore, QtGui
 from PySide2.QtCore import Qt, QRectF, QPointF, QSizeF, QEvent
 from PySide2.QtGui import QColor, QPainter, QPixmap, QDoubleValidator, \
     QIntValidator
@@ -9,6 +9,7 @@ from PySide2.QtWidgets import QFrame, QGraphicsPixmapItem, QGraphicsScene, QAppl
 
 from conf import config
 from src.qt.com.qtbubblelabel import QtBubbleLabel
+from src.qt.qt_main import QtOwner
 from src.qt.util.qttask import QtTaskBase
 from src.util import Singleton, ToolUtil, Log
 from ui.img import Ui_Img
@@ -160,6 +161,12 @@ class QtImg(QtWidgets.QWidget, Ui_Img, QtTaskBase):
     def keyReleaseEvent(self, ev):
         if ev.key() == Qt.Key_Escape:
             self.hide()
+            return
+        if ev.key() == Qt.Key_Plus or ev.key() == Qt.Key_Equal:
+            self.zoomIn()
+            return
+        if ev.key() == Qt.Key_Minus:
+            self.zoomOut()
             return
         super(self.__class__, self).keyReleaseEvent(ev)
 

@@ -13,7 +13,7 @@ from src.util.status import Status
 
 
 class ItemWidget(QWidget):
-    def __init__(self, _id, title, leftStr1="", leftStr2="", leftStr3="", leftStr4=""):
+    def __init__(self, _id, title, leftStr1, leftStr2, leftStr3, leftStr4):
         super(ItemWidget, self).__init__()
         self.id = _id
         self.url = ""
@@ -81,6 +81,11 @@ class ItemWidget(QWidget):
             self.leftLabel4.adjustSize()
             self.leftLabel4.setAlignment(Qt.AlignLeft)
             layout.addWidget(self.leftLabel4)
+        # self.infoLabel = QLabel(info, self, styleSheet="color: #999999;")
+        # self.infoLabel.setMinimumSize(160, 20)
+        # self.infoLabel.setMaximumSize(160, 40)
+        # self.infoLabel.setAlignment(Qt.AlignRight)
+        # layout2.addWidget(self.infoLabel)
 
         self.label = QLabel(title, self)
         self.label.setMinimumSize(210, 20)
@@ -92,8 +97,11 @@ class ItemWidget(QWidget):
         font.setPointSize(12)
         font.setBold(True)
         self.label.setFont(font)
+        # self.label.setFont(QFont("Microsoft YaHei",  10,   87))
         self.label.setWordWrap(True)
         layout.addWidget(self.label)
+        # if self.info:
+        #     self.PaintInfo()
 
     def SetPicture(self, data):
         if not data:
@@ -101,8 +109,20 @@ class ItemWidget(QWidget):
         self.pictureData = data
         pic = QPixmap()
         pic.loadFromData(data)
+        # maxW = self.picIcon.width()
+        # maxH = self.picIcon.height()
+        # picW = pic.width()
+        # picH = pic.height()
+        # if maxW / picW < maxH / picH:
+        #     toW = maxW
+        #     toH = (picH/(picW/maxW))
+        # else:
+        #     toH = maxH
+        #     toW = (picW / (picH / maxH))
         newPic = pic.scaled(self.picIcon.width(), self.picIcon.height(), Qt.KeepAspectRatio, Qt.SmoothTransformation)
+
         self.picIcon.setPixmap(newPic)
+
 
     def GetTitle(self):
         return self.label.text()
@@ -186,9 +206,9 @@ class QtBookList(QListWidget, QtTaskBase):
     def UpdateState(self, isLoading=False):
         self.isLoadingPage = isLoading
 
-    def AddBookItem(self, _id, title, info="", url="", path="", param="", originalName=""):
+    def AddBookItem(self, _id, title, categories="", url="", path="", param="", originalName=""):
         index = self.count()
-        iwidget = ItemWidget(_id, title)
+        iwidget = ItemWidget(_id, title, categories, "", "", "")
         iwidget.url = url
         iwidget.path = path
         item = QListWidgetItem(self)
