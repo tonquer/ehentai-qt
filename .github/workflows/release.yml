@@ -110,7 +110,7 @@ jobs:
         cp waifu2x-ncnn-vulkan-python-v1.0.2-py37-macos-x86_64/waifu2x.so ./
     - name: Build
       run: |
-        pyinstaller --clean --log-level TRACE --onedir --name PicACG \
+        pyinstaller --clean --log-level TRACE --onedir --name Ehentai \
             --add-binary waifu2x.so:. --hidden-import PySide2 --hidden-import requests \
             --hidden-import urllib3 --hidden-import pillow \
             --hidden-import conf --hidden-import resources --hidden-import translate --hidden-import src \
@@ -122,13 +122,13 @@ jobs:
             --hidden-import src.util --hidden-import ui \
             --hidden-import qss --strip --windowed -i Icon.icns \
             start.py
-        rm -rf dist/PicACG
+        rm -rf dist/Ehentai
         cp Icon.icns dist/
         ln -s /Applications/   dist/Applications
-        cp -avf database models resources translate dist/PicACG.app/Contents/MacOS
-        rm -rf dist/PicACG.app/Contents/MacOS/resources/*.py
-        rm -rf dist/PicACG.app/Contents/MacOS/translate/*.ts
-        create-dmg --volname "PicACG" --volicon "Icon.icns" --icon "Icon.icns" 200 190 \
+        cp -avf database models resources translate dist/Ehentai.app/Contents/MacOS
+        rm -rf dist/Ehentai.app/Contents/MacOS/resources/*.py
+        rm -rf dist/Ehentai.app/Contents/MacOS/translate/*.ts
+        create-dmg --volname "Ehentai" --volicon "Icon.icns" --icon "Icon.icns" 200 190 \
             --hide-extension "Icon.icns" ${{ env.PACKAGENAME }}.dmg dist/
         zip -9 ehentai.zip ${{ env.PACKAGENAME }}.dmg
     - name: Upload
