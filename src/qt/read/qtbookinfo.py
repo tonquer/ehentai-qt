@@ -160,7 +160,7 @@ class QtBookInfo(QtWidgets.QWidget, Ui_BookInfo, QtTaskBase):
                 self.AddDownloadTask(self.url, "{}/{}-cover".format(config.CurSite, self.bookId), completeCallBack=self.UpdatePicture)
             self.GetCommnetBack(info.pageInfo.comment)
         else:
-            QtMsgLabel.ShowErrorEx(self, QtOwner.owner.GetStatusStr(st))
+            QtMsgLabel.ShowErrorEx(self, QtOwner().owner.GetStatusStr(st))
         return
 
     def UpdatePicture(self, data, status):

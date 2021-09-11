@@ -106,9 +106,9 @@ class QtLogin(QtWidgets.QWidget, Ui_Login, QtTaskBase):
             self.AddHttpTask(req.GetUserIdReq(), self.GetUserBack, {})
             self.isTestLogin = True
         elif st == Status.UserError:
-            QtMsgLabel.ShowErrorEx(self, QtOwner.owner.GetStatusStr(st))
+            QtMsgLabel.ShowErrorEx(self, QtOwner().owner.GetStatusStr(st))
         elif st == Status.NeedGoogle:
-            QtMsgLabel.ShowErrorEx(self, QtOwner.owner.GetStatusStr(st))
+            QtMsgLabel.ShowErrorEx(self, QtOwner().owner.GetStatusStr(st))
             self.isTestLogin = True
             self.isLogin = False
             self.OpenLoginUrl()

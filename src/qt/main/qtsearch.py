@@ -89,7 +89,7 @@ class QtSearch(QtWidgets.QWidget, Ui_search, QtTaskBase):
                     self.bookList.AddBookItem(_id, title, self.tr("分类：")+category, url, path, "")
                 # self.CheckCategoryShowItem()
             else:
-                QtOwner().owner.msgForm.ShowError(QtOwner.owner.GetStatusStr(st))
+                QtOwner().owner.msgForm.ShowError(QtOwner().owner.GetStatusStr(st))
         except Exception as es:
             Log.Error(es)
         pass

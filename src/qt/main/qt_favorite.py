@@ -55,7 +55,7 @@ class QtFavorite(QtWidgets.QWidget, Ui_favorite, QtTaskBase):
                 path = "{}/{}-cover".format(config.CurSite, _id)
                 self.bookList.AddBookItem(_id, title, self.tr("分类：")+category, url, path, "")
         else:
-            QtMsgLabel().ShowErrorEx(self, QtOwner.owner.GetStatusStr(data['st']))
+            QtMsgLabel().ShowErrorEx(self, QtOwner().owner.GetStatusStr(data['st']))
         pass
 
     def JumpPage(self):
