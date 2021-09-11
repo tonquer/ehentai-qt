@@ -259,6 +259,7 @@ class QtMainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             # 清除cookie
             Server().session = requests.session()
             self.stackedWidget.setCurrentIndex(0)
+            self.loginForm.Init()
         pass
 
     def InitUpdate(self):

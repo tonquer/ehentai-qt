@@ -1,3 +1,4 @@
+import base64
 import json
 
 import requests
@@ -139,6 +140,7 @@ class QtLogin(QtWidgets.QWidget, Ui_Login, QtTaskBase):
     def Init(self):
         userId = QtOwner().owner.settingForm.GetSettingV("UserId", "")
         passwd = QtOwner().owner.settingForm.GetSettingV("Passwd2", "")
+        passwd = base64.b64decode(passwd).decode("utf-8") if passwd else ""
         memberId = QtOwner().owner.settingForm.GetSettingV("ipb_member_id", "")
         passHash = QtOwner().owner.settingForm.GetSettingV("ipb_pass_hash", "")
         igneous = QtOwner().owner.settingForm.GetSettingV("igneous", "")
