@@ -8,7 +8,7 @@ from PySide2.QtGui import Qt
 from PySide2.QtWidgets import QLabel
 
 from conf import config
-from src.qt.com.qtbubblelabel import QtBubbleLabel
+from src.qt.com.qtmsg import QtMsgLabel
 from src.qt.com.qtimg import QtImgMgr
 from src.qt.qt_main import QtOwner
 from src.qt.struct.qt_define import QtFileData
@@ -95,8 +95,6 @@ class QtImgTool(QtWidgets.QWidget, Ui_ReadImg):
         self.setAutoFillBackground(True)
         # self.setPalette(palette)
         # self.setAttribute(Qt.WA_TranslucentBackground, False)
-        self.radioButton.installEventFilter(self)
-        self.radioButton_2.installEventFilter(self)
         self.downloadMaxSize = 0
         self.downloadSize = 0
         self.slider = QtCustomSlider(self)
@@ -104,6 +102,13 @@ class QtImgTool(QtWidgets.QWidget, Ui_ReadImg):
         self.SetWaifu2xCancle()
         self.scaleBox.installEventFilter(self)
         self.zoomSlider.setMaximum(500)
+        # self.buttonGroup.buttonClicked.connect(self.SwitchPicture)
+        # self.buttonGroup.setId(self.radioButton, 1)
+        # self.buttonGroup.setId(self.radioButton_2, 2)
+        # self.buttonGroup.setId(self.radioButton_3, 3)
+        # self.buttonGroup.setId(self.radioButton_4, 4)
+        # self.buttonGroup.setId(self.radioButton_5, 5)
+        # self.buttonGroup.setId(self.radioButton_6, 6)
 
     @property
     def imgFrame(self):
@@ -130,12 +135,12 @@ class QtImgTool(QtWidgets.QWidget, Ui_ReadImg):
         return self.readImg.maxPic
 
     @property
-    def isStripModel(self):
-        return self.readImg.isStripModel
+    def stripModel(self):
+        return self.readImg.stripModel
 
-    @isStripModel.setter
-    def isStripModel(self, value):
-        self.readImg.isStripModel = value
+    @stripModel.setter
+    def stripModel(self, value):
+        self.readImg.stripModel = value
 
     def Show(self, size):
         self.show()
@@ -152,15 +157,28 @@ class QtImgTool(QtWidgets.QWidget, Ui_ReadImg):
         self.imgFrame.scaleCnt = value
 
     def NextPage(self):
+        from src.qt.read.qtreadimg import ReadMode
+        if self.stripModel in [ReadMode.RightLeftDouble, ReadMode.RightLeftScroll]:
+            self._LastPage()
+        else:
+            self._NextPage()
+
+    def _NextPage(self):
         self.graphicsGroup.setPos(0, 0)
-        epsId = self.readImg.epsId
-        bookId = self.readImg.bookId
 
         if self.curIndex >= self.maxPic -1:
-            QtBubbleLabel.ShowMsgEx(self.readImg, "已经最后一页")
+            QtMsgLabel.ShowMsgEx(self.readImg, self.tr("已经最后一页"))
             return
         t = CTime()
-        self.curIndex += 1
+
+        from src.qt.read.qtreadimg import ReadMode
+        if self.stripModel in [ReadMode.RightLeftDouble, ReadMode.LeftRightDouble]:
+            self.curIndex += 2
+            self.curIndex = min(self.curIndex, self.maxPic-1)
+        else:
+            self.curIndex += 1
+
+        self.imgFrame.oldValue = 0
         self.SetData(isInit=True)
         self.readImg.CheckLoadPicture()
         self.readImg.ShowImg()
@@ -169,36 +187,32 @@ class QtImgTool(QtWidgets.QWidget, Ui_ReadImg):
         return
 
     def LastPage(self):
+        from src.qt.read.qtreadimg import ReadMode
+        if self.stripModel in [ReadMode.RightLeftDouble, ReadMode.RightLeftScroll]:
+            self._NextPage()
+        else:
+            self._LastPage()
+
+    def _LastPage(self):
         self.graphicsGroup.setPos(0, 0)
-        epsId = self.readImg.epsId
-        bookId = self.readImg.bookId
 
         if self.curIndex <= 0:
-            if epsId - 1 >= 0:
-                return
-            QtBubbleLabel.ShowMsgEx(self.readImg, "已经是第一页")
+            QtMsgLabel.ShowMsgEx(self.readImg, self.tr("已经是第一页"))
             return
-        self.curIndex -= 1
+
+        from src.qt.read.qtreadimg import ReadMode
+        if self.stripModel in [ReadMode.RightLeftDouble, ReadMode.LeftRightDouble]:
+            self.curIndex -= 2
+            self.curIndex = max(self.curIndex, 0)
+        else:
+            self.curIndex -= 1
+
+        self.imgFrame.oldValue = 0
         self.SetData(isInit=True)
         self.readImg.CheckLoadPicture()
         self.readImg.ShowImg()
         self.readImg.ShowOtherPage()
         return
-
-    def SwitchPicture(self):
-        if self.radioButton.isChecked():
-            self.isStripModel = False
-            self.imgFrame.SetPixIem(1, QPixmap())
-            self.imgFrame.SetPixIem(2, QPixmap())
-            self.zoomSlider.setValue(100)
-            self.scaleCnt = 0
-        else:
-            self.isStripModel = True
-            self.readImg.ShowOtherPage()
-            self.zoomSlider.setValue(120)
-            self.scaleCnt = 2
-        self.graphicsGroup.setPos(0, 0)
-        self.imgFrame.ScalePicture()
 
     def ReturnPage(self):
         self.readImg.hide()
@@ -209,22 +223,16 @@ class QtImgTool(QtWidgets.QWidget, Ui_ReadImg):
         self.readImg.Clear()
         return
 
-    def eventFilter(self, obj, ev):
-        if ev.type() == QEvent.KeyPress:
-            return True
-        else:
-            return super(self.__class__, self).eventFilter(obj, ev)
-
     def SetData(self, pSize=None, dataLen=0, state="", waifuSize=None, waifuDataLen=0, waifuState="", waifuTick=0, isInit=False):
         self.UpdateSlider()
-        self.epsLabel.setText("位置：{}/{}".format(self.readImg.curIndex + 1, self.readImg.maxPic))
+        self.epsLabel.setText(self.tr("位置")+"：{}/{}".format(self.readImg.curIndex + 1, self.readImg.maxPic))
         if pSize or isInit:
             if not pSize:
                 pSize = QSize(0, 0)
-            self.resolutionLabel.setText("分辨率：{}x{}".format(str(pSize.width()), str(pSize.height())))
+            self.resolutionLabel.setText(self.tr("分辨率")+"：{}x{}".format(str(pSize.width()), str(pSize.height())))
 
         if dataLen or isInit:
-            self.sizeLabel.setText("大小: " + ToolUtil.GetDownloadSize(dataLen))
+            self.sizeLabel.setText(self.tr("大小")+": " + ToolUtil.GetDownloadSize(dataLen))
 
         if waifuSize or isInit:
             if not waifuSize:
@@ -234,7 +242,7 @@ class QtImgTool(QtWidgets.QWidget, Ui_ReadImg):
             self.waifu2xSize.setText("" + ToolUtil.GetDownloadSize(waifuDataLen))
 
         if state or isInit:
-            self.stateLable.setText("状态：" + state)
+            self.stateLable.setText(self.tr("状态：") + self.GetStatus(state))
 
         if waifuState or isInit:
             if waifuState == QtFileData.WaifuStateStart:
@@ -246,15 +254,38 @@ class QtImgTool(QtWidgets.QWidget, Ui_ReadImg):
             else:
                 self.waifu2xStatus.setStyleSheet("color:dark;")
             if config.CanWaifu2x:
-                self.waifu2xStatus.setText(waifuState)
+                self.waifu2xStatus.setText(self.GetStatus(waifuState))
         if waifuTick or isInit:
             self.waifu2xTick.setText(str(waifuTick) + "s")
+
+    def GetStatus(self, data):
+        if data == QtFileData.Downloading:
+            return self.tr("开始下载")
+        elif data == QtFileData.Downloading:
+            return self.tr("转换中")
+        elif data == QtFileData.DownloadSuc:
+            return self.tr("下载完成")
+        elif data == QtFileData.DownloadError:
+            return self.tr("下载错误")
+        elif data == QtFileData.DownloadReset:
+            return self.tr("重新下载")
+        elif data == QtFileData.WaifuWait:
+            return self.tr("等待中")
+        elif data == QtFileData.WaifuStateStart:
+            return self.tr("转换开始")
+        elif data == QtFileData.WaifuStateCancle:
+            return self.tr("不转换")
+        elif data == QtFileData.WaifuStateEnd:
+            return self.tr("转换完成")
+        elif data == QtFileData.WaifuStateEnd:
+            return self.tr("转换失败")
+        return data
 
     def CopyPicture(self):
         owner = self.readImg
         p = owner.pictureData.get(owner.curIndex)
         if not p or not p.data:
-            QtBubbleLabel.ShowErrorEx(owner, "下载未完成")
+            QtMsgLabel.ShowErrorEx(owner, self.tr("下载未完成"))
             return
         QtImgMgr().ShowImg(p.data)
         return
@@ -277,20 +308,6 @@ class QtImgTool(QtWidgets.QWidget, Ui_ReadImg):
         self.noiseLabel.setText(str(noise))
         self.scaleLabel.setText(str(scale))
         self.gpuLabel.setText(QtOwner().owner.settingForm.GetGpuName())
-
-    def ReduceScalePic(self):
-        self.readImg.zoom(1/1.1)
-        return
-
-    def AddScalePic(self):
-        self.readImg.zoom(1.1)
-        return
-
-    def OpenLastEps(self):
-        return
-
-    def OpenNextEps(self):
-        return
 
     def SkipPicture(self, index=0):
         value = self.slider.value()
@@ -317,10 +334,13 @@ class QtImgTool(QtWidgets.QWidget, Ui_ReadImg):
     def FullScreen(self):
         if self.readImg.windowState() == Qt.WindowFullScreen:
             self.readImg.showNormal()
-            self.fullButton.setText("全屏")
+            self.fullButton.setText(self.tr("全屏"))
+            config.LookReadFull = 0
         else:
             self.readImg.showFullScreen()
-            self.fullButton.setText("退出全屏")
+            self.fullButton.setText(self.tr("退出全屏"))
+            config.LookReadFull = 1
+        QtOwner().SetV("Read/LookReadFull", config.LookReadFull)
 
     def Waifu2xSave(self):
         self.SetWaifu2xCancle(True)
@@ -361,17 +381,52 @@ class QtImgTool(QtWidgets.QWidget, Ui_ReadImg):
         self.modelBox.setVisible(isVisibel)
 
     def ScalePicture(self, value):
-        self.zoomLabel.setText("缩放（{}%）".format(str(value)))
+        self.zoomLabel.setText(self.tr("缩放")+"（{}%）".format(str(value)))
         self.readImg.zoom(value//10-10)
 
     def eventFilter(self, obj, ev):
-        if obj == self.scaleBox:
-            if ev.type() == QEvent.KeyRelease:
-                return True
-            elif ev.type() == QEvent.KeyPress:
-                return True
+        if ev.type() == QEvent.KeyRelease:
+            return True
+        elif ev.type() == QEvent.KeyPress:
+            return True
         return False
 
+    def ChangeReadMode(self, index):
+        from src.qt.read.qtreadimg import ReadMode
+        self.graphicsGroup.setPos(0, 0)
+        self.stripModel = ReadMode(index)
+        if self.stripModel == ReadMode.LeftRight:
+            self.imgFrame.SetPixIem(1, QPixmap())
+            self.imgFrame.SetPixIem(2, QPixmap())
+            self.zoomSlider.setValue(100)
+            self.scaleCnt = 0
+        elif self.stripModel in [ReadMode.RightLeftDouble, ReadMode.LeftRightDouble]:
+            self.zoomSlider.setValue(100)
+            self.scaleCnt = 0
+            self.imgFrame.SetPixIem(0, QPixmap())
+            self.imgFrame.SetPixIem(1, QPixmap())
+            self.imgFrame.SetPixIem(2, QPixmap())
+            self.readImg.CheckLoadPicture()
+            self.readImg.ShowImg()
+            self.readImg.ShowOtherPage()
+        elif self.stripModel in [ReadMode.RightLeftScroll, ReadMode.LeftRightScroll]:
+            self.zoomSlider.setValue(100)
+            self.scaleCnt = 0
+            self.imgFrame.graphicsView.verticalScrollBar().blockSignals(True)
+            self.imgFrame.graphicsView.horizontalScrollBar().blockSignals(False)
+            self.readImg.CheckLoadPicture()
+            self.readImg.ShowImg()
+            self.readImg.ShowOtherPage()
+        else:
+            self.zoomSlider.setValue(100)
+            self.scaleCnt = 0
+            self.imgFrame.graphicsView.verticalScrollBar().blockSignals(False)
+            self.imgFrame.graphicsView.horizontalScrollBar().blockSignals(True)
+            self.readImg.ShowOtherPage()
+        self.imgFrame.ScalePicture()
+        config.LookReadMode = index
+        QtOwner().SetV("Read/LookReadMode", config.LookReadMode)
+        self.imgFrame.InitHelp()
 
 
 

@@ -1,6 +1,7 @@
 from PySide2 import QtWidgets
 
-from src.qt.com.qtbubblelabel import QtBubbleLabel
+from conf import config
+from src.qt.com.qtmsg import QtMsgLabel
 from src.qt.qt_main import QtOwner
 from src.qt.util.qttask import QtTaskBase
 from src.server import req, Status
@@ -13,11 +14,11 @@ class QtFavorite(QtWidgets.QWidget, Ui_favorite, QtTaskBase):
         Ui_favorite.__init__(self)
         QtTaskBase.__init__(self)
         self.setupUi(self)
-        self.bookList.InitBook()
-        action = self.bookList.popMenu.addAction("删除")
-        action.triggered.connect(self.DeleteHandler)
-        for i in range(0, 10):
-            self.comboBox.addItem("收藏"+str(i))
+        self.bookList.InitFavorite()
+        # action = self.bookList.popMenu.addAction("删除")
+        # action.triggered.connect(self.DeleteHandler)
+        # for i in range(0, 10):
+        #     self.comboBox.addItem("收藏"+str(i))
 
     def SwitchCurrent(self):
         self.bookList.UpdatePage(1, 1)
@@ -43,17 +44,18 @@ class QtFavorite(QtWidgets.QWidget, Ui_favorite, QtTaskBase):
             favoriteList = data["favoriteList"]
             self.bookList.UpdatePage(page, maxPages)
             allNum = sum(favoriteList.values())
-            self.comboBox.setItemText(0, "所有({})".format(str(allNum)))
+            self.comboBox.setItemText(0, self.tr("所有")+"({})".format(str(allNum)))
             for k, v in favoriteList.items():
-                self.comboBox.setItemText(k+1, "收藏{}({})".format(str(k), str(v)))
+                self.comboBox.setItemText(k+1, self.tr("收藏")+"{}({})".format(str(k), str(v)))
             for info in bookList:
                 _id = info.baseInfo.id
                 title = info.baseInfo.title
                 url = info.baseInfo.imgUrl
                 category = QtOwner().owner.GetCategoryName(info.baseInfo.category)
-                self.bookList.AddBookItem(_id, title, "分类："+category, url, "", "")
+                path = "{}/{}-cover".format(config.CurSite, _id)
+                self.bookList.AddBookItem(_id, title, self.tr("分类：")+category, url, path, "")
         else:
-            QtBubbleLabel().ShowErrorEx(self, data['st'])
+            QtMsgLabel().ShowErrorEx(self, QtOwner.owner.GetStatusStr(data['st']))
         pass
 
     def JumpPage(self):
@@ -91,5 +93,5 @@ class QtFavorite(QtWidgets.QWidget, Ui_favorite, QtTaskBase):
     def DeleteBack(self, data):
         QtOwner().owner.loadingForm.close()
         if data["st"] == Status.Ok:
-            QtBubbleLabel.ShowMsgEx(self, "删除成功")
+            QtMsgLabel.ShowMsgEx(self, self.tr("删除成功"))
         self.SwitchCurrent()

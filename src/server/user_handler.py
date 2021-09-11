@@ -1,3 +1,4 @@
+import json
 import os
 import pickle
 import re
@@ -41,18 +42,19 @@ class GetUserIdReqHandler(object):
     def __call__(self, task: Task):
         data = {"st": task.status}
         try:
+            if task.status != Status.Ok:
+                return
             userId, userName = ToolUtil.ParseLoginUserName(task.res.raw.text)
             if userId:
                 data["st"] = Status.Ok
                 data["userId"] = userId
                 data["userName"] = userName
-            else:
-                data["st"] = Status.UserError
         except Exception as es:
             data["st"] = Status.ParseError
             Log.Error(es)
-        if task.backParam:
-            QtTask().taskBack.emit(task.backParam, pickle.dumps(data))
+        finally:
+            if task.backParam:
+                QtTask().taskBack.emit(task.backParam, pickle.dumps(data))
 
 
 @handler(req.LoginReq)
@@ -60,6 +62,8 @@ class LoginReqHandler(object):
     def __call__(self, task: Task):
         data = {"st": task.status}
         try:
+            if task.status != Status.Ok:
+                return
             parseSt = ToolUtil.ParseLoginUserName(task.res.raw.text)
             from requests import Response
             assert isinstance(task.res.raw, Response)
@@ -75,17 +79,18 @@ class LoginReqHandler(object):
                 data["ipb_coppa"] = coppa
                 Log.Info("login success, {}".format(cookies))
                 st = Status.Ok
+                data["st"] = st
             else:
+                data["st"] = ToolUtil.ParseLoginResult(task.res.raw.text)
                 Log.Info("login error, {}".format(cookies))
-                st = parseSt
             # cookies = task.res.raw.headers.get("Set-Cookie", "")
             # print(cookies)
-            data["st"] = st
         except Exception as es:
             data["st"] = Status.ParseError
             Log.Error(es)
-        if task.backParam:
-            QtTask().taskBack.emit(task.backParam, pickle.dumps(data))
+        finally:
+            if task.backParam:
+                QtTask().taskBack.emit(task.backParam, pickle.dumps(data))
 
 
 @handler(req.HomeReq)
@@ -93,13 +98,19 @@ class HomeReqHandler(object):
     def __call__(self, task: Task):
         data = {"st": task.status}
         try:
+            if task.status != Status.Ok:
+                return
+            curNum, maxNum = ToolUtil.ParseHomeInfo(task.res.raw.text)
             data["st"] = Status.Ok
+            data["curNum"] = curNum
+            data["maxNum"] = maxNum
             pass
         except Exception as es:
             data["st"] = Status.ParseError
             Log.Error(es)
-        if task.backParam:
-            QtTask().taskBack.emit(task.backParam, pickle.dumps(data))
+        finally:
+            if task.backParam:
+                QtTask().taskBack.emit(task.backParam, pickle.dumps(data))
 
 
 @handler(req.GetIndexInfoReq)
@@ -108,17 +119,35 @@ class GetIndexInfoReqHandler(object):
     def __call__(self, task: Task):
         data = {"st": task.status}
         try:
-            bookList, maxPages = ToolUtil.ParseBookIndex(task.res.raw.text)
-            from src.book.book import BookMgr
-            BookMgr().UpdateBookInfoList(bookList)
-            data["st"] = Status.Ok
-            data["bookList"] = bookList
-            data["maxPages"] = maxPages
+            if task.status != Status.Ok:
+                return
+            if not task.res.raw.text:
+                data["st"] = Status.Error
+            else:
+                if task.req.site == "exhentai":
+                    cookies = requests.utils.dict_from_cookiejar(task.res.raw.cookies)
+                    igneous = cookies.get("igneous")
+                    if igneous:
+                        data["igneous"] = igneous
+                    else:
+                        for raw in task.res.raw.history:
+                            cookies = requests.utils.dict_from_cookiejar(raw.cookies)
+                            igneous = cookies.get("igneous")
+                            if igneous:
+                                data["igneous"] = igneous
+                                break
+                bookList, maxPages = ToolUtil.ParseBookIndex(task.res.raw.text)
+                from src.book.book import BookMgr
+                BookMgr().UpdateBookInfoList(bookList, task.req.site)
+                data["st"] = Status.Ok
+                data["bookList"] = bookList
+                data["maxPages"] = maxPages
         except Exception as es:
             data["st"] = Status.ParseError
             Log.Error(es)
-        if task.backParam:
-            QtTask().taskBack.emit(task.backParam, pickle.dumps(data))
+        finally:
+            if task.backParam:
+                QtTask().taskBack.emit(task.backParam, pickle.dumps(data))
 
 
 @handler(req.GetFavoritesReq)
@@ -126,10 +155,12 @@ class GetFavoritesReqHandler(object):
     def __call__(self, task: Task):
         data = {"st": task.status}
         try:
+            if task.status != Status.Ok:
+                return
             bookList, maxPages = ToolUtil.ParseBookIndex(task.res.raw.text)
             favoriteList = ToolUtil.ParseFavorite(task.res.raw.text)
             from src.book.book import BookMgr
-            BookMgr().UpdateBookInfoList(bookList)
+            BookMgr().UpdateBookInfoList(bookList, task.req.site)
             data["st"] = Status.Ok
             data["bookList"] = bookList
             data["maxPages"] = maxPages
@@ -137,8 +168,9 @@ class GetFavoritesReqHandler(object):
         except Exception as es:
             data["st"] = Status.ParseError
             Log.Error(es)
-        if task.backParam:
-            QtTask().taskBack.emit(task.backParam, pickle.dumps(data))
+        finally:
+            if task.backParam:
+                QtTask().taskBack.emit(task.backParam, pickle.dumps(data))
 
 
 @handler(req.BookInfoReq)
@@ -146,13 +178,15 @@ class BookInfoReqHandler(object):
     def __call__(self, task):
         data = {"st": task.status}
         try:
+            if task.status != Status.Ok:
+                return
             info, maxPage = ToolUtil.ParseBookInfo(task.res.raw.text)
             from src.book.book import BookMgr
-            BookMgr().UpdateBookInfo(task.req.bookId, info, task.req.page, maxPage)
+            BookMgr().UpdateBookInfo(task.req.bookId, info, task.req.page, maxPage, task.req.site)
 
             if task.req.page == 1:
                 # TODO 预加载第一页
-                Server().Send(req.GetBookImgUrl(task.req.bookId, 1), isASync=False)
+                Server().Send(req.GetBookImgUrl(task.req.bookId, 1, task.req.site), isASync=False)
 
                 # TODO 加载剩余分页
                 # for i in range(1+1, maxPage+1):
@@ -162,8 +196,9 @@ class BookInfoReqHandler(object):
         except Exception as es:
             data["st"] = Status.ParseError
             Log.Error(es)
-        if task.backParam:
-            QtTask().taskBack.emit(task.backParam, pickle.dumps(data))
+        finally:
+            if task.backParam:
+                QtTask().taskBack.emit(task.backParam, pickle.dumps(data))
 
 
 @handler(req.GetBookImgUrl)
@@ -171,16 +206,19 @@ class GetBookImgUrlReqHandler(object):
     def __call__(self, task: Task):
         data = {"st": task.status}
         try:
+            if task.status != Status.Ok:
+                return
             imgUrl, imgKey = ToolUtil.ParsePictureInfo(task.res.raw.text)
             from src.book.book import BookMgr
-            BookMgr().UpdateImgKey(task.req.bookId, imgKey)
-            BookMgr().UpdateImgUrl(task.req.bookId, task.req.index, imgUrl)
+            BookMgr().UpdateImgKey(task.req.bookId, imgKey, task.req.site)
+            BookMgr().UpdateImgUrl(task.req.bookId, task.req.index, imgUrl, task.req.site)
             data["st"] = Status.Ok
         except Exception as es:
             data["st"] = Status.ParseError
             Log.Error(es)
-        if task.backParam:
-            QtTask().taskBack.emit(task.backParam, pickle.dumps(data))
+        finally:
+            if task.backParam:
+                QtTask().taskBack.emit(task.backParam, pickle.dumps(data))
 
 
 @handler(req.GetBookImgUrl2)
@@ -188,15 +226,18 @@ class GetBookImgUrl2ReqHandler(object):
     def __call__(self, task):
         data = {"st": task.status}
         try:
+            if task.status != Status.Ok:
+                return
             imgUrl = ToolUtil.ParsePictureInfo2(task.res.raw.text)
             from src.book.book import BookMgr
-            BookMgr().UpdateImgUrl(task.req.bookId, task.req.index, imgUrl)
+            BookMgr().UpdateImgUrl(task.req.bookId, task.req.index, imgUrl, task.req.site)
             data["st"] = Status.Ok
         except Exception as es:
             data["st"] = Status.ParseError
             Log.Error(es)
-        if task.backParam:
-            QtTask().taskBack.emit(task.backParam, pickle.dumps(data))
+        finally:
+            if task.backParam:
+                QtTask().taskBack.emit(task.backParam, pickle.dumps(data))
 
 
 @handler(req.AddFavoritesReq)
@@ -204,6 +245,8 @@ class AddFavoritesReqHandler(object):
     def __call__(self, task):
         data = {"st": task.status}
         try:
+            if task.status != Status.Ok:
+                return
             note, favorites, isUpdate = ToolUtil.ParseAddFavorite(task.res.raw.text)
             data["st"] = Status.Ok
             data["note"] = note
@@ -212,8 +255,9 @@ class AddFavoritesReqHandler(object):
         except Exception as es:
             data["st"] = Status.ParseError
             Log.Error(es)
-        if task.backParam:
-            QtTask().taskBack.emit(task.backParam, pickle.dumps(data))
+        finally:
+            if task.backParam:
+                QtTask().taskBack.emit(task.backParam, pickle.dumps(data))
 
 
 @handler(req.AddFavorites2Req)
@@ -221,12 +265,13 @@ class AddFavorites2ReqHandler(object):
     def __call__(self, task):
         data = {"st": task.status}
         try:
-            data["st"] = Status.Ok
+            return
         except Exception as es:
             data["st"] = Status.ParseError
             Log.Error(es)
-        if task.backParam:
-            QtTask().taskBack.emit(task.backParam, pickle.dumps(data))
+        finally:
+            if task.backParam:
+                QtTask().taskBack.emit(task.backParam, pickle.dumps(data))
 
 
 @handler(req.DelFavoritesReq)
@@ -234,12 +279,13 @@ class DelFavoritesReqHandler(object):
     def __call__(self, task):
         data = {"st": task.status}
         try:
-            data["st"] = Status.Ok
+            return
         except Exception as es:
             data["st"] = Status.ParseError
             Log.Error(es)
-        if task.backParam:
-            QtTask().taskBack.emit(task.backParam, pickle.dumps(data))
+        finally:
+            if task.backParam:
+                QtTask().taskBack.emit(task.backParam, pickle.dumps(data))
 
 
 @handler(req.DownloadBookReq)
@@ -253,7 +299,7 @@ class DownloadBookReq(object):
             try:
                 if r.status_code != 200:
                     if backData.backParam:
-                        QtTask().downloadBack.emit(backData.backParam, -1, b"")
+                        QtTask().downloadBack.emit(backData.backParam, -r.status_code, b"")
                     return
                 fileSize = int(r.headers.get('Content-Length', 0))
                 getSize = 0
@@ -279,3 +325,37 @@ class DownloadBookReq(object):
                 Log.Error(es)
                 if backData.backParam:
                     QtTask().downloadBack.emit(backData.backParam, -1, b"")
+
+
+@handler(req.SpeedTestPingReq)
+class SpeedTestPingHandler(object):
+    def __call__(self, task):
+        data = {"st": task.status, "data": str(0)}
+        try:
+            if task.status != Status.Ok:
+                return
+            if hasattr(task.res.raw, "elapsed"):
+                data["data"] = str(task.res.raw.elapsed.total_seconds())
+        except Exception as es:
+            data["st"] = Status.ParseError
+            Log.Error(es)
+        finally:
+            if task.backParam:
+                QtTask().taskBack.emit(task.backParam, pickle.dumps(data))
+
+
+@handler(req.DnsOverHttpsReq)
+class DnsOverHttpsReqHandler(object):
+    def __call__(self, task):
+        data = {"st": task.status}
+        try:
+            if task.status != Status.Ok:
+                return
+            info = json.loads(task.res.raw.text)
+            data['Answer'] = info.get("Answer")
+        except Exception as es:
+            data["st"] = Status.ParseError
+            Log.Error(es)
+        finally:
+            if task.backParam:
+                QtTask().taskBack.emit(task.backParam, pickle.dumps(data))

@@ -1,17 +1,21 @@
 import hashlib
+import json
 import os
 import pickle
 import threading
 import time
 from queue import Queue
+from types import FunctionType
 
 from PySide2.QtCore import Signal, QObject
 from PySide2.QtGui import QImage
 
 from conf import config
+from src.qt.util.qt_domain import QtDomainMgr
 from src.util import Singleton, Log
 from src.util.status import Status
 from src.util.tool import CTime, ToolUtil
+from zlib import crc32
 
 
 class QtTaskQObject(QObject):
@@ -46,14 +50,14 @@ class QtTaskBase:
     # callBack(data)
     # callBack(data, backParam)
     def AddHttpTask(self, req, callBack=None, backParam=None):
-        return QtTask().AddHttpTask(req, callBack, backParam, cleanFlag=self.__taskFlagId)
+        return QtDomainMgr().AddHttpTask(req, callBack, backParam, cleanFlag=self.__taskFlagId)
 
     # downloadCallBack(data, laveFileSize, backParam)
     # downloadCallBack(data, laveFileSize)
     # downloadCompleteBack(data, st)
     # downloadCompleteBack(data, st, backParam)
     def AddDownloadTask(self, url, path, downloadCallBack=None, completeCallBack=None, isSaveData=True, backParam=None, isSaveCache=True, filePath=""):
-        return QtTask().AddDownloadTask(url, path, downloadCallBack, completeCallBack, isSaveData, backParam, isSaveCache, self.__taskFlagId, filePath)
+        return QtDomainMgr().AddDownloadTask(url, path, downloadCallBack, completeCallBack, isSaveData, backParam, isSaveCache, self.__taskFlagId, filePath)
 
     # completeCallBack(saveData, taskId, backParam, tick)
     def AddConvertTask(self, path, imgData, model, completeCallBack, backParam=None, filePath=""):
@@ -170,8 +174,7 @@ class QtTask(Singleton, threading.Thread):
             taskIds.add(self.taskId)
 
         from src.server import Server
-        Server().Send(req, backParam=self.taskId)
-        return
+        return Server().Send(req, backParam=self.taskId)
 
     def AddDownloadTask(self, url, path, downloadCallBack=None, completeCallBack=None, isSaveData=True, backParam=None, isSaveCache=True, cleanFlag=None, filePath=""):
         self.taskId += 1
@@ -188,13 +191,8 @@ class QtTask(Singleton, threading.Thread):
             taskIds = self.flagToIds.setdefault(cleanFlag, set())
             taskIds.add(self.taskId)
 
-        if isSaveCache:
-            if not path:
-                a = hashlib.md5(url.encode("utf-8")).hexdigest()
-            else:
-                a = hashlib.md5(path.encode("utf-8")).hexdigest()
-            filePath2 = os.path.join(os.path.join(config.SavePath, config.CachePathDir), os.path.dirname(path))
-            filePath2 = os.path.join(filePath2, a)
+        if isSaveCache and path:
+            filePath2 = os.path.join(os.path.join(config.SavePath, config.CachePathDir), path)
             data.cacheAndLoadPath = filePath2
         if filePath:
             data.loadPath = filePath
@@ -231,13 +229,13 @@ class QtTask(Singleton, threading.Thread):
         if not info:
             return
         assert isinstance(info, QtDownloadTask)
-        if laveFileSize == -1 and data == b"":
+        if laveFileSize < 0 and data == b"":
             try:
                 if info.downloadCompleteBack:
                     if info.backParam is not None:
-                        info.downloadCompleteBack(self.GetDownloadData(downlodaId), Status.Error, info.backParam)
+                        info.downloadCompleteBack(self.GetDownloadData(downlodaId), laveFileSize, info.backParam)
                     else:
-                        info.downloadCompleteBack(self.GetDownloadData(downlodaId), Status.Error)
+                        info.downloadCompleteBack(self.GetDownloadData(downlodaId), laveFileSize)
             except Exception as es:
                 Log.Error(es)
             self.ClearDownloadTask(downlodaId)
@@ -297,11 +295,10 @@ class QtTask(Singleton, threading.Thread):
         info.imgData = imgData
         info.model = model
         if path:
-            a = hashlib.md5(path.encode("utf-8")).hexdigest()
-            path = os.path.join(os.path.join(config.SavePath, config.CachePathDir), config.Waifu2xPath)
-            path = os.path.join(path, a)
-            info.cacheAndLoadPath = path
-        info.loadPath = filePath
+            a = crc32(json.dumps(model).encode("utf-8"))
+            path2 = os.path.join(os.path.join(config.SavePath, config.CachePathDir), config.Waifu2xPath)
+            path = os.path.join(path2, path)
+            info.cacheAndLoadPath = path + "-{}".format(a)
         if cleanFlag:
             info.cleanFlag = cleanFlag
             taskIds = self.convertFlag.setdefault(cleanFlag, set())

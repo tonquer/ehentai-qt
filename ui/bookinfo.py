@@ -154,13 +154,23 @@ class Ui_BookInfo(object):
 
         self.horizontalLayout_2.addWidget(self.updateTick)
 
-        self.pushButton = QPushButton(self.page)
-        self.pushButton.setObjectName(u"pushButton")
+        self.favoriteButton = QToolButton(self.page)
+        self.favoriteButton.setObjectName(u"favoriteButton")
+        self.favoriteButton.setMinimumSize(QSize(40, 40))
+        self.favoriteButton.setStyleSheet(u"background-color:transparent;")
 
-        self.horizontalLayout_2.addWidget(self.pushButton, 0, Qt.AlignHCenter|Qt.AlignVCenter)
+        self.horizontalLayout_2.addWidget(self.favoriteButton)
+
+        self.downloadButton = QToolButton(self.page)
+        self.downloadButton.setObjectName(u"downloadButton")
+        self.downloadButton.setMinimumSize(QSize(40, 40))
+        self.downloadButton.setStyleSheet(u"background-color:transparent;")
+
+        self.horizontalLayout_2.addWidget(self.downloadButton)
 
         self.startRead = QPushButton(self.page)
         self.startRead.setObjectName(u"startRead")
+        self.startRead.setMinimumSize(QSize(0, 40))
         self.startRead.setMaximumSize(QSize(16777215, 20))
 
         self.horizontalLayout_2.addWidget(self.startRead, 0, Qt.AlignHCenter|Qt.AlignVCenter)
@@ -253,7 +263,8 @@ class Ui_BookInfo(object):
 
         self.retranslateUi(BookInfo)
         self.startRead.clicked.connect(BookInfo.StartRead)
-        self.pushButton.clicked.connect(BookInfo.SaveFavorite)
+        self.downloadButton.clicked.connect(BookInfo.StartDownload)
+        self.favoriteButton.clicked.connect(BookInfo.SaveFavorite)
 
         self.tabWidget.setCurrentIndex(0)
 
@@ -274,7 +285,8 @@ class Ui_BookInfo(object):
         self.label_7.setText(QCoreApplication.translate("BookInfo", u"\u6536\u85cf\u6570\uff1a", None))
         self.views.setText(QCoreApplication.translate("BookInfo", u"\u6536\u85cf\u6570", None))
         self.updateTick.setText(QCoreApplication.translate("BookInfo", u"TextLabel", None))
-        self.pushButton.setText(QCoreApplication.translate("BookInfo", u"\u6536\u85cf", None))
+        self.favoriteButton.setText("")
+        self.downloadButton.setText("")
         self.startRead.setText(QCoreApplication.translate("BookInfo", u"\u5f00\u59cb\u9605\u8bfb", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.epsWidget), QCoreApplication.translate("BookInfo", u"Tags", None))
         self.commentButton.setText(QCoreApplication.translate("BookInfo", u"\u53d1\u9001\u8bc4\u8bba", None))

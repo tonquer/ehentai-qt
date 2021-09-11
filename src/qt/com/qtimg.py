@@ -8,7 +8,7 @@ from PySide2.QtGui import QColor, QPainter, QPixmap, QDoubleValidator, \
 from PySide2.QtWidgets import QFrame, QGraphicsPixmapItem, QGraphicsScene, QApplication, QFileDialog
 
 from conf import config
-from src.qt.com.qtbubblelabel import QtBubbleLabel
+from src.qt.com.qtmsg import QtMsgLabel
 from src.qt.qt_main import QtOwner
 from src.qt.util.qttask import QtTaskBase
 from src.util import Singleton, ToolUtil, Log
@@ -29,19 +29,19 @@ class QtImgMgr(Singleton):
             if config.CanWaifu2x:
                 self.obj.comboBox.setEnabled(True)
                 self.obj.changeButton.setEnabled(True)
-            self.obj.changeButton.setText("转换")
+            self.obj.changeButton.setText(self.obj.tr("转换"))
             self.obj.ShowImg(data)
         elif self.data:
             if config.CanWaifu2x:
                 self.obj.comboBox.setEnabled(True)
                 self.obj.changeButton.setEnabled(True)
-            self.obj.changeButton.setText("转换")
+            self.obj.changeButton.setText(self.obj.tr("转换"))
             self.obj.ShowImg(self.data)
         else:
             if config.CanWaifu2x:
                 self.obj.comboBox.setEnabled(True)
                 self.obj.changeButton.setEnabled(True)
-            self.obj.changeButton.setText("转换")
+            self.obj.changeButton.setText(self.obj.tr("转换"))
             self.obj.show()
 
     def SetHeadStatus(self, isSet):
@@ -57,7 +57,6 @@ class QtImg(QtWidgets.QWidget, Ui_Img, QtTaskBase):
         self.bookId = ""
         self.epsId = 0
         self.curIndex = 0
-        self.setWindowTitle("图片查看")
         self.setWindowModality(QtCore.Qt.ApplicationModal)
         self.resize(800, 900)
         self.checkBox.setChecked(True)
@@ -94,7 +93,7 @@ class QtImg(QtWidgets.QWidget, Ui_Img, QtTaskBase):
         self.graphicsItem.setTransformationMode(Qt.SmoothTransformation)
         self.graphicsScene.addItem(self.graphicsItem)
         self.graphicsView.setMinimumSize(10, 10)
-        self.pixMap = QPixmap("加载中")
+        self.pixMap = QPixmap()
         self.graphicsItem.setPixmap(self.pixMap)
         # self.radioButton.setChecked(True)
         self.isStripModel = False
@@ -212,7 +211,7 @@ class QtImg(QtWidgets.QWidget, Ui_Img, QtTaskBase):
     def CopyPicture(self):
         clipboard = QApplication.clipboard()
         clipboard.setPixmap(self.pixMap)
-        QtBubbleLabel.ShowMsgEx(self, "复制成功")
+        QtMsgLabel.ShowMsgEx(self, self.tr("复制成功"))
         return
 
     def ReduceScalePic(self):
@@ -278,7 +277,7 @@ class QtImg(QtWidgets.QWidget, Ui_Img, QtTaskBase):
             model['high'] = int(self.heighEdit.text())
         self.backStatus = self.GetStatus()
         self.AddConvertTask("", QtImgMgr().data, model, self.AddConvertBack)
-        self.changeButton.setText("正在转换")
+        self.changeButton.setText(self.tr("正在转换"))
         return
 
     def AddConvertBack(self, data, waifuId, backParam, tick):
@@ -286,7 +285,7 @@ class QtImg(QtWidgets.QWidget, Ui_Img, QtTaskBase):
             QtImgMgr().waifu2xData = data
             if self.checkBox.isChecked():
                 self.ShowImg(data)
-            self.changeButton.setText("已转换")
+            self.changeButton.setText(self.tr("已转换"))
             self.tickLabel.setText(str(round(tick, 3)) + "s")
             self.changeButton.setEnabled(False)
         else:
@@ -301,7 +300,7 @@ class QtImg(QtWidgets.QWidget, Ui_Img, QtTaskBase):
             return
         try:
             today = time.strftime("%Y%m%d%H%M%S", time.localtime(time.time()))
-            filepath = QFileDialog.getSaveFileName(self, "保存", "{}.jpg".format(today))
+            filepath = QFileDialog.getSaveFileName(self, self.tr("保存"), "{}.jpg".format(today))
             if filepath and len(filepath) >= 1:
                 name = filepath[0]
                 f = open(name, "wb")
@@ -322,7 +321,7 @@ class QtImg(QtWidgets.QWidget, Ui_Img, QtTaskBase):
         if self.comboBox.currentIndex() == self.index:
             return
         # self.index = self.comboBox.currentIndex()
-        self.changeButton.setText("转换")
+        self.changeButton.setText(self.tr("转换"))
         self.changeButton.setEnabled(True)
         return
 
@@ -369,15 +368,8 @@ class QtImg(QtWidgets.QWidget, Ui_Img, QtTaskBase):
         data = self.GetStatus()
         if self.backStatus != data:
             self.changeButton.setEnabled(True)
-            self.changeButton.setText("转换")
+            self.changeButton.setText(self.tr("转换"))
         else:
             self.changeButton.setEnabled(False)
-            self.changeButton.setText("转换")
+            self.changeButton.setText(self.tr("转换"))
 
-    def SetHead(self):
-        data = QtImgMgr().waifu2xData if QtImgMgr().waifu2xData else QtImgMgr().data
-        if not data:
-            return
-        QtOwner().owner.userForm.UpdatePictureData(data)
-        QtBubbleLabel.ShowMsgEx(self, "头像上传中......")
-        return

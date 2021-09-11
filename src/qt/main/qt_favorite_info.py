@@ -1,6 +1,6 @@
 from PySide2 import QtWidgets, QtCore
 
-from src.qt.com.qtbubblelabel import QtBubbleLabel
+from src.qt.com.qtmsg import QtMsgLabel
 from src.qt.com.qtloading import QtLoading
 from src.qt.util.qttask import QtTaskBase
 from src.server import req, Status
@@ -36,16 +36,16 @@ class QtFavoriteInfo(QtWidgets.QWidget, Ui_Favorite_Info, QtTaskBase):
             self.nameLabel.setText(bookName)
             self.isUpdate = isUpdate
             if not self.isUpdate:
-                self.pushButton.setText("保存")
+                self.pushButton.setText(self.tr("保存"))
             else:
-                self.pushButton.setText("更改")
+                self.pushButton.setText(self.tr("更改"))
             for k, v in favorites.items():
                 if v:
                     self.comboBox.setCurrentIndex(int(k))
 
             pass
         else:
-            QtBubbleLabel().ShowErrorEx(self, "出错了")
+            QtMsgLabel().ShowErrorEx(self, self.tr("出错了"))
             self.close()
 
     def SaveFavorite(self):
@@ -57,7 +57,7 @@ class QtFavoriteInfo(QtWidgets.QWidget, Ui_Favorite_Info, QtTaskBase):
     def SaveFavoriteBack(self, data):
         self.loadingForm.close()
         if data["st"] != Status.Ok:
-            QtBubbleLabel().ShowErrorEx(self, "出错了")
+            QtMsgLabel().ShowErrorEx(self, self.tr("出错了"))
         else:
-            QtBubbleLabel().ShowMsgEx(self, "保存成功")
+            QtMsgLabel().ShowMsgEx(self, self.tr("保存成功"))
         self.close()

@@ -1,11 +1,12 @@
 from PySide2 import QtWidgets, QtCore, QtGui
 from PySide2.QtCore import Qt, QSize, QEvent
-from PySide2.QtGui import QColor, QFont
+from PySide2.QtGui import QColor, QFont, QPixmap, QIcon
 from PySide2.QtWidgets import QListWidgetItem, QLabel, QDesktopWidget
 
 from conf import config
+from resources.resources import DataMgr
 from src.book.book import BookMgr
-from src.qt.com.qtbubblelabel import QtBubbleLabel
+from src.qt.com.qtmsg import QtMsgLabel
 from src.qt.com.qtimg import QtImgMgr
 from src.qt.com.qtloading import QtLoading
 from src.qt.qt_main import QtOwner
@@ -29,7 +30,20 @@ class QtBookInfo(QtWidgets.QWidget, Ui_BookInfo, QtTaskBase):
         self.lastEpsId = -1
         self.pictureData = None
 
-        self.msgForm = QtBubbleLabel(self)
+        p = QPixmap()
+        p.loadFromData(DataMgr.GetData("ic_get_app_black_36dp"))
+        self.downloadButton.setIcon(QIcon(p))
+        self.downloadButton.setToolButtonStyle(Qt.ToolButtonTextBesideIcon)
+        self.downloadButton.setIconSize(QSize(50, 50))
+        self.downloadButton.setCursor(Qt.PointingHandCursor)
+
+        p.loadFromData(DataMgr.GetData("icon_like_off"))
+        self.favoriteButton.setIcon(QIcon(p.scaled(50, 50, Qt.KeepAspectRatio, Qt.SmoothTransformation)))
+        self.favoriteButton.setToolButtonStyle(Qt.ToolButtonTextBesideIcon)
+        self.favoriteButton.setIconSize(QSize(50, 50))
+        self.favoriteButton.setCursor(Qt.PointingHandCursor)
+
+        self.msgForm = QtMsgLabel(self)
         self.picture.installEventFilter(self)
         self.title.setWordWrap(True)
         self.title.setTextInteractionFlags(Qt.TextSelectableByMouse)
@@ -40,7 +54,8 @@ class QtBookInfo(QtWidgets.QWidget, Ui_BookInfo, QtTaskBase):
 
         self.listWidget.InitUser(self.LoadNextPage)
         self.commentButton.clicked.connect(self.SendComment)
-        self.commentButton.setEnabled(False)
+        self.commentButton.setVisible(False)
+        self.commentLine.setVisible(False)
         self.tags = QtOwner().owner.tags
         desktop = QDesktopWidget()
         self.resize(desktop.width()//4*1, desktop.height()//4*3)
@@ -72,7 +87,7 @@ class QtBookInfo(QtWidgets.QWidget, Ui_BookInfo, QtTaskBase):
         self.nameToTag.clear()
         self.listWidget.clear()
 
-    def OpenBook(self, bookId):
+    def OpenBook(self, bookId, token="", site=""):
         self.bookId = bookId
         self.setWindowTitle(self.bookId)
         self.setFocus()
@@ -84,7 +99,8 @@ class QtBookInfo(QtWidgets.QWidget, Ui_BookInfo, QtTaskBase):
         self.Clear()
         self.show()
         self.loadingForm.show()
-        self.AddHttpTask(req.BookInfoReq(bookId), self.OpenBookBack)
+        QtOwner().SetDirty()
+        self.AddHttpTask(req.BookInfoReq(bookId, token=token, site=site), self.OpenBookBack)
 
     def close(self):
         super(self.__class__, self).close()
@@ -100,7 +116,7 @@ class QtBookInfo(QtWidgets.QWidget, Ui_BookInfo, QtTaskBase):
             info = BookMgr().GetBook(self.bookId)
             self.title.setText(info.baseInfo.title)
             self.bookName = info.baseInfo.title
-            self.picture.setText("图片加载中...")
+            self.picture.setText(self.tr("图片加载中..."))
             self.url = info.baseInfo.imgUrl
             self.path = ""
             self.updateTick.setText(info.pageInfo.posted)
@@ -127,23 +143,24 @@ class QtBookInfo(QtWidgets.QWidget, Ui_BookInfo, QtTaskBase):
                 item.setSizeHint(label.sizeHint() + QSize(20, 20))
 
                 tagData = tag.split(":")
-                if len(tagData) >= 2:
-                    tagName = tagData[0]
-                    if tagName in self.tags:
-                        if tagData[1] in self.tags.get(tagName, {}).get("data"):
-                            tagInfo = self.tags.get(tagName, {}).get("data", {}).get(tagData[1], {})
-                            label.setText(self.tags.get(tagName, {}).get("name", "") + ":" + tagInfo.get("dest", ""))
-                            item.setToolTip(tagInfo.get('description', ""))
+                if config.Language != "English":
+                    if len(tagData) >= 2:
+                        tagName = tagData[0]
+                        if tagName in self.tags:
+                            if tagData[1] in self.tags.get(tagName, {}).get("data"):
+                                tagInfo = self.tags.get(tagName, {}).get("data", {}).get(tagData[1], {})
+                                label.setText(self.tags.get(tagName, {}).get("name", "") + ":" + tagInfo.get("dest", ""))
+                                item.setToolTip(tagInfo.get('description', ""))
 
                 # item.setToolTip(epsInfo.title)
                 self.epsListWidget.setItemWidget(item, label)
                 self.nameToTag[label.text()] = tag
 
             if config.IsLoadingPicture:
-                self.AddDownloadTask(self.url, "", completeCallBack=self.UpdatePicture)
+                self.AddDownloadTask(self.url, "{}/{}-cover".format(config.CurSite, self.bookId), completeCallBack=self.UpdatePicture)
             self.GetCommnetBack(info.pageInfo.comment)
         else:
-            QtBubbleLabel.ShowErrorEx(self, st)
+            QtMsgLabel.ShowErrorEx(self, QtOwner.owner.GetStatusStr(st))
         return
 
     def UpdatePicture(self, data, status):
@@ -156,7 +173,7 @@ class QtBookInfo(QtWidgets.QWidget, Ui_BookInfo, QtTaskBase):
             # self.picture.setScaledContents(True)
             self.update()
         else:
-            self.picture.setText("图片加载失败")
+            self.picture.setText(self.tr("图片加载失败"))
         return
 
     # 加载评论
@@ -164,7 +181,7 @@ class QtBookInfo(QtWidgets.QWidget, Ui_BookInfo, QtTaskBase):
         try:
             self.listWidget.page = 1
             self.listWidget.pages = 1
-            self.tabWidget.setTabText(1, "评论({})".format(str(len(data))))
+            self.tabWidget.setTabText(1, self.tr("评论") + "({})".format(str(len(data))))
             for index, v in enumerate(data):
                 createdTime, content = v
                 self.listWidget.AddUserItem("", 0, 0, content, createdTime, "", index+1, "",
@@ -176,14 +193,14 @@ class QtBookInfo(QtWidgets.QWidget, Ui_BookInfo, QtTaskBase):
     # def AddDownload(self):
     #     self.owner().epsInfoForm.OpenEpsInfo(self.bookId)
         # if self.owner().downloadForm.AddDownload(self.bookId):
-        #     QtBubbleLabel.ShowMsgEx(self, "添加下载成功")
+        #     QtMsgLabel.ShowMsgEx(self, "添加下载成功")
         # else:
-        #     QtBubbleLabel.ShowMsgEx(self, "已在下载列表")
+        #     QtMsgLabel.ShowMsgEx(self, "已在下载列表")
         # self.download.setEnabled(False)
 
     # def AddFavority(self):
     #     User().AddAndDelFavorites(self.bookId)
-    #     QtBubbleLabel.ShowMsgEx(self, "添加收藏成功")
+    #     QtMsgLabel.ShowMsgEx(self, "添加收藏成功")
     #     self.favorites.setEnabled(False)
 
     def LoadNextPage(self):
@@ -215,7 +232,15 @@ class QtBookInfo(QtWidgets.QWidget, Ui_BookInfo, QtTaskBase):
         return
 
     def SendComment(self):
+        # comment = self.commentLine.text()
+        # if not comment:
+        #     return
+        # self.AddHttpTask(req.SendCommentReq(self.bookId, comment), self.SendCommentBack)
         return
+
+    def SendCommentBack(self, data):
+        return
+
         # data = self.commentLine.text()
         # if not data:
         #     return
@@ -231,7 +256,7 @@ class QtBookInfo(QtWidgets.QWidget, Ui_BookInfo, QtTaskBase):
     #                                             self.GetCommnetBack, cleanFlag=self.closeFlag)
     #         else:
     #             self.loadingForm.close()
-    #             QtBubbleLabel.ShowErrorEx(self, data.get("message", "错误"))
+    #             QtMsgLabel.ShowErrorEx(self, data.get("message", "错误"))
     #         self.commentLine.setText("")
     #     except Exception as es:
     #         self.loadingForm.close()
@@ -256,7 +281,13 @@ class QtBookInfo(QtWidgets.QWidget, Ui_BookInfo, QtTaskBase):
 
     def SaveFavorite(self):
         if not QtOwner().owner.userForm.name.text():
-            QtBubbleLabel().ShowErrorEx(self, "未登录")
+            QtMsgLabel().ShowErrorEx(self, self.tr("未登录"))
             return
         QtOwner().owner.favoriteInfoForm.OpenFavorite(self.bookId, self.bookName)
         return
+
+    def StartDownload(self):
+        bookId = self.bookId
+        info = BookMgr().GetBook(bookId)
+        QtOwner().owner.downloadForm.AddDownload(bookId, info.baseInfo.token, config.CurSite)
+        QtMsgLabel().ShowMsgEx(self, self.tr("添加下载成功"))

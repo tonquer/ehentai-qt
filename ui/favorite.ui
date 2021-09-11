@@ -51,6 +51,56 @@
            <string>全部</string>
           </property>
          </item>
+         <item>
+          <property name="text">
+           <string>收藏0</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>收藏1</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>收藏2</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>收藏3</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>收藏4</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>收藏5</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>收藏6</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>收藏7</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>收藏8</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>收藏9</string>
+          </property>
+         </item>
         </widget>
        </item>
        <item>

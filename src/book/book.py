@@ -1,6 +1,6 @@
 import re
 
-from src.server import Server
+from src.server import Server, config
 from src.util import Singleton
 
 
@@ -10,11 +10,25 @@ class BookBaseInfo(object):
         self.title = ""
         self.bookUrl = ""
         self.token = ""       # 收藏和下载使用
+        self.apiUid = ""      # TODO
+        self.apiKey = ""      # TODO
         self.category = ""
         self.timeStr = ""
         self.imgData = None
         self.imgUrl = ""
         self.tags = []
+
+    def Copy(self, o):
+        self.id = o.id
+        self.title = o.title
+        self.bookUrl = o.bookUrl
+        self.token = o.token
+        self.apiUid = o.apiUid
+        self.category = o.category
+        self.timeStr = o.timeStr
+        self.imgData = o.imgData
+        self.imgUrl = o.imgUrl
+        self.tags = o.tags
 
 
 class BookPageInfo(object):
@@ -33,6 +47,7 @@ class BookPageInfo(object):
     def GetImgKey(self, index):
         if index not in self.picUrl:
             return None
+
         mo = re.search("(?<=/s/)\w+", self.picUrl.get(index))
         return mo.group()
 
@@ -51,7 +66,7 @@ class BookInfo(object):
     def __init__(self):
         self.baseInfo = BookBaseInfo()
         self.pageInfo = BookPageInfo()
-        self.curPage = 1
+        self.curPage = 0
         self.maxPage = 1
 
 
@@ -59,41 +74,52 @@ class BookInfo(object):
 class BookMgr(Singleton):
     def __init__(self):
         super(self.__class__, self).__init__()
-        self.books = {}      # id: book
+        self.books = {"e-hentai": {}, "exhentai": {}}      # id: site: book
 
     @property
     def server(self):
         return Server()
 
     def GetBook(self, bookId) -> BookInfo:
-        return self.books.get(bookId)
+        books = self.books.get(config.CurSite, {})
+        return books.get(bookId)
 
-    def UpdateBookInfoList(self, bookList):
+    def GetBookBySite(self, bookId, site) -> BookInfo:
+        books = self.books.get(site, {})
+        return books.get(bookId)
+
+    def UpdateBookInfoList(self, bookList, site):
         for info in bookList:
             assert isinstance(info, BookInfo)
             if info.baseInfo.id in self.books:
                 # TODO
                 continue
-            self.books[info.baseInfo.id] = info
+            self.books[site][info.baseInfo.id] = info
 
-    def UpdateBookInfo(self, bookId, info, curPage, maxPage):
+    def UpdateBookInfo(self, bookId, info, curPage, maxPage, site):
         book = self.GetBook(bookId)
+        assert isinstance(info, BookInfo)
         if not book:
+            info.curPage = curPage
+            info.maxPage = maxPage
+            self.books[site][bookId] = info
             return
-        book.pageInfo.Copy(info)
+        book.baseInfo.Copy(info.baseInfo)
+        book.pageInfo.Copy(info.pageInfo)
         book.maxPage = maxPage
-        book.curPage = curPage
+        if curPage > book.curPage:
+            book.curPage = curPage
         return
 
-    def UpdateImgUrl(self, bookId, index, url):
-        book = self.GetBook(bookId)
+    def UpdateImgUrl(self, bookId, index, url, site):
+        book = self.GetBookBySite(bookId, site)
         if not book:
             return
         book.pageInfo.picRealUrl[index] = url
         return
 
-    def UpdateImgKey(self, bookId, key):
-        book = self.GetBook(bookId)
+    def UpdateImgKey(self, bookId, key, site):
+        book = self.GetBookBySite(bookId, site)
         if not book:
             return
         book.pageInfo.showKey = key

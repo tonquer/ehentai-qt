@@ -218,15 +218,46 @@ QListWidget::item {
                      </property>
                     </widget>
                    </item>
-                   <item alignment="Qt::AlignHCenter|Qt::AlignVCenter">
-                    <widget class="QPushButton" name="pushButton">
+                   <item>
+                    <widget class="QToolButton" name="favoriteButton">
+                     <property name="minimumSize">
+                      <size>
+                       <width>40</width>
+                       <height>40</height>
+                      </size>
+                     </property>
+                     <property name="styleSheet">
+                      <string notr="true">background-color:transparent;</string>
+                     </property>
                      <property name="text">
-                      <string>收藏</string>
+                      <string/>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QToolButton" name="downloadButton">
+                     <property name="minimumSize">
+                      <size>
+                       <width>40</width>
+                       <height>40</height>
+                      </size>
+                     </property>
+                     <property name="styleSheet">
+                      <string notr="true">background-color:transparent;</string>
+                     </property>
+                     <property name="text">
+                      <string/>
                      </property>
                     </widget>
                    </item>
                    <item alignment="Qt::AlignHCenter|Qt::AlignVCenter">
                     <widget class="QPushButton" name="startRead">
+                     <property name="minimumSize">
+                      <size>
+                       <width>0</width>
+                       <height>40</height>
+                      </size>
+                     </property>
                      <property name="maximumSize">
                       <size>
                        <width>16777215</width>
@@ -361,8 +392,8 @@ QListWidget::item { border-bottom: 1px solid black; }</string>
    <slot>StartRead()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>511</x>
-     <y>312</y>
+     <x>522</x>
+     <y>396</y>
     </hint>
     <hint type="destinationlabel">
      <x>313</x>
@@ -371,18 +402,34 @@ QListWidget::item { border-bottom: 1px solid black; }</string>
    </hints>
   </connection>
   <connection>
-   <sender>pushButton</sender>
+   <sender>downloadButton</sender>
+   <signal>clicked()</signal>
+   <receiver>BookInfo</receiver>
+   <slot>StartDownload()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>424</x>
+     <y>377</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>823</x>
+     <y>357</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>favoriteButton</sender>
    <signal>clicked()</signal>
    <receiver>BookInfo</receiver>
    <slot>SaveFavorite()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>385</x>
-     <y>299</y>
+     <x>381</x>
+     <y>379</y>
     </hint>
     <hint type="destinationlabel">
-     <x>1025</x>
-     <y>347</y>
+     <x>895</x>
+     <y>334</y>
     </hint>
    </hints>
   </connection>
@@ -392,5 +439,6 @@ QListWidget::item { border-bottom: 1px solid black; }</string>
   <slot>AddFavority()</slot>
   <slot>StartRead()</slot>
   <slot>SaveFavorite()</slot>
+  <slot>StartDownload()</slot>
  </slots>
 </ui>

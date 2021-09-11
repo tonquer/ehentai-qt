@@ -17,7 +17,7 @@ class Ui_Login(object):
     def setupUi(self, Login):
         if not Login.objectName():
             Login.setObjectName(u"Login")
-        Login.resize(455, 237)
+        Login.resize(528, 347)
         self.gridLayout = QGridLayout(Login)
         self.gridLayout.setObjectName(u"gridLayout")
         self.horizontalSpacer_2 = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
@@ -28,19 +28,70 @@ class Ui_Login(object):
         self.verticalLayout.setObjectName(u"verticalLayout")
         self.gridLayout_2 = QGridLayout()
         self.gridLayout_2.setObjectName(u"gridLayout_2")
-        self.line = QFrame(Login)
-        self.line.setObjectName(u"line")
-        self.line.setFrameShape(QFrame.HLine)
-        self.line.setFrameShadow(QFrame.Sunken)
+        self.horizontalLayout_7 = QHBoxLayout()
+        self.horizontalLayout_7.setObjectName(u"horizontalLayout_7")
+        self.passLabel = QLabel(Login)
+        self.passLabel.setObjectName(u"passLabel")
+        self.passLabel.setEnabled(False)
+        self.passLabel.setMinimumSize(QSize(110, 0))
+        self.passLabel.setTextInteractionFlags(Qt.LinksAccessibleByMouse|Qt.TextSelectableByMouse)
 
-        self.gridLayout_2.addWidget(self.line, 2, 0, 1, 1)
+        self.horizontalLayout_7.addWidget(self.passLabel)
+
+        self.passLine = QLineEdit(Login)
+        self.passLine.setObjectName(u"passLine")
+        self.passLine.setEnabled(False)
+
+        self.horizontalLayout_7.addWidget(self.passLine)
+
+
+        self.gridLayout_2.addLayout(self.horizontalLayout_7, 8, 0, 1, 1)
+
+        self.verticalLayout_2 = QVBoxLayout()
+        self.verticalLayout_2.setObjectName(u"verticalLayout_2")
+
+        self.gridLayout_2.addLayout(self.verticalLayout_2, 0, 0, 1, 1)
+
+        self.horizontalLayout_5 = QHBoxLayout()
+        self.horizontalLayout_5.setObjectName(u"horizontalLayout_5")
+        self.memberLabel = QLabel(Login)
+        self.memberLabel.setObjectName(u"memberLabel")
+        self.memberLabel.setEnabled(False)
+        self.memberLabel.setMinimumSize(QSize(110, 0))
+        self.memberLabel.setTextInteractionFlags(Qt.LinksAccessibleByMouse|Qt.TextSelectableByMouse)
+
+        self.horizontalLayout_5.addWidget(self.memberLabel)
+
+        self.memberLine = QLineEdit(Login)
+        self.memberLine.setObjectName(u"memberLine")
+        self.memberLine.setEnabled(False)
+
+        self.horizontalLayout_5.addWidget(self.memberLine)
+
+
+        self.gridLayout_2.addLayout(self.horizontalLayout_5, 7, 0, 1, 1)
 
         self.line_2 = QFrame(Login)
         self.line_2.setObjectName(u"line_2")
         self.line_2.setFrameShape(QFrame.HLine)
         self.line_2.setFrameShadow(QFrame.Sunken)
 
-        self.gridLayout_2.addWidget(self.line_2, 7, 0, 1, 1)
+        self.gridLayout_2.addWidget(self.line_2, 12, 0, 1, 1)
+
+        self.line_3 = QFrame(Login)
+        self.line_3.setObjectName(u"line_3")
+        self.line_3.setFrameShape(QFrame.HLine)
+        self.line_3.setFrameShadow(QFrame.Sunken)
+
+        self.gridLayout_2.addWidget(self.line_3, 10, 0, 1, 1)
+
+        self.cookieRadio = QRadioButton(Login)
+        self.buttonGroup = QButtonGroup(Login)
+        self.buttonGroup.setObjectName(u"buttonGroup")
+        self.buttonGroup.addButton(self.cookieRadio)
+        self.cookieRadio.setObjectName(u"cookieRadio")
+
+        self.gridLayout_2.addWidget(self.cookieRadio, 6, 0, 1, 1)
 
         self.horizontalLayout_3 = QHBoxLayout()
         self.horizontalLayout_3.setObjectName(u"horizontalLayout_3")
@@ -59,16 +110,16 @@ class Ui_Login(object):
         self.horizontalLayout_3.addWidget(self.skipButton)
 
 
-        self.gridLayout_2.addLayout(self.horizontalLayout_3, 6, 0, 1, 1)
+        self.gridLayout_2.addLayout(self.horizontalLayout_3, 11, 0, 1, 1)
 
         self.horizontalLayout = QHBoxLayout()
         self.horizontalLayout.setObjectName(u"horizontalLayout")
-        self.label = QLabel(Login)
-        self.label.setObjectName(u"label")
-        self.label.setMinimumSize(QSize(50, 30))
-        self.label.setAlignment(Qt.AlignCenter)
+        self.userLabel = QLabel(Login)
+        self.userLabel.setObjectName(u"userLabel")
+        self.userLabel.setMinimumSize(QSize(50, 30))
+        self.userLabel.setAlignment(Qt.AlignLeading|Qt.AlignLeft|Qt.AlignVCenter)
 
-        self.horizontalLayout.addWidget(self.label)
+        self.horizontalLayout.addWidget(self.userLabel)
 
         self.userIdEdit = QLineEdit(Login)
         self.userIdEdit.setObjectName(u"userIdEdit")
@@ -79,25 +130,33 @@ class Ui_Login(object):
 
         self.gridLayout_2.addLayout(self.horizontalLayout, 3, 0, 1, 1)
 
-        self.label_3 = QLabel(Login)
-        self.label_3.setObjectName(u"label_3")
-        self.label_3.setAlignment(Qt.AlignCenter)
+        self.horizontalLayout_4 = QHBoxLayout()
+        self.horizontalLayout_4.setObjectName(u"horizontalLayout_4")
+        self.userRadio = QRadioButton(Login)
+        self.buttonGroup.addButton(self.userRadio)
+        self.userRadio.setObjectName(u"userRadio")
+        self.userRadio.setChecked(True)
 
-        self.gridLayout_2.addWidget(self.label_3, 1, 0, 1, 1)
+        self.horizontalLayout_4.addWidget(self.userRadio)
 
-        self.verticalLayout_2 = QVBoxLayout()
-        self.verticalLayout_2.setObjectName(u"verticalLayout_2")
 
-        self.gridLayout_2.addLayout(self.verticalLayout_2, 0, 0, 1, 1)
+        self.gridLayout_2.addLayout(self.horizontalLayout_4, 2, 0, 1, 1)
+
+        self.line = QFrame(Login)
+        self.line.setObjectName(u"line")
+        self.line.setFrameShape(QFrame.HLine)
+        self.line.setFrameShadow(QFrame.Sunken)
+
+        self.gridLayout_2.addWidget(self.line, 1, 0, 1, 1)
 
         self.horizontalLayout_2 = QHBoxLayout()
         self.horizontalLayout_2.setObjectName(u"horizontalLayout_2")
-        self.label_2 = QLabel(Login)
-        self.label_2.setObjectName(u"label_2")
-        self.label_2.setMinimumSize(QSize(50, 30))
-        self.label_2.setAlignment(Qt.AlignCenter)
+        self.passwdLabel = QLabel(Login)
+        self.passwdLabel.setObjectName(u"passwdLabel")
+        self.passwdLabel.setMinimumSize(QSize(50, 30))
+        self.passwdLabel.setAlignment(Qt.AlignLeading|Qt.AlignLeft|Qt.AlignVCenter)
 
-        self.horizontalLayout_2.addWidget(self.label_2)
+        self.horizontalLayout_2.addWidget(self.passwdLabel)
 
         self.passwdEdit = QLineEdit(Login)
         self.passwdEdit.setObjectName(u"passwdEdit")
@@ -109,17 +168,36 @@ class Ui_Login(object):
 
         self.gridLayout_2.addLayout(self.horizontalLayout_2, 4, 0, 1, 1)
 
+        self.horizontalLayout_6 = QHBoxLayout()
+        self.horizontalLayout_6.setObjectName(u"horizontalLayout_6")
+        self.igneousLabel = QLabel(Login)
+        self.igneousLabel.setObjectName(u"igneousLabel")
+        self.igneousLabel.setEnabled(False)
+        self.igneousLabel.setMinimumSize(QSize(110, 0))
+        self.igneousLabel.setTextInteractionFlags(Qt.LinksAccessibleByMouse|Qt.TextSelectableByMouse)
+
+        self.horizontalLayout_6.addWidget(self.igneousLabel)
+
+        self.igneousLine = QLineEdit(Login)
+        self.igneousLine.setObjectName(u"igneousLine")
+        self.igneousLine.setEnabled(False)
+
+        self.horizontalLayout_6.addWidget(self.igneousLine)
+
+
+        self.gridLayout_2.addLayout(self.horizontalLayout_6, 9, 0, 1, 1)
+
         self.gridLayout_4 = QGridLayout()
         self.gridLayout_4.setObjectName(u"gridLayout_4")
 
-        self.gridLayout_2.addLayout(self.gridLayout_4, 8, 0, 1, 1)
+        self.gridLayout_2.addLayout(self.gridLayout_4, 13, 0, 1, 1)
 
-        self.line_3 = QFrame(Login)
-        self.line_3.setObjectName(u"line_3")
-        self.line_3.setFrameShape(QFrame.HLine)
-        self.line_3.setFrameShadow(QFrame.Sunken)
+        self.line_4 = QFrame(Login)
+        self.line_4.setObjectName(u"line_4")
+        self.line_4.setFrameShape(QFrame.HLine)
+        self.line_4.setFrameShadow(QFrame.Sunken)
 
-        self.gridLayout_2.addWidget(self.line_3, 5, 0, 1, 1)
+        self.gridLayout_2.addWidget(self.line_4, 5, 0, 1, 1)
 
 
         self.verticalLayout.addLayout(self.gridLayout_2)
@@ -152,15 +230,20 @@ class Ui_Login(object):
 
     def retranslateUi(self, Login):
         Login.setWindowTitle(QCoreApplication.translate("Login", u"Form", None))
+        self.passLabel.setText(QCoreApplication.translate("Login", u"ipb_pass_hash", None))
+        self.memberLabel.setText(QCoreApplication.translate("Login", u"ipb_member_id", None))
+        self.cookieRadio.setText(QCoreApplication.translate("Login", u"Cookie\u767b\u9646", None))
         self.loginButton.setText(QCoreApplication.translate("Login", u"\u767b\u9646", None))
 #if QT_CONFIG(shortcut)
         self.loginButton.setShortcut(QCoreApplication.translate("Login", u"Return", None))
 #endif // QT_CONFIG(shortcut)
         self.skipButton.setText(QCoreApplication.translate("Login", u"\u8df3\u8fc7\u767b\u5f55", None))
-        self.label.setText(QCoreApplication.translate("Login", u"\u5e10\u53f7", None))
+        self.userLabel.setText(QCoreApplication.translate("Login", u"\u5e10\u53f7", None))
         self.userIdEdit.setText("")
-        self.label_3.setText(QCoreApplication.translate("Login", u"\u5982\u679c\u4e0d\u80fd\u8fde\u63a5\u548c\u770b\u56fe\uff0c\u8bf7\u5c1d\u8bd5\u5176\u4ed6\u5206\u6d41", None))
-        self.label_2.setText(QCoreApplication.translate("Login", u"\u5bc6\u7801", None))
+        self.userRadio.setText(QCoreApplication.translate("Login", u"\u5e10\u53f7\u767b\u9646", None))
+        self.passwdLabel.setText(QCoreApplication.translate("Login", u"\u5bc6\u7801", None))
         self.passwdEdit.setText("")
+        self.igneousLabel.setText(QCoreApplication.translate("Login", u"igneous", None))
+        self.igneousLine.setPlaceholderText(QCoreApplication.translate("Login", u"\u9009\u586b", None))
     # retranslateUi
 

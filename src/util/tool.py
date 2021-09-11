@@ -92,6 +92,7 @@ class ToolUtil(object):
         host = url.replace("https://", "")
         host = host.replace("http://", "")
         host = host.split("/")[0]
+        host = host.split(":")[0]
         return host
 
     @staticmethod
@@ -280,7 +281,7 @@ class ToolUtil(object):
     def GetCanSaveName(name):
         return name.replace("/", "").replace("|", "").replace("*", "").\
             replace("\\", "").replace("?", "").replace(":", "").replace("*", "").\
-            replace("<", "").replace(">", "").replace("\"", "").replace(" ", "")
+            replace("<", "").replace(">", "").replace("\"", "")
 
     @staticmethod
     def LoadCachePicture(filePath):
@@ -384,8 +385,9 @@ class ToolUtil(object):
         soup = BeautifulSoup(data, features="lxml")
         tag = soup.find("div", id="gdd")
         table = tag.find("table")
-        from src.book.book import BookPageInfo
-        info = BookPageInfo()
+        from src.book.book import BookInfo
+        book = BookInfo()
+        info = book.pageInfo
         for tr in table.find_all("tr"):
             key = tr.find("td", class_="gdt1").text.replace(":", "")
             value = tr.find("td", class_="gdt2").text
@@ -419,7 +421,33 @@ class ToolUtil(object):
             times = tag.find("div", class_="c3").text
             data = tag.find("div", class_="c6").text
             info.comment.append([times, data])
-        return info, maxPage
+        base = book.baseInfo
+        data = soup.find_all("script", {'type': "text/javascript"})
+        mo = re.search("(?<=var gid =\s)\d+", data[1].next)
+        base.id = mo.group()
+        mo = re.search("(?<=var token = \")\w+", data[1].next)
+        base.token = mo.group()
+        mo = re.search("(?<=var apiuid = )\S*(?=;)", data[1].next)
+        base.apiUid = mo.group()
+        mo = re.search("(?<=var apikey = \")\w+", data[1].next)
+        base.apiKey = mo.group()
+        mo = re.search("(?<=var average_rating =\s)\d+(.\d+)", data[1].next)
+        base.average_rating = mo.group()
+        mo = re.search("(?<=var display_rating =\s)\d+(.\d+)", data[1].next)
+        base.display_rating = mo.group()
+        tag = soup.find("div", id="gdc")
+        base.category = tag.text.replace("\n", "")
+        tag = soup.find("h1", id="gn")
+        base.title = tag.text
+        tag = soup.find("div", id="gd1")
+        base.imgUrl = re.search("(?<=url\()\S*(?=\))", tag.div.attrs.get("style")).group()
+        table = soup.find("div", id="taglist")
+        for tc in table.find_all("td", class_="tc"):
+            td = tc.find_next_sibling()
+            if td:
+                for div in td.find_all("div"):
+                    base.tags.append(tc.text + div.text)
+        return book, maxPage
 
     @staticmethod
     def ParsePictureInfo(data):
@@ -430,15 +458,14 @@ class ToolUtil(object):
         imgKey = mo.group().replace("\"", "").replace("=", "").replace(" ", "")
         return imgUrl, imgKey
 
-
     @staticmethod
     def ParsePictureInfo2(data):
         data = json.loads(data)
         tag = data.get('i3')
-        mo = re.search("(?<=src=\")\S+\"", str(tag))
+        mo = re.search("(?<=src=\")\S+(?=\")", str(tag))
         if not mo:
             return ""
-        imgUrl = mo.group().replace("\\/", "/").replace("\"", "")
+        imgUrl = mo.group().replace("\\/", "/")
         return imgUrl
 
     @staticmethod
@@ -509,9 +536,24 @@ class ToolUtil(object):
         soup = BeautifulSoup(data, features="lxml")
         table = soup.find("div", class_="tablepad")
         if not table:
-            return ""
+            return Status.Error
         if "captcha" in table.text:
             return Status.NeedGoogle
         elif "password incorrect" in table.text:
             return Status.UserError
         return Status.Error
+
+    @staticmethod
+    def ParseHomeInfo(data):
+        soup = BeautifulSoup(data, features="lxml")
+        tag = soup.find("div", class_="homebox")
+        # print(tag.text)
+        mo = re.search("(?<=You are currently at\s)\d*", tag.text)
+        curNum = 0
+        if mo:
+            curNum = int(mo.group())
+        mo = re.search("(?<=towards a limit of\s)\d*", tag.text)
+        maxNum = 0
+        if mo:
+            maxNum = int(mo.group())
+        return curNum, maxNum

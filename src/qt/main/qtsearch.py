@@ -1,5 +1,7 @@
 from PySide2 import QtWidgets
+from PySide2.QtWidgets import QAbstractItemView
 
+from conf import config
 from src.book.book import BookMgr
 from src.qt.qt_main import QtOwner
 from src.qt.util.qttask import QtTaskBase
@@ -23,15 +25,20 @@ class QtSearch(QtWidgets.QWidget, Ui_search, QtTaskBase):
         self.isInit = False
         self.searchEdit.words = QtOwner().owner.words
 
-        for value in ToolUtil.Category.values():
-            self.categoryList.AddItem(value)
         self.categoryList.itemClicked.connect(self.ClickKeywordListItem)
+        self.categoryList.setHorizontalScrollMode(QAbstractItemView.ScrollPerPixel)
+
+    def retranslateUi(self, search):
+        Ui_search.retranslateUi(self, search)
+        search.categoryList.clear()
+        for key, value in ToolUtil.Category.items():
+            if config.Language == "English":
+                search.categoryList.AddItem(key)
+            else:
+                search.categoryList.AddItem(value)
 
     def SwitchCurrent(self):
-        if not self.isInit:
-            self.isInit = True
-            self.Search()
-        pass
+        self.Search()
 
     def Search(self, categories=""):
         data = self.searchEdit.text()
@@ -58,7 +65,7 @@ class QtSearch(QtWidgets.QWidget, Ui_search, QtTaskBase):
             self.AddHttpTask(req.GetIndexInfoReq(page, data), self.SendSearchBack, page)
         else:
             for k, v in ToolUtil.Category.items():
-                if v == data:
+                if v == data or k == data:
                     self.AddHttpTask(req.GetCategoryInfoReq(page, k), self.SendSearchBack, page)
                     break
 
@@ -71,17 +78,18 @@ class QtSearch(QtWidgets.QWidget, Ui_search, QtTaskBase):
                 pages = data.get("maxPages")
                 self.bookList.UpdatePage(page, pages)
                 self.spinBox.setMaximum(pages)
-                pageText = "页：" + str(self.bookList.page) + "/" + str(self.bookList.pages)
+                pageText = self.tr("页：") + str(self.bookList.page) + "/" + str(self.bookList.pages)
                 self.label.setText(pageText)
                 for info in data.get("bookList"):
                     _id = info.baseInfo.id
                     title = info.baseInfo.title
                     url = info.baseInfo.imgUrl
                     category = QtOwner().owner.GetCategoryName(info.baseInfo.category)
-                    self.bookList.AddBookItem(_id, title, "分类："+category, url, "", "")
+                    path = "{}/{}-cover".format(config.CurSite, _id)
+                    self.bookList.AddBookItem(_id, title, self.tr("分类：")+category, url, path, "")
                 # self.CheckCategoryShowItem()
             else:
-                QtOwner().owner.msgForm.ShowError(st)
+                QtOwner().owner.msgForm.ShowError(QtOwner.owner.GetStatusStr(st))
         except Exception as es:
             Log.Error(es)
         pass
@@ -122,7 +130,6 @@ class QtSearch(QtWidgets.QWidget, Ui_search, QtTaskBase):
         self.bookList.page = 1
         self.bookList.clear()
         self.SendSearch(self.data, 1)
-
 
     def ClickKeywordListItem(self, item):
         data = item.text()

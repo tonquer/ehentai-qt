@@ -126,6 +126,7 @@ class Ui_search(object):
 "    color: rgb(0, 0, 0);\n"
 "}\n"
 "")
+        self.categoryList.setFrameShape(QFrame.NoFrame)
 
         self.horizontalLayout_2.addWidget(self.categoryList)
 

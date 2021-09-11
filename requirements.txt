@@ -1,5 +1,5 @@
 PySide2
-websocket-client
+PyOpenssl
 requests
 urllib3
 pillow

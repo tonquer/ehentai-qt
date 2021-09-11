@@ -1,12 +1,19 @@
-from PySide2.QtCore import Qt, QSize
-from PySide2.QtGui import QPixmap, QColor, QFont, QCursor
+from collections import deque
+from math import cos, pi
+
+from PySide2.QtCore import Qt, QSize, QTimer, QPoint, QDateTime
+from PySide2.QtGui import QPixmap, QColor, QFont, QCursor, QWheelEvent
 from PySide2.QtWidgets import QListWidget, QLabel, QWidget, QVBoxLayout, QHBoxLayout, QListWidgetItem, QAbstractSlider, \
     QScroller, QMenu, QApplication, QAbstractItemView
 
 from conf import config
+from qss.qss import QssDataMgr
 from resources.resources import DataMgr
+from src.book.book import BookMgr
+from src.qt.com.qt_scroll import SmoothMode
 from src.qt.com.qtcomment import QtComment
 from src.qt.com.qtimg import QtImgMgr
+from src.qt.com.qtmsg import QtMsgLabel
 from src.qt.qt_main import QtOwner
 from src.qt.util.qttask import QtTaskBase
 from src.util.status import Status
@@ -145,8 +152,94 @@ class QtBookList(QListWidget, QtTaskBase):
         self.popMenu = None
         QScroller.grabGesture(self, QScroller.LeftMouseButtonGesture)
         self.setVerticalScrollMode(QAbstractItemView.ScrollPerPixel)
-        # self.verticalScrollBar().setStyleSheet(QssDataMgr().GetData('qt_list_scrollbar'))
+        self.verticalScrollBar().setStyleSheet(QssDataMgr().GetData('qt_list_scrollbar'))
         self.verticalScrollBar().setSingleStep(30)
+
+        self.fps = 60
+        self.duration = 400
+        self.stepsTotal = 0
+        self.stepRatio = 1.5
+        self.acceleration = 1
+        self.lastWheelEvent = None
+        self.scrollStamps = deque()
+        self.stepsLeftQueue = deque()
+        self.smoothMoveTimer = QTimer(self)
+        self.smoothMode = SmoothMode(SmoothMode.LINEAR)
+        self.smoothMoveTimer.timeout.connect(self.__smoothMove)
+        self.qEventParam = []
+        self.wheelStatus = True
+
+    def wheelEvent(self, e):
+        if not self.wheelStatus:
+            return
+        if self.smoothMode == SmoothMode.NO_SMOOTH:
+            super().wheelEvent(e)
+            return False
+
+        # 将当前时间点插入队尾
+        now = QDateTime.currentDateTime().toMSecsSinceEpoch()
+        self.scrollStamps.append(now)
+        while now - self.scrollStamps[0] > 500:
+            self.scrollStamps.popleft()
+        # 根据未处理完的事件调整移动速率增益
+        accerationRatio = min(len(self.scrollStamps) / 15, 1)
+        self.qEventParam = (e.pos(), e.globalPos(), e.buttons())
+        # 计算步数
+        self.stepsTotal = self.fps * self.duration / 1000
+        # 计算每一个事件对应的移动距离
+        delta = e.angleDelta().y() * self.stepRatio
+        if self.acceleration > 0:
+            delta += delta * self.acceleration * accerationRatio
+        # 将移动距离和步数组成列表，插入队列等待处理
+        self.stepsLeftQueue.append([delta, self.stepsTotal])
+        # 定时器的溢出时间t=1000ms/帧数
+        self.smoothMoveTimer.start(1000 // self.fps)
+        return False
+        # print(e)
+
+    def __smoothMove(self):
+        """ 计时器溢出时进行平滑滚动 """
+        totalDelta = 0
+        # 计算所有未处理完事件的滚动距离，定时器每溢出一次就将步数-1
+        for i in self.stepsLeftQueue:
+            totalDelta += self.__subDelta(i[0], i[1])
+            i[1] -= 1
+        # 如果事件已处理完，就将其移出队列
+        while self.stepsLeftQueue and self.stepsLeftQueue[0][1] == 0:
+            self.stepsLeftQueue.popleft()
+        # 构造滚轮事件
+        e = QWheelEvent(self.qEventParam[0],
+                        self.qEventParam[1],
+                        QPoint(),
+                        QPoint(0, totalDelta),
+                        round(totalDelta),
+                        Qt.Vertical,
+                        self.qEventParam[2],
+                        Qt.NoModifier)
+        # print(e)
+        # 将构造出来的滚轮事件发送给app处理
+        QApplication.sendEvent(self.verticalScrollBar(), e)
+        # 如果队列已空，停止滚动
+        if not self.stepsLeftQueue:
+            self.smoothMoveTimer.stop()
+
+    def __subDelta(self, delta, stepsLeft):
+        """ 计算每一步的插值 """
+        m = self.stepsTotal / 2
+        x = abs(self.stepsTotal - stepsLeft - m)
+        # 根据滚动模式计算插值
+        res = 0
+        if self.smoothMode == SmoothMode.NO_SMOOTH:
+            res = 0
+        elif self.smoothMode == SmoothMode.CONSTANT:
+            res = delta / self.stepsTotal
+        elif self.smoothMode == SmoothMode.LINEAR:
+            res = 2 * delta / self.stepsTotal * (m - x) / m
+        elif self.smoothMode == SmoothMode.QUADRATI:
+            res = 3 / 4 / m * (1 - x * x / m / m) * delta
+        elif self.smoothMode == SmoothMode.COSINE:
+            res = (cos(x * pi / m) + 1) / (2 * m) * delta
+        return res
 
     def InitBook(self, callBack=None):
         self.resize(800, 600)
@@ -157,37 +250,96 @@ class QtBookList(QListWidget, QtTaskBase):
         self.setResizeMode(self.Adjust)
         self.LoadCallBack = callBack
 
-        self.popMenu = QMenu(self)
-        action = self.popMenu.addAction("打开")
-        action.triggered.connect(self.OpenBookInfoHandler)
-        action = self.popMenu.addAction("查看封面")
-        action.triggered.connect(self.OpenPicture)
-        action = self.popMenu.addAction("重下封面")
-        action.triggered.connect(self.ReDownloadPicture)
-        action = self.popMenu.addAction("复制标题")
-        action.triggered.connect(self.CopyHandler)
         self.setContextMenuPolicy(Qt.CustomContextMenu)
+        self.customContextMenuRequested.connect(self.SelectMenuBook)
         self.doubleClicked.connect(self.OpenBookInfo)
-        self.customContextMenuRequested.connect(self.SelectMenu)
+        self.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+
+    def InitFavorite(self, callBack=None):
+        self.resize(800, 600)
+        self.setMinimumHeight(400)
+        self.setFrameShape(self.NoFrame)  # 无边框
+        self.setFlow(self.LeftToRight)  # 从左到右
+        self.setWrapping(True)
+        self.setResizeMode(self.Adjust)
+        self.LoadCallBack = callBack
+
+        self.setContextMenuPolicy(Qt.CustomContextMenu)
+        self.customContextMenuRequested.connect(self.SelectMenuFavorite)
+        self.doubleClicked.connect(self.OpenBookInfo)
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
 
     def InstallCategory(self):
         self.doubleClicked.disconnect(self.OpenBookInfo)
-        self.popMenu = QMenu(self)
-        action = self.popMenu.addAction("查看封面")
-        action.triggered.connect(self.OpenPicture)
+
+        self.setContextMenuPolicy(Qt.CustomContextMenu)
+        self.customContextMenuRequested.connect(self.SelectMenuCategory)
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         return
 
     def InstallDel(self):
-        action = self.popMenu.addAction("刪除")
-        action.triggered.connect(self.DelHandler)
+        self.setContextMenuPolicy(Qt.CustomContextMenu)
+        self.customContextMenuRequested.connect(self.SelectMenuDel)
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+
+    def SelectMenuCategory(self, pos):
+        index = self.indexAt(pos)
+        if index.isValid():
+            popMenu = QMenu(self)
+            action = popMenu.addAction(self.tr("查看封面"))
+            action.triggered.connect(self.OpenPicture)
+            popMenu.exec_(QCursor.pos())
+        pass
+
+    def SelectMenuDel(self, pos):
+        index = self.indexAt(pos)
+        if index.isValid():
+            popMenu = QMenu(self)
+
+            action = popMenu.addAction(self.tr("刪除"))
+            action.triggered.connect(self.DelHandler)
+            popMenu.exec_(QCursor.pos())
+        pass
 
     def InitUser(self, callBack=None):
         self.setFrameShape(self.NoFrame)  # 无边框
         self.LoadCallBack = callBack
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+
+    def SelectMenuBook(self, pos):
+        index = self.indexAt(pos)
+        if index.isValid():
+            popMenu = QMenu(self)
+            action = popMenu.addAction(self.tr("打开"))
+            action.triggered.connect(self.OpenBookInfoHandler)
+            action = popMenu.addAction(self.tr("查看封面"))
+            action.triggered.connect(self.OpenPicture)
+            action = popMenu.addAction(self.tr("重下封面"))
+            action.triggered.connect(self.ReDownloadPicture)
+            action = popMenu.addAction(self.tr("复制标题"))
+            action.triggered.connect(self.CopyHandler)
+            action = popMenu.addAction(self.tr("下载"))
+            action.triggered.connect(self.DownloadHandler)
+            popMenu.exec_(QCursor.pos())
+        pass
+
+    def SelectMenuFavorite(self, pos):
+        index = self.indexAt(pos)
+        if index.isValid():
+            popMenu = QMenu(self)
+            action = popMenu.addAction(self.tr("打开"))
+            action.triggered.connect(self.OpenBookInfoHandler)
+            action = popMenu.addAction(self.tr("查看封面"))
+            action.triggered.connect(self.OpenPicture)
+            action = popMenu.addAction(self.tr("重下封面"))
+            action.triggered.connect(self.ReDownloadPicture)
+            action = popMenu.addAction(self.tr("复制标题"))
+            action.triggered.connect(self.CopyHandler)
+            action = popMenu.addAction(self.tr("下载"))
+            action.triggered.connect(self.DownloadHandler)
+            action = popMenu.addAction(self.tr("删除"))
+            action.triggered.connect(self.parent().DeleteHandler)
+            popMenu.exec_(QCursor.pos())
 
     def OnActionTriggered(self, action):
         if action != QAbstractSlider.SliderMove or self.isLoadingPage:
@@ -258,17 +410,14 @@ class QtBookList(QListWidget, QtTaskBase):
         # 防止异步加载时，信息错乱
         self.ClearTask()
 
-    def SelectMenu(self, pos):
-        index = self.indexAt(pos)
-        if index.isValid():
-            self.popMenu.exec_(QCursor.pos())
-        pass
-
     def DownloadHandler(self):
         selected = self.selectedItems()
         for item in selected:
             widget = self.itemWidget(item)
-            QtOwner().owner.epsInfoForm.OpenEpsInfo(widget.GetId())
+            bookId = widget.GetId()
+            info = BookMgr().GetBook(bookId)
+            QtOwner().owner.downloadForm.AddDownload(bookId, info.baseInfo.token, config.CurSite)
+            QtMsgLabel().ShowMsgEx(self, self.tr("添加下载成功"))
         pass
 
     def OpenBookInfoHandler(self):
@@ -330,7 +479,7 @@ class QtBookList(QListWidget, QtTaskBase):
             if widget.url and config.IsLoadingPicture:
                 widget.picIcon.setPixmap(None)
                 widget.picIcon.setText("图片加载中")
-                self.AddDownloadTask(widget.url, "", None, self.LoadingPictureComplete, True, index, False)
+                self.AddDownloadTask(widget.url, widget.path, None, self.LoadingPictureComplete, True, index, False)
                 pass
 
 

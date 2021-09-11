@@ -2,6 +2,9 @@
 """第一个程序"""
 import os
 import sys
+
+from PySide2.QtCore import Qt
+
 from conf import config
 
 
@@ -27,6 +30,7 @@ from src.util import Log
 
 
 if __name__ == "__main__":
+    QtWidgets.QApplication.setAttribute(Qt.AA_EnableHighDpiScaling)
     Log.Init()
     Log.UpdateLoggingLevel()
     app = QtWidgets.QApplication(sys.argv)  # 建立application对象
@@ -36,4 +40,5 @@ if __name__ == "__main__":
     main.show()  # 显示窗体
     main.Init()
     sts = app.exec_()
+    main.Stop()
     sys.exit(sts)  # 运行程序

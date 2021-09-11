@@ -11,7 +11,6 @@ class QtAbout(QtWidgets.QWidget, Ui_AboutForm):
         super(self.__class__, self).__init__()
         Ui_AboutForm.__init__(self)
         self.setupUi(self)
-        self.setWindowTitle("关于")
         self.label.setText("E-hentai漫画{}".format(config.UpdateVersion))
         self.label_3.linkActivated.connect(self.OpenUrl)
 
