@@ -134,9 +134,6 @@ class QtLogin(QtWidgets.QWidget, Ui_Login, QtTaskBase):
         QtOwner().owner.userForm.toolButton0.click()
         return
 
-    def OpenProxy(self):
-        QtOwner().owner.loginProxyForm.show()
-
     def Init(self):
         userId = QtOwner().owner.settingForm.GetSettingV("UserId", "")
         passwd = QtOwner().owner.settingForm.GetSettingV("Passwd2", "")

@@ -62,8 +62,13 @@ class ToolUtil(object):
         header = {
             "User-Agent": "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.198 Safari/537.36",
             "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9",
-            "Accept-Language": "zh-CN,zh;q=0.9",
         }
+        if config.Language == 'Chinese-Simplified':
+            header["Accept-Language"] = "zh-CN,zh;q=0.9"
+        elif config.Language == "English":
+            header["Accept-Language"] = "en-US,en;q=0.9"
+        else:
+            header["Accept-Language"] = "zh-HK,zh;q=0.9"
         return header
 
     @staticmethod

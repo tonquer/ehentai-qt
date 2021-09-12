@@ -18,6 +18,7 @@ from http.server import HTTPServer, BaseHTTPRequestHandler
 from socketserver import ThreadingMixIn
 from io import BytesIO
 
+from conf import config
 from src.util import Log
 
 
@@ -238,11 +239,16 @@ class ProxyRequestHandler(BaseHTTPRequestHandler):
             #     del req.headers['Host']
             # req.headers['Host'] = netloc
 
+        newHearder = self.filter_headers(req.headers)
         # 自定义dns解析
+        global dns_hosts
         if netloc in dns_hosts:
             netloc = dns_hosts.get(netloc)
-
-        setattr(req, 'headers', self.filter_headers(req.headers))
+        elif config.Language != "English" and netloc == "www.google.com":
+            netloc = "recaptcha.net"
+            del newHearder["Host"]
+            newHearder["Host"] = "recaptcha.net"
+        setattr(req, 'headers', newHearder)
 
         try:
             origin = (scheme, netloc)
@@ -402,22 +408,22 @@ class ProxyRequestHandler(BaseHTTPRequestHandler):
         req_header_text = "{} {} {}\n{}".format(req.command, req.path, req.request_version, req.headers)
         res_header_text = "{} {} {}\n{}".format(res.response_version, res.status, res.reason, res.headers)
 
-        # print_color(33, req_header_text)
+        print_color(33, req_header_text)
 
-        # u = urlparse.urlsplit(req.path)
-        # if u.query:
-        #     query_text = parse_qsl(u.query)
-        #     print_color(32, "==== QUERY PARAMETERS ====\n{}\n".format(query_text))
+        u = urlparse.urlsplit(req.path)
+        if u.query:
+            query_text = parse_qsl(u.query)
+            print_color(32, "==== QUERY PARAMETERS ====\n{}\n".format(query_text))
 
-        # cookie = req.headers.get('Cookie', '')
-        # if cookie:
-        #     cookie = parse_qsl(re.sub(r';\s*', '&', cookie))
-        #     print_color(32, "==== COOKIE ====\n{}\n".format(cookie))
+        cookie = req.headers.get('Cookie', '')
+        if cookie:
+            cookie = parse_qsl(re.sub(r';\s*', '&', cookie))
+            print_color(32, "==== COOKIE ====\n{}\n".format(cookie))
 
-        # auth = req.headers.get('Authorization', '')
-        # if auth.lower().startswith('basic'):
-        #     token = auth.split()[1].decode('base64')
-        #     print_color(31, "==== BASIC AUTH ====\n{}\n".format(token))
+        auth = req.headers.get('Authorization', '')
+        if auth.lower().startswith('basic'):
+            token = auth.split()[1].decode('base64')
+            print_color(31, "==== BASIC AUTH ====\n{}\n".format(token))
 
         if req_body is not None:
             req_body_text = None
@@ -489,6 +495,7 @@ class ProxyRequestHandler(BaseHTTPRequestHandler):
 
 
 def UpdateDns(domain, address):
+    global dns_hosts
     if not address:
         if address  in dns_hosts:
             dns_hosts.pop(address)
@@ -496,6 +503,7 @@ def UpdateDns(domain, address):
 
 
 def ClearDns():
+    global dns_hosts
     dns_hosts.clear()
 
 httpd = None

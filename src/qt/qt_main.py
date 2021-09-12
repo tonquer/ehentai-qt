@@ -121,9 +121,6 @@ class QtMainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.settingForm.LoadSetting()
         self.qtReadImg.LoadSetting()
 
-        from src.qt.user.qt_login_proxy import QtLoginProxy
-
-        self.loginProxyForm = QtLoginProxy()
         self.loginWebForm = QtLoginWeb(self)
         self.msgForm = QtMsgLabel(self)
         self.loginForm = QtLogin(self)
@@ -293,6 +290,9 @@ class QtMainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         from src.qt.com.qtimg import QtImgMgr
         from src.qt.user.login_web_proxy import Init as ProxyInit
         ProxyInit()
+        from src.qt.util.qt_domain import QtDomainMgr
+        QtDomainMgr().Update()
+        self.loginWebForm.Init()
         IsCanUse = False
         if config.CanWaifu2x:
             import waifu2x
