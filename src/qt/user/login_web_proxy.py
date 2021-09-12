@@ -408,22 +408,22 @@ class ProxyRequestHandler(BaseHTTPRequestHandler):
         req_header_text = "{} {} {}\n{}".format(req.command, req.path, req.request_version, req.headers)
         res_header_text = "{} {} {}\n{}".format(res.response_version, res.status, res.reason, res.headers)
 
-        print_color(33, req_header_text)
-
-        u = urlparse.urlsplit(req.path)
-        if u.query:
-            query_text = parse_qsl(u.query)
-            print_color(32, "==== QUERY PARAMETERS ====\n{}\n".format(query_text))
-
-        cookie = req.headers.get('Cookie', '')
-        if cookie:
-            cookie = parse_qsl(re.sub(r';\s*', '&', cookie))
-            print_color(32, "==== COOKIE ====\n{}\n".format(cookie))
-
-        auth = req.headers.get('Authorization', '')
-        if auth.lower().startswith('basic'):
-            token = auth.split()[1].decode('base64')
-            print_color(31, "==== BASIC AUTH ====\n{}\n".format(token))
+        # print_color(33, req_header_text)
+        #
+        # u = urlparse.urlsplit(req.path)
+        # if u.query:
+        #     query_text = parse_qsl(u.query)
+        #     print_color(32, "==== QUERY PARAMETERS ====\n{}\n".format(query_text))
+        #
+        # cookie = req.headers.get('Cookie', '')
+        # if cookie:
+        #     cookie = parse_qsl(re.sub(r';\s*', '&', cookie))
+        #     print_color(32, "==== COOKIE ====\n{}\n".format(cookie))
+        #
+        # auth = req.headers.get('Authorization', '')
+        # if auth.lower().startswith('basic'):
+        #     token = auth.split()[1].decode('base64')
+        #     print_color(31, "==== BASIC AUTH ====\n{}\n".format(token))
 
         if req_body is not None:
             req_body_text = None
