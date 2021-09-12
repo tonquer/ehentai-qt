@@ -7,7 +7,6 @@ from PySide2.QtCore import Qt
 
 from conf import config
 
-
 if sys.platform == 'darwin':
     # 确保工作区为当前可执行文件所在目录
     current_path = os.path.abspath(__file__)

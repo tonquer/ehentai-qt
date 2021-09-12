@@ -1,15 +1,14 @@
 import os
 import time
 
-from PySide2 import QtWidgets, QtCore, QtGui
+from PySide2 import QtWidgets, QtCore
 from PySide2.QtCore import Qt, QRectF, QPointF, QSizeF, QEvent
-from PySide2.QtGui import QColor, QPainter, QPixmap, QDoubleValidator, \
+from PySide2.QtGui import QPainter, QPixmap, QDoubleValidator, \
     QIntValidator
 from PySide2.QtWidgets import QFrame, QGraphicsPixmapItem, QGraphicsScene, QApplication, QFileDialog
 
 from conf import config
 from src.qt.com.qtmsg import QtMsgLabel
-from src.qt.qt_main import QtOwner
 from src.qt.util.qttask import QtTaskBase
 from src.util import Singleton, ToolUtil, Log
 from ui.img import Ui_Img

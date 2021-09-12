@@ -1,9 +1,6 @@
 import threading
 from queue import Queue
 
-import threading
-from queue import Queue
-
 import requests
 import urllib3
 
@@ -14,8 +11,6 @@ from src.util.status import Status
 
 urllib3.disable_warnings()
 
-
-import urllib3
 import urllib3.contrib.pyopenssl
 
 from urllib3.util import connection

@@ -1,13 +1,10 @@
 import base64
-import json
 
 import requests
-from PySide2 import QtWidgets, QtCore
-from PySide2.QtWebEngineWidgets import QWebEngineView, QWebEnginePage, QWebEngineProfile
+from PySide2 import QtWidgets
 
 from src.qt.com.qtmsg import QtMsgLabel
 from src.qt.qt_main import QtOwner
-from src.qt.user.qt_login_web import QtLoginWeb
 from src.qt.util.qttask import QtTaskBase
 from src.server import Server, req, Log
 from src.util.status import Status
@@ -81,6 +78,7 @@ class QtLogin(QtWidgets.QWidget, Ui_Login, QtTaskBase):
             self.LoginByCookie(cookie)
 
     def GetUserBack(self, data, load_cookies):
+        QtOwner().owner.loadingForm.close()
         if data["st"] != Status.Ok:
             Log.Warn("login fail, relogin")
             self.cookie.clear()

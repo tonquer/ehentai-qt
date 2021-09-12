@@ -3,13 +3,13 @@ import weakref
 from PySide2 import QtWidgets
 from PySide2.QtCore import QEvent, Qt
 from PySide2.QtCore import QSize
-from PySide2.QtGui import QPalette, QPixmap
+from PySide2.QtGui import QPixmap
 from PySide2.QtGui import Qt
 from PySide2.QtWidgets import QLabel
 
 from conf import config
-from src.qt.com.qtmsg import QtMsgLabel
 from src.qt.com.qtimg import QtImgMgr
+from src.qt.com.qtmsg import QtMsgLabel
 from src.qt.qt_main import QtOwner
 from src.qt.struct.qt_define import QtFileData
 from src.util import ToolUtil

@@ -1,5 +1,5 @@
-from PySide2.QtCore import QByteArray, QBuffer, QRect
-from PySide2.QtGui import QMovie, Qt, QPainter
+from PySide2.QtCore import QByteArray, QBuffer
+from PySide2.QtGui import QMovie, Qt
 from PySide2.QtWidgets import QLabel
 
 

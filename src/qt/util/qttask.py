@@ -1,11 +1,10 @@
-import hashlib
 import json
 import os
 import pickle
 import threading
 import time
 from queue import Queue
-from types import FunctionType
+from zlib import crc32
 
 from PySide2.QtCore import Signal, QObject
 from PySide2.QtGui import QImage
@@ -15,7 +14,6 @@ from src.qt.util.qt_domain import QtDomainMgr
 from src.util import Singleton, Log
 from src.util.status import Status
 from src.util.tool import CTime, ToolUtil
-from zlib import crc32
 
 
 class QtTaskQObject(QObject):

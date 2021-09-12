@@ -1,16 +1,13 @@
-import hmac
 import json
 import os
 import re
 import time
-import uuid
-from hashlib import sha256
 from urllib.parse import quote
+
+from bs4 import BeautifulSoup, Tag
 
 from conf import config
 from src.util import Log
-from bs4 import BeautifulSoup, Tag
-
 from src.util.status import Status
 
 
@@ -166,7 +163,6 @@ class ToolUtil(object):
         # 条漫不放大
         if not config.CanWaifu2x:
             return {}
-        import waifu2x
         return ToolUtil.GetModelByIndex(config.DownloadNoise, config.DownloadScale, config.DownloadModel)
 
     @staticmethod

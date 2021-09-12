@@ -1,8 +1,7 @@
 import re
 
-from PySide2 import QtWidgets, QtGui
+from PySide2 import QtWidgets
 from PySide2.QtCore import Qt, QEvent, QTimer
-from PySide2.QtGui import QPixmap
 
 from conf import config
 from resources import resources

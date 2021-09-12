@@ -1,6 +1,5 @@
 from PySide2 import QtWidgets
 from PySide2.QtCore import QEvent, Qt
-from PySide2.QtGui import QPixmap
 
 from resources.resources import DataMgr
 from src.qt.com.qtimg import QtImgMgr

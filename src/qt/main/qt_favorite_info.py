@@ -1,7 +1,7 @@
 from PySide2 import QtWidgets, QtCore
 
-from src.qt.com.qtmsg import QtMsgLabel
 from src.qt.com.qtloading import QtLoading
+from src.qt.com.qtmsg import QtMsgLabel
 from src.qt.util.qttask import QtTaskBase
 from src.server import req, Status
 from ui.favorite import Ui_favorite

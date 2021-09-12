@@ -1,14 +1,14 @@
 from PySide2 import QtWidgets, QtCore, QtGui
 from PySide2.QtCore import Qt, QSize, QEvent
-from PySide2.QtGui import QColor, QFont, QPixmap, QIcon
+from PySide2.QtGui import QFont, QPixmap, QIcon
 from PySide2.QtWidgets import QListWidgetItem, QLabel, QDesktopWidget
 
 from conf import config
 from resources.resources import DataMgr
 from src.book.book import BookMgr
-from src.qt.com.qtmsg import QtMsgLabel
 from src.qt.com.qtimg import QtImgMgr
 from src.qt.com.qtloading import QtLoading
+from src.qt.com.qtmsg import QtMsgLabel
 from src.qt.qt_main import QtOwner
 from src.qt.util.qttask import QtTaskBase
 from src.server import req, Log

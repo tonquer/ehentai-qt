@@ -1,14 +1,13 @@
 from enum import Enum
 from functools import partial
 
-from PySide2 import QtWidgets, QtGui
-from PySide2.QtCore import Qt, QRectF, QPointF, QEvent, QSize
-from PySide2.QtGui import QPixmap, QMatrix, QImage, QCursor
-from PySide2.QtWidgets import QDesktopWidget, QMessageBox, QMenu
+from PySide2 import QtWidgets
+from PySide2.QtCore import Qt, QEvent, QSize
+from PySide2.QtGui import QPixmap, QImage, QCursor
+from PySide2.QtWidgets import QDesktopWidget, QMenu
 
 from conf import config
 from src.book.book import BookMgr
-from src.qt.com.qtmsg import QtMsgLabel
 from src.qt.com.qtloading import QtLoading
 from src.qt.qt_main import QtOwner
 from src.qt.read.qtreadimg_frame import QtImgFrame
@@ -17,7 +16,7 @@ from src.qt.util.qttask import QtTaskBase
 from src.server import req
 from src.util import ToolUtil, Log
 from src.util.status import Status
-from src.util.tool import time_me, CTime
+from src.util.tool import time_me
 
 
 class ReadMode(Enum):

@@ -1,4 +1,5 @@
 import json
+import weakref
 
 import requests
 from PySide2 import QtWidgets, QtGui  # 导入PySide2部件
@@ -6,8 +7,6 @@ from PySide2.QtCore import QSettings, QLocale, QTranslator
 from PySide2.QtGui import QDesktopServices
 
 from conf import config
-import weakref
-
 from src.server import req, Singleton, Server
 from src.util import Log, ToolUtil
 from src.util.status import Status
@@ -287,7 +286,6 @@ class QtMainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             Log.Error(es)
 
     def Init(self):
-        from src.qt.com.qtimg import QtImgMgr
         from src.qt.user.login_web_proxy import Init as ProxyInit
         ProxyInit()
         from src.qt.util.qt_domain import QtDomainMgr

@@ -1,10 +1,9 @@
 import weakref
 
-from PySide2 import QtWidgets
-from PySide2.QtCore import Qt, QSizeF, QRectF, QEvent, QPoint, QSize, QRect
+from PySide2.QtCore import Qt, QEvent, QPoint, QRect
 from PySide2.QtGui import QPainter, QColor, QPixmap, QFont, QFontMetrics, QPen, QBrush
 from PySide2.QtWidgets import QGraphicsScene, QGraphicsPixmapItem, QFrame, QGraphicsItemGroup, QGraphicsItem, \
-    QAbstractSlider, QAbstractItemView, QScroller, QLabel
+    QAbstractSlider, QLabel
 
 from conf import config
 from resources.resources import DataMgr
@@ -13,7 +12,6 @@ from src.qt.com.qt_git_label import QtGifLabel
 from src.qt.com.qt_scroll import QtComGraphicsView
 from src.qt.com.qtmsg import QtMsgLabel
 from src.qt.read.qtreadimg_tool import QtImgTool
-from src.util.tool import time_me
 
 
 class QtImgFrame(QFrame):

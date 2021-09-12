@@ -1,11 +1,9 @@
 from PySide2 import QtWidgets, QtCore
 from PySide2.QtCore import QTimer
-from PySide2.QtGui import QPixmap, QImage
 
-from resources import resources
 from resources.resources import DataMgr
 from src.qt.com.qt_git_label import QtGifLabel
-from ui.loading import Ui_Loading, QGridLayout
+from ui.loading import QGridLayout
 
 
 class QtLoading(QtWidgets.QDialog):

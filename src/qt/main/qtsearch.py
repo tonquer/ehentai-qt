@@ -2,7 +2,6 @@ from PySide2 import QtWidgets
 from PySide2.QtWidgets import QAbstractItemView
 
 from conf import config
-from src.book.book import BookMgr
 from src.qt.qt_main import QtOwner
 from src.qt.util.qttask import QtTaskBase
 from src.server import req, Log

@@ -1,9 +1,9 @@
 import random
 
 from conf import config
+from src.qt.user.login_web_proxy import UpdateDns, ClearDns
 from src.server import req, Status, Log, Server
 from src.util import Singleton
-from src.qt.user.login_web_proxy import UpdateDns, ClearDns
 
 
 class QtDomainMgr(Singleton):
@@ -31,6 +31,7 @@ class QtDomainMgr(Singleton):
         return
 
     def AddHttpTaskBack(self, data, host):
+        self.wait_dns.discard(host)
         if data["st"] == Status.Ok:
             addresss = []
             for info in data.get("Answer"):

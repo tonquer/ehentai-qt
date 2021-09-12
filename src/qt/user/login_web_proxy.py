@@ -1,26 +1,26 @@
-import sys
+import gzip
+import http.client as httplib
+import json
 import os
+import re
+import select
 import socket
 import ssl
-import select
+import sys
 import threading
-import gzip
-import zlib
 import time
-import json
-import re
-from os.path import join, isdir
-from string import Template
-from OpenSSL import crypto
-import http.client as httplib
 import urllib.parse as urlparse
+import zlib
 from http.server import HTTPServer, BaseHTTPRequestHandler
-from socketserver import ThreadingMixIn
 from io import BytesIO
+from os.path import join, isdir
+from socketserver import ThreadingMixIn
+from string import Template
+
+from OpenSSL import crypto
 
 from conf import config
 from src.util import Log
-
 
 dns_hosts = {}
 dir_name = "ssl-data"

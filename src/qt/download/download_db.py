@@ -1,5 +1,3 @@
-import json
-
 from PySide2.QtSql import QSqlDatabase, QSqlQuery
 
 from src.qt.download.download_info import DownloadInfo

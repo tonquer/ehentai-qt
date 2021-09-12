@@ -1,14 +1,10 @@
-import re
 import sys
 
 from PySide2 import QtCore, QtNetwork, QtWidgets
-from PySide2.QtCore import QUrl, QByteArray
-from PySide2.QtWebEngineCore import QWebEngineUrlRequestInterceptor, QWebEngineUrlSchemeHandler, QWebEngineHttpRequest
-from PySide2.QtWebEngineWidgets import QWebEngineView, QWebEngineProfile, QWebEnginePage
+from PySide2.QtWebEngineWidgets import QWebEngineView, QWebEnginePage
 
 from conf import config
 from src.qt.qt_main import QtOwner
-from src.util import ToolUtil
 
 
 class CustomWebEnginePage(QWebEnginePage):
@@ -28,13 +24,13 @@ class QtLoginWeb(QWebEngineView):
         self.page().profile().cookieStore().deleteAllCookies()
         self.page().profile().cookieStore().cookieAdded.connect(self.OnCookieAdd)
         self.page().profile().setHttpUserAgent("Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.198 Safari/537.36")
-        self.loadFinished.connect(self.LoadFinished)
+        # self.loadFinished.connect(self.LoadFinished)
         self.cookies = {}
         self.userName = ""
         self.passWord = ""
 
     def Init(self):
-        if config.HttpProxy:
+        if config.IsHttpProxy and config.HttpProxy:
             proxy = QtNetwork.QNetworkProxy()
             proxy.setType(QtNetwork.QNetworkProxy.HttpProxy)
             url = config.HttpProxy
@@ -45,7 +41,7 @@ class QtLoginWeb(QWebEngineView):
                 proxy.setHostName(data[0])
                 proxy.setPort(int(data[1]))
                 QtNetwork.QNetworkProxy.setApplicationProxy(proxy)
-        elif config.IsOpenDoh:
+        elif config.IsOpenDoh and config.LocalProxyPort:
             proxy = QtNetwork.QNetworkProxy()
             proxy.setType(QtNetwork.QNetworkProxy.HttpProxy)
             proxy.setHostName("127.0.0.1")
@@ -60,7 +56,7 @@ class QtLoginWeb(QWebEngineView):
         self.page().runJavaScript(jsStr)
 
     def OpenUrl(self, userName, passWord):
-        if config.HttpProxy:
+        if config.IsHttpProxy and config.HttpProxy:
             proxy = QtNetwork.QNetworkProxy()
             proxy.setType(QtNetwork.QNetworkProxy.HttpProxy)
             url = config.HttpProxy
@@ -71,7 +67,7 @@ class QtLoginWeb(QWebEngineView):
                 proxy.setHostName(data[0])
                 proxy.setPort(int(data[1]))
                 QtNetwork.QNetworkProxy.setApplicationProxy(proxy)
-        elif config.IsOpenDoh:
+        elif config.IsOpenDoh and config.LocalProxyPort:
             proxy = QtNetwork.QNetworkProxy()
             proxy.setType(QtNetwork.QNetworkProxy.HttpProxy)
             proxy.setHostName("127.0.0.1")
