@@ -407,6 +407,10 @@ class ToolUtil(object):
             url = tag.a.attrs.get('href')
             index = int(tag.a.img.attrs.get('alt'))
             info.picUrl[index] = url
+        for tag in soup.find_all("div", class_="gdtl"):
+            url = tag.a.attrs.get('href')
+            index = int(tag.a.img.attrs.get('alt'))
+            info.picUrl[index] = url
         table = soup.find("table", class_="ptt")
         maxPage = 1
         for td in table.tr.children:

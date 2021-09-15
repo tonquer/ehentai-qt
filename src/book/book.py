@@ -97,7 +97,7 @@ class BookMgr(Singleton):
             self.books[site][info.baseInfo.id] = info
 
     def UpdateBookInfo(self, bookId, info, curPage, maxPage, site):
-        book = self.GetBook(bookId)
+        book = self.GetBookBySite(bookId, site)
         assert isinstance(info, BookInfo)
         if not book:
             info.curPage = curPage
