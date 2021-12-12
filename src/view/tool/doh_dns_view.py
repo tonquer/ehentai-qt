@@ -11,9 +11,10 @@ class DohDnsView(BaseMaskDialog, Ui_DohDns):
         Ui_DohDns.__init__(self)
         self.setupUi(self.widget)
         self.pushButton.clicked.connect(self.close)
+        self.tableWidget.setMinimumWidth(600)
+        self.LoadDns()
 
     def show(self):
-        self.LoadDns()
         return super(self.__class__, self).show()
 
     def LoadDns(self):
