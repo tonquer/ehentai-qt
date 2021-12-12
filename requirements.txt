@@ -1,7 +1,0 @@
-PySide2
-PyOpenssl
-requests
-urllib3
-pillow
-bs4
-lxml

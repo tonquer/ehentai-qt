@@ -5,9 +5,12 @@ import requests
 import urllib3
 
 import src.server.res as res
-from conf import config
-from src.util import ToolUtil, Singleton, Log
-from src.util.status import Status
+from config import config
+from config.setting import Setting
+from tools.tool import ToolUtil
+from tools.singleton import Singleton
+from tools.log import Log
+from tools.status import Status
 
 urllib3.disable_warnings()
 
@@ -97,23 +100,29 @@ class Server(Singleton, threading.Thread):
 
     def Run(self):
         while True:
-            try:
-                task = self._inQueue.get(True)
-            except Exception as es:
-                continue
-                pass
+            task = self._inQueue.get(True)
             self._inQueue.task_done()
             try:
+                if task == "":
+                    break
                 self._Send(task)
             except Exception as es:
                 Log.Error(es)
         pass
+
+    def Stop(self):
+        for i in range(self.threadNum):
+            self._inQueue.put("")
+        for i in range(self.downloadNum):
+            self._downloadQueue.put("")
 
     def RunDownload(self):
         while True:
             task = self._downloadQueue.get(True)
             self._downloadQueue.task_done()
             try:
+                if task == "":
+                    break
                 self._Download(task)
             except Exception as es:
                 Log.Error(es)
@@ -166,7 +175,8 @@ class Server(Singleton, threading.Thread):
         if request.headers == None:
             request.headers = {}
 
-        r = self.session.post(request.url, proxies=request.proxy, headers=request.headers, data=request.params, timeout=task.timeout, verify=False)
+        cookie = {"igneous": Setting.Igneous.value, "ipb_member_id": Setting.IpbMemberId.value, "ipb_pass_hash": Setting.IpbPassHash.value}
+        r = self.session.post(request.url, proxies=request.proxy, headers=request.headers, data=request.params, timeout=task.timeout, verify=False, cookies=cookie)
         task.res = res.BaseRes(r, request.isParseRes)
         return task
 
@@ -178,7 +188,8 @@ class Server(Singleton, threading.Thread):
         if request.headers == None:
             request.headers = {}
 
-        r = self.session.get(request.url, proxies=request.proxy, headers=request.headers, timeout=task.timeout, verify=False)
+        cookie = {"igneous": Setting.Igneous.value, "ipb_member_id": Setting.IpbMemberId.value, "ipb_pass_hash": Setting.IpbPassHash.value}
+        r = self.session.get(request.url, proxies=request.proxy, headers=request.headers, timeout=task.timeout, verify=False, cookies=cookie)
         task.res = res.BaseRes(r, request.isParseRes)
         return task
 
@@ -196,9 +207,9 @@ class Server(Singleton, threading.Thread):
                 if cachePath and task.backParam:
                     data = ToolUtil.LoadCachePicture(cachePath)
                     if data:
-                        from src.qt.util.qttask import QtTask
-                        QtTask().downloadBack.emit(task.backParam, len(data), data)
-                        QtTask().downloadBack.emit(task.backParam, 0, b"")
+                        from task.qt_task import TaskBase
+                        TaskBase.taskObj.downloadBack.emit(task.backParam, len(data), data)
+                        TaskBase.taskObj.downloadBack.emit(task.backParam, 0, b"")
                         return
             request = task.req
             if request.params == None:
@@ -208,7 +219,9 @@ class Server(Singleton, threading.Thread):
                 request.headers = {}
 
             Log.Info("request-> backId:{}, {}".format(task.backParam, task.req))
-            r = self.session.get(request.url, proxies=request.proxy, headers=request.headers, stream=True, timeout=task.timeout, verify=False)
+            cookie = {"igneous": Setting.Igneous.value, "ipb_member_id": Setting.IpbMemberId.value,
+                      "ipb_pass_hash": Setting.IpbPassHash.value}
+            r = self.session.get(request.url, proxies=request.proxy, headers=request.headers, stream=True, timeout=task.timeout, verify=False, cookies=cookie)
             # task.res = res.BaseRes(r)
             task.res = r
         except Exception as es:

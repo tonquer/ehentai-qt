@@ -1,14 +1,16 @@
+from util.str import Str
 
 
 class Status(object):
-    Ok = ""
-    Load = "Load"
-    Error = "Error"
-    WaitLoad = "Wait"
-    NetError = "网络错误，请检查代理设置"
-    UserError = "用户名密码错误"
-    RegisterError = "注册失败"
-    NotFoundBook = "未找到书籍"
-    ParseError = "解析出错了"
-    NeedGoogle = "需要谷歌验证"
+    Ok = Str.Ok
+    Load = Str.Load
+    Error = Str.Error
+    WaitLoad = Str.WaitLoad
+    NetError = Str.NetError
+    UserError = Str.UserError
+    RegisterError = Str.RegisterError
+    UnKnowError = Str.UnKnowError
+    NotFoundBook = Str.NotFoundBook
+    ParseError = Str.ParseError
+    NeedGoogle = Str.NeedGoogle
 

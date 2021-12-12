@@ -1,7 +1,8 @@
 import json
 
-from conf import config
-from src.util import ToolUtil
+from config import config
+from config.setting import Setting
+from tools.tool import ToolUtil
 
 
 def get_url(site=""):
@@ -30,14 +31,16 @@ class ServerReq(object):
         self.method = method
         self.isParseRes = False
         self.timeout = 5
-        if config.IsHttpProxy:
-            self.proxy = {"http": config.HttpProxy, "https": config.HttpProxy}
+        if Setting.IsHttpProxy.value:
+            self.proxy = {"http": Setting.HttpProxy.value, "https": Setting.HttpProxy.value}
         else:
             self.proxy = {}
 
     def __str__(self):
-        if config.LogIndex == 0:
-            return ""
+        if Setting.LogIndex.value == 0:
+            return self.__class__.__name__
+        elif Setting.LogIndex.value == 1:
+            return "{}, url:{}".format(self.__class__.__name__, self.url)
         headers = dict()
         headers.update(self.headers)
         params = self.params
@@ -46,11 +49,11 @@ class ServerReq(object):
 
 # 下载图片
 class DownloadBookReq(ServerReq):
-    def __init__(self, url, path="", isSaveCache=False):
+    def __init__(self, url, isSaveCache=False, saveFile=""):
         method = "Download"
         self.url = url
-        self.path = path
         self.isSaveCache = isSaveCache
+        self.saveFile = saveFile
         super(self.__class__, self).__init__(url, ToolUtil.GetHeader(url, method),
                                              {}, method)
 
@@ -115,7 +118,7 @@ class CheckUpdateReq(ServerReq):
 # 本子信息
 class BookInfoReq(ServerReq):
     def __init__(self, bookId, page=1, token="", site=""):
-        from src.book.book import BookMgr
+        from tools.book import BookMgr
         self.bookId = bookId
         self.page = page
         self.site = config.CurSite
@@ -132,6 +135,7 @@ class BookInfoReq(ServerReq):
         if page > 1:
             params["p"] = str(page - 1)
         else:
+            params["hc"] = "1"
             params["nw"] = "always"
         data = ToolUtil.DictToUrl(params)
         if data:
@@ -143,7 +147,7 @@ class BookInfoReq(ServerReq):
 # 图片信息
 class GetBookImgUrl(ServerReq):
     def __init__(self, bookId, index, site=""):
-        from src.book.book import BookMgr
+        from tools.book import BookMgr
         self.bookId = bookId
         self.index = index
         self.site = config.CurSite
@@ -164,7 +168,7 @@ class GetBookImgUrl2(ServerReq):
         self.site = config.CurSite
         if site:
             self.site = site
-        from src.book.book import BookMgr
+        from tools.book import BookMgr
         info = BookMgr().GetBookBySite(bookId, self.site)
 
         url = get_api(site)
@@ -246,7 +250,7 @@ class GetFavoritesReq(ServerReq):
 # 添加收藏
 class AddFavoritesReq(ServerReq):
     def __init__(self, bookId=""):
-        from src.book.book import BookMgr
+        from tools.book import BookMgr
         info = BookMgr().GetBook(bookId)
         url = get_url() + "/gallerypopups.php?gid={}&t={}&act=addfav".format(bookId, info.baseInfo.token)
         method = "GET"
@@ -257,7 +261,7 @@ class AddFavoritesReq(ServerReq):
 # 添加收藏2
 class AddFavorites2Req(ServerReq):
     def __init__(self, bookId="", favcat=0, msg="", isUpdate=False):
-        from src.book.book import BookMgr
+        from tools.book import BookMgr
         info = BookMgr().GetBook(bookId)
         url = get_url() + "/gallerypopups.php?gid={}&t={}&act=addfav".format(bookId, info.baseInfo.token)
         method = "POST"
@@ -296,9 +300,12 @@ class DelFavoritesReq(ServerReq):
 class SendCommentReq(ServerReq):
     def __init__(self, bookId, comment):
 
-        from src.book.book import BookMgr
+        from tools.book import BookMgr
+        self.bookId = bookId
+        self.site = config.CurSite
+        self.page = 0
         info = BookMgr().GetBook(bookId)
-        url = get_url() + "/g/{}/{}/".format(bookId, info.baseInfo.token)
+        url = get_url() + "/g/{}/{}?hc=1".format(bookId, info.baseInfo.token)
         method = "POST"
 
         header = ToolUtil.GetHeader(url, method)
@@ -314,7 +321,7 @@ class BookScoreReq(ServerReq):
     # {"rating_avg":4.63,"rating_usr":4,"rating_cnt":6,"rating_cls":"ir irg"}
     def __init__(self, bookId, rating):
         self.bookId = bookId
-        from src.book.book import BookMgr
+        from tools.book import BookMgr
         info = BookMgr().GetBook(bookId)
         url = get_api()
         method = "POST"
@@ -323,7 +330,7 @@ class BookScoreReq(ServerReq):
             'apikey': info.pageInfo.apiKey,
             'apiUid': info.pageInfo.apiUid,
             'method': 'rategallery',
-            'token': info.pageInfo.token,
+            'token': info.baseInfo.token,
             'rating': rating
         }
         header = ToolUtil.GetHeader(url, method)
@@ -334,7 +341,10 @@ class BookScoreReq(ServerReq):
 # Doh域名解析
 class DnsOverHttpsReq(ServerReq):
     def __init__(self, domain=""):
-        url = config.DohAddress + "?name={}&type=A".format(domain)
+        doh = "https://1.1.1.1/dns-query"
+        if Setting.DohAddress.value:
+            doh = Setting.DohAddress.value
+        url = doh + "?name={}&type=A".format(domain)
         method = "GET"
         header = dict()
         header["accept"] = "application/dns-json"

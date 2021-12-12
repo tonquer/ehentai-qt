@@ -23,21 +23,17 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install pyinstaller
-        if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
-    - name: Waifu2x
-      run: |
-        wget 'https://github.com/tonquer/waifu2x-ncnn-vulkan-python/releases/download/v1.0.2/waifu2x-ncnn-vulkan-python-v1.0.2-py37-ubuntu-x86_64.zip'
-        unzip waifu2x-ncnn-vulkan-python-v1.0.2-py37-ubuntu-x86_64.zip -d waifu2x-ncnn-vulkan-python-v1.0.2-py37-ubuntu-x86_64
-        cp waifu2x-ncnn-vulkan-python-v1.0.2-py37-ubuntu-x86_64/waifu2x.so ./
+        pip install pyinstaller==4.5.1
+        pip install https://github.com/tonquer/waifu2x-vulkan/releases/download/v1.0.9/waifu2x_vulkan-1.0.9-cp37-cp37m-linux_x86_64.whl
+        if [ -f requirements.txt ]; then pip install -r src/requirements.txt; fi
     - name: Build
       run: |
-        pyinstaller -F -w start.py --add-binary waifu2x.so:.
+        cd src
+        pyinstaller -F -w start.py
         mv dist ehentai
-        cp -r database models resources translate ehentai/
-        rm ehentai/resources/*.py -rf
-        rm ehentai/translate/*.ts -rf
         tar -zcvf ${{ env.PACKAGENAME }}.tar.gz ehentai/
+        mv ${{ env.PACKAGENAME }}.tar.gz ..
+        cd ..
     - name: Upload
       uses: actions/upload-artifact@v2
       with:
@@ -58,37 +54,34 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install pyinstaller
-        pip install -r requirements.txt
+        pip install pyinstaller==4.5.1
+        pip install https://github.com/tonquer/waifu2x-vulkan/releases/download/v1.0.9/waifu2x_vulkan-1.0.9-cp37-cp37m-macosx_10_14_x86_64.whl
+        pip install -r src/requirements.txt
         brew install create-dmg
-    - name: Waifu2x
-      run: |
-        wget 'https://github.com/tonquer/waifu2x-ncnn-vulkan-python/releases/download/v1.0.2/waifu2x-ncnn-vulkan-python-v1.0.2-py37-macos-x86_64.zip'
-        unzip waifu2x-ncnn-vulkan-python-v1.0.2-py37-macos-x86_64.zip -d waifu2x-ncnn-vulkan-python-v1.0.2-py37-macos-x86_64
-        cp waifu2x-ncnn-vulkan-python-v1.0.2-py37-macos-x86_64/waifu2x.so ./
     - name: Build
       run: |
-        pyinstaller --clean --log-level TRACE --onedir --name Ehentai \
-            --add-binary waifu2x.so:. --hidden-import PySide2 --hidden-import requests \
-            --hidden-import urllib3 --hidden-import pillow \
-            --hidden-import conf --hidden-import resources --hidden-import translate --hidden-import src \
-            --hidden-import src.qt  \
-            --hidden-import src.qt.com --hidden-import src.qt.download \
-            --hidden-import src.qt.main --hidden-import src.qt.menu \
-            --hidden-import src.qt.read --hidden-import src.qt.struct \
-            --hidden-import src.qt.user --hidden-import src.qt.util --hidden-import src.server \
-            --hidden-import src.util --hidden-import ui \
-            --hidden-import qss --strip --windowed -i Icon.icns \
+        cd src
+        cp ../res/icon/Icon.icns ./
+        pyinstaller --clean --onedir --name Ehentai \
+            --hidden-import waifu2x_vulkan --hidden-import PySide6 --hidden-import requests \
+            --hidden-import urllib3 --hidden-import websocket-client --hidden-import pillow \
+            --hidden-import config \
+            --hidden-import component \
+            --hidden-import server \
+            --hidden-import task \
+            --hidden-import tools \
+            --hidden-import view \
+            --strip --windowed -i Icon.icns \
             start.py
         rm -rf dist/Ehentai
         cp Icon.icns dist/
         ln -s /Applications/   dist/Applications
-        cp -avf database models resources translate dist/Ehentai.app/Contents/MacOS
-        rm -rf dist/Ehentai.app/Contents/MacOS/resources/*.py
-        rm -rf dist/Ehentai.app/Contents/MacOS/translate/*.ts
         create-dmg --volname "Ehentai" --volicon "Icon.icns" --icon "Icon.icns" 200 190 \
             --hide-extension "Icon.icns" ${{ env.PACKAGENAME }}.dmg dist/
         zip -9 ehentai.zip ${{ env.PACKAGENAME }}.dmg
+        mv ${{ env.PACKAGENAME }}.dmg ..
+        mv ehentai.zip ..
+        cd ..
     - name: Upload
       uses: actions/upload-artifact@v2
       with:
@@ -109,29 +102,22 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install pyinstaller
-        pip install -r requirements.txt
-    - name: Waifu2x
-      run: |
-        Invoke-WebRequest -Uri 'https://github.com/tonquer/waifu2x-ncnn-vulkan-python/releases/download/v1.0.2/waifu2x-ncnn-vulkan-python-v1.0.2-py37-windows-x64.zip ' -OutFile 'waifu2x-ncnn-vulkan-python-v1.0.2-py37-windows-x64.zip'
-        7z x .\waifu2x-ncnn-vulkan-python-v1.0.2-py37-windows-x64.zip "-owaifu2x-ncnn-vulkan-python-v1.0.2-py37-windows-x64"
-        cp waifu2x-ncnn-vulkan-python-v1.0.2-py37-windows-x64/waifu2x.pyd .\
+        pip install pyinstaller==4.5.1
+        pip install https://github.com/tonquer/waifu2x-vulkan/releases/download/v1.0.9/waifu2x_vulkan-1.0.9-cp36.cp37.cp38.cp39.cp310-none-win_amd64.whl
+        pip install -r src\requirements.txt
     - name: Build
       run: |
-        pyinstaller -F -i resources\icon.ico start.py --add-binary "waifu2x.pyd;."
+        cd src
+        cp ..\res\icon\icon.ico .\
+        pyinstaller -F -i icon.ico start.py
         mv dist/start.exe "dist/start(debug).exe"
-        pyinstaller -F -w -i resources\icon.ico start.py --add-binary "waifu2x.pyd;." 
+        pyinstaller -F -w -i icon.ico start.py
         mv dist ehentai
-        Copy-Item -Verbose -Recurse -Path database -Destination ehentai/
-        Copy-Item -Verbose -Recurse -Path models -Destination ehentai/
-        Copy-Item -Verbose -Recurse -Path resources -Destination ehentai/
-        Copy-Item -Verbose -Recurse -Path translate -Destination ehentai/
-        Remove-Item ehentai/resources/*.py -r -fo
-        Remove-Item ehentai/translate/*.ts -r -fo
-        cp LICENSE ehentai\
-        cp README.md ehentai\
+        cp ..\LICENSE ehentai\
+        cp ..\CHANGELOG ehentai\
+        cd ..
         mkdir ${{ env.PACKAGENAME }}
-        mv ehentai ${{ env.PACKAGENAME }}
+        mv src\ehentai ${{ env.PACKAGENAME }}
         7z a -r "$($Env:PACKAGENAME + '.zip')" "ehentai"
     - name: Upload
       uses: actions/upload-artifact@v2
