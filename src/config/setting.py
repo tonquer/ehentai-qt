@@ -1,5 +1,6 @@
 import os
 import shutil
+import sys
 
 
 class SettingValue:
@@ -162,8 +163,14 @@ class Setting:
 
     @staticmethod
     def GetConfigPath():
-        projectName = "data"
-        return projectName
+        if sys.platform == "win32":
+            projectName = "data"
+            return projectName
+        else:
+            from PySide2.QtCore import QDir
+            homePath = QDir.homePath()
+            projectName = ".picacg"
+            return os.path.join(homePath, projectName)
 
     @staticmethod
     def GetLogPath():
