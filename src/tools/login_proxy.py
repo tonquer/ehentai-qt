@@ -510,6 +510,12 @@ def ClearDns():
 httpd = None
 def Init():
     try:
+        global dir_name, ca_key, ca_crt, cert_key, cert_dir
+        dir_name = join(Setting.GetConfigPath(), "ssl-data")
+        ca_key = join(dir_name, 'ca.key')
+        ca_crt = join(dir_name, 'ca.crt')
+        cert_key = join(dir_name, 'cert.key')
+        cert_dir = join(dir_name, 'certs')
 
         def generate_key_pair(key_type, bits):
             """

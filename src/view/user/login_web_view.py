@@ -35,7 +35,6 @@ class LoginWebView(QWebEngineView):
         self.isLogin = False
 
     def SwitchCurrent(self, **kwargs):
-        self.Init()
         self.OpenUrl()
         return
 

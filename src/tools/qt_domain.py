@@ -110,10 +110,11 @@ class QtDomainMgr(Singleton):
         return
 
     def Update(self):
-        self.cache_dns.clear()
-        self.fail_dns.clear()
-        Server().ClearDns()
-        ClearDns()
+        # self.cache_dns.clear()
+        # self.fail_dns.clear()
         if Setting.IsOpenDoh.value:
             self.Init()
+        else:
+            Server().ClearDns()
+            ClearDns()
         return

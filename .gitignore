@@ -8,6 +8,8 @@ __pycache__/
 
 # Distribution / packaging
 src/test
+src/data
+src/ssl-data
 .idea
 .Python
 build/

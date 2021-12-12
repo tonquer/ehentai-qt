@@ -16,6 +16,7 @@ from task.task_download import TaskDownload
 from task.task_qimage import TaskQImage
 from task.task_waifu2x import TaskWaifu2x
 from tools.log import Log
+from tools.qt_domain import QtDomainMgr
 from view.download.download_dir_view import DownloadDirView
 
 
@@ -93,6 +94,7 @@ class MainView(Main, QtTaskBase):
 
     def Init(self):
         IsCanUse = False
+
         if config.CanWaifu2x:
             from waifu2x_vulkan import waifu2x_vulkan
             stat = waifu2x_vulkan.init()
@@ -146,6 +148,11 @@ class MainView(Main, QtTaskBase):
         if not Setting.SavePath.value:
             view = DownloadDirView(self)
             view.exec()
+
+        from tools.login_proxy import Init
+        Init()
+        QtDomainMgr().Update()
+        self.loginWebView.Init()
         self.OpenLoginView()
 
     def ClearTabBar(self):
@@ -325,5 +332,7 @@ class MainView(Main, QtTaskBase):
         TaskQImage().Stop()
         TaskDownload().Stop()
         Server().Stop()
+        from tools.login_proxy import Stop
+        Stop()
         # QtTask().Stop()
 
