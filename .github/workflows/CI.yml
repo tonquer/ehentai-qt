@@ -109,7 +109,7 @@ jobs:
       run: |
         cd src
         cp ..\res\icon\icon.ico .\
-        pyinstaller -F -i icon.ico start.py
+        pyinstaller -i icon.ico start.py
         mv dist/start dist/start2
         pyinstaller -w -i icon.ico start.py
         mv dist/start2/start.exe "dist/start/start(debug).exe"
