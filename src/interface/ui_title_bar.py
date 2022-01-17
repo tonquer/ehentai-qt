@@ -92,7 +92,7 @@ class Ui_TitleBar(object):
     def retranslateUi(self, TitleBar):
         TitleBar.setWindowTitle(QCoreApplication.translate("TitleBar", u"Form", None))
         self.label_2.setText("")
-        self.label.setText(QCoreApplication.translate("TitleBar", u"PicACG", None))
+        self.label.setText(QCoreApplication.translate("TitleBar", u"E-Hentai", None))
         self.minButton.setText("")
         self.maxBt.setText("")
         self.closeButton.setText("")

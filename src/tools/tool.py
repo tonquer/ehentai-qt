@@ -143,101 +143,31 @@ class ToolUtil(object):
         return size
 
     @staticmethod
-    def GetScaleAndNoise(w, h):
-        dot = w * h
-        # 条漫不放大
-        if max(w, h) >= 2561:
-            return 1, 3
-        if dot >= 1920 * 1440:
-            return 2, 3
-        if dot >= 1920 * 1080:
-            return 2, 3
-        elif dot >= 720 * 1080:
-            return 2, 3
-        elif dot >= 240 * 720:
-            return 2, 3
-        else:
-            return 2, 3
+    def GetLookScaleModel(category, mat="jpg"):
+        return ToolUtil.GetModelByIndex(Setting.LookNoise.value, Setting.LookScale.value, ToolUtil.GetLookModel(category), mat)
 
     @staticmethod
-    def GetLookScaleModel(category):
-        return ToolUtil.GetModelByIndex(Setting.LookNoise.value, Setting.LookScale.value, ToolUtil.GetLookModel(category))
-
-    @staticmethod
-    def GetDownloadScaleModel(w, h):
+    def GetDownloadScaleModel(w, h, mat):
         dot = w * h
         # 条漫不放大
         if not config.CanWaifu2x:
             return {}
-        return ToolUtil.GetModelByIndex(Setting.DownloadNoise.value, Setting.DownloadScale.value, Setting.DownloadModel.value)
-
-    @staticmethod
-    def GetPictureFormat(data):
-        if data[:8] == b"\x89\x50\x4e\x47\x0d\x0a\x1a\x0a":
-            return "png"
-        elif data[:2] == b"\xff\xd8":
-            return "jpg"
-        return "jpg"
+        return ToolUtil.GetModelByIndex(Setting.DownloadNoise.value, Setting.DownloadScale.value, Setting.DownloadModel.value, mat)
 
     @staticmethod
     def GetPictureSize(data):
+        if not data:
+            return 0, 0, "jpg"
         from PIL import Image
         from io import BytesIO
         a = BytesIO(data)
         img = Image.open(a)
         a.close()
-        return img.width, img.height
-        # picFormat = ToolUtil.GetPictureFormat(data)
-        # weight, height = 1, 1
-        # if picFormat == "png":
-        #     # head = 8 + 4 + 4
-        #     data2 = data[16:24]
-        #     weight = int.from_bytes(data2[:4], byteorder='big', signed=False)
-        #     height = int.from_bytes(data2[5:], byteorder='big', signed=False)
-        # elif picFormat == "jpg":
-        #     size = min(1000, len(data))
-        #
-        #     index = 0
-        #     while index < size:
-        #         if data[index] == 255:
-        #             index += 1
-        #             if 192 <= data[index] <= 206:
-        #                 index += 4
-        #                 if index + 4 >= size:
-        #                     continue
-        #                 height = int.from_bytes(data[index:index + 2], byteorder='big', signed=False)
-        #                 weight = int.from_bytes(data[index + 2:index + 4], byteorder='big', signed=False)
-        #                 break
-        #             else:
-        #                 continue
-        #         index += 1
-        # return weight, height
-
-    @staticmethod
-    def GetDataModel(data):
-        picFormat = ToolUtil.GetPictureFormat(data)
-        if picFormat == "png":
-            IDATEnd = 8 + 25
-            dataSize = int.from_bytes(data[IDATEnd:IDATEnd + 4], byteorder="big", signed=False)
-            if dataSize >= 10:
-                return ""
-            dataType = data[IDATEnd + 4:IDATEnd + 8]
-            if dataType == b"tEXt":
-                return data[IDATEnd + 8:IDATEnd + 8 + dataSize].decode("utf-8")
-            return ""
-        elif picFormat == "jpg":
-            if data[:4] != b"\xff\xd8\xff\xe0":
-                return ""
-            size = int.from_bytes(data[4:6], byteorder="big", signed=False)
-            if size >= 100:
-                return ""
-            if data[4 + size:4 + size + 2] != b"\xff\xfe":
-                return
-            size2 = int.from_bytes(data[4 + size + 2:4 + size + 2 + 2], byteorder="big", signed=False) - 2
-            if size2 >= 100:
-                return
-            return data[4 + size2 + 2 + 2:4 + size2 + 2 + 2 + size2].decode("utf-8")
-        return ""
+        if img.format == "PNG":
+            mat = "png"
+        else:
+            mat = "jpg"
+        return img.width, img.height, mat
 
     @staticmethod
     def GetLookModel(category):
@@ -266,32 +196,28 @@ class ToolUtil(object):
         return model, noise, scale
 
     @staticmethod
-    def GetModelByIndex(noise, scale, index):
+    def GetModelByIndex(noise, scale, index, mat="jpg"):
         if not config.CanWaifu2x:
             return {}
         if noise < 0:
             noise = 3
-        from waifu2x_vulkan import waifu2x_vulkan as waifu2x
+        data = {"format": mat, "noise": noise, "scale": scale, "index": index}
+        from waifu2x_vulkan import waifu2x_vulkan
         if index == 0:
-            return {"model": getattr(waifu2x, "MODEL_ANIME_STYLE_ART_RGB_NOISE" + str(noise)), "noise": noise,
-                    "scale": scale, "index": index}
+            data["model"] = getattr(waifu2x_vulkan, "MODEL_ANIME_STYLE_ART_RGB_NOISE"+str(noise))
         elif index == 1:
-            return {"model": getattr(waifu2x, "MODEL_CUNET_NOISE" + str(noise)), "noise": noise, "scale": scale,
-                    "index": index}
+            data["model"] = getattr(waifu2x_vulkan, "MODEL_CUNET_NOISE"+str(noise))
         elif index == 2:
-            return {"model": getattr(waifu2x, "MODEL_PHOTO_NOISE" + str(noise)), "noise": noise, "scale": scale,
-                    "index": index}
+            data["model"] = getattr(waifu2x_vulkan, "MODEL_PHOTO_NOISE" + str(noise))
         elif index == 3:
-            return {"model": getattr(waifu2x, "MODEL_ANIME_STYLE_ART_RGB_NOISE" + str(noise)), "noise": noise,
-                    "scale": scale, "index": index}
-        return {"model": getattr(waifu2x, "MODEL_CUNET_NOISE" + str(noise)), "noise": noise, "scale": scale,
-                "index": index}
+            data["model"] = getattr(waifu2x_vulkan, "MODEL_ANIME_STYLE_ART_RGB_NOISE"+str(noise))
+        else:
+            data["model"] = getattr(waifu2x_vulkan, "MODEL_CUNET_NOISE"+str(noise))
+        return data
 
     @staticmethod
     def GetCanSaveName(name):
-        return name.replace("/", "").replace("|", "").replace("*", ""). \
-            replace("\\", "").replace("?", "").replace(":", "").replace("*", ""). \
-            replace("<", "").replace(">", "").replace("\"", "")
+        return re.sub('[\\\/:*?"<>|\0\r\n]', '', name).rstrip(".").strip(" ")
 
     @staticmethod
     def LoadCachePicture(filePath):
@@ -308,14 +234,14 @@ class ToolUtil(object):
         return None
 
     @staticmethod
-    def SetIcon(self):
-        from PySide2.QtGui import QIcon, QPixmap
-        icon = QIcon()
-        pic = QPixmap()
-        from resources import resources
-        pic.loadFromData(resources.DataMgr.GetData("logo_round"))
-        icon.addPixmap(pic, QIcon.Normal, QIcon.Off)
-        self.setWindowIcon(icon)
+    def IsHaveFile(filePath):
+        try:
+            if os.path.isfile(filePath):
+                return True
+            return False
+        except Exception as es:
+            Log.Error(es)
+        return False
 
     @staticmethod
     def DiffDays(d1, d2):
@@ -341,7 +267,7 @@ class ToolUtil(object):
     @staticmethod
     def ParseBookIndex(data):
         soup = BeautifulSoup(data, features="lxml")
-        tag = soup.find("table", class_="itg gltc")
+        tag = soup.find("table", class_=re.compile(r"itg gl\w+"))
         bookInfos = []
         if not tag:
             return [], 1
@@ -412,10 +338,11 @@ class ToolUtil(object):
         if mo:
             info.favorites = int(mo.group())
 
-        for tag in soup.find_all("div", class_="gdtm"):
+        for tag in soup.find_all("div", class_=re.compile("gdt\w")):
             url = tag.a.attrs.get('href')
             index = int(tag.a.img.attrs.get('alt'))
             info.picUrl[index] = url
+
         table = soup.find("table", class_="ptt")
         maxPage = 1
         for td in table.tr.children:

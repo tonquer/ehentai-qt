@@ -122,7 +122,7 @@ class Waifu2xToolView(QtWidgets.QWidget, Ui_Waifu2xTool, QtTaskBase):
 
         size = ToolUtil.GetDownloadSize(len(data))
         self.sizeLabel.setText(size)
-        weight, height = ToolUtil.GetPictureSize(data)
+        weight, height, mat = ToolUtil.GetPictureSize(data)
         self.resolutionLabel.setText(str(weight) + "x" + str(height))
         self.ScalePicture()
         self.CheckScaleRadio()

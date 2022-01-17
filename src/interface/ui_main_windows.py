@@ -15,18 +15,17 @@ from PySide2.QtWidgets import *
 from view.read.read_view import ReadView
 from view.setting.setting_view import SettingView
 from view.download.download_view import DownloadView
-from view.category.category_view import CategoryView
 from component.widget.navigation_widget import NavigationWidget
 from component.widget.animation_stack_widget import AnimationStackWidget
 from view.search.search_view import SearchView
-from view.comment.comment_view import CommentView
 from view.user.favorite_view import FavoriteView
 from view.user.history_view import HistoryView
 from view.info.book_info_view import BookInfoView
 from view.tool.waifu2x_tool_view import Waifu2xToolView
 from view.help.help_view import HelpView
-from component.widget.title_bar_widget import TitleBarWidget
 from view.user.login_web_view import LoginWebView
+from view.comment.comment_view import CommentView
+from component.widget.title_bar_widget import TitleBarWidget
 
 
 class Ui_MainWindows(object):
@@ -96,15 +95,9 @@ class Ui_MainWindows(object):
         self.downloadView = DownloadView()
         self.downloadView.setObjectName(u"downloadView")
         self.subStackWidget.addWidget(self.downloadView)
-        self.categoryView = CategoryView()
-        self.categoryView.setObjectName(u"categoryView")
-        self.subStackWidget.addWidget(self.categoryView)
         self.searchView = SearchView()
         self.searchView.setObjectName(u"searchView")
         self.subStackWidget.addWidget(self.searchView)
-        self.commentView = CommentView()
-        self.commentView.setObjectName(u"commentView")
-        self.subStackWidget.addWidget(self.commentView)
         self.favorityView = FavoriteView()
         self.favorityView.setObjectName(u"favorityView")
         self.subStackWidget.addWidget(self.favorityView)
@@ -120,6 +113,9 @@ class Ui_MainWindows(object):
         self.loginWebView = LoginWebView()
         self.loginWebView.setObjectName(u"loginWebView")
         self.subStackWidget.addWidget(self.loginWebView)
+        self.commentView = CommentView()
+        self.commentView.setObjectName(u"commentView")
+        self.subStackWidget.addWidget(self.commentView)
 
         self.verticalLayout_2.addWidget(self.subStackWidget)
 

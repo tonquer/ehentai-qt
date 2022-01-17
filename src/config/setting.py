@@ -67,10 +67,12 @@ class Setting:
     CoverSize = SettingValue("GeneraSetting", 100, False)  #
     CategorySize = SettingValue("GeneraSetting", 80, False)  #
     ScaleLevel = SettingValue("GeneraSetting", 0, True, ["Auto", 100, 125, 150, 175, 200])
+    IsNotUseTitleBar = SettingValue("GeneraSetting", 0, True)
 
     # 代理设置
-    IsHttpProxy = SettingValue("ProxySetting", 0, False)
+    IsHttpProxy = SettingValue("ProxySetting", 0, False, ["", "Http", "Sock5"])
     HttpProxy = SettingValue("ProxySetting", "", False)
+    Sock5Proxy = SettingValue("ProxySetting", "", False)
     ChatProxy = SettingValue("ProxySetting", 0, False)
     PreferCDNIP = SettingValue("ProxySetting", "104.16.109.107", False)
     IsUseHttps = SettingValue("ProxySetting", 1, False)
@@ -84,7 +86,7 @@ class Setting:
 
     # Waifu2x设置
     SelectEncodeGpu = SettingValue("Waifu2xSetting", "", True)
-    Waifu2xThread = SettingValue("Waifu2xSetting", 2, True)
+    Waifu2xCpuCore = SettingValue("Waifu2xSetting", 0, True)
 
     # 封面 Waifu2x
     CoverIsOpenWaifu = SettingValue("Waifu2xSetting", 0, False)
@@ -119,6 +121,9 @@ class Setting:
     IpbMemberId = SettingValue("Other", "", False)
     IpbPassHash = SettingValue("Other", "", False)
     Igneous = SettingValue("Other", "", False)
+
+    AutoLogin = SettingValue("Other", 0, False)
+    SavePassword = SettingValue("Other", 1, False)
 
     @staticmethod
     def InitLoadSetting():
@@ -158,7 +163,7 @@ class Setting:
         path = Setting.GetConfigPath()
         if not os.path.isdir(path):
             os.mkdir(path)
-        Setting.CheckRepair()
+        # Setting.CheckRepair()
         return
 
     @staticmethod
@@ -169,23 +174,23 @@ class Setting:
         else:
             from PySide2.QtCore import QDir
             homePath = QDir.homePath()
-            projectName = ".picacg"
+            projectName = ".ehentai"
             return os.path.join(homePath, projectName)
 
     @staticmethod
     def GetLogPath():
         return os.path.join(Setting.GetConfigPath(), "logs")
 
-    @staticmethod
-    def CheckRepair():
-        try:
-            fileList = ["download.db", "config.ini", "history.db"]
-            for file in fileList:
-                path = os.path.join(Setting.GetConfigPath(), file)
-                if not os.path.isfile(path):
-                    if os.path.isfile(file):
-                        shutil.copyfile(file, path)
-        except Exception as es:
-
-            from tools.log import Log
-            Log.Error(es)
+    # @staticmethod
+    # def CheckRepair():
+    #     try:
+    #         fileList = ["download.db", "config.ini", "history.db"]
+    #         for file in fileList:
+    #             path = os.path.join(Setting.GetConfigPath(), file)
+    #             if not os.path.isfile(path):
+    #                 if os.path.isfile(file):
+    #                     shutil.copyfile(file, path)
+    #     except Exception as es:
+    #
+    #         from tools.log import Log
+    #         Log.Error(es)

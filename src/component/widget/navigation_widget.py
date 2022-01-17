@@ -59,7 +59,8 @@ class NavigationWidget(QWidget, Ui_Navigation, QtTaskBase):
     def SetUserName(self, userName):
         config.CurLoginName = userName
         self.nameLabel.setText(userName)
-        self.UpdatePicLimit()
+        if userName:
+            self.UpdatePicLimit()
         return
 
     def UpdatePicLimit(self):
@@ -78,11 +79,13 @@ class NavigationWidget(QWidget, Ui_Navigation, QtTaskBase):
             return
 
         loginView = LoginView(QtOwner().owner)
-        loginView.exec()
+        loginView.show()
+        loginView.closed.connect(self.LoginSucBack)
+        return
 
+    def LoginSucBack(self):
         if self.isLogin:
             self.pushButton.setText(Str.GetStr(Str.SwitchSite))
-        return
 
     def ShowUserImg(self, data, st):
         if st == Status.Ok:

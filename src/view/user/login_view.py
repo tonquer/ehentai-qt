@@ -66,6 +66,10 @@ class LoginView(BaseMaskDialog, Ui_Login, QtTaskBase):
                 self.SetErrMsg(Str.NotSpace)
                 return
             QtOwner().ShowLoading()
+            # 清除下cookie
+            Setting.Igneous.SetValue("")
+            Setting.IpbPassHash.SetValue("")
+            Setting.IpbMemberId.SetValue("")
             self.AddHttpTask(req.LoginReq(userId, passwd), self._LoginBack)
         else:
             hash = self.hashLabel.text()
@@ -96,6 +100,9 @@ class LoginView(BaseMaskDialog, Ui_Login, QtTaskBase):
         # QtOwner().owner.loadingForm.show()
         QtOwner().ShowLoading()
         Server().session.cookies = requests.utils.cookiejar_from_dict(load_cookies, cookiejar=None, overwrite=True)
+        Setting.IpbMemberId.SetValue(load_cookies.get("ipb_member_id", ""))
+        Setting.IpbPassHash.SetValue(load_cookies.get("ipb_pass_hash", ""))
+        Setting.Igneous.SetValue(load_cookies.get("igneous", ""))
         self.AddHttpTask(req.GetUserIdReq(), self._GetUserBack, dict(load_cookies))
         return
 

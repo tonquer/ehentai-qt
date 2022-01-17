@@ -632,8 +632,8 @@
     <name>Main</name>
     <message>
         <location filename="../ui/ui_main.ui" line="14"/>
-        <source>PicACG</source>
-        <translation>PicACG</translation>
+        <source>E-Hentai</source>
+        <translation>E-Hentai</translation>
     </message>
     <message>
         <location filename="../ui/ui_main.ui" line="59"/>
@@ -966,12 +966,12 @@
         <translation>搜索：</translation>
     </message>
     <message>
-        <location filename="../ui/ui_search.ui" line="106"/>
+        <location filename="../ui/ui_search.ui" line="143"/>
         <source>页：0/0</source>
         <translation>頁：0/0</translation>
     </message>
     <message>
-        <location filename="../ui/ui_search.ui" line="158"/>
+        <location filename="../ui/ui_search.ui" line="195"/>
         <source>跳转</source>
         <translation>跳轉</translation>
     </message>
@@ -996,7 +996,7 @@
     </message>
     <message>
         <location filename="../ui/ui_setting_new.ui" line="47"/>
-        <location filename="../ui/ui_setting_new.ui" line="593"/>
+        <location filename="../ui/ui_setting_new.ui" line="624"/>
         <source>代理</source>
         <translation>代理</translation>
     </message>
@@ -1007,7 +1007,7 @@
     </message>
     <message>
         <location filename="../ui/ui_setting_new.ui" line="61"/>
-        <location filename="../ui/ui_setting_new.ui" line="1767"/>
+        <location filename="../ui/ui_setting_new.ui" line="1813"/>
         <source>下载与缓存</source>
         <translation>下載與緩存</translation>
     </message>
@@ -1102,245 +1102,254 @@
         <translation>200%</translation>
     </message>
     <message>
-        <location filename="../ui/ui_setting_new.ui" line="400"/>
+        <location filename="../ui/ui_setting_new.ui" line="398"/>
+        <source>标题栏设置（需重启）</source>
+        <translation>標題欄設置（需重啟）</translation>
+    </message>
+    <message>
+        <location filename="../ui/ui_setting_new.ui" line="405"/>
+        <source>使用默认标题栏（如果标题栏出现显示异常，请勾选）</source>
+        <translation>使用默認標題欄（如果標題欄出現顯示異常，請勾選）</translation>
+    </message>
+    <message>
+        <location filename="../ui/ui_setting_new.ui" line="431"/>
         <source>封面显示大小（默认为100%）：</source>
         <translation>封面顯示大小（默認為100%）：</translation>
     </message>
     <message>
-        <location filename="../ui/ui_setting_new.ui" line="451"/>
+        <location filename="../ui/ui_setting_new.ui" line="482"/>
         <source>分类封面大小：</source>
         <translation>分類封面大小：</translation>
     </message>
     <message>
-        <location filename="../ui/ui_setting_new.ui" line="522"/>
+        <location filename="../ui/ui_setting_new.ui" line="553"/>
         <source>日志等级：</source>
         <translation>日誌等級：</translation>
     </message>
     <message>
-        <location filename="../ui/ui_setting_new.ui" line="529"/>
+        <location filename="../ui/ui_setting_new.ui" line="560"/>
         <source>Warn</source>
         <translation>Warn</translation>
     </message>
     <message>
-        <location filename="../ui/ui_setting_new.ui" line="542"/>
+        <location filename="../ui/ui_setting_new.ui" line="573"/>
         <source>Info</source>
         <translation>Info</translation>
     </message>
     <message>
-        <location filename="../ui/ui_setting_new.ui" line="552"/>
+        <location filename="../ui/ui_setting_new.ui" line="583"/>
         <source>Debug</source>
         <translation>Debug</translation>
     </message>
     <message>
-        <location filename="../ui/ui_setting_new.ui" line="622"/>
+        <location filename="../ui/ui_setting_new.ui" line="653"/>
         <source>Http代理：</source>
         <translation>Http代理：</translation>
     </message>
     <message>
-        <location filename="../ui/ui_setting_new.ui" line="629"/>
         <location filename="../ui/ui_setting_new.ui" line="660"/>
-        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;请填写你的代理软件提供的代理地址&lt;/p&gt;&lt;p&gt;如:&lt;/p&gt;&lt;p&gt;v2ray可能是 http://127.0.0.1:10809&lt;/p&gt;&lt;p&gt;shadowsocks可能是 http://127.0.0.1:1080&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;請填寫你的代理軟件提供的代理地址&lt;/p&gt;&lt;p&gt;如:&lt;/p&gt;&lt;p&gt;v2ray可能是 http://127.0.0.1:10809&lt;/p&gt;&lt;p&gt;shadowsocks可能是 http://127.0.0.1:1080&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+        <source>无代理</source>
+        <translation>無代理</translation>
     </message>
     <message>
-        <location filename="../ui/ui_setting_new.ui" line="632"/>
-        <location filename="../ui/ui_setting_new.ui" line="796"/>
-        <source>启用代理</source>
-        <translation>啟用代理</translation>
+        <location filename="../ui/ui_setting_new.ui" line="678"/>
+        <source>HTTP代理</source>
+        <translation>HTTP代理</translation>
     </message>
     <message>
-        <location filename="../ui/ui_setting_new.ui" line="647"/>
-        <source>代理地址：</source>
-        <translation>代理地址：</translation>
+        <location filename="../ui/ui_setting_new.ui" line="695"/>
+        <location filename="../ui/ui_setting_new.ui" line="748"/>
+        <source>代理地址</source>
+        <translation>代理地址</translation>
     </message>
     <message>
-        <location filename="../ui/ui_setting_new.ui" line="696"/>
+        <location filename="../ui/ui_setting_new.ui" line="731"/>
+        <source>Sock5代理</source>
+        <translation>Sock5代理</translation>
+    </message>
+    <message>
+        <location filename="../ui/ui_setting_new.ui" line="784"/>
         <source>Doh DNS配置（启用后能避免SNI阻断和DNS拦截，如果使用了代理，可不启用）：</source>
         <translation>Doh DNS配置（啟用後能避免SNI阻斷和DNS攔截，如果使用了代理，可不啟用）：</translation>
     </message>
     <message>
-        <location filename="../ui/ui_setting_new.ui" line="703"/>
+        <location filename="../ui/ui_setting_new.ui" line="791"/>
         <source>Api启用Doh</source>
         <translation>Api啟用Doh</translation>
     </message>
     <message>
-        <location filename="../ui/ui_setting_new.ui" line="710"/>
+        <location filename="../ui/ui_setting_new.ui" line="798"/>
         <source>图片启用Doh（开启会加长图片加载速度）</source>
         <translation>圖片啟用Doh（開啟會加長圖片加載速度）</translation>
     </message>
     <message>
-        <location filename="../ui/ui_setting_new.ui" line="725"/>
+        <location filename="../ui/ui_setting_new.ui" line="813"/>
         <source>DoH地址：</source>
         <translation>DoH地址：</translation>
     </message>
     <message>
-        <location filename="../ui/ui_setting_new.ui" line="757"/>
+        <location filename="../ui/ui_setting_new.ui" line="845"/>
         <source>查看DoH DNS解析</source>
         <translation>查看DoH DNS解析</translation>
     </message>
     <message>
-        <location filename="../ui/ui_setting_new.ui" line="789"/>
-        <source>聊天室：</source>
-        <translation>聊天室：</translation>
-    </message>
-    <message>
-        <location filename="../ui/ui_setting_new.ui" line="844"/>
+        <location filename="../ui/ui_setting_new.ui" line="890"/>
         <source>Waifu2x设置</source>
         <translation>Waifu2x設置</translation>
     </message>
     <message>
-        <location filename="../ui/ui_setting_new.ui" line="873"/>
+        <location filename="../ui/ui_setting_new.ui" line="919"/>
         <source>waifu2x线程数</source>
         <translation>waifu2x線程數</translation>
     </message>
     <message>
-        <location filename="../ui/ui_setting_new.ui" line="892"/>
-        <location filename="../ui/ui_setting_new.ui" line="1080"/>
-        <location filename="../ui/ui_setting_new.ui" line="1352"/>
-        <location filename="../ui/ui_setting_new.ui" line="1584"/>
+        <location filename="../ui/ui_setting_new.ui" line="938"/>
+        <location filename="../ui/ui_setting_new.ui" line="1126"/>
+        <location filename="../ui/ui_setting_new.ui" line="1398"/>
+        <location filename="../ui/ui_setting_new.ui" line="1630"/>
         <source>2</source>
         <translation>2</translation>
     </message>
     <message>
-        <location filename="../ui/ui_setting_new.ui" line="926"/>
+        <location filename="../ui/ui_setting_new.ui" line="972"/>
         <source>CPU/GPU选择（需重启生效）</source>
         <translation>CPU/GPU選擇（需重啟生效）</translation>
     </message>
     <message>
-        <location filename="../ui/ui_setting_new.ui" line="985"/>
+        <location filename="../ui/ui_setting_new.ui" line="1031"/>
         <source>Waifu2x看图模式</source>
         <translation>Waifu2x看圖模式</translation>
     </message>
     <message>
-        <location filename="../ui/ui_setting_new.ui" line="992"/>
-        <location filename="../ui/ui_setting_new.ui" line="1264"/>
+        <location filename="../ui/ui_setting_new.ui" line="1038"/>
+        <location filename="../ui/ui_setting_new.ui" line="1310"/>
         <source>是否启用</source>
         <translation>是否啟用</translation>
     </message>
     <message>
-        <location filename="../ui/ui_setting_new.ui" line="1001"/>
+        <location filename="../ui/ui_setting_new.ui" line="1047"/>
         <source>为了保证速度，图片分辨率小于等于该值时才进行转换（默认4096P）</source>
         <translation>為了保證速度，圖片分辨率小於等於該值時才進行轉換（默認4096P）</translation>
     </message>
     <message>
-        <location filename="../ui/ui_setting_new.ui" line="1056"/>
-        <location filename="../ui/ui_setting_new.ui" line="1328"/>
-        <location filename="../ui/ui_setting_new.ui" line="1560"/>
+        <location filename="../ui/ui_setting_new.ui" line="1102"/>
+        <location filename="../ui/ui_setting_new.ui" line="1374"/>
+        <location filename="../ui/ui_setting_new.ui" line="1606"/>
         <source>去噪等级</source>
         <translation>去噪等級</translation>
     </message>
     <message>
-        <location filename="../ui/ui_setting_new.ui" line="1070"/>
-        <location filename="../ui/ui_setting_new.ui" line="1342"/>
-        <location filename="../ui/ui_setting_new.ui" line="1574"/>
+        <location filename="../ui/ui_setting_new.ui" line="1116"/>
+        <location filename="../ui/ui_setting_new.ui" line="1388"/>
+        <location filename="../ui/ui_setting_new.ui" line="1620"/>
         <source>0</source>
         <translation>0</translation>
     </message>
     <message>
-        <location filename="../ui/ui_setting_new.ui" line="1075"/>
-        <location filename="../ui/ui_setting_new.ui" line="1347"/>
-        <location filename="../ui/ui_setting_new.ui" line="1579"/>
+        <location filename="../ui/ui_setting_new.ui" line="1121"/>
+        <location filename="../ui/ui_setting_new.ui" line="1393"/>
+        <location filename="../ui/ui_setting_new.ui" line="1625"/>
         <source>1</source>
         <translation>1</translation>
     </message>
     <message>
-        <location filename="../ui/ui_setting_new.ui" line="1085"/>
-        <location filename="../ui/ui_setting_new.ui" line="1357"/>
-        <location filename="../ui/ui_setting_new.ui" line="1589"/>
+        <location filename="../ui/ui_setting_new.ui" line="1131"/>
+        <location filename="../ui/ui_setting_new.ui" line="1403"/>
+        <location filename="../ui/ui_setting_new.ui" line="1635"/>
         <source>3</source>
         <translation>3</translation>
     </message>
     <message>
-        <location filename="../ui/ui_setting_new.ui" line="1122"/>
-        <location filename="../ui/ui_setting_new.ui" line="1394"/>
-        <location filename="../ui/ui_setting_new.ui" line="1626"/>
+        <location filename="../ui/ui_setting_new.ui" line="1168"/>
+        <location filename="../ui/ui_setting_new.ui" line="1440"/>
+        <location filename="../ui/ui_setting_new.ui" line="1672"/>
         <source>模型</source>
         <translation>模型</translation>
     </message>
     <message>
-        <location filename="../ui/ui_setting_new.ui" line="1136"/>
-        <location filename="../ui/ui_setting_new.ui" line="1408"/>
-        <location filename="../ui/ui_setting_new.ui" line="1640"/>
+        <location filename="../ui/ui_setting_new.ui" line="1182"/>
+        <location filename="../ui/ui_setting_new.ui" line="1454"/>
+        <location filename="../ui/ui_setting_new.ui" line="1686"/>
         <source>自动</source>
         <translation>自動</translation>
     </message>
     <message>
-        <location filename="../ui/ui_setting_new.ui" line="1141"/>
-        <location filename="../ui/ui_setting_new.ui" line="1413"/>
-        <location filename="../ui/ui_setting_new.ui" line="1645"/>
+        <location filename="../ui/ui_setting_new.ui" line="1187"/>
+        <location filename="../ui/ui_setting_new.ui" line="1459"/>
+        <location filename="../ui/ui_setting_new.ui" line="1691"/>
         <source>cunet</source>
         <translation>cunet</translation>
     </message>
     <message>
-        <location filename="../ui/ui_setting_new.ui" line="1146"/>
-        <location filename="../ui/ui_setting_new.ui" line="1418"/>
-        <location filename="../ui/ui_setting_new.ui" line="1650"/>
+        <location filename="../ui/ui_setting_new.ui" line="1192"/>
+        <location filename="../ui/ui_setting_new.ui" line="1464"/>
+        <location filename="../ui/ui_setting_new.ui" line="1696"/>
         <source>photo</source>
         <translation>photo</translation>
     </message>
     <message>
-        <location filename="../ui/ui_setting_new.ui" line="1151"/>
-        <location filename="../ui/ui_setting_new.ui" line="1423"/>
-        <location filename="../ui/ui_setting_new.ui" line="1655"/>
+        <location filename="../ui/ui_setting_new.ui" line="1197"/>
+        <location filename="../ui/ui_setting_new.ui" line="1469"/>
+        <location filename="../ui/ui_setting_new.ui" line="1701"/>
         <source>anime_style_art_rgb</source>
         <translation>anime_style_art_rgb</translation>
     </message>
     <message>
-        <location filename="../ui/ui_setting_new.ui" line="1188"/>
-        <location filename="../ui/ui_setting_new.ui" line="1460"/>
-        <location filename="../ui/ui_setting_new.ui" line="1692"/>
+        <location filename="../ui/ui_setting_new.ui" line="1234"/>
+        <location filename="../ui/ui_setting_new.ui" line="1506"/>
+        <location filename="../ui/ui_setting_new.ui" line="1738"/>
         <source>放大倍数</source>
         <translation>放大倍數</translation>
     </message>
     <message>
-        <location filename="../ui/ui_setting_new.ui" line="1257"/>
+        <location filename="../ui/ui_setting_new.ui" line="1303"/>
         <source>Waifu2x封面模式（开启后所有封面会经过Waifu2x处理）</source>
         <translation>Waifu2x封面模式（開啟後所有封面會經過Waifu2x處理）</translation>
     </message>
     <message>
-        <location filename="../ui/ui_setting_new.ui" line="1273"/>
+        <location filename="../ui/ui_setting_new.ui" line="1319"/>
         <source>为了保证速度，封面分辨率小于等于该值时才进行转换（默认400P）</source>
         <translation>為了保證速度，封面分辨率小於等於該值時才進行轉換（默認400P）</translation>
     </message>
     <message>
-        <location filename="../ui/ui_setting_new.ui" line="1529"/>
+        <location filename="../ui/ui_setting_new.ui" line="1575"/>
         <source>waifu2x下载模式（开启后下载完成会经过Waifu2x处理）</source>
         <translation>waifu2x下載模式（開啟後下載完成會經過Waifu2x處理）</translation>
     </message>
     <message>
-        <location filename="../ui/ui_setting_new.ui" line="1536"/>
+        <location filename="../ui/ui_setting_new.ui" line="1582"/>
         <source>下载完后自动转换</source>
         <translation>下載完後自動轉換</translation>
     </message>
     <message>
-        <location filename="../ui/ui_setting_new.ui" line="1796"/>
+        <location filename="../ui/ui_setting_new.ui" line="1842"/>
         <source>下载和缓存路径（缓存文件需自己手动清除）</source>
         <translation>下載和緩存路徑（緩存文件需自己手動清除）</translation>
     </message>
     <message>
-        <location filename="../ui/ui_setting_new.ui" line="1805"/>
+        <location filename="../ui/ui_setting_new.ui" line="1851"/>
         <source>设置目录</source>
         <translation>設置目錄</translation>
     </message>
     <message>
-        <location filename="../ui/ui_setting_new.ui" line="1835"/>
+        <location filename="../ui/ui_setting_new.ui" line="1881"/>
         <source>下载</source>
         <translation>下載</translation>
     </message>
     <message>
-        <location filename="../ui/ui_setting_new.ui" line="1855"/>
-        <location filename="../ui/ui_setting_new.ui" line="1905"/>
-        <location filename="../ui/ui_setting_new.ui" line="1958"/>
+        <location filename="../ui/ui_setting_new.ui" line="1901"/>
+        <location filename="../ui/ui_setting_new.ui" line="1951"/>
+        <location filename="../ui/ui_setting_new.ui" line="2004"/>
         <source>打开目录</source>
         <translation>打開目錄</translation>
     </message>
     <message>
-        <location filename="../ui/ui_setting_new.ui" line="1885"/>
+        <location filename="../ui/ui_setting_new.ui" line="1931"/>
         <source>缓存</source>
         <translation>緩存</translation>
     </message>
     <message>
-        <location filename="../ui/ui_setting_new.ui" line="1938"/>
+        <location filename="../ui/ui_setting_new.ui" line="1984"/>
         <source>Waifu2x缓存</source>
         <translation>Waifu2x緩存</translation>
     </message>
@@ -1354,8 +1363,8 @@
     </message>
     <message>
         <location filename="../ui/component/ui_title_bar.ui" line="85"/>
-        <source>PicACG</source>
-        <translation>PicACG</translation>
+        <source>E-Hentai</source>
+        <translation>E-Hentai</translation>
     </message>
 </context>
 <context>

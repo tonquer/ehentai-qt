@@ -10,37 +10,6 @@ on:
     branches: [ main ]
 
 jobs:
-  ubuntu:
-    runs-on: ubuntu-latest
-    env:
-      PACKAGENAME: ehentai_py37_ubuntu_x86_64
-    steps:
-    - uses: actions/checkout@v2
-    - name: Set up Python 3.7
-      uses: actions/setup-python@v2
-      with:
-        python-version: 3.7
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install pyinstaller==4.5.1
-        pip install https://github.com/tonquer/waifu2x-vulkan/releases/download/v1.0.9/waifu2x_vulkan-1.0.9-cp37-cp37m-linux_x86_64.whl
-        if [ -f requirements.txt ]; then pip install -r src/requirements.txt; fi
-    - name: Build
-      run: |
-        cd src
-        pyinstaller -F -w start.py
-        mv dist ehentai
-        tar -zcvf ${{ env.PACKAGENAME }}.tar.gz ehentai/
-        mv ${{ env.PACKAGENAME }}.tar.gz ..
-        cd ..
-    - name: Upload
-      uses: actions/upload-artifact@v2
-      with:
-        name: ${{ env.PACKAGENAME }}
-        path: ${{ env.PACKAGENAME }}.tar.gz
-        retention-days: 7
-
   macos:
     runs-on: macos-latest
     env:

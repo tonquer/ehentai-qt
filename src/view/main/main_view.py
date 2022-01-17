@@ -28,7 +28,7 @@ class MainView(Main, QtTaskBase):
         Main.__init__(self)
         QtTaskBase.__init__(self)
         self.resize(600, 600)
-        self.setWindowTitle("PicACG")
+        self.setWindowTitle("E-Hentai")
         self.setWindowIcon(QIcon(":/png/icon/logo_round.png"))
         # self.setAttribute(Qt.WidgetAttribute.WA_TranslucentBackground)
 
@@ -94,7 +94,7 @@ class MainView(Main, QtTaskBase):
 
     def Init(self):
         IsCanUse = False
-
+        # self.downloadView.Init()
         if config.CanWaifu2x:
             from waifu2x_vulkan import waifu2x_vulkan
             stat = waifu2x_vulkan.init()
@@ -109,17 +109,18 @@ class MainView(Main, QtTaskBase):
 
             IsCanUse = True
             gpuInfo = waifu2x_vulkan.getGpuInfo()
-            self.settingView.SetGpuInfos(gpuInfo)
+            cpuNum = waifu2x_vulkan.getCpuCoreNum()
+            self.settingView.SetGpuInfos(gpuInfo, cpuNum)
             # if not gpuInfo or (gpuInfo and config.Encode < 0) or (gpuInfo and config.Encode >= len(gpuInfo)):
             #     config.Encode = 0
 
-            sts = waifu2x_vulkan.initSet(config.Encode, Setting.Waifu2xThread.value)
+            sts = waifu2x_vulkan.initSet(config.Encode, config.UseCpuNum)
             TaskWaifu2x().Start()
             version = waifu2x_vulkan.getVersion()
             config.Waifu2xVersion = version
             self.helpView.waifu2x.setText(config.Waifu2xVersion)
-            Log.Info("waifu2x初始化: " + str(stat) + " encode: " + str(
-                config.Encode) + " version:" + version + " code:" + str(sts))
+            Log.Warn("Waifu2x init: " + str(stat) + " encode: " + str(
+                config.Encode) + " version:" + version + " code:" + str(sts) + " cpuNum:" + str(config.UseCpuNum))
         else:
             pass
             # QtOwner().ShowError(self.tr("waifu2x无法启用, ") + config.ErrorMsg)
@@ -145,15 +146,18 @@ class MainView(Main, QtTaskBase):
         self.searchView.InitWord()
         self.msgLabel = MsgLabel(self)
         self.msgLabel.hide()
-        if not Setting.SavePath.value:
-            view = DownloadDirView(self)
-            view.exec()
 
         from tools.login_proxy import Init
         Init()
         QtDomainMgr().Update()
         self.loginWebView.Init()
-        self.OpenLoginView()
+
+        if not Setting.SavePath.value:
+            view = DownloadDirView(self)
+            view.show()
+            view.closed.connect(self.OpenLoginView)
+        else:
+            self.OpenLoginView()
 
     def ClearTabBar(self):
         for toolButton in self.toolButtons:

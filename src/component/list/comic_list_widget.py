@@ -113,6 +113,7 @@ class ComicListWidget(BaseListWidget):
         widget.id = _id
         widget.url = url
         widget.path = path
+        widget.index = index
         widget.categoryLabel.setText(categoryStr)
         widget.nameLable.setText(title)
         if updated_at:
@@ -139,9 +140,13 @@ class ComicListWidget(BaseListWidget):
         item.setSizeHint(widget.sizeHint())
         self.setItemWidget(item, widget)
         widget.picLabel.setText(Str.GetStr(Str.LoadingPicture))
-        if url and config.IsLoadingPicture:
-            self.AddDownloadTask(url, path, completeCallBack=self.LoadingPictureComplete, backParam=index)
-            pass
+        widget.PicLoad.connect(self.LoadingPicture)
+
+    def LoadingPicture(self, index):
+        item = self.item(index)
+        widget = self.itemWidget(item)
+        assert isinstance(widget, ComicItemWidget)
+        self.AddDownloadTask(widget.url, widget.path, completeCallBack=self.LoadingPictureComplete, backParam=index)
 
     def LoadingPictureComplete(self, data, status, index):
         if status == Status.Ok:
@@ -198,9 +203,9 @@ class ComicListWidget(BaseListWidget):
     def Waifu2xPicture(self, index, isIfSize=False):
         widget = self.indexWidget(index)
         if widget and widget.picData:
-            w, h = ToolUtil.GetPictureSize(widget.picData)
+            w, h, mat = ToolUtil.GetPictureSize(widget.picData)
             if max(w, h) <= Setting.CoverMaxNum.value or not isIfSize:
-                model = ToolUtil.GetModelByIndex(Setting.CoverLookNoise.value, Setting.CoverLookScale.value, Setting.CoverLookModel.value)
+                model = ToolUtil.GetModelByIndex(Setting.CoverLookNoise.value, Setting.CoverLookScale.value, Setting.CoverLookModel.value, mat)
                 widget.isWaifu2xLoading = True
                 self.AddConvertTask(widget.path, widget.picData, model, self.Waifu2xPictureBack, index)
 

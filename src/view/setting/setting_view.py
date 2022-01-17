@@ -38,19 +38,20 @@ class SettingView(QtWidgets.QWidget, Ui_SettingNew):
         self.languageGroup.buttonClicked.connect(partial(self.ButtonClickEvent, Setting.Language))
         self.logGroup.buttonClicked.connect(partial(self.ButtonClickEvent, Setting.LogIndex))
         self.mainScaleGroup.buttonClicked.connect(partial(self.ButtonClickEvent, Setting.ScaleLevel))
+        self.proxyGroup.buttonClicked.connect(partial(self.ButtonClickEvent, Setting.IsHttpProxy))
 
         # CheckButton:
         self.checkBox_IsUpdate.clicked.connect(partial(self.CheckButtonEvent, Setting.IsUpdate, self.checkBox_IsUpdate))
-        self.httpProxy.clicked.connect(partial(self.CheckButtonEvent, Setting.IsHttpProxy, self.httpProxy))
-        self.chatProxy.clicked.connect(partial(self.CheckButtonEvent, Setting.ChatProxy, self.chatProxy))
         self.readCheckBox.clicked.connect(partial(self.CheckButtonEvent, Setting.IsOpenWaifu, self.readCheckBox))
         self.coverCheckBox.clicked.connect(partial(self.CheckButtonEvent, Setting.CoverIsOpenWaifu, self.coverCheckBox))
         self.downAuto.clicked.connect(partial(self.CheckButtonEvent, Setting.DownloadAuto, self.downAuto))
+        self.titleBox.clicked.connect(partial(self.CheckButtonEvent, Setting.IsNotUseTitleBar, self.titleBox))
         self.dohRadio.clicked.connect(partial(self.CheckButtonEvent, Setting.IsOpenDoh, self.dohRadio))
         self.dohPictureRadio.clicked.connect(partial(self.CheckButtonEvent, Setting.IsOpenDohPicture, self.dohPictureRadio))
 
         # LineEdit:
         self.httpEdit.editingFinished.connect(partial(self.LineEditEvent, Setting.HttpProxy, self.httpEdit))
+        self.sockEdit.editingFinished.connect(partial(self.LineEditEvent, Setting.Sock5Proxy, self.sockEdit))
         self.dohLine.editingFinished.connect(partial(self.LineEditEvent, Setting.DohAddress, self.dohLine))
 
         # Button:
@@ -64,6 +65,7 @@ class SettingView(QtWidgets.QWidget, Ui_SettingNew):
         self.downModel.currentIndexChanged.connect(partial(self.CheckRadioEvent, Setting.DownloadModel))
         self.downNoise.currentIndexChanged.connect(partial(self.CheckRadioEvent, Setting.DownloadNoise))
         self.encodeSelect.currentTextChanged.connect(partial(self.CheckRadioEvent, Setting.SelectEncodeGpu))
+        self.threadSelect.currentIndexChanged.connect(partial(self.CheckRadioEvent, Setting.Waifu2xCpuCore))
 
         # spinBox
         # self.preDownNum.valueChanged.connect(partial(self.SpinBoxEvent, "", self.preDownNum))
@@ -122,6 +124,8 @@ class SettingView(QtWidgets.QWidget, Ui_SettingNew):
                 Log.UpdateLoggingLevel()
             elif setItem == Setting.Language:
                 self.SetLanguage()
+            elif setItem == Setting.IsHttpProxy:
+                self.SetSock5Proxy()
             QtOwner().ShowMsgOne(Str.GetStr(Str.SaveSuc))
         self.CheckMsgLabel()
         return
@@ -137,6 +141,8 @@ class SettingView(QtWidgets.QWidget, Ui_SettingNew):
         assert isinstance(setItem, SettingValue)
         setItem.SetValue(value)
         QtOwner().ShowMsgOne(Str.GetStr(Str.SaveSuc))
+        if setItem == Setting.IsHttpProxy:
+            self.SetSock5Proxy()
         self.CheckMsgLabel()
         return
 
@@ -169,6 +175,7 @@ class SettingView(QtWidgets.QWidget, Ui_SettingNew):
         self.InitSetting()
         self.SetTheme()
         self.SetLanguage()
+        self.SetSock5Proxy()
         return
 
     def ExitSaveSetting(self, mainQsize):
@@ -179,13 +186,13 @@ class SettingView(QtWidgets.QWidget, Ui_SettingNew):
         self.SetRadioGroup("themeButton", Setting.ThemeIndex.value)
         self.SetRadioGroup("languageButton", Setting.Language.value)
         self.SetRadioGroup("mainScaleButton", Setting.ScaleLevel.value)
+        self.SetRadioGroup("proxy", Setting.IsHttpProxy.value)
         self.coverSize.setValue(Setting.CoverSize.value)
         self.categorySize.setValue(Setting.CategorySize.value)
         self.SetRadioGroup("logutton", Setting.LogIndex.value)
-        self.httpProxy.setChecked(Setting.IsHttpProxy.value)
         self.httpEdit.setText(Setting.HttpProxy.value)
-        self.chatProxy.setChecked(Setting.ChatProxy.value)
-
+        self.sockEdit.setText(Setting.Sock5Proxy.value)
+        self.titleBox.setChecked(Setting.IsNotUseTitleBar.value)
         self.dohLine.setText(Setting.DohAddress.value)
         self.dohRadio.setChecked(Setting.IsOpenDoh.value)
 
@@ -217,6 +224,25 @@ class SettingView(QtWidgets.QWidget, Ui_SettingNew):
         radio = getattr(self, text+str(index))
         if radio:
             radio.setChecked(True)
+
+    def SetSock5Proxy(self):
+        try:
+            import socket
+            import socks
+            if Setting.IsHttpProxy == 2 and Setting.Sock5Proxy.value:
+                data = Setting.Sock5Proxy.value.replace("http://", "").replace("https://", "").replace("sock5://", "")
+                data = data.split(":")
+                if len(data) == 2:
+                    host = data[0]
+                    port = data[1]
+                    socks.set_default_proxy(socks.SOCKS5, host, int(port))
+                    socket.socket = socks.socksocket
+            else:
+                socks.set_default_proxy()
+                socket.socket = socks.socksocket
+        except Exception as es:
+            Log.Error(es)
+            QtOwner().ShowMsg(Str.GetStr(Str.Sock5Error))
 
     def SetLanguage(self):
         language = Setting.Language.value
@@ -302,6 +328,8 @@ class SettingView(QtWidgets.QWidget, Ui_SettingNew):
         # MacOS 和 KDE如何获取系统颜色
         if sys.platform == "win32":
             return self.GetWinSysColor() + 1
+        elif sys.platform == "darwin":
+            return self.GetMacOsSysColor()
         return 1
 
     def GetWinSysColor(self):
@@ -312,8 +340,17 @@ class SettingView(QtWidgets.QWidget, Ui_SettingNew):
         return value
 
     def GetMacOsSysColor(self):
-        cmd = "defaults read -g AppleInterfaceStyle"
-        return
+        try:
+            import subprocess
+            cmd = "defaults read -g AppleInterfaceStyle"
+            results = subprocess.getoutput(cmd)
+            if results == "Dark":
+                return 1
+            else:
+                return 2
+        except Exception as es:
+            Log.Error(es)
+        return 1
 
     def SaveSetting(self):
         return
@@ -336,35 +373,42 @@ class SettingView(QtWidgets.QWidget, Ui_SettingNew):
         QDesktopServices.openUrl(QUrl.fromLocalFile(label.text()))
         return
 
-    def SetGpuInfos(self, gpuInfo):
+    def SetGpuInfos(self, gpuInfo, cpuNum):
         self.gpuInfos = gpuInfo
         config.EncodeGpu = Setting.SelectEncodeGpu.value
 
         if not self.gpuInfos:
-            SettingView.EncodeGpu = "CPU"
+            config.EncodeGpu = "CPU"
             config.Encode = -1
             self.encodeSelect.addItem(config.EncodeGpu)
             self.encodeSelect.setCurrentIndex(0)
-            return
 
         if not config.EncodeGpu or (config.EncodeGpu != "CPU" and config.EncodeGpu not in self.gpuInfos):
             config.EncodeGpu = self.gpuInfos[0]
             config.Encode = 0
 
         index = 0
-        for info in self.gpuInfos:
-            self.encodeSelect.addItem(info)
-            if info == config.EncodeGpu:
-                self.encodeSelect.setCurrentIndex(index)
-                config.Encode = index
-            index += 1
+        if self.gpuInfos:
+            for info in self.gpuInfos:
+                self.encodeSelect.addItem(info)
+                if info == config.EncodeGpu:
+                    self.encodeSelect.setCurrentIndex(index)
+                    config.Encode = index
+                index += 1
 
         self.encodeSelect.addItem("CPU")
         if config.EncodeGpu == "CPU":
             config.Encode = -1
             self.encodeSelect.setCurrentIndex(index)
 
-        Log.Info("waifu2x GPU: " + str(self.gpuInfos) + ",select: " + config.EncodeGpu)
+        config.UseCpuNum = Setting.Waifu2xCpuCore.value
+        if config.UseCpuNum > cpuNum:
+            config.UseCpuNum = cpuNum
+        for i in range(cpuNum):
+            self.threadSelect.addItem(str(i + 1))
+        self.threadSelect.setCurrentIndex(config.UseCpuNum)
+
+        Log.Info("waifu2x GPU: " + str(self.gpuInfos) + ",select: " + str(config.EncodeGpu) + ",use cpu num: " + str(config.UseCpuNum))
         return
 
     def GetGpuName(self):

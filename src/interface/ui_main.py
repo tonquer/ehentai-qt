@@ -129,7 +129,7 @@ class Ui_Main(object):
     # setupUi
 
     def retranslateUi(self, Main):
-        Main.setWindowTitle(QCoreApplication.translate("Main", u"PicACG", None))
+        Main.setWindowTitle(QCoreApplication.translate("Main", u"E-Hentai", None))
         self.menuButton.setText(QCoreApplication.translate("Main", u"\u83dc\u5355", None))
         self.label.setText(QCoreApplication.translate("Main", u">", None))
     # retranslateUi
