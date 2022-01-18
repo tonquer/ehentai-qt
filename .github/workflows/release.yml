@@ -78,6 +78,7 @@ jobs:
         rm -rf dist/Ehentai
         cp Icon.icns dist/
         ln -s /Applications/   dist/Applications
+        xattr -cr dist/Ehentai.app
         create-dmg --volname "Ehentai" --volicon "Icon.icns" --icon "Icon.icns" 200 190 \
             --hide-extension "Icon.icns" ${{ env.PACKAGENAME }}.dmg dist/
         zip -9 ehentai.zip ${{ env.PACKAGENAME }}.dmg
