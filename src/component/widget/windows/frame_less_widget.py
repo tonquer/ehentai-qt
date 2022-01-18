@@ -88,7 +88,8 @@ class FrameLessWidget(QWidget):
                 x = win32api.LOWORD(msg.lParam)
                 y = win32api.HIWORD(msg.lParam)
 
-                radio = self.devicePixelRatio()
+                radio = self.devicePixelRatioF()
+
                 xPos = (x-
                         self.frameGeometry().x()*radio) % 65536
                 yPos = y - self.frameGeometry().y()*radio
