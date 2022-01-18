@@ -153,8 +153,8 @@ class LoginView(BaseMaskDialog, Ui_Login, QtTaskBase):
         else:
             Log.Warn("login success, {}, cookie".format(data, load_cookies))
             userName = data.get("userName", "")
-            self.close()
             QtOwner().owner.LoginSucBack(userName)
+            self.close()
             # if load_cookies:
                 # QtOwner().owner.settingForm.SetSettingV("ipb_member_id", load_cookies.get("ipb_member_id", ""))
                 # QtOwner().owner.settingForm.SetSettingV("ipb_pass_hash", load_cookies.get("ipb_pass_hash", ""))

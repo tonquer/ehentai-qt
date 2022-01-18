@@ -229,7 +229,7 @@ class SettingView(QtWidgets.QWidget, Ui_SettingNew):
         try:
             import socket
             import socks
-            if Setting.IsHttpProxy == 2 and Setting.Sock5Proxy.value:
+            if Setting.IsHttpProxy.value == 2 and Setting.Sock5Proxy.value:
                 data = Setting.Sock5Proxy.value.replace("http://", "").replace("https://", "").replace("sock5://", "")
                 data = data.split(":")
                 if len(data) == 2:
@@ -240,6 +240,7 @@ class SettingView(QtWidgets.QWidget, Ui_SettingNew):
             else:
                 socks.set_default_proxy()
                 socket.socket = socks.socksocket
+            Log.Info("Update sock5 proxy, {}".format(Setting.Sock5Proxy.value))
         except Exception as es:
             Log.Error(es)
             QtOwner().ShowMsg(Str.GetStr(Str.Sock5Error))
