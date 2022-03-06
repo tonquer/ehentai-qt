@@ -8,7 +8,7 @@ from ctypes.wintypes import MSG
 
 from ctypes import POINTER
 
-from PySide2.QtGui import QPainter, QBrush, QColor, QPainterPath
+from PySide2.QtGui import QPainter, QBrush, QColor, QPainterPath, QGuiApplication
 from PySide2.QtWidgets import QWidget, QStyleOption, QStyle
 from win32 import win32api, win32gui
 from win32.lib import win32con
@@ -95,10 +95,16 @@ class FrameLessWidget(QWidget):
                 y = win32api.HIWORD(msg.lParam)
 
                 radio = self.devicePixelRatioF()
-                xPos = (x-
-                        self.frameGeometry().x()*radio) % 65536
+
+                seekX = self.screen().geometry().left()
+                if self.frameGeometry().x() > seekX:
+                    seekX = seekX + (self.frameGeometry().x() - seekX)*radio
+                else:
+                    seekX = self.frameGeometry().x() * radio
+
+                xPos = (x - seekX) % 65536
                 yPos = y - self.frameGeometry().y()*radio
-                # print(self.frameGeometry().x(), self.frameGeometry().y(), x, y, xPos, yPos)
+                # print(self.frameGeometry().x(), self.frameGeometry().width(), seekX, x, xPos)
                 w, h = self.width()*radio, self.height()*radio
                 lx = xPos < self.BORDER_WIDTH
                 rx = xPos + 9 > w - self.BORDER_WIDTH
