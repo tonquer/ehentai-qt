@@ -6,7 +6,7 @@ import sys
 class SettingValue:
     def __init__(self, tag, defaultV, isNeedReset, des=None):
         self.tag = tag                 # 分类
-        self.value = defaultV          # 生效值
+        self._value = defaultV          # 生效值
         self.setV = defaultV           # 设置的值
         self.defaultV = defaultV       # 默认值
         self.isNeedReset = isNeedReset       # 是否重启生效
@@ -14,9 +14,24 @@ class SettingValue:
         self.autoValue = 0      # 选自动时，自动生效的值
         self.name = ""
 
+    def __lt__(self, other):
+        raise OverflowError
+
+    def __gt__(self, other):
+        raise OverflowError
+
+    def __eq__(self, other):
+        if isinstance(other, SettingValue):
+            return id(self) == id(other)
+        raise OverflowError
+
+    @property
+    def value(self):
+        return self._value
+    
     def InitValue(self, value, name):
         value = self.GetSettingV(value, self.defaultV)
-        self.value = value
+        self._value = value
         self.setV = value
         self.name = name
         return
@@ -44,17 +59,17 @@ class SettingValue:
     def GetIndexV(self):
         if not isinstance(self.des, list):
             return ""
-        if self.value >= len(self.des):
+        if self._value >= len(self.des):
             return ""
-        return self.des[self.value]
+        return self.des[self._value]
 
     def SetValue(self, value):
-        if self.setV == value and self.value == value:
+        if self.setV == value and self._value == value:
             return
 
         self.setV = value
         if not self.isNeedReset:
-            self.value = value
+            self._value = value
             self.autoValue = 0
         Setting.SaveSettingV(self)
 
@@ -79,7 +94,7 @@ class Setting:
     ProxySelectIndex = SettingValue("ProxySetting", 1, False)
     IsOpenDoh = SettingValue("ProxySetting", 1, False)
     IsOpenDohPicture = SettingValue("ProxySetting", 0, False)
-    DohAddress = SettingValue("ProxySetting", "https://1.1.1.1/dns-query", True)
+    DohAddress = SettingValue("ProxySetting", "https://101.6.6.6:8443/dns-query", True)
 
     # 下载与缓存
     SavePath = SettingValue("DownloadSetting", "", False)
@@ -124,7 +139,8 @@ class Setting:
 
     AutoLogin = SettingValue("Other", 0, False)
     SavePassword = SettingValue("Other", 1, False)
-
+    IsShowCmd = SettingValue("Other", 0, False)
+    
     @staticmethod
     def InitLoadSetting():
         path = os.path.join(Setting.GetConfigPath(), "config.ini")

@@ -27,7 +27,7 @@ class TaskDownload(TaskBase, QtTaskBase):
                 break
             self.HandlerDownload({"st": Status.Ok}, v)
 
-    def DownloadBook(self, bookId, index, token, statusBack=None, downloadCallBack=None, completeCallBack=None,
+    def DownloadBook(self, bookId, index, token, domain, statusBack=None, downloadCallBack=None, completeCallBack=None,
                     backParam=None, isSaveCache=True, cleanFlag=None, isSaveFile=False, filePath=""):
         self.taskId += 1
         data = QtDownloadTask(self.taskId)
@@ -37,7 +37,7 @@ class TaskDownload(TaskBase, QtTaskBase):
         data.backParam = backParam
         data.bookId = bookId
         data.index = index
-        data.site = config.CurSite
+        data.site = domain
         data.token = token
         data.isSaveCache = isSaveCache
         data.isSaveFile = isSaveFile
@@ -82,7 +82,7 @@ class TaskDownload(TaskBase, QtTaskBase):
                 return
 
             info = BookMgr().GetBookBySite(task.bookId, task.site)
-            if not info or info.curPage <= 0:
+            if not info or len(info.loadPages) <= 0:
                 self.AddHttpTask(req.BookInfoReq(task.bookId, token=task.token, site=task.site), self.HandlerDownload, taskId)
                 status = task.Reading
                 self.SetTaskStatus(taskId, task, backData, status)
@@ -91,10 +91,15 @@ class TaskDownload(TaskBase, QtTaskBase):
             task.token = info.baseInfo.token
             backData["maxPic"] = info.pageInfo.pages
 
-            # 如果有缓存则不需要以下步骤了
-            task.cacheAndLoadPath = "{}/{}_{}/{}".format(task.site, task.bookId, task.token, task.index + 1)
-            filePath2 = os.path.join(os.path.join(Setting.SavePath.value, config.CachePathDir), task.cacheAndLoadPath) + ".jpg"
-            for cachePath in [filePath2, task.loadPath]:
+            if task.isSaveFile:
+                filePaths = [task.loadPath]
+            else:
+                # 如果有缓存则不需要以下步骤了
+                task.cacheAndLoadPath = "{}/{}_{}/{}".format(task.site, task.bookId, task.token, task.index + 1)
+                filePath2 = os.path.join(os.path.join(Setting.SavePath.value, config.CachePathDir), task.cacheAndLoadPath)
+                filePaths = [filePath2, task.loadPath]
+
+            for cachePath in filePaths:
                 if cachePath:
                     imgData = ToolUtil.LoadCachePicture(cachePath)
                     if imgData:
@@ -107,11 +112,13 @@ class TaskDownload(TaskBase, QtTaskBase):
             # 如果不存在url
             if not imgUrl:
                 # 如果是分页没有加载完
-                if info.curPage < info.maxPage:
-                    self.AddHttpTask(req.BookInfoReq(task.bookId, page=info.curPage+1, token=task.token, site=task.site), self.HandlerDownload, taskId)
+                #计算当前所在的分页
+                if info.IsNeedLoadPage(task.index):
+                    self.AddHttpTask(req.BookInfoReq(task.bookId, page=info.GetPicInPages(task.index), token=task.token, site=task.site), self.HandlerDownload, taskId)
                     status = task.ReadingPicture
                     self.SetTaskStatus(taskId, task, backData, status)
                     return
+
                 # 分页加载完，则获取imgUrl
                 else:
                     self.AddHttpTask(req.GetBookImgUrl2(task.bookId, task.index + 1, task.site), self.HandlerDownload, taskId)
@@ -122,7 +129,7 @@ class TaskDownload(TaskBase, QtTaskBase):
                 from server.server import Server
                 status = task.Downloading
                 self.SetTaskStatus(taskId, task, backData, status)
-                self.AddDownloadTask(imgUrl, task.cacheAndLoadPath, task.downloadCallBack, task.downloadCompleteBack, task.backParam, task.isSaveCache,task.isSaveFile,
+                self.AddDownloadTask(imgUrl, task.cacheAndLoadPath, task.downloadCallBack, task.downloadCompleteBack, task.backParam, task.isSaveCache, task.isSaveFile,
                                      task.loadPath)
         except Exception as es:
             Log.Error(es)
@@ -171,6 +178,8 @@ class TaskDownload(TaskBase, QtTaskBase):
         from src.server import req
         if isSaveFile:
             savePath = filePath
+            data.loadPath = ""
+            data.cacheAndLoadPath = ""
         else:
             savePath = ""
 

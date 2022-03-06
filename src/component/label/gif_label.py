@@ -11,7 +11,7 @@ class GifLabel(QLabel):
         self.bBuffer = None
         self.setAttribute(Qt.WidgetAttribute.WA_TranslucentBackground)
         self.setWindowFlags(self.windowFlags() | Qt.WindowType.FramelessWindowHint)
-        self.movie.frameChanged.connect(self.FrameChange)
+        # self.movie.frameChanged.connect(self.FrameChange)
 
     def FrameChange(self):
         currentPixmap = self.movie.currentPixmap()

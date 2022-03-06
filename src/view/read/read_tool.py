@@ -25,13 +25,13 @@ class QtCustomSlider(QtWidgets.QSlider):
         self.label.setAutoFillBackground(True)
         self.label.setAutoFillBackground(True)
         # palette = QPalette()
-        # palette.setColor(QPalette.Background, Qt.GlobalColor.white)
+        # palette.setColor(QPalette.Background, Qt.white)
         # self.label.setPalette(palette)
-        self.label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.label.setAlignment(Qt.AlignCenter)
         self.label.setVisible(False)
         self.label.move(0, 3)
         self.setMaximum(100)
-        self.setOrientation(Qt.Orientation.Horizontal)
+        self.setOrientation(Qt.Horizontal)
         self.setPageStep(0)
 
     @property
@@ -86,14 +86,14 @@ class ReadTool(QtWidgets.QWidget, Ui_ReadImg):
         self.resize(100, 400)
         self._imgFrame = weakref.ref(imgFrame)
         # self.setWindowFlags(
-        #     Qt.Window | Qt.Tool | Qt.WindowType.FramelessWindowHint | Qt.WindowStaysOnTopHint | Qt.X11BypassWindowManagerHint)
+        #     Qt.Window | Qt.Tool | Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint | Qt.X11BypassWindowManagerHint)
         # self.setStyleSheet("background-color:white;")
-        # self.setAttribute(Qt.WidgetAttribute.WA_StyledBackground, False)
+        # self.setAttribute(Qt.WA_StyledBackground, False)
         # palette = QPalette(self.palette())
-        # palette.setColor(QPalette.Background, Qt.GlobalColor.white)
+        # palette.setColor(QPalette.Background, Qt.white)
         # self.setAutoFillBackground(True)
         # self.setPalette(palette)
-        # self.setAttribute(Qt.WidgetAttribute.WA_TranslucentBackground, False)
+        # self.setAttribute(Qt.WA_TranslucentBackground, False)
         self.downloadMaxSize = 0
         self.downloadSize = 0
         self.slider = QtCustomSlider(self)
@@ -111,6 +111,8 @@ class ReadTool(QtWidgets.QWidget, Ui_ReadImg):
         self.timerOut = QTimer()
         self.timerOut.setInterval(1000)
         self.timerOut.timeout.connect(self.TimeOut)
+        self.isMaxFull = False
+        self.gpuLabel.setMaximumWidth(250)
 
     @property
     def imgFrame(self):
@@ -204,12 +206,11 @@ class ReadTool(QtWidgets.QWidget, Ui_ReadImg):
     def _LastPage(self):
         epsId = self.readImg.epsId
         bookId = self.readImg.bookId
-        bookInfo = BookMgr().books.get(bookId)
 
         if self.curIndex <= 0:
             if epsId - 1 >= 0:
-                # QtOwner().ShowMsg(Str.GetStr(Str.AutoSkipLast))
-                # self.OpenLastEps()
+                QtOwner().ShowMsg(Str.GetStr(Str.AutoSkipLast))
+                self.OpenLastEps()
                 return
             QtOwner().ShowMsg(Str.GetStr(Str.AlreadyLastPage))
             return
@@ -362,19 +363,24 @@ class ReadTool(QtWidgets.QWidget, Ui_ReadImg):
 
     def UpdateSlider(self):
         self.slider.setValue(self.readImg.curIndex+1)
-        self.readImg.setWindowTitle(self.readImg.epsName + "（{}/{}）".format(self.slider.value(), self.slider.maximum()))
+        if self.readImg.epsName:
+            QtOwner().SetSubTitle(self.readImg.epsName + "（{}/{}）".format(self.slider.value(), self.slider.maximum()))
 
-    def FullScreen(self):
+    def FullScreen(self, isClear=False):
         if QtOwner().owner.windowState() == Qt.WindowFullScreen:
-            QtOwner().owner.showNormal()
+
+            if self.isMaxFull:
+                QtOwner().owner.showMaximized()
+            else:
+                QtOwner().owner.showNormal()
             self.fullButton.setText(Str.GetStr(Str.FullScreen))
-            Setting.LookReadFull.SetValue(0)
+            if not isClear:
+                Setting.LookReadFull.SetValue(0)
         else:
+            self.isMaxFull = self.window().isMaximized()
             QtOwner().owner.showFullScreen()
             self.fullButton.setText(Str.GetStr(Str.ExitFullScreen))
             Setting.LookReadFull.SetValue(1)
-        # self.readImg.raise_()
-        self.scrollArea.changeScale.emit(self.scaleCnt)
 
     def Waifu2xSave(self):
         self.SetWaifu2xCancle(True)
@@ -392,7 +398,7 @@ class ReadTool(QtWidgets.QWidget, Ui_ReadImg):
             data.model = model
             data.waifuData = None
             data.cacheWaifu2xImage = None
-            w, h, mat = ToolUtil.GetPictureSize(data.data)
+            w, h, _ = ToolUtil.GetPictureSize(data.data)
             if max(w, h) <= Setting.LookMaxNum.value:
                data.waifuState = data.WaifuWait
             else:

@@ -14,3 +14,9 @@ class Status(object):
     ParseError = Str.ParseError
     NeedGoogle = Str.NeedGoogle
 
+    UnderReviewBook = Str.UnderReviewBook
+    SaveError = Str.SaveError
+    AddError = Str.AddError
+    FileError = Str.FileError
+    PathError = Str.PathError
+    FileFormatError = Str.FileFormatError

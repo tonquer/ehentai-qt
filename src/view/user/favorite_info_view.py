@@ -17,7 +17,7 @@ class FavoriteInfoView(BaseMaskDialog, Ui_FavoriteInfo, QtTaskBase):
 
         self.widget.SaveFavorite = self.SaveFavorite
         self.setupUi(self.widget)
-        self.closeButton.clicked.connect(self.close)
+        # self.closeButton.clicked.connect(self.close)
         self.bookId = ""
         self.isUpdate = True
 

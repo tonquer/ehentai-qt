@@ -95,22 +95,12 @@ class DownloadView(QtWidgets.QWidget, Ui_Download):
             return []
         return self.downloadDict[bookId].GetDownloadCompleteEpsId()
 
-    def GetConvertFilePath(self, bookId, epsId, index):
-        if bookId not in self.downloadDict:
-            return ""
-        task = self.downloadDict[bookId]
-        if epsId not in task.epsInfo:
-            return ""
-        epsTitle = task.epsInfo[epsId].epsTitle
-        savePath = os.path.join(task.convertPath, ToolUtil.GetCanSaveName(epsTitle))
-        return os.path.join(savePath, "{:04}.{}".format(index + 1, "jpg"))
-
     def GetDonwloadFilePath(self, bookId, epsId, index):
         if bookId not in self.downloadDict:
             return ""
         task = self.downloadDict[bookId]
         savePath = task.savePath
-        return os.path.join(savePath, "{:04}.{}".format(index + 1, "jpg"))
+        return os.path.join(savePath, "{:04}".format(index + 1))
 
     def SwitchCurrent(self, **kwargs):
         refresh = kwargs.get("refresh")
@@ -474,7 +464,7 @@ class DownloadView(QtWidgets.QWidget, Ui_Download):
         info = self.downloadDict.get(bookId)
         if not info:
             return
-        QtOwner().OpenBookInfo(bookId, info.token)
+        QtOwner().OpenBookInfo(bookId, info.token, info.domain)
 
     def StartAll(self):
         for row in range(self.tableWidget.rowCount()):

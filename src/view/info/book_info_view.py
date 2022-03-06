@@ -57,14 +57,17 @@ class BookInfoView(QtWidgets.QWidget, Ui_BookInfo, QtTaskBase):
     def SwitchCurrent(self, **kwargs):
         bookId = kwargs.get("bookId")
         token = kwargs.get("token", "")
+        site = kwargs.get("site", "")
         if not bookId:
             return
 
-        self.OpenBook(bookId, token)
+        self.OpenBook(bookId, token, site)
 
-    def OpenBook(self, bookId, token=""):
+    def OpenBook(self, bookId, token="", site=""):
         self.bookId = bookId
-        self.site = config.CurSite
+        self.site = site
+        if not self.site:
+            self.site = config.CurSite
         self.Clear()
         QtOwner().ShowLoading()
         QtOwner().SetDirty()
@@ -78,7 +81,7 @@ class BookInfoView(QtWidgets.QWidget, Ui_BookInfo, QtTaskBase):
             # self.listWidget.UpdatePage(1, maxPages)
             # self.listWidget.UpdateState()
             self.epsListWidget.clear()
-            info = BookMgr().GetBook(self.bookId)
+            info = BookMgr().GetBookBySite(self.bookId, self.site)
             self.title.setText(info.baseInfo.title)
             self.bookName = info.baseInfo.title
             self.token = info.baseInfo.token
@@ -128,7 +131,11 @@ class BookInfoView(QtWidgets.QWidget, Ui_BookInfo, QtTaskBase):
                 self.AddDownloadTask(self.url, "{}/{}_{}_cover".format(config.CurSite, self.bookId, self.token), completeCallBack=self.UpdatePicture)
 
         else:
-            QtOwner().ShowError(Str.GetStr(st))
+            msg = data.get("msg")
+            if msg:
+                QtOwner().ShowError(msg)
+            else:
+                QtOwner().ShowError(Str.GetStr(st))
         return
 
     def UpdatePicture(self, data, status):
@@ -194,6 +201,6 @@ class BookInfoView(QtWidgets.QWidget, Ui_BookInfo, QtTaskBase):
 
     def AddDownload(self):
         bookId = self.bookId
-        info = BookMgr().GetBook(bookId)
+        info = BookMgr().GetBookBySite(bookId, self.site)
         QtOwner().downloadView.AddDownload(bookId, info.baseInfo.token, config.CurSite)
         QtOwner().ShowMsg(Str.GetStr(Str.AddDownload))

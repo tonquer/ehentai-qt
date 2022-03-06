@@ -1,8 +1,9 @@
+import os
 from functools import partial
 
 from PySide2 import QtWidgets
 from PySide2.QtCore import Qt, QSize
-from PySide2.QtGui import QPixmap, QImage, QCursor, QGuiApplication
+from PySide2.QtGui import QImage, QCursor, QGuiApplication, QPixmap
 from PySide2.QtWidgets import QMenu
 
 from config import config
@@ -134,7 +135,7 @@ class ReadView(QtWidgets.QWidget, QtTaskBase):
         self.frame.scrollArea.ClearPixItem()
         self.Clear()
         if QtOwner().owner.windowState() == Qt.WindowFullScreen:
-            QtOwner().owner.showNormal()
+            self.qtTool.FullScreen(True)
         QtOwner().CloseReadView()
 
     def Clear(self):
@@ -149,17 +150,19 @@ class ReadView(QtWidgets.QWidget, QtTaskBase):
         self.curIndex = 0
         self.frame.oldValue = 0
         self.pictureData.clear()
+        QtOwner().SetSubTitle("")
         self.ClearTask()
+        self.ClearDownload()
         self.ClearQImageTask()
 
     def OpenPage(self, bookId, name, pageIndex=-1):
         if not bookId:
             return
         self.Clear()
-        info = BookMgr().books.get(bookId)
-        if info:
-            self.category = info.tags[:]
-            self.category.extend(info.categories)
+        # info = BookMgr().GetBook(bookId)
+        # if info:
+        #     self.category = info.baseInfo.tags[:]
+        #     self.category.extend(info.categories)
 
         self.qtTool.checkBox.setChecked(Setting.IsOpenWaifu.value)
         self.qtTool.SetData(isInit=True)
@@ -168,7 +171,8 @@ class ReadView(QtWidgets.QWidget, QtTaskBase):
         # self.qtTool.show()
         self.bookId = bookId
         self.pageIndex = pageIndex
-
+        
+        self.qtTool.isMaxFull = self.window().isMaximized()
         if Setting.LookReadFull.value:
             QtOwner().owner.showFullScreen()
             self.qtTool.fullButton.setText(Str.GetStr(Str.ExitFullScreen))
@@ -193,6 +197,9 @@ class ReadView(QtWidgets.QWidget, QtTaskBase):
         newDict = {}
         needUp = False
         removeTaskIds = []
+
+        if not self.maxPic:
+            return
 
         preLoadList = list(range(self.curIndex, self.curIndex + config.PreLoading))
 
@@ -245,7 +252,7 @@ class ReadView(QtWidgets.QWidget, QtTaskBase):
     def StartLoadPicUrlBack(self, raw, v):
         st = raw["st"]
         if st == Status.Error:
-            QtOwner().ShowError(st)
+            QtOwner().ShowError(Str.GetStr(st))
             return
         maxPic = raw.get("maxPic")
         if not maxPic or self.maxPic > 0:
@@ -331,8 +338,11 @@ class ReadView(QtWidgets.QWidget, QtTaskBase):
         else:
             p2 = p.cacheImage
 
-        pixMap = QPixmap(p2)
-        self.scrollArea.SetPixIem(index, pixMap, waifu2x)
+        if p.isGif:
+            self.scrollArea.SetGifData(index, p.data, p.w, p.h)
+        else:
+            pixMap = QPixmap(p2)
+            self.scrollArea.SetPixIem(index, pixMap, waifu2x)
 
     @time_me
     def ShowOtherPage(self):
@@ -384,7 +394,7 @@ class ReadView(QtWidgets.QWidget, QtTaskBase):
 
         else:
             p2 = p.cacheImage
-            if Setting.IsOpenWaifu.value:
+            if Setting.IsOpenWaifu.value and (p.waifuState == p.WaifuStateCancle or p.waifuState == p.WaifuWait):
                 self.frame.waifu2xProcess.show()
             else:
                 self.frame.waifu2xProcess.hide()
@@ -392,8 +402,11 @@ class ReadView(QtWidgets.QWidget, QtTaskBase):
         self.qtTool.SetData(pSize=p.qSize, dataLen=p.size, state=p.state, waifuState=p.waifuState)
         self.qtTool.UpdateText(p.model)
 
-        pixMap = QPixmap(p2)
-        self.scrollArea.SetPixIem(self.curIndex, pixMap, waifu2x)
+        if p.isGif:
+            self.scrollArea.SetGifData(self.curIndex, p.data, p.w, p.h)
+        else:
+            pixMap = QPixmap(p2)
+            self.scrollArea.SetPixIem(self.curIndex, pixMap, waifu2x)
         # self.graphicsView.setSceneRect(QRectF(QPointF(0, 0), QPointF(pixMap.width(), pixMap.height())))
         # self.frame.ScalePicture()
         self.CheckLoadPicture()
@@ -423,6 +436,7 @@ class ReadView(QtWidgets.QWidget, QtTaskBase):
             self.AddQImageTask(data, self.ConvertQImageWaifu2xBack, index)
         if index == self.curIndex:
             self.qtTool.SetData(waifuState=p.waifuState)
+            self.frame.waifu2xProcess.hide()
             # self.ShowImg()
         elif self.stripModel in [ReadMode.UpDown, ReadMode.RightLeftScroll,
                                  ReadMode.LeftRightScroll] and self.curIndex < index <= self.curIndex + config.PreLoading - 1:
@@ -465,7 +479,7 @@ class ReadView(QtWidgets.QWidget, QtTaskBase):
         #                      downloadCallBack=self.UpdateProcessBar,
         #                      completeCallBack=self.CompleteDownloadPic, backParam=i,
         #                      isSaveCache=True, filePath=path)
-        self.AddDownloadBook(self.bookId, i, downloadCallBack=self.UpdateProcessBar,
+        self.AddDownloadBook(self.bookId, i, config.CurSite, downloadCallBack=self.UpdateProcessBar,
                              statusBack=self.StartLoadPicUrlBack,
                              completeCallBack=self.CompleteDownloadPic,
                              backParam=i, isSaveCache=True, filePath=path)

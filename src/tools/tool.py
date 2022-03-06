@@ -158,16 +158,22 @@ class ToolUtil(object):
     def GetPictureSize(data):
         if not data:
             return 0, 0, "jpg"
-        from PIL import Image
-        from io import BytesIO
-        a = BytesIO(data)
-        img = Image.open(a)
-        a.close()
-        if img.format == "PNG":
-            mat = "png"
-        else:
-            mat = "jpg"
-        return img.width, img.height, mat
+        try:
+            from PIL import Image
+            from io import BytesIO
+            a = BytesIO(data)
+            img = Image.open(a)
+            a.close()
+            if img.format == "PNG":
+                mat = "png"
+            elif img.format == "GIF":
+                mat = "gif"
+            else:
+                mat = "jpg"
+            return img.width, img.height, mat
+        except Exception as es:
+            Log.Error(es)
+        return 0, 0, "jpg"
 
     @staticmethod
     def GetLookModel(category):
@@ -223,12 +229,16 @@ class ToolUtil(object):
     def LoadCachePicture(filePath):
         try:
             c = CTime()
-            if not os.path.isfile(filePath):
-                return None
-            with open(filePath, "rb") as f:
-                data = f.read()
-                c.Refresh("LoadCache", filePath)
-                return data
+            for mat in [".jpg", ".png", ".gif"]:
+                path = filePath + mat
+                if not os.path.isfile(path):
+                    continue
+
+                with open(path, "rb") as f:
+                    data = f.read()
+                    c.Refresh("LoadCache", path)
+                    return data
+
         except Exception as es:
             Log.Error(es)
         return None
@@ -268,42 +278,31 @@ class ToolUtil(object):
     def ParseBookIndex(data):
         soup = BeautifulSoup(data, features="lxml")
         tag = soup.find("table", class_=re.compile(r"itg gl\w+"))
+        if not tag:
+            tag = soup.find("div", class_=re.compile(r"itg gld"))
+
         bookInfos = []
         if not tag:
             return [], 1
-        for tr in tag.children:
-            from tools.book import BookInfo
-            info = BookInfo()
-            baseInfo = info.baseInfo
-            for td in tr.children:
-                className = " ".join(td.attrs.get('class', []))
-                if className == "gl1c glcat":
-                    baseInfo.category = td.text
-                elif className == "gl2c":
-                    bookInfos.append(info)
-                    picture = td.find("img")
-                    baseInfo.title = picture.attrs.get("title")
-                    url = picture.attrs.get("data-src")
-                    if url:
-                        baseInfo.imgUrl = url
-                        baseInfo.imgData = picture.attrs.get("src")
-                    else:
-                        baseInfo.imgUrl = picture.attrs.get("src")
 
-                    timeTag = td.find("div", id=re.compile(r"postedpop_\d+"))
-                    baseInfo.id = re.findall(r"\d+", timeTag.attrs.get("id"))[0]
-                    baseInfo.timeStr = timeTag.text
-                elif className == "gl3c glname":
-                    baseInfo.bookUrl = td.next.attrs.get("href")
-                    for tag in td.find_all("div", class_="gt"):
-                        baseInfo.tags.append(tag.attrs.get("title"))
+        if "gld" not in tag.attrs.get("class", []):
 
-                    pass
-                elif className == "gl4c glhide":
-                    pass
-            mo = re.search("(?<={}/)\w*".format(baseInfo.id), baseInfo.bookUrl)
-            if mo:
-                baseInfo.token = mo.group()
+            for tr in tag.children:
+                if "gltm" in tag.attrs.get("class", []):
+                    b = ToolUtil.ParseBookBaseInfoGlm(tr)
+                elif "gltc" in tag.attrs.get("class", []):
+                    b = ToolUtil.ParseBookBaseInfoGlc(tr)
+                elif "glte" in tag.attrs.get("class", []):
+                    b = ToolUtil.ParseBookBaseInfoGle(tr)
+                else:
+                    return
+                if b.baseInfo.id:
+                    bookInfos.append(b)
+        else:
+            for tr in tag.find_all("div", class_="gl1t"):
+                b = ToolUtil.ParseBookBaseInfoGlt(tr)
+                if b.baseInfo.id:
+                    bookInfos.append(b)
 
         table = soup.find("table", class_="ptt")
         maxPage = 1
@@ -317,9 +316,160 @@ class ToolUtil(object):
         return bookInfos, maxPage
 
     @staticmethod
+    def ParseBookBaseInfoGlt(tr):
+        from tools.book import BookInfo
+        info = BookInfo()
+        baseInfo = info.baseInfo
+        td = tr.find("div", class_="gl5t")
+        if td:
+            baseInfo.category = td.next.next.text
+            timeTag = td.next.find("div", id=re.compile(r"posted_\d+"))
+            baseInfo.id = re.findall(r"\d+", timeTag.attrs.get("id"))[0]
+            baseInfo.timeStr = timeTag.text
+
+        td = tr.find("div", class_="gl3t")
+        if td:
+            picture = td.find("img")
+            if picture:
+                baseInfo.title = picture.attrs.get("title")
+                url = picture.attrs.get("data-src")
+                if url:
+                    baseInfo.imgUrl = url
+                    baseInfo.imgData = picture.attrs.get("src")
+                else:
+                    baseInfo.imgUrl = picture.attrs.get("src")
+
+        td = tr.find("div", class_="gl4t")
+        if td:
+            if isinstance(td.next, Tag):
+                baseInfo.bookUrl = td.next.next.attrs.get("href")
+            else:
+                baseInfo.bookUrl = td.previous.attrs.get("href")
+
+        mo = re.search("(?<={}/)\w*".format(baseInfo.id), baseInfo.bookUrl)
+        if mo:
+            baseInfo.token = mo.group()
+        return info
+
+    @staticmethod
+    def ParseBookBaseInfoGle(tr):
+        from tools.book import BookInfo
+        info = BookInfo()
+        baseInfo = info.baseInfo
+
+        td = tr.find("td", class_="gl1e")
+        if td:
+            baseInfo.bookUrl = td.next.next.attrs.get("href")
+            picture = td.find("img")
+            if picture:
+                baseInfo.title = picture.attrs.get("title")
+                url = picture.attrs.get("data-src")
+                if url:
+                    baseInfo.imgUrl = url
+                    baseInfo.imgData = picture.attrs.get("src")
+                else:
+                    baseInfo.imgUrl = picture.attrs.get("src")
+
+        td = tr.find("div", class_="gl3e")
+        if td:
+            baseInfo.category = td.next.text
+            timeTag = td.find("div", id=re.compile(r"posted_\d+"))
+            baseInfo.id = re.findall(r"\d+", timeTag.attrs.get("id"))[0]
+            baseInfo.timeStr = timeTag.text
+
+        td = tr.find("div", class_="gl4e glname")
+        if td:
+            for tag in td.find_all("div", class_="gt"):
+                baseInfo.tags.append(tag.attrs.get("title"))
+
+        mo = re.search("(?<={}/)\w*".format(baseInfo.id), baseInfo.bookUrl)
+        if mo:
+            baseInfo.token = mo.group()
+        return info
+
+    @staticmethod
+    def ParseBookBaseInfoGlc(tr):
+        from tools.book import BookInfo
+        info = BookInfo()
+        baseInfo = info.baseInfo
+
+        td = tr.find("td", class_="gl1c glcat")
+        if td:
+            baseInfo.category = td.next.text
+
+        td = tr.find("td", class_="gl2c")
+        if td:
+            picture = td.find("img")
+            if picture:
+                baseInfo.title = picture.attrs.get("title")
+                url = picture.attrs.get("data-src")
+                if url:
+                    baseInfo.imgUrl = url
+                    baseInfo.imgData = picture.attrs.get("src")
+                else:
+                    baseInfo.imgUrl = picture.attrs.get("src")
+
+            timeTag = td.find("div", id=re.compile(r"posted_\d+"))
+            baseInfo.id = re.findall(r"\d+", timeTag.attrs.get("id"))[0]
+            baseInfo.timeStr = timeTag.text
+
+        td = tr.find("td", class_="gl3c glname")
+        if td:
+            baseInfo.bookUrl = td.next.attrs.get("href")
+            for tag in td.find_all("div", class_="gt"):
+                baseInfo.tags.append(tag.attrs.get("title"))
+
+        mo = re.search("(?<={}/)\w*".format(baseInfo.id), baseInfo.bookUrl)
+        if mo:
+            baseInfo.token = mo.group()
+        return info
+
+    @staticmethod
+    def ParseBookBaseInfoGlm(tr):
+        from tools.book import BookInfo
+        info = BookInfo()
+        baseInfo = info.baseInfo
+
+        td = tr.find("td", class_="gl1m glcat")
+        if td:
+            baseInfo.category = td.next.text
+
+        td = tr.find("td", class_="gl2m")
+        if td:
+            picture = td.find("img")
+            if picture:
+                baseInfo.title = picture.attrs.get("title")
+                url = picture.attrs.get("data-src")
+                if url:
+                    baseInfo.imgUrl = url
+                    baseInfo.imgData = picture.attrs.get("src")
+                else:
+                    baseInfo.imgUrl = picture.attrs.get("src")
+
+            timeTag = td.find("div", id=re.compile(r"posted_\d+"))
+            baseInfo.id = re.findall(r"\d+", timeTag.attrs.get("id"))[0]
+            baseInfo.timeStr = timeTag.text
+
+        td = tr.find("td", class_="gl3m glname")
+        if td:
+            baseInfo.bookUrl = td.next.attrs.get("href")
+
+        mo = re.search("(?<={}/)\w*".format(baseInfo.id), baseInfo.bookUrl)
+        if mo:
+            baseInfo.token = mo.group()
+        return info
+
+
+    @staticmethod
     def ParseBookInfo(data):
         soup = BeautifulSoup(data, features="lxml")
         tag = soup.find("div", id="gdd")
+        if not tag:
+            tag = soup.find("div", class_="d")
+            msg = ""
+            if tag:
+                msg = tag.text
+            return Status.ParseError, msg, None, None, None
         table = tag.find("table")
         from tools.book import BookInfo
         book = BookInfo()
@@ -389,7 +539,7 @@ class ToolUtil(object):
         commentError = ""
         if tag:
             commentError = tag.text
-        return book, maxPage, commentError
+        return Status.Ok, "", book, maxPage, commentError
 
     @staticmethod
     def ParsePictureInfo(data):
@@ -499,3 +649,29 @@ class ToolUtil(object):
         if mo:
             maxNum = int(mo.group())
         return curNum, maxNum
+
+    @staticmethod
+    def Escape(s):
+        s = s.replace("&", "&amp;")
+        s = s.replace("<", "&lt;")
+        s = s.replace(">", "&gt;")
+        s = s.replace('"', "&quot;")
+        s = s.replace('\'', "&#x27;")
+        s = s.replace('\n', '<br/>')
+        s = s.replace('  ', '&nbsp;')
+        s = s.replace(' ', '&emsp;')
+        return s
+
+    @staticmethod
+    def IsFile(path):
+        for mat in [".jpg", ".png", ".gif"]:
+            if os.path.isfile(path + mat):
+                return True
+        return False
+
+
+    @staticmethod
+    def SaveFile(data, path, mat):
+        f = open(path + "." + mat, "wb+")
+        f.write(data)
+        f.close()

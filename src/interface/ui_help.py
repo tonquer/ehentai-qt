@@ -88,11 +88,11 @@ class Ui_Help(object):
 
         self.gridLayout.addWidget(self.label_6, 2, 0, 1, 1)
 
-        self.label_10 = QLabel(self.widget_2)
-        self.label_10.setObjectName(u"label_10")
-        self.label_10.setFont(font)
+        self.upTimeLabel = QLabel(self.widget_2)
+        self.upTimeLabel.setObjectName(u"upTimeLabel")
+        self.upTimeLabel.setFont(font)
 
-        self.gridLayout.addWidget(self.label_10, 1, 1, 1, 1)
+        self.gridLayout.addWidget(self.upTimeLabel, 1, 1, 1, 1)
 
         self.label_4 = QLabel(self.widget_2)
         self.label_4.setObjectName(u"label_4")
@@ -131,6 +131,11 @@ class Ui_Help(object):
 
         self.gridLayout.addWidget(self.waifu2x, 2, 1, 1, 1)
 
+        self.openCmd = QPushButton(self.widget_2)
+        self.openCmd.setObjectName(u"openCmd")
+
+        self.gridLayout.addWidget(self.openCmd, 5, 1, 1, 1)
+
 
         self.verticalLayout_2.addWidget(self.widget_2)
 
@@ -166,12 +171,13 @@ class Ui_Help(object):
         self.pushButton.setText(QCoreApplication.translate("Help", u"Github Issue", None))
         self.logButton.setText(QCoreApplication.translate("Help", u"\u6253\u5f00\u65e5\u5fd7\u76ee\u5f55", None))
         self.label_6.setText(QCoreApplication.translate("Help", u"waifu2x\u7248\u672c:", None))
-        self.label_10.setText(QCoreApplication.translate("Help", u"2021-11-27", None))
+        self.upTimeLabel.setText(QCoreApplication.translate("Help", u"2021-11-27", None))
         self.label_4.setText(QCoreApplication.translate("Help", u"\u7248\u672c\u53f7:", None))
         self.verCheck.setText(QCoreApplication.translate("Help", u"\u68c0\u6d4b\u66f4\u65b0", None))
         self.version.setText(QCoreApplication.translate("Help", u"v1.2.8", None))
         self.label_7.setText(QCoreApplication.translate("Help", u"\u65e5\u5fd7:", None))
         self.label_9.setText(QCoreApplication.translate("Help", u"\u4e0a\u6b21\u66f4\u65b0\u65f6\u95f4\uff1a", None))
         self.waifu2x.setText(QCoreApplication.translate("Help", u"v1.0.8", None))
+        self.openCmd.setText(QCoreApplication.translate("Help", u"\u6253\u5f00\u63a7\u5236\u53f0", None))
     # retranslateUi
 

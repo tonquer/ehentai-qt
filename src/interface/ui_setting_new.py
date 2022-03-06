@@ -76,7 +76,7 @@ class Ui_SettingNew(object):
         self.scrollArea.setWidgetResizable(True)
         self.scrollAreaWidgetContents = QWidget()
         self.scrollAreaWidgetContents.setObjectName(u"scrollAreaWidgetContents")
-        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 673, 2401))
+        self.scrollAreaWidgetContents.setGeometry(QRect(0, -1306, 673, 2390))
         self.scrollAreaWidgetContents.setStyleSheet(u"")
         self.verticalLayout_4 = QVBoxLayout(self.scrollAreaWidgetContents)
         self.verticalLayout_4.setObjectName(u"verticalLayout_4")
@@ -1130,7 +1130,7 @@ class Ui_SettingNew(object):
         self.label_31.setText(QCoreApplication.translate("SettingNew", u"DoH\u5730\u5740\uff1a", None))
         self.dohButton.setText(QCoreApplication.translate("SettingNew", u"\u67e5\u770bDoH DNS\u89e3\u6790", None))
         self.waifu2xLabel.setText(QCoreApplication.translate("SettingNew", u"Waifu2x\u8bbe\u7f6e", None))
-        self.label_11.setText(QCoreApplication.translate("SettingNew", u"waifu2x\u7ebf\u7a0b\u6570", None))
+        self.label_11.setText(QCoreApplication.translate("SettingNew", u"waifu2x\u4f7f\u7528CPU\u6570\uff08CPU\u6a21\u5f0f\u4e0b\u751f\u6548\uff09", None))
         self.threadSelect.setItemText(0, QCoreApplication.translate("SettingNew", u"2", None))
 
         self.label_20.setText(QCoreApplication.translate("SettingNew", u"CPU/GPU\u9009\u62e9\uff08\u9700\u91cd\u542f\u751f\u6548\uff09", None))

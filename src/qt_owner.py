@@ -11,6 +11,7 @@ class QtOwner(Singleton):
         Singleton.__init__(self)
         self._owner = None
         self._app = None
+        self.backSock = None
 
     @property
     def downloadView(self):
@@ -20,6 +21,9 @@ class QtOwner(Singleton):
     def settingView(self):
         return self.owner.settingView
 
+    def SetSubTitle(self, text):
+        return self.owner.setSubTitle(text)
+    
     def ShowError(self, msg):
         return MsgLabel.ShowErrorEx(self.owner, msg)
 
@@ -71,8 +75,8 @@ class QtOwner(Singleton):
         info.exec_()
         return
 
-    def OpenBookInfo(self, bookId, token=""):
-        arg = {"bookId": bookId, "token": token}
+    def OpenBookInfo(self, bookId, token="", site=""):
+        arg = {"bookId": bookId, "token": token, "site": site}
         self.owner.SwitchWidget(self.owner.bookInfoView, **arg)
 
     def OpenSearch(self, text):

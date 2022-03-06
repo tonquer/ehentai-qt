@@ -2,6 +2,7 @@ import re
 
 from server.server import Server
 from config import config
+from tools.log import Log
 from tools.singleton import Singleton
 
 
@@ -53,6 +54,9 @@ class BookPageInfo(object):
         return mo.group()
 
     def Copy(self, o):
+        if not o.pages:
+            return
+
         self.kv.update(o.kv)
         self.posted = o.posted
         self.language = o.language
@@ -70,9 +74,22 @@ class BookInfo(object):
         self.pageInfo = BookPageInfo()
         self.curPage = 0
         self.maxPage = 1
+        self.stepPage = 0
+        self.loadPages = set()
 
+    def GetPicInPages(self, index):
+        if self.stepPage:
+            return index // self.stepPage + 1
+        else:
+            pages = list(set(range(1, self.maxPage+1)) - self.loadPages)
+            pages.sort()
+            return pages[0]
 
-# 书的管理器
+    def IsNeedLoadPage(self, index):
+        page = self.GetPicInPages(index)
+        return page not in self.loadPages
+
+    # 书的管理器
 class BookMgr(Singleton):
     def __init__(self):
         super(self.__class__, self).__init__()
@@ -93,24 +110,31 @@ class BookMgr(Singleton):
     def UpdateBookInfoList(self, bookList, site):
         for info in bookList:
             assert isinstance(info, BookInfo)
-            if info.baseInfo.id in self.books:
-                # TODO
+            if self.GetBookBySite(info.baseInfo.id, site):
                 continue
+            info.stepPage = len(info.pageInfo.picUrl)
             self.books[site][info.baseInfo.id] = info
+        # Log.Warn("update book list, {}, {}, {}".format(site, len(bookList), len(self.books[site])))
 
     def UpdateBookInfo(self, bookId, info, curPage, maxPage, site):
-        book = self.GetBook(bookId)
+        book = self.GetBookBySite(bookId, site)
         assert isinstance(info, BookInfo)
         if not book:
-            info.curPage = curPage
+            info.loadPages.add(curPage)
             info.maxPage = maxPage
             self.books[site][bookId] = info
+            info.stepPage = len(info.pageInfo.picUrl)
             return
         book.baseInfo.Copy(info.baseInfo)
         book.pageInfo.Copy(info.pageInfo)
         book.maxPage = maxPage
-        if curPage > book.curPage:
-            book.curPage = curPage
+        book.loadPages.add(curPage)
+
+        step = len(info.pageInfo.picUrl)
+        if not book.stepPage:
+            book.stepPage = step
+        if step and curPage != maxPage and step != book.stepPage:
+            book.stepPage = 0
         return
 
     def UpdateImgUrl(self, bookId, index, url, site):

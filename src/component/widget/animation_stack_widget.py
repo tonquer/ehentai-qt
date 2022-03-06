@@ -94,6 +94,7 @@ class AnimationStackWidget(QStackedWidget):
     def paintEvent(self, event: QPaintEvent) -> None:
         if self.animation.state() == QPropertyAnimation.State.Running:
             paint = QPainter(self)
+            paint.setRenderHints(QPainter.Antialiasing | QPainter.SmoothPixmapTransform)
             if self.animationType == AnimationEnum.LeftToRight:
                 self.PaintPrevious(paint, self.currentIndex())
                 self.PaintNext(paint, self.nextIndex)

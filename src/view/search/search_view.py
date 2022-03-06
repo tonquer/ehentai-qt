@@ -80,7 +80,10 @@ class SearchView(QWidget, Ui_Search, QtTaskBase):
     def SendSearchCategories(self, page):
         for k, v in ToolUtil.Category.items():
             if v == self.categories or k == self.categories:
+                QtOwner().ShowLoading()
                 self.AddHttpTask(req.GetCategoryInfoReq(page, k), self.SendSearchBack, page)
+
+                break
 
     def SendSearchBack(self, data, page):
         QtOwner().CloseLoading()

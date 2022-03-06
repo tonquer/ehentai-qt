@@ -1,6 +1,6 @@
 from functools import partial
 
-from PySide2.QtCore import Qt, QEvent, QPoint
+from PySide2.QtCore import Qt, QEvent, QPoint, Signal
 from PySide2.QtGui import QIcon, QMouseEvent, QGuiApplication
 from PySide2.QtWidgets import QButtonGroup, QToolButton, QLabel, QMainWindow, QApplication
 
@@ -18,10 +18,12 @@ from task.task_waifu2x import TaskWaifu2x
 from tools.log import Log
 from tools.qt_domain import QtDomainMgr
 from view.download.download_dir_view import DownloadDirView
+from view.read.read_pool import QtReadImgPoolManager
 
 
 class MainView(Main, QtTaskBase):
     """ 主窗口 """
+    WindowsSizeChange = Signal()
 
     def __init__(self):
         QtOwner().SetOwner(self)
@@ -42,8 +44,8 @@ class MainView(Main, QtTaskBase):
         self.adjustSize()
         self.resize(desktop.width() // 4 * 3, desktop.height() // 4 * 3)
         self.move(self.width() // 8+desktop.x(), max(0, desktop.height()-self.height()) // 2+desktop.y())
-        # print(desktop.size(), self.size())
-        # self.setAttribute(Qt.WidgetAttribute.WA_StyledBackground, True)
+        print(desktop.size(), self.size())
+        self.setAttribute(Qt.WidgetAttribute.WA_StyledBackground, True)
 
         self.loadingDialog = LoadingDialog(self)
         self.__initWidget()
@@ -66,7 +68,12 @@ class MainView(Main, QtTaskBase):
     @subStackList.setter
     def subStackList(self, value):
         self.subStackWidget.subStackList = value
-
+        
+    def changeEvent(self, event):
+        if event.type() == QEvent.WindowStateChange:
+            self.WindowsSizeChange.emit()
+        return super(self.__class__, self).changeEvent(event)
+    
     def __initWidget(self):
         self.navigationWidget.settingButton.clicked.connect(partial(self.SwitchWidgetAndClear, self.subStackWidget.indexOf(self.settingView)))
         self.navigationWidget.downloadButton.clicked.connect(partial(self.SwitchWidgetAndClear, self.subStackWidget.indexOf(self.downloadView)))
@@ -151,6 +158,7 @@ class MainView(Main, QtTaskBase):
         Init()
         QtDomainMgr().Update()
         self.loginWebView.Init()
+        QtReadImgPoolManager().Init()
 
         if not Setting.SavePath.value:
             view = DownloadDirView(self)
@@ -336,6 +344,7 @@ class MainView(Main, QtTaskBase):
         TaskQImage().Stop()
         TaskDownload().Stop()
         Server().Stop()
+        QtReadImgPoolManager().Stop()
         from tools.login_proxy import Stop
         Stop()
         # QtTask().Stop()

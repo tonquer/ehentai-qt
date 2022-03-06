@@ -95,9 +95,9 @@
         <property name="geometry">
          <rect>
           <x>0</x>
-          <y>0</y>
+          <y>-1306</y>
           <width>673</width>
-          <height>2401</height>
+          <height>2390</height>
          </rect>
         </property>
         <property name="styleSheet">
@@ -916,7 +916,7 @@
                </font>
               </property>
               <property name="text">
-               <string>waifu2x线程数</string>
+               <string>waifu2x使用CPU数（CPU模式下生效）</string>
               </property>
              </widget>
             </item>
@@ -2057,10 +2057,10 @@
  <resources/>
  <connections/>
  <buttongroups>
-  <buttongroup name="languageGroup"/>
-  <buttongroup name="mainScaleGroup"/>
-  <buttongroup name="themeGroup"/>
   <buttongroup name="proxyGroup"/>
+  <buttongroup name="themeGroup"/>
+  <buttongroup name="languageGroup"/>
   <buttongroup name="logGroup"/>
+  <buttongroup name="mainScaleGroup"/>
  </buttongroups>
 </ui>

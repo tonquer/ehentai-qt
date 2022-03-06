@@ -152,6 +152,7 @@ class TaskWaifu2x(TaskBase):
                         os.makedirs(os.path.dirname(path))
 
                     if path and data:
+                        path = path + "." + info.model.get("format", "jpg")
                         with open(path, "wb+") as f:
                             f.write(data)
             except Exception as es:
@@ -175,7 +176,7 @@ class TaskWaifu2x(TaskBase):
             if Setting.SavePath.value:
                 path2 = os.path.join(os.path.join(Setting.SavePath.value, config.CachePathDir), config.Waifu2xPath)
                 path = os.path.join(path2, path)
-                info.cachePath = path + "-{}.jpg".format(a)
+                info.cachePath = path + "-{}".format(a)
 
         if cleanFlag:
             info.cleanFlag = cleanFlag

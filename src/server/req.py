@@ -31,7 +31,7 @@ class ServerReq(object):
         self.method = method
         self.isParseRes = False
         self.timeout = 5
-        if Setting.IsHttpProxy.value:
+        if Setting.IsHttpProxy.value == 1:
             self.proxy = {"http": Setting.HttpProxy.value, "https": Setting.HttpProxy.value}
         else:
             self.proxy = {}
@@ -304,7 +304,7 @@ class SendCommentReq(ServerReq):
         self.bookId = bookId
         self.site = config.CurSite
         self.page = 0
-        info = BookMgr().GetBook(bookId)
+        info = BookMgr().GetBookBySite(bookId, self.site)
         url = get_url() + "/g/{}/{}?hc=1".format(bookId, info.baseInfo.token)
         method = "POST"
 
@@ -341,10 +341,7 @@ class BookScoreReq(ServerReq):
 # Doh域名解析
 class DnsOverHttpsReq(ServerReq):
     def __init__(self, domain=""):
-        doh = "https://1.1.1.1/dns-query"
-        if Setting.DohAddress.value:
-            doh = Setting.DohAddress.value
-        url = doh + "?name={}&type=A".format(domain)
+        url = Setting.DohAddress.value + "?name={}&type=A".format(domain)
         method = "GET"
         header = dict()
         header["accept"] = "application/dns-json"

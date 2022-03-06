@@ -198,19 +198,21 @@ class BookInfoReqHandler(object):
         try:
             if task.status != Status.Ok:
                 return
-            info, maxPage, _ = ToolUtil.ParseBookInfo(task.res.raw.text)
-            from tools.book import BookMgr
-            BookMgr().UpdateBookInfo(task.req.bookId, info, task.req.page, maxPage, task.req.site)
+            st, msg, info, maxPage, _ = ToolUtil.ParseBookInfo(task.res.raw.text)
+            if st == Status.Ok:
+                from tools.book import BookMgr
+                BookMgr().UpdateBookInfo(task.req.bookId, info, task.req.page, maxPage, task.req.site)
 
-            if task.req.page == 1:
-                # TODO 预加载第一页
-                Server().Send(req.GetBookImgUrl(task.req.bookId, 1, task.req.site), isASync=False)
+                if task.req.page == 1:
+                    # TODO 预加载第一页
+                    Server().Send(req.GetBookImgUrl(task.req.bookId, 1, task.req.site), isASync=False)
 
-                # TODO 加载剩余分页
-                # for i in range(1+1, maxPage+1):
-                #     Server().Send(req.BookInfoReq(task.req.bookId, i), isASync=False)
+                    # TODO 加载剩余分页
+                    # for i in range(1+1, maxPage+1):
+                    #     Server().Send(req.BookInfoReq(task.req.bookId, i), isASync=False)
             data["maxPages"] = maxPage
-            data["st"] = Status.Ok
+            data["msg"] = msg
+            data["st"] = st
         except Exception as es:
             data["st"] = Status.ParseError
             Log.Error(es)
@@ -342,7 +344,7 @@ class DownloadBookReq(object):
                 fileSize = int(r.headers.get('Content-Length', 0))
                 getSize = 0
                 data = b""
-                for chunk in r.iter_content(chunk_size=1024):
+                for chunk in r.iter_content(chunk_size=10240):
                     if backData.backParam:
                         TaskBase.taskObj.downloadBack.emit(backData.backParam, fileSize-getSize, chunk)
                     getSize += len(chunk)
@@ -350,13 +352,14 @@ class DownloadBookReq(object):
                 if backData.backParam:
                     TaskBase.taskObj.downloadBack.emit(backData.backParam, 0, b"")
                 # Log.Info("size:{}, url:{}".format(ToolUtil.GetDownloadSize(fileSize), backData.req.url))
+                _, _, mat = ToolUtil.GetPictureSize(data)
                 if backData.cacheAndLoadPath and config.IsUseCache and len(data) > 0:
                     filePath = backData.cacheAndLoadPath
                     fileDir = os.path.dirname(filePath)
                     if not os.path.isdir(fileDir):
                         os.makedirs(fileDir)
 
-                    with open(filePath + ".jpg", "wb+") as f:
+                    with open(filePath + "." + mat, "wb+") as f:
                         f.write(data)
                     Log.Debug("add download cache, cachePath:{}".format(filePath))
 
@@ -366,7 +369,7 @@ class DownloadBookReq(object):
                     if not os.path.isdir(fileDir):
                         os.makedirs(fileDir)
 
-                    with open(filePath, "wb+") as f:
+                    with open(filePath + "." + mat, "wb+") as f:
                         f.write(data)
                     Log.Debug("add download file, filePath:{}".format(filePath))
 

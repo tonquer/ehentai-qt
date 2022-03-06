@@ -62,9 +62,9 @@ class QtTaskBase:
     # downloadCallBack(data, laveFileSize)
     # downloadCompleteBack(data, st)
     # downloadCompleteBack(data, st, backParam)
-    def AddDownloadBook(self, bookId, index, token="",statusBack=None, downloadCallBack=None, completeCallBack=None, backParam=None, isSaveCache=True, isSaveFile=False, filePath=""):
+    def AddDownloadBook(self, bookId, index, token="", domain=config.CurSite, statusBack=None, downloadCallBack=None, completeCallBack=None, backParam=None, isSaveCache=True, isSaveFile=False, filePath=""):
         from task.task_download import TaskDownload
-        return TaskDownload().DownloadBook(bookId, index, token, statusBack, downloadCallBack, completeCallBack, backParam, isSaveCache, self.__taskFlagId, isSaveFile, filePath)
+        return TaskDownload().DownloadBook(bookId, index, token, domain, statusBack, downloadCallBack, completeCallBack, backParam, isSaveCache, self.__taskFlagId, isSaveFile, filePath)
 
     # downloadCallBack(data, laveFileSize, backParam)
     # downloadCallBack(data, laveFileSize)
@@ -79,9 +79,9 @@ class QtTaskBase:
             return QtDomainMgr.AddDownloadTask(url, path, downloadCallBack, completeCallBack, backParam, isSaveCache, self.__taskFlagId, isSaveFile, filePath)
 
     # completeCallBack(saveData, taskId, backParam, tick)
-    def AddConvertTask(self, path, imgData, model, completeCallBack, backParam=None, filePath=""):
+    def AddConvertTask(self, path, imgData, model, completeCallBack, backParam=None):
         from task.task_waifu2x import TaskWaifu2x
-        return TaskWaifu2x().AddConvertTask(path, imgData, model, completeCallBack, backParam, self.__taskFlagId, filePath)
+        return TaskWaifu2x().AddConvertTaskByData(path, imgData, model, completeCallBack, backParam, self.__taskFlagId)
 
     def AddQImageTask(self, data, callBack=None, backParam=None):
         from task.task_qimage import TaskQImage
@@ -91,6 +91,10 @@ class QtTaskBase:
         from task.task_http import TaskHttp
         return TaskHttp().Cancel(self.__taskFlagId)
 
+    def ClearDownload(self):
+        from task.task_download import TaskDownload
+        return TaskDownload().Cancel(self.__taskFlagId)
+    
     def ClearConvert(self):
         from task.task_waifu2x import TaskWaifu2x
         return TaskWaifu2x().Cancel(self.__taskFlagId)
@@ -119,6 +123,7 @@ class QtDownloadTask(object):
 
         self.status = self.Waiting
         self.statusBack = None             # data, status
+        self.domain = config.CurSite
         self.fileSize = 0
         self.saveData = b""
         self.bookId = ""

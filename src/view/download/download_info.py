@@ -60,12 +60,12 @@ class DownloadInfo(QtTaskBase):
     @property
     def curSavePath(self):
         savePath = self.savePath
-        return os.path.join(savePath, "{:04}.{}".format(self.curPreDownloadIndex + 1, "jpg"))
+        return os.path.join(savePath, "{:04}".format(self.curPreDownloadIndex + 1))
 
     @property
     def curConvertPath(self):
         savePath = self.convertPath
-        return os.path.join(savePath, "{:04}.{}".format(self.curPreConvertId + 1, "jpg"))
+        return os.path.join(savePath, "{:04}".format(self.curPreConvertId + 1))
 
     @property
     def curDownloadPic(self):
@@ -163,12 +163,17 @@ class DownloadInfo(QtTaskBase):
             self.SetStatu(DownloadInfo.ReadingEps)
             self.CheckGetBookPage()
 
-    def CheckGetBookPage(self):
+    def CheckGetBookPage(self, index=0):
         info = BookMgr().GetBookBySite(self.bookId, self.domain)
-        if info.curPage >= info.maxPage:
+        if not info.IsNeedLoadPage(index):
+            self.resetCnt = 0
             return self.StartDownload()
         QtOwner().SetDirty()
-        self.AddHttpTask(req.BookInfoReq(self.bookId, info.curPage+1, token=self.token, site=self.domain), self.GetBookPageBack)
+        self.resetCnt += 1
+        if self.resetCnt >= 5:
+            self.SetStatu(self.Error)
+            return
+        self.AddHttpTask(req.BookInfoReq(self.bookId, info.GetPicInPages(index), token=self.token, site=self.domain), self.GetBookPageBack)
 
     def GetBookPageBack(self, data):
         if data["st"] == Status.Ok:
@@ -193,8 +198,9 @@ class DownloadInfo(QtTaskBase):
 
     def GetPictureUrl(self, i):
         info = BookMgr().GetBookBySite(self.bookId, self.domain)
-        if not info.pageInfo.GetImgKey(i):
+        if not info.pageInfo.GetImgKey(i+1):
             Log.Warn("Not found picture url, {}:{}".format(info.baseInfo.id, i))
+            self.CheckGetBookPage(i)
             return
         QtOwner().SetDirty()
         self.AddHttpTask(req.GetBookImgUrl2(self.bookId, i+1, self.domain), self.GetPictureUrlBack, i)
@@ -215,7 +221,7 @@ class DownloadInfo(QtTaskBase):
 
         isDownloadNext = True
         while self.curPreDownloadIndex < bookInfo.pageInfo.pages:
-            if os.path.isfile(self.curSavePath):
+            if ToolUtil.IsFile(self.curSavePath):
                 self.curPreDownloadIndex += 1
             else:
                 imgUrl = bookInfo.pageInfo.picRealUrl.get(self.curPreDownloadIndex + 1)
@@ -225,6 +231,7 @@ class DownloadInfo(QtTaskBase):
                 self.downloadLen = 0
                 self.AddDownloadBook(self.bookId, self.curPreDownloadIndex,
                                      self.token,
+                                     self.domain,
                                      downloadCallBack=self.AddDownloadBack,
                                      completeCallBack=self.AddDownloadCompleteBack,
                                      backParam=False,
@@ -267,7 +274,6 @@ class DownloadInfo(QtTaskBase):
                 # f = open(path, "wb+")
                 # f.write(data)
                 # f.close()
-
                 self.size += self.downloadLen
                 self.downloadLen = 0
                 self.curPreDownloadIndex += 1
@@ -286,40 +292,36 @@ class DownloadInfo(QtTaskBase):
 
     def AddConvert(self):
         savePath = self.savePath
-        filePath = os.path.join(savePath, "{:04}.{}".format(self.curPreConvertId + 1, "jpg"))
-        if not os.path.isfile(filePath):
+        filePath = os.path.join(savePath, "{:04}".format(self.curPreConvertId + 1))
+        if not ToolUtil.IsFile(filePath):
             self.status = DownloadInfo.NotFound
             self.SetConvertStatu(self.status)
             return
         isConvertNext = True
         while self.curPreConvertId < self.picCnt:
-            if os.path.isfile(self.curConvertPath):
+            if ToolUtil.IsFile(self.curConvertPath):
                 self.curPreConvertId += 1
             else:
                 isConvertNext = False
-                f = open(filePath, "rb")
-                data = f.read()
-                f.close()
+                data = ToolUtil.LoadCachePicture(filePath)
 
                 w, h, mat = ToolUtil.GetPictureSize(data)
                 model = ToolUtil.GetDownloadScaleModel(w, h, mat)
 
-                self.AddConvertTask("", data, model, self.AddConvertBack)
+                self.AddConvertTask("", data, model, self.AddConvertBack, mat)
                 break
         self.UpdateTableItem()
         if isConvertNext:
             self.StartConvert()
         return
 
-    def AddConvertBack(self, data, waifuId, backParam, tick):
+    def AddConvertBack(self, data, waifuId, mat, tick):
         try:
             if data:
                 savePath = os.path.dirname(self.curConvertPath)
                 if not os.path.isdir(savePath):
                     os.makedirs(savePath)
-                f = open(self.curConvertPath, "wb+")
-                f.write(data)
-                f.close()
+                ToolUtil.SaveFile(data, self.curConvertPath, mat)
                 self.tick = tick
                 self.resetConvertCnt = 0
                 self.curPreConvertId += 1
@@ -327,8 +329,10 @@ class DownloadInfo(QtTaskBase):
             else:
                 self.resetConvertCnt += 1
                 if self.resetConvertCnt >= 3:
-                    self.status = DownloadInfo.Error
-                    self.SetConvertStatu(DownloadInfo.Error)
+                    # 不转换该文件了
+                    self.resetConvertCnt = 0
+                    self.curPreConvertId += 1
+                    self.StartConvert()
                 else:
                     self.StartConvert()
         except Exception as es:
@@ -340,6 +344,7 @@ class DownloadInfo(QtTaskBase):
     def PauseDownload(self):
         self.status = DownloadInfo.Pause
         self.ClearTask()
+        self.ClearDownload()
         return
 
     def PauseConvert(self):

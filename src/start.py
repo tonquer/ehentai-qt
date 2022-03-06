@@ -36,7 +36,7 @@ if __name__ == "__main__":
     try:
         from PySide2.QtWidgets import QApplication
         from PySide2.QtCore import Qt, QCoreApplication
-        from PySide2.QtGui import QGuiApplication
+        from PySide2.QtGui import QGuiApplication, QFont
         from config.setting import Setting
         Log.Init()
         Setting.Init()
@@ -68,6 +68,10 @@ if __name__ == "__main__":
     try:
         from qt_owner import QtOwner
         QtOwner().SetApp(app)
+        if sys.platform == "win32":
+            f = QFont("微软雅黑")
+            # f.setBold(True)
+            app.setFont(f)
         from view.main.main_view import MainView
         main = MainView()
         main.show()  # 显示窗体
