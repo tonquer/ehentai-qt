@@ -174,8 +174,8 @@ class TaskDownload(TaskBase, QtTaskBase):
             data.loadPath = filePath
 
         Log.Debug("add download info, cachePath:{}, loadPath:{}".format(data.cacheAndLoadPath, data.loadPath))
-        from src.server import Server
-        from src.server import req
+        from server import Server
+        from server import req
         if isSaveFile:
             savePath = filePath
             data.loadPath = ""

@@ -4,7 +4,7 @@ from queue import Queue
 import requests
 import urllib3
 
-import src.server.res as res
+import server.res as res
 from config import config
 from config.setting import Setting
 from tools.tool import ToolUtil

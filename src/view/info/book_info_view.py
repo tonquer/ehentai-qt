@@ -8,8 +8,8 @@ from PySide2.QtWidgets import QListWidgetItem, QLabel, QDesktopWidget
 from config.setting import Setting
 from interface.ui_book_info import Ui_BookInfo
 from qt_owner import QtOwner
-from src.server import req, Log, config
-from src.util.status import Status
+from server import req, Log, config
+from util.status import Status
 from task.qt_task import QtTaskBase
 from tools.book import BookMgr
 from tools.str import Str

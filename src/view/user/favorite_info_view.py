@@ -3,7 +3,7 @@ from PySide2 import QtWidgets, QtCore
 from component.dialog.base_mask_dialog import BaseMaskDialog
 from interface.ui_favorite_info import Ui_FavoriteInfo
 from qt_owner import QtOwner
-from src.server import req, Status
+from server import req, Status
 from task.qt_task import QtTaskBase
 
 from tools.str import Str
