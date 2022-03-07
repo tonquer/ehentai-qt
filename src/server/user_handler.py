@@ -344,7 +344,7 @@ class DownloadBookReq(object):
                 fileSize = int(r.headers.get('Content-Length', 0))
                 getSize = 0
                 data = b""
-                for chunk in r.iter_content(chunk_size=10240):
+                for chunk in r.iter_content(chunk_size=40960):
                     if backData.backParam:
                         TaskBase.taskObj.downloadBack.emit(backData.backParam, fileSize-getSize, chunk)
                     getSize += len(chunk)

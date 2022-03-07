@@ -37,14 +37,14 @@ class ServerReq(object):
             self.proxy = {}
 
     def __str__(self):
-        if Setting.LogIndex.value == 0:
-            return self.__class__.__name__
-        elif Setting.LogIndex.value == 1:
-            return "{}, url:{}".format(self.__class__.__name__, self.url)
-        headers = dict()
-        headers.update(self.headers)
+        # if Setting.LogIndex.value == 0:
+        #     return self.__class__.__name__
+        # elif Setting.LogIndex.value == 1:
+        #     return "{}, url:{}".format(self.__class__.__name__, self.url)
+        # headers = dict()
+        # headers.update(self.headers)
         params = self.params
-        return "{}, url:{}, proxy:{}, method:{}, headers:{}, params:{}".format(self.__class__.__name__, self.url, self.proxy, self.method, headers, params)
+        return "{}, url:{}, proxy:{}, method:{}, params:{}".format(self.__class__.__name__, self.url, not not self.proxy, self.method, params)
 
 
 # 下载图片

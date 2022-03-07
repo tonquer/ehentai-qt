@@ -76,7 +76,7 @@ class Ui_SettingNew(object):
         self.scrollArea.setWidgetResizable(True)
         self.scrollAreaWidgetContents = QWidget()
         self.scrollAreaWidgetContents.setObjectName(u"scrollAreaWidgetContents")
-        self.scrollAreaWidgetContents.setGeometry(QRect(0, -1306, 673, 2390))
+        self.scrollAreaWidgetContents.setGeometry(QRect(0, -904, 673, 2427))
         self.scrollAreaWidgetContents.setStyleSheet(u"")
         self.verticalLayout_4 = QVBoxLayout(self.scrollAreaWidgetContents)
         self.verticalLayout_4.setObjectName(u"verticalLayout_4")
@@ -477,6 +477,11 @@ class Ui_SettingNew(object):
         self.label_30.setFont(font1)
 
         self.verticalLayout_14.addWidget(self.label_30)
+
+        self.sniRadio = QCheckBox(self.frame)
+        self.sniRadio.setObjectName(u"sniRadio")
+
+        self.verticalLayout_14.addWidget(self.sniRadio)
 
         self.dohRadio = QCheckBox(self.frame)
         self.dohRadio.setObjectName(u"dohRadio")
@@ -1125,6 +1130,7 @@ class Ui_SettingNew(object):
         self.proxy2.setText(QCoreApplication.translate("SettingNew", u"Sock5\u4ee3\u7406", None))
         self.label_36.setText(QCoreApplication.translate("SettingNew", u"\u4ee3\u7406\u5730\u5740", None))
         self.label_30.setText(QCoreApplication.translate("SettingNew", u"Doh DNS\u914d\u7f6e\uff08\u542f\u7528\u540e\u80fd\u907f\u514dSNI\u963b\u65ad\u548cDNS\u62e6\u622a\uff0c\u5982\u679c\u4f7f\u7528\u4e86\u4ee3\u7406\uff0c\u53ef\u4e0d\u542f\u7528\uff09\uff1a", None))
+        self.sniRadio.setText(QCoreApplication.translate("SettingNew", u"\u7981\u7528SNI\uff08\u5982\u679c\u51fa\u73b0SSL\u8bc1\u4e66\u9519\u8bef\uff0c\u8bf7\u5173\u95ed\uff09", None))
         self.dohRadio.setText(QCoreApplication.translate("SettingNew", u"Api\u542f\u7528Doh", None))
         self.dohPictureRadio.setText(QCoreApplication.translate("SettingNew", u"\u56fe\u7247\u542f\u7528Doh\uff08\u5f00\u542f\u4f1a\u52a0\u957f\u56fe\u7247\u52a0\u8f7d\u901f\u5ea6\uff09", None))
         self.label_31.setText(QCoreApplication.translate("SettingNew", u"DoH\u5730\u5740\uff1a", None))

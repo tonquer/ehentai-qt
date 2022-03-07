@@ -8,11 +8,11 @@ __pycache__/
 
 # Distribution / packaging
 src/test
-src/data
-src/ssl-data
 .idea
 .Python
+test/
 build/
+src/data
 develop-eggs/
 dist/
 downloads/

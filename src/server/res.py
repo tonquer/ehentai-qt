@@ -16,13 +16,13 @@ class BaseRes(object):
             ToolUtil.ParseFromData(self, self.raw.text)
 
     def __str__(self):
-        if Setting.LogIndex.value == 0:
-            return ""
-        elif Setting.LogIndex.value == 1:
-            return "code:{}".format(self.code)
-        else:
-            data = self.GetText()
-        return "code:{}, raw:{}".format(self.code, data.replace("\n", ""))
+        # if Setting.LogIndex.value == 0:
+        #     return ""
+        # elif Setting.LogIndex.value == 1:
+        #     return "code:{}".format(self.code)
+        # else:
+        #     data = self.GetText()
+        return "code:{}".format(self.code)
 
     def GetText(self):
         if hasattr(self.raw, "text"):

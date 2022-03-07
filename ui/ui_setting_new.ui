@@ -95,9 +95,9 @@
         <property name="geometry">
          <rect>
           <x>0</x>
-          <y>-1306</y>
+          <y>-904</y>
           <width>673</width>
-          <height>2390</height>
+          <height>2427</height>
          </rect>
         </property>
         <property name="styleSheet">
@@ -782,6 +782,13 @@
               </property>
               <property name="text">
                <string>Doh DNS配置（启用后能避免SNI阻断和DNS拦截，如果使用了代理，可不启用）：</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QCheckBox" name="sniRadio">
+              <property name="text">
+               <string>禁用SNI（如果出现SSL证书错误，请关闭）</string>
               </property>
              </widget>
             </item>

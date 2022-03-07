@@ -131,6 +131,14 @@ class Server(Singleton, threading.Thread):
     def UpdateDns(self, domain, address):
         host_table[domain] = address
 
+    def UpdateSni(self):
+        if Setting.IsCloseSNI.value:
+            urllib3.contrib.pyopenssl.HAS_SNI = False
+            urllib3.contrib.pyopenssl.inject_into_urllib3()
+        else:
+            urllib3.contrib.pyopenssl.HAS_SNI = True
+            urllib3.contrib.pyopenssl.inject_into_urllib3()
+
     def ClearDns(self):
         host_table.clear()
 

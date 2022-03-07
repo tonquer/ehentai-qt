@@ -94,6 +94,7 @@ class Setting:
     ProxySelectIndex = SettingValue("ProxySetting", 1, False)
     IsOpenDoh = SettingValue("ProxySetting", 1, False)
     IsOpenDohPicture = SettingValue("ProxySetting", 0, False)
+    IsCloseSNI = SettingValue("ProxySetting", 1, False)
     DohAddress = SettingValue("ProxySetting", "https://101.6.6.6:8443/dns-query", True)
 
     # 下载与缓存

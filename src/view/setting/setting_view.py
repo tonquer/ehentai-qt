@@ -48,6 +48,7 @@ class SettingView(QtWidgets.QWidget, Ui_SettingNew):
         self.titleBox.clicked.connect(partial(self.CheckButtonEvent, Setting.IsNotUseTitleBar, self.titleBox))
         self.dohRadio.clicked.connect(partial(self.CheckButtonEvent, Setting.IsOpenDoh, self.dohRadio))
         self.dohPictureRadio.clicked.connect(partial(self.CheckButtonEvent, Setting.IsOpenDohPicture, self.dohPictureRadio))
+        self.sniRadio.clicked.connect(partial(self.CheckButtonEvent, Setting.IsCloseSNI, self.sniRadio))
 
         # LineEdit:
         self.httpEdit.editingFinished.connect(partial(self.LineEditEvent, Setting.HttpProxy, self.httpEdit))
@@ -135,14 +136,14 @@ class SettingView(QtWidgets.QWidget, Ui_SettingNew):
         setItem.SetValue(int(button.isChecked()))
         QtOwner().ShowMsgOne(Str.GetStr(Str.SaveSuc))
         self.CheckMsgLabel()
+        if setItem == Setting.IsCloseSNI:
+            self.SetSNI()
         return
 
     def CheckRadioEvent(self, setItem, value):
         assert isinstance(setItem, SettingValue)
         setItem.SetValue(value)
         QtOwner().ShowMsgOne(Str.GetStr(Str.SaveSuc))
-        if setItem == Setting.IsHttpProxy:
-            self.SetSock5Proxy()
         self.CheckMsgLabel()
         return
 
@@ -175,7 +176,8 @@ class SettingView(QtWidgets.QWidget, Ui_SettingNew):
         self.InitSetting()
         self.SetTheme()
         self.SetLanguage()
-        self.SetSock5Proxy()
+        self.SetSock5Proxy(True)
+        self.SetSNI()
         return
 
     def ExitSaveSetting(self, mainQsize):
@@ -225,25 +227,55 @@ class SettingView(QtWidgets.QWidget, Ui_SettingNew):
         if radio:
             radio.setChecked(True)
 
-    def SetSock5Proxy(self):
+    def SetSock5Proxy(self, isInit=False):
         try:
             import socket
             import socks
+            from server import Server
             if not QtOwner().backSock:
                 QtOwner().backSock = socket.socket
+            isSetCheck = True
             if Setting.IsHttpProxy.value == 2 and Setting.Sock5Proxy.value:
                 data = Setting.Sock5Proxy.value.replace("http://", "").replace("https://", "").replace("sock5://", "").replace("socks5://", "")
                 data = data.split(":")
+                isSetCheck = False
                 if len(data) == 2:
                     host = data[0]
                     port = data[1]
                     socks.set_default_proxy(socks.SOCKS5, host, int(port))
                     socket.socket = socks.socksocket
+
                 else:
                     QtOwner().ShowMsg(Str.GetStr(Str.Sock5Error))
+
             else:
                 socks.set_default_proxy()
                 socket.socket = QtOwner().backSock
+
+            if Setting.IsHttpProxy.value == 1:
+                isSetCheck = False
+
+            if isSetCheck:
+                if not self.sniRadio.isChecked():
+                    if not isInit:
+                        self.sniRadio.click()
+                    else:
+                        self.sniRadio.setChecked(True)
+            else:
+                if self.sniRadio.isChecked():
+                    if not isInit:
+                        self.sniRadio.click()
+                    else:
+                        self.sniRadio.setChecked(False)
+
+        except Exception as es:
+            Log.Error(es)
+            QtOwner().ShowMsg(Str.GetStr(Str.Sock5Error))
+
+    def SetSNI(self):
+        try:
+            from server import Server
+            Server().UpdateSni()
         except Exception as es:
             Log.Error(es)
             QtOwner().ShowMsg(Str.GetStr(Str.Sock5Error))
