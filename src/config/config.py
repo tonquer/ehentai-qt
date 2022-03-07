@@ -24,7 +24,7 @@ UpdateUrl2 = "https://hub.fastgit.org/tonquer/ehentai-qt/releases/latest"
 UpdateUrl2Back = "https://hub.fastgit.org/tonquer/ehentai-qt"
 
 UpdateVersion = "v1.0.6"
-RealVersion = "v1.0.6"
+RealVersion = "v1.0.6.1"
 Waifu2xVersion = "1.1.1"
 TimeVersion = "2022-3-6"
 
