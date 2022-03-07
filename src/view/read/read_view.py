@@ -479,7 +479,7 @@ class ReadView(QtWidgets.QWidget, QtTaskBase):
         #                      downloadCallBack=self.UpdateProcessBar,
         #                      completeCallBack=self.CompleteDownloadPic, backParam=i,
         #                      isSaveCache=True, filePath=path)
-        self.AddDownloadBook(self.bookId, i, config.CurSite, downloadCallBack=self.UpdateProcessBar,
+        self.AddDownloadBook(self.bookId, i, domain=config.CurSite, downloadCallBack=self.UpdateProcessBar,
                              statusBack=self.StartLoadPicUrlBack,
                              completeCallBack=self.CompleteDownloadPic,
                              backParam=i, isSaveCache=True, filePath=path)
