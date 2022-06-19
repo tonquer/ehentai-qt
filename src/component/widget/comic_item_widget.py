@@ -17,6 +17,7 @@ class ComicItemWidget(QWidget, Ui_ComicItem):
         self.setupUi(self)
         self.picData = None
         self.id = ""
+        self.token = ""
         self.url = ""
         self.path = ""
         self.index = 0

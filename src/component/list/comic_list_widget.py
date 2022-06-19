@@ -62,55 +62,56 @@ class ComicListWidget(BaseListWidget):
             popMenu.exec_(QCursor.pos())
         return
 
-    def AddBookByDict(self, v):
-        _id = v.get("_id")
-        title = v.get("title")
-        categories = v.get("categories", [])
-        if "thumb" in v:
-            url = v.get("thumb", {}).get("fileServer")
-            path = v.get("thumb", {}).get("path")
-        elif "icon" in v:
-            url = v.get("icon", {}).get("fileServer")
-            path = v.get("icon", {}).get("path")
-        else:
-            url = ""
-            path = ""
-        categoryStr = "，".join(categories)
-        likesCount = str(v.get("totalLikes", ""))
-        finished = v.get("finished")
-        pagesCount = v.get("pagesCount")
-        self.AddBookItem(_id, title, categoryStr, url, path, likesCount, "", pagesCount, finished)
+    # def AddBookByDict(self, v):
+    #     _id = v.get("_id")
+    #     title = v.get("title")
+    #     categories = v.get("categories", [])
+    #     if "thumb" in v:
+    #         url = v.get("thumb", {}).get("fileServer")
+    #         path = v.get("thumb", {}).get("path")
+    #     elif "icon" in v:
+    #         url = v.get("icon", {}).get("fileServer")
+    #         path = v.get("icon", {}).get("path")
+    #     else:
+    #         url = ""
+    #         path = ""
+    #     categoryStr = "，".join(categories)
+    #     likesCount = str(v.get("totalLikes", ""))
+    #     finished = v.get("finished")
+    #     pagesCount = v.get("pagesCount")
+    #     self.AddBookItem(_id, title, categoryStr, url, path, likesCount, "", pagesCount, finished)
 
-    def AddBookItemByBook(self, v, isShowHistory=False):
-        title = v.title
-        url = v.fileServer
-        path = v.path
-        _id = v.id
-        finished = v.finished
-        pagesCount = v.pages
-        likesCount = str(v.likesCount)
-        updated_at = v.updated_at
-        categories = v.categories
-        updated_at = v.updated_at
-        if isShowHistory:
-            info = QtOwner().owner.historyView.GetHistory(_id)
-            if info:
-                categories = Str.GetStr(Str.LastLook) + str(info.epsId + 1) + Str.GetStr(Str.Chapter) + "/" + str(v.epsCount) + Str.GetStr(Str.Chapter)
-        self.AddBookItem(_id, title, categories, url, path, likesCount, updated_at, pagesCount, finished)
+    # def AddBookItemByBook(self, v, isShowHistory=False):
+    #     title = v.title
+    #     url = v.fileServer
+    #     path = v.path
+    #     _id = v.id
+    #     finished = v.finished
+    #     pagesCount = v.pages
+    #     likesCount = str(v.likesCount)
+    #     updated_at = v.updated_at
+    #     categories = v.categories
+    #     updated_at = v.updated_at
+    #     if isShowHistory:
+    #         info = QtOwner().owner.historyView.GetHistory(_id)
+    #         if info:
+    #             categories = Str.GetStr(Str.LastLook) + str(info.epsId + 1) + Str.GetStr(Str.Chapter) + "/" + str(v.epsCount) + Str.GetStr(Str.Chapter)
+    #     self.AddBookItem(_id, title, categories, url, path, likesCount, updated_at, pagesCount, finished)
 
     def AddBookItemByHistory(self, v):
         _id = v.bookId
+        token = v.token
         title = v.name
-        path = v.path
         url = v.url
         categories = "{} {}".format(ToolUtil.GetUpdateStrByTick(v.tick), Str.GetStr(Str.Looked))
-        self.AddBookItem(_id, title, categories, url, path)
+        self.AddBookItem(_id, title, categories, url, "", token=token)
 
-    def AddBookItem(self, _id, title, categoryStr="", url="", path="", likesCount="", updated_at="", pagesCount="", finished=""):
+    def AddBookItem(self, _id, title, categoryStr="", url="", path="", likesCount="", updated_at="", pagesCount="", finished="", token=""):
         index = self.count()
         widget = ComicItemWidget()
         widget.setFocusPolicy(Qt.FocusPolicy.NoFocus)
         widget.id = _id
+        widget.token = token
         widget.url = url
         widget.path = path
         widget.index = index
@@ -146,7 +147,7 @@ class ComicListWidget(BaseListWidget):
         item = self.item(index)
         widget = self.itemWidget(item)
         assert isinstance(widget, ComicItemWidget)
-        self.AddDownloadTask(widget.url, widget.path, completeCallBack=self.LoadingPictureComplete, backParam=index)
+        self.AddDownloadTask(widget.url, self.GetCoverKey(widget.id, widget.token, config.CurSite), completeCallBack=self.LoadingPictureComplete, backParam=index)
 
     def LoadingPictureComplete(self, data, status, index):
         if status == Status.Ok:
@@ -174,7 +175,7 @@ class ComicListWidget(BaseListWidget):
         if self.isGame:
             QtOwner().OpenGameInfo(widget.id)
         else:
-            QtOwner().OpenBookInfo(widget.id)
+            QtOwner().OpenBookInfo(widget.id, widget.token)
         return
 
     def OpenBookInfoHandler(self, index):
@@ -197,7 +198,7 @@ class ComicListWidget(BaseListWidget):
                 item = self.itemFromIndex(index)
                 count = self.row(item)
                 widget.picLabel.setText(Str.GetStr(Str.LoadingPicture))
-                self.AddDownloadTask(widget.url, widget.path, completeCallBack=self.LoadingPictureComplete, backParam=count)
+                self.AddDownloadTask(widget.url, self.GetCoverKey(widget.id, widget.token, config.CurSite), completeCallBack=self.LoadingPictureComplete, backParam=count, isReload=True)
                 pass
 
     def Waifu2xPicture(self, index, isIfSize=False):
@@ -241,7 +242,7 @@ class ComicListWidget(BaseListWidget):
         widget = self.indexWidget(index)
         if widget:
             bookId = widget.id
-            info = BookMgr().GetBook(bookId)
-            QtOwner().downloadView.AddDownload(bookId, info.baseInfo.token, config.CurSite)
+            token = widget.token
+            QtOwner().downloadView.AddDownload(bookId, token, config.CurSite)
             QtOwner().ShowMsg(Str.GetStr(Str.AddDownload))
         pass

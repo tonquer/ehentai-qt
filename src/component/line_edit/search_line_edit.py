@@ -27,6 +27,7 @@ class SearchLineEdit(QLineEdit):
         self.widget = QWidget()
         self.help = Ui_LineEditHelp()
         self.help.setupUi(self.widget)
+        self.cacheWords = []
 
         self.widget.setParent(self, Qt.WindowType.Popup)
         # self.widget.setFocusPolicy(Qt.FocusPolicy.NoFocus)
@@ -64,6 +65,18 @@ class SearchLineEdit(QLineEdit):
     def listView(self):
         return self.help.listView
 
+    def InitCacheWords(self):
+        self.cacheWords = QtOwner().LoadCacheWord()
+        self.model.setStringList(self.cacheWords)
+
+    def AddCacheWord(self, word):
+        if not word:
+            return
+        if word in self.cacheWords:
+            self.cacheWords.remove(word)
+        self.cacheWords.insert(0, word)
+        del self.cacheWords[200:]
+
     def SetText(self, index):
         item = self.model.itemData(index)
         text = item.get(0)
@@ -77,14 +90,18 @@ class SearchLineEdit(QLineEdit):
         if len(text2) >= 2:
             self.setText(text2[0] + ":\"" + text2[1] + "$\"")
         else:
-            self.setText(text+"$")
+            if len(data) > 1:
+                self.setText(text+"$")
+            else:
+                self.setText(text)
         self.Search()
         return
 
     def setCompleter(self, strings):
         if not strings:
             # self.widget.hide()
-            self.model.setStringList([])
+            # 显示搜索历史
+            self.model.setStringList(self.cacheWords)
             return
         if self.isNotReload:
             return

@@ -8,6 +8,7 @@ from PySide2.QtWidgets import QWidget, QMessageBox
 from config import config
 from config.setting import Setting
 from interface.ui_help import Ui_Help
+from qt_owner import QtOwner
 from server import req
 from task.qt_task import QtTaskBase
 from tools.log import Log
@@ -44,6 +45,9 @@ class HelpView(QWidget, Ui_Help, QtTaskBase):
         else:
             self.helpLogWidget.hide()
         self.openCmd.clicked.connect(self.helpLogWidget.show)
+        self.updateWidget.setVisible(False)
+        self.selectUrl = ""
+        self.updateButton.clicked.connect(self.OpenUpdateUrl)
 
     def retranslateUi(self, Help):
         Ui_Help.retranslateUi(self, Help)
@@ -72,12 +76,11 @@ class HelpView(QWidget, Ui_Help, QtTaskBase):
             if not data:
                 self.checkUpdateIndex += 1
                 self.StartUpdate()
-
                 return
-            r = QMessageBox.information(self, Str.GetStr(Str.Update), Str.GetStr(Str.CurVersion) + config.UpdateVersion + ", "+ Str.GetStr(Str.CheckUpdateAndUp) + "\n" + data,
-                                         QMessageBox.Yes | QMessageBox.No, QMessageBox.Yes)
-            if r == QMessageBox.Yes:
-                QDesktopServices.openUrl(QUrl(self.updateBackUrl[self.checkUpdateIndex]))
+            if data == "no":
+                self.UpdateText(self.verCheck, Str.AlreadyUpdate, "#ff4081", True)
+                return
+            self.SetNewUpdate(self.updateBackUrl[self.checkUpdateIndex], Str.GetStr(Str.CurVersion) + config.UpdateVersion + ", "+ Str.GetStr(Str.CheckUpdateAndUp) + "\n" + data)
             self.UpdateText(self.verCheck, Str.HaveUpdate, "#d71345", True)
         except Exception as es:
             Log.Error(es)
@@ -101,4 +104,15 @@ class HelpView(QWidget, Ui_Help, QtTaskBase):
     def OpenLogDir(self):
         path = Setting.GetLogPath()
         QDesktopServices.openUrl(QUrl.fromLocalFile(path))
+        return
+
+    def SetNewUpdate(self, updateUrl, updateLog):
+        self.updateWidget.setVisible(True)
+        self.selectUrl = updateUrl
+        self.updateLabel.setText(updateLog)
+        QtOwner().owner.navigationWidget.SetNewUpdate()
+        return
+
+    def OpenUpdateUrl(self):
+        QDesktopServices.openUrl(QUrl(self.selectUrl))
         return

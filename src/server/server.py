@@ -76,6 +76,7 @@ class Server(Singleton, threading.Thread):
     def __init__(self) -> None:
         super().__init__()
         threading.Thread.__init__(self)
+        self.isLogin = False
         self.handler = {}
         self.session = requests.session()
         self.address = ""
@@ -162,14 +163,26 @@ class Server(Singleton, threading.Thread):
             else:
                 return
         except Exception as es:
-            task.status = Status.NetError
+            if isinstance(es, requests.exceptions.ConnectTimeout):
+                task.status = Status.TimeOut
+            elif isinstance(es, requests.exceptions.ReadTimeout):
+                task.status = Status.ReadOut
+            elif isinstance(es, requests.exceptions.SSLError):
+                if "WSAECONNRESET" in es.__repr__():
+                    task.status = Status.ResetErr
+                else:
+                    task.status = Status.SSLErr
+            # elif isinstance(es, ConnectionResetError):
+            #     task.status = Status.ResetErr
+            else:
+                task.status = Status.NetError
             Log.Warn(task.req.url + " " + es.__repr__())
             Log.Debug(es)
         finally:
             Log.Info("response-> backId:{}, {}, {}".format(task.backParam, task.req.__class__.__name__, task.res))
         try:
             self.handler.get(task.req.__class__)(task)
-            if hasattr(task.res, "raw"):
+            if task.res.raw:
                 task.res.raw.close()
         except Exception as es:
             Log.Warn("task: {}, error".format(task.req.__class__))
@@ -183,7 +196,11 @@ class Server(Singleton, threading.Thread):
         if request.headers == None:
             request.headers = {}
 
-        cookie = {"igneous": Setting.Igneous.value, "ipb_member_id": Setting.IpbMemberId.value, "ipb_pass_hash": Setting.IpbPassHash.value}
+        if self.isLogin:
+            cookie = {"igneous": Setting.Igneous.value, "ipb_member_id": Setting.IpbMemberId.value, "ipb_pass_hash": Setting.IpbPassHash.value}
+        else:
+            cookie = {}
+        task.res = res.BaseRes("", False)
         r = self.session.post(request.url, proxies=request.proxy, headers=request.headers, data=request.params, timeout=task.timeout, verify=False, cookies=cookie)
         task.res = res.BaseRes(r, request.isParseRes)
         return task
@@ -196,7 +213,11 @@ class Server(Singleton, threading.Thread):
         if request.headers == None:
             request.headers = {}
 
-        cookie = {"igneous": Setting.Igneous.value, "ipb_member_id": Setting.IpbMemberId.value, "ipb_pass_hash": Setting.IpbPassHash.value}
+        if self.isLogin:
+            cookie = {"igneous": Setting.Igneous.value, "ipb_member_id": Setting.IpbMemberId.value, "ipb_pass_hash": Setting.IpbPassHash.value}
+        else:
+            cookie = {}
+        task.res = res.BaseRes("", False)
         r = self.session.get(request.url, proxies=request.proxy, headers=request.headers, timeout=task.timeout, verify=False, cookies=cookie)
         task.res = res.BaseRes(r, request.isParseRes)
         return task
@@ -211,14 +232,16 @@ class Server(Singleton, threading.Thread):
 
     def _Download(self, task):
         try:
-            for cachePath in [task.cacheAndLoadPath, task.loadPath]:
-                if cachePath and task.backParam:
-                    data = ToolUtil.LoadCachePicture(cachePath)
-                    if data:
-                        from task.qt_task import TaskBase
-                        TaskBase.taskObj.downloadBack.emit(task.backParam, len(data), data)
-                        TaskBase.taskObj.downloadBack.emit(task.backParam, 0, b"")
-                        return
+            if not task.req.isReload:
+                for cachePath in [task.cacheAndLoadPath, task.loadPath]:
+                    if cachePath and task.backParam:
+                        data = ToolUtil.LoadCachePicture(cachePath)
+                        if data:
+                            from task.qt_task import TaskBase
+                            TaskBase.taskObj.downloadBack.emit(task.backParam, len(data), data)
+                            TaskBase.taskObj.downloadBack.emit(task.backParam, 0, b"")
+                            Log.Info("response cache -> backId:{}, {}".format(task.backParam, task.req))
+                            return
             request = task.req
             if request.params == None:
                 request.params = {}
@@ -232,9 +255,12 @@ class Server(Singleton, threading.Thread):
             r = self.session.get(request.url, proxies=request.proxy, headers=request.headers, stream=True, timeout=task.timeout, verify=False, cookies=cookie)
             # task.res = res.BaseRes(r)
             task.res = r
+        # except ConnectTimeoutError as es:
+        #     Log.Warn(task.req.url + " " + es.__repr__())
+        #     task.status = Status.Timeout
         except Exception as es:
-            Log.Warn(task.req.url + " " + es.__repr__())
             task.status = Status.NetError
+            Log.Warn(task.req.url + " " + es.__repr__())
         self.handler.get(task.req.__class__)(task)
         if task.res:
             task.res.close()

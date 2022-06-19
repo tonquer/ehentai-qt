@@ -12,6 +12,7 @@ from task.qt_task import QtTaskBase
 from tools.book import BookMgr
 from tools.log import Log
 from tools.str import Str
+from tools.tool import ToolUtil
 
 
 class CommentWidget(QtWidgets.QWidget, Ui_Comment, QtTaskBase):
@@ -57,10 +58,16 @@ class CommentWidget(QtWidgets.QWidget, Ui_Comment, QtTaskBase):
         if not info:
             QtOwner().ShowError(Str.GetStr(Str.Error))
             return
-        for index, v in enumerate(reversed(info.pageInfo.comment)):
-            floor = index + 1
-            name, comment = v
-            self.listWidget.AddUserItem(name, comment, floor)
+        data = []
+        for v in info.pageInfo.comment:
+            tick, name = ToolUtil.ConvertEhentaiDate(v[0])
+            data.append((tick, name, v[1]))
+
+        data.sort(key=lambda a: a[0], reverse=True)
+        for index, v in enumerate(data):
+            floor = len(data) - index
+            tick, name, comment = v
+            self.listWidget.AddUserItem(ToolUtil.ConvertDate(tick) + "     by "+name, comment, floor)
         # self.AddHttpTask(self.reqGetComment(self.bookId, self.listWidget.page), self.GetCommnetBack)
         return
 

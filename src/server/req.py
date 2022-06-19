@@ -49,11 +49,12 @@ class ServerReq(object):
 
 # 下载图片
 class DownloadBookReq(ServerReq):
-    def __init__(self, url, isSaveCache=False, saveFile=""):
+    def __init__(self, url, isSaveCache=False, saveFile="", isReload=False):
         method = "Download"
         self.url = url
         self.isSaveCache = isSaveCache
         self.saveFile = saveFile
+        self.isReload = isReload
         super(self.__class__, self).__init__(url, ToolUtil.GetHeader(url, method),
                                              {}, method)
 

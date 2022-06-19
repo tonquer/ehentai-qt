@@ -20,13 +20,14 @@ IsLoadingPicture = True
 
 UpdateUrl = "https://github.com/tonquer/ehentai-qt/releases/latest"
 UpdateUrlBack = "https://github.com/tonquer/ehentai-qt"
-UpdateUrl2 = "https://hub.fastgit.org/tonquer/ehentai-qt/releases/latest"
-UpdateUrl2Back = "https://hub.fastgit.org/tonquer/ehentai-qt"
+UpdateUrl2 = "https://hub.fastgit.xyz/tonquer/ehentai-qt/releases/latest"
+UpdateUrl2Back = "https://hub.fastgit.xyz/tonquer/ehentai-qt"
+Issues = "https://github.com/tonquer/ehentai-qt/issues"
 
-UpdateVersion = "v1.0.6"
-RealVersion = "v1.0.6.1"
+UpdateVersion = "v1.0.7"
+RealVersion = "v1.0.7"
 Waifu2xVersion = "1.1.1"
-TimeVersion = "2022-3-6"
+TimeVersion = "2022-6-18"
 
 CurSite = "e-hentai"   # 当前站点
 CurLoginName = ""      # 当前登录名
@@ -59,3 +60,4 @@ DomainMapping = {
     "gt0.ehgt.org": "ehgt.org",
     "forums.e-hentai.org": "e-hentai.org"
 }
+

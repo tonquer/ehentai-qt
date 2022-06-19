@@ -1,10 +1,14 @@
 import json
+from functools import partial
 
 from PySide2 import QtWidgets, QtCore, QtGui
-from PySide2.QtCore import Qt, QSize, QEvent
-from PySide2.QtGui import QFont, QPixmap, QIcon
-from PySide2.QtWidgets import QListWidgetItem, QLabel, QDesktopWidget
+from PySide2.QtCore import Qt, QSize, QEvent, Signal
+from PySide2.QtGui import QColor, QFont, QPixmap, QIcon
+from PySide2.QtWidgets import QListWidgetItem, QLabel, QDesktopWidget, QPushButton, QVBoxLayout, QSpacerItem, \
+    QSizePolicy
 
+import config.config
+from component.layout.flow_layout import FlowLayout
 from config.setting import Setting
 from interface.ui_book_info import Ui_BookInfo
 from qt_owner import QtOwner
@@ -16,6 +20,8 @@ from tools.str import Str
 
 
 class BookInfoView(QtWidgets.QWidget, Ui_BookInfo, QtTaskBase):
+    ReloadHistory = Signal()
+
     def __init__(self):
         super(self.__class__, self).__init__()
         Ui_BookInfo.__init__(self)
@@ -28,30 +34,35 @@ class BookInfoView(QtWidgets.QWidget, Ui_BookInfo, QtTaskBase):
         self.path = ""
         self.bookName = ""
         self.lastEpsId = -1
+        self.lastIndex = 0
         self.pictureData = None
 
         self.picture.installEventFilter(self)
         self.title.setWordWrap(True)
         self.title.setTextInteractionFlags(Qt.TextSelectableByMouse)
+        self.allFlowLayout = []
+        self.allFlowLabel = []
+        self.flowHorizontalSpacer = None
         # self.epsListWidget.setFlow(self.epsListWidget.LeftToRight)
-        self.epsListWidget.setWrapping(True)
-        self.epsListWidget.wheelMode = 1
-        self.epsListWidget.setViewMode(self.epsListWidget.ViewMode.ListMode)
-        self.epsListWidget.setFlow(self.epsListWidget.Flow.TopToBottom)
-        self.epsListWidget.setFrameShape(self.epsListWidget.NoFrame)
-        self.epsListWidget.setResizeMode(self.epsListWidget.Adjust)
+        # self.epsListWidget.setWrapping(True)
+        # self.epsListWidget.wheelMode = 1
+        # self.epsListWidget.setViewMode(self.epsListWidget.ViewMode.ListMode)
+        # self.epsListWidget.setFlow(self.epsListWidget.Flow.TopToBottom)
+        # self.epsListWidget.setFrameShape(self.epsListWidget.NoFrame)
+        # self.epsListWidget.setResizeMode(self.epsListWidget.Adjust)
 
         self.commentButton.clicked.connect(self.OpenComment)
 
         data = str(QtOwner().GetFileData(":/json/translate.json"), encoding="utf-8")
         self.tags = json.loads(data)
 
-        self.epsListWidget.itemClicked.connect(self.ClickTagsItem)
+        # self.epsListWidget.itemClicked.connect(self.ClickTagsItem)
         self.nameToTag = {}
+        self.ReloadHistory.connect(self.LoadHistory)
 
     def Clear(self):
         self.ClearTask()
-        self.epsListWidget.clear()
+        # self.epsListWidget.clear()
         self.nameToTag.clear()
 
     def SwitchCurrent(self, **kwargs):
@@ -80,7 +91,7 @@ class BookInfoView(QtWidgets.QWidget, Ui_BookInfo, QtTaskBase):
             maxPages = data.get("maxPages")
             # self.listWidget.UpdatePage(1, maxPages)
             # self.listWidget.UpdateState()
-            self.epsListWidget.clear()
+            # self.epsListWidget.clear()
             info = BookMgr().GetBookBySite(self.bookId, self.site)
             self.title.setText(info.baseInfo.title)
             self.bookName = info.baseInfo.title
@@ -88,48 +99,51 @@ class BookInfoView(QtWidgets.QWidget, Ui_BookInfo, QtTaskBase):
             self.picture.setText(Str.GetStr(Str.LoadingPicture))
             self.url = info.baseInfo.imgUrl
             self.path = ""
-            self.idLabel.setText(self.bookId)
+            self.idLabel.setText("https://{}.org/g/{}/{}".format(self.site, self.bookId, self.token))
             self.updateTick.setText(info.pageInfo.posted)
             self.favoriteLabel.setText(str(info.pageInfo.favorites))
             self.pageLabel.setText(str(info.pageInfo.pages))
             self.lanLabel.setText(info.pageInfo.language)
+            self.categoryList.clear()
             self.categoryList.AddItem(info.baseInfo.category)
             self.commentButton.setText("({})".format(len(info.pageInfo.comment)))
-            for tag in info.baseInfo.tags:
-                tagData = tag.split(":")
-                if len(tagData) >= 2:
-                    tagName = tagData[0]
-                    if not tagName:
-                        tag = "misc" + tag
+            self.SetTagInfo(info.baseInfo.tags)
+            # for tag in info.baseInfo.tags:
+            #     tagData = tag.split(":")
+            #     if len(tagData) >= 2:
+            #         tagName = tagData[0]
+            #         if not tagName:
+            #             tag = "misc" + tag
+            #
+            #     label = QLabel(tag)
+            #     label.setAlignment(Qt.AlignCenter)
+            #     label.setStyleSheet("color: rgb(196, 95, 125);")
+            #     font = QFont()
+            #     font.setPointSize(12)
+            #     font.setBold(True)
+            #     label.setFont(font)
 
-                label = QLabel(tag)
-                label.setAlignment(Qt.AlignCenter)
-                label.setStyleSheet("color: rgb(196, 95, 125);")
-                font = QFont()
-                font.setPointSize(12)
-                font.setBold(True)
-                label.setFont(font)
+                # item = QListWidgetItem(self.epsListWidget)
+                # item.setSizeHint(label.sizeHint() + QSize(20, 20))
 
-                item = QListWidgetItem(self.epsListWidget)
-                item.setSizeHint(label.sizeHint() + QSize(20, 20))
-
-                tagData = tag.split(":")
-                if Setting.Language.autoValue != 3:
-                    if len(tagData) >= 2:
-                        tagName = tagData[0]
-                        if tagName in self.tags:
-                            if tagData[1] in self.tags.get(tagName, {}).get("data"):
-                                tagInfo = self.tags.get(tagName, {}).get("data", {}).get(tagData[1], {})
-                                label.setText(self.tags.get(tagName, {}).get("name", "") + ":" + tagInfo.get("dest", ""))
-                                item.setToolTip(tagInfo.get('description', ""))
-
-                # item.setToolTip(epsInfo.title)
-                self.epsListWidget.setItemWidget(item, label)
-                self.nameToTag[label.text()] = tag
+                # tagData = tag.split(":")
+                # if Setting.Language.autoValue != 3:
+                #     if len(tagData) >= 2:
+                #         tagName = tagData[0]
+                #         if tagName in self.tags:
+                #             if tagData[1] in self.tags.get(tagName, {}).get("data"):
+                #                 tagInfo = self.tags.get(tagName, {}).get("data", {}).get(tagData[1], {})
+                #                 label.setText(self.tags.get(tagName, {}).get("name", "") + ":" + tagInfo.get("dest", ""))
+                #                 item.setToolTip(tagInfo.get('description', ""))
+                #
+                # # item.setToolTip(epsInfo.title)
+                # self.epsListWidget.setItemWidget(item, label)
+                # self.nameToTag[label.text()] = tag
 
             if config.IsLoadingPicture:
-                self.AddDownloadTask(self.url, "{}/{}_{}_cover".format(config.CurSite, self.bookId, self.token), completeCallBack=self.UpdatePicture)
-
+                self.AddDownloadTask(self.url, self.GetCoverKey(self.bookId, self.token, config.CurSite), completeCallBack=self.UpdatePicture)
+            self.lastEpsId = -1
+            self.LoadHistory()
         else:
             msg = data.get("msg")
             if msg:
@@ -143,8 +157,10 @@ class BookInfoView(QtWidgets.QWidget, Ui_BookInfo, QtTaskBase):
             self.pictureData = data
             pic = QtGui.QPixmap()
             pic.loadFromData(data)
-            pic.scaled(self.picture.size(), QtCore.Qt.KeepAspectRatio)
-            self.picture.setPixmap(pic)
+            radio = self.devicePixelRatioF()
+            pic.setDevicePixelRatio(radio)
+            newPic = pic.scaled(self.picture.size()*radio, QtCore.Qt.KeepAspectRatio, Qt.SmoothTransformation)
+            self.picture.setPixmap(newPic)
             # self.picture.setScaledContents(True)
             self.update()
         else:
@@ -155,15 +171,21 @@ class BookInfoView(QtWidgets.QWidget, Ui_BookInfo, QtTaskBase):
         return
 
     def StartRead(self):
-        QtOwner().OpenReadView(self.bookId, self.title.text(), -1)
+        QtOwner().OpenReadView(self.bookId, self.title.text(), self.lastIndex)
         return
 
     def LoadHistory(self):
+        info = QtOwner().historyView.GetHistory(self.bookId)
+        if not info:
+            self.startRead.setText(Str.GetStr(Str.LookFirst))
+            return
+        self.lastIndex = info.picIndex
+        self.startRead.setText(Str.GetStr(Str.LastLook) + str(info.picIndex + 1) + Str.GetStr(Str.Page))
         return
 
-    def ClickTagsItem(self, item):
-        widget = self.epsListWidget.itemWidget(item)
-        text = self.nameToTag.get(widget.text())
+    def ClickTagsItem(self, text):
+        # widget = self.epsListWidget.itemWidget(item)
+        # text = self.nameToTag.get(widget.text())
         data = text.split("|")
         if data[0]:
             text = data[0]
@@ -174,7 +196,7 @@ class BookInfoView(QtWidgets.QWidget, Ui_BookInfo, QtTaskBase):
         else:
             newText = text+"$"
 
-        QtOwner().OpenSearch(newText)
+        QtOwner().OpenSearch2(newText)
         return
 
     def OpenComment(self):
@@ -204,3 +226,65 @@ class BookInfoView(QtWidgets.QWidget, Ui_BookInfo, QtTaskBase):
         info = BookMgr().GetBookBySite(bookId, self.site)
         QtOwner().downloadView.AddDownload(bookId, info.baseInfo.token, config.CurSite)
         QtOwner().ShowMsg(Str.GetStr(Str.AddDownload))
+
+    def SetTagInfo(self, tagInfo):
+        newTagData = {}
+        # self.tagScrollArea.setStyleSheet("")
+        for tag in tagInfo:
+            tagData = tag.split(":")
+            if len(tagData) >= 2:
+                tagName = tagData[0]
+                if not tagName:
+                    tagName = "misc"
+                    tag = "misc" + tag
+            else:
+                continue
+            tagList = newTagData.setdefault(tagName, [])
+            if Setting.Language.autoValue != 3:
+                if tagName in self.tags:
+                    if tagData[1] in self.tags.get(tagName.lower(), {}).get("data"):
+                        tagInfo = self.tags.get(tagName.lower(), {}).get("data", {}).get(tagData[1], {})
+                        tagList.append((tag, self.tags.get(tagName.lower(), {}).get("name", "") + ":" + tagInfo.get("dest", ""), tagInfo.get('description', "")))
+                        continue
+            tagList.append((tag, tag, ""))
+
+        # item.setToolTip(epsInfo.title)
+        # for i in reversed(range(self.verticalLayout.count())):
+        #     self.verticalLayout.itemAt(i).widget().setParent(None)
+        # self.verticalLayout.setParent(None)
+        # self.verticalLayout = QVBoxLayout(self.tagWidgetContents)
+        for i in self.allFlowLayout:
+            for j in reversed(range(i.count())):
+                i.itemAt(j).widget().setParent(None)
+
+            self.verticalLayout.removeItem(i)
+            i.setParent(None)
+        for i in self.allFlowLabel:
+            self.verticalLayout.removeWidget(i)
+            i.setParent(None)
+
+        self.allFlowLabel = []
+        self.allFlowLayout = []
+        if self.flowHorizontalSpacer:
+            self.verticalLayout.removeItem(self.flowHorizontalSpacer)
+            self.flowHorizontalSpacer = None
+
+        for title, contentList in newTagData.items():
+            if Setting.Language.autoValue != 3:
+                if title in self.tags:
+                    title = self.tags.get(title).get("name", "")
+            label = QLabel(title)
+            self.verticalLayout.addWidget(label)
+            self.allFlowLabel.append(label)
+            layout = FlowLayout()
+            for tag, text, desc in contentList:
+                box = QPushButton(text)
+                box.clicked.connect(partial(self.ClickTagsItem, tag))
+                box.setMinimumWidth(160)
+                box.setToolTip(desc)
+                layout.addWidget(box)
+            self.verticalLayout.addLayout(layout)
+            self.allFlowLayout.append(layout)
+        self.flowHorizontalSpacer = QSpacerItem(20, 20, QSizePolicy.Minimum, QSizePolicy.Expanding)
+        self.verticalLayout.addItem(self.flowHorizontalSpacer)
+        return

@@ -7,7 +7,7 @@ import time
 import traceback
 
 
-from qt_error import showError
+from qt_error import showError, showError2
 from tools.log import Log
 
 if sys.platform == 'darwin':
@@ -82,6 +82,14 @@ if __name__ == "__main__":
         if config.CanWaifu2x:
             waifu2x_vulkan.stop()
         sys.exit(-111)
+
+    oldHook = sys.excepthook
+    def excepthook(exc_type, exc_value, exc_tb):
+        tb = "".join(traceback.format_exception(exc_type, exc_value, exc_tb))
+        Log.Error(tb)
+        showError2(tb, app)
+
+    sys.excepthook = excepthook
 
     sts = app.exec_()
     main.Stop()

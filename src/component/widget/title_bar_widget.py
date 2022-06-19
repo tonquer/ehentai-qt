@@ -12,6 +12,7 @@ class TitleBarWidget(QWidget, Ui_TitleBar):
         super().__init__(parent)
         Ui_TitleBar.__init__(self)
         self.setupUi(self)
+        self.label.setText("EHentai")
         self.setAttribute(Qt.WA_StyledBackground, True)
         self.resize(1360, 40)
         self.maxBt.clicked.connect(self._ShowRestoreWindow)

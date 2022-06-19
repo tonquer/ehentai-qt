@@ -1,9 +1,13 @@
+import os
 import weakref
 
 from PySide2.QtCore import QFile
 
 from component.label.msg_label import MsgLabel
+from config.setting import Setting
+from tools.log import Log
 from tools.singleton import Singleton
+from tools.tool import ToolUtil
 
 
 class QtOwner(Singleton):
@@ -12,6 +16,7 @@ class QtOwner(Singleton):
         self._owner = None
         self._app = None
         self.backSock = None
+        self.cacheWord = []
 
     @property
     def downloadView(self):
@@ -20,6 +25,14 @@ class QtOwner(Singleton):
     @property
     def settingView(self):
         return self.owner.settingView
+
+    @property
+    def settingView2(self):
+        return self.owner.settingView2
+
+    @property
+    def historyView(self):
+        return self.owner.historyView
 
     def SetSubTitle(self, text):
         return self.owner.setSubTitle(text)
@@ -59,6 +72,10 @@ class QtOwner(Singleton):
         return self._app()
 
     @property
+    def bookInfoView(self):
+        return self.owner.bookInfoView
+
+    @property
     def owner(self):
         from view.main.main_view import MainView
         assert isinstance(self._owner(), MainView)
@@ -83,6 +100,12 @@ class QtOwner(Singleton):
         arg = {"text": text}
         self.owner.SwitchWidget(self.owner.searchView, **arg)
 
+    def OpenSearch2(self, text):
+        arg = {"text": text}
+        self.owner.searchView2.searchTab.setText(text)
+        self.owner.searchView2.setWindowTitle("TAG: {}".format(ToolUtil.GetStrMaxLen(text)))
+        self.owner.SwitchWidget(self.owner.searchView2, **arg)
+
     def OpenComment(self, bookId, site):
         # self.owner.subCommentView.SetOpenEvent(commentId, widget)
         arg = {"bookId": bookId, "site": site}
@@ -95,6 +118,7 @@ class QtOwner(Singleton):
 
     def CloseReadView(self):
         self.owner.totalStackWidget.setCurrentIndex(0)
+        QtOwner().bookInfoView.ReloadHistory.emit()
 
     def OpenLoginWebView(self, userId, passwd):
         arg = {"userId": userId, "passwd": passwd}
@@ -123,3 +147,30 @@ class QtOwner(Singleton):
     #     if config.ThemeText == "flatblack":
     #         msg.setStyleSheet("QWidget{background-color:#2E2F30}")
     #     return msg.exec_()
+
+    @staticmethod
+    def SaveCacheWord():
+        path = os.path.join(Setting.GetConfigPath(), "cache_word")
+        try:
+            f = open(path, "w+", encoding="utf-8")
+            f.write("\n".join(QtOwner().cacheWord))
+            f.close()
+        except Exception as es:
+            Log.Error(es)
+
+    @staticmethod
+    def LoadCacheWord():
+        path = os.path.join(Setting.GetConfigPath(), "cache_word")
+        try:
+            if not os.path.isfile(path):
+                return
+            f = open(path, "r", encoding="utf-8")
+            data = f.read()
+            f.close()
+            for v in data.split("\n"):
+                if v:
+                    QtOwner().cacheWord.append(v)
+        except Exception as es:
+            Log.Error(es)
+        finally:
+            return QtOwner().cacheWord

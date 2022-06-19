@@ -56,6 +56,8 @@ class DownloadView(QtWidgets.QWidget, Ui_Download):
 
         self.db = DownloadDb()
         self.radioButton.setChecked(Setting.DownloadAuto.value)
+        self.downloadNumBox.currentIndexChanged.connect(self.UpdateDownloadNum)
+
         datas = self.db.LoadDownload(self)
         for task in datas.values():
             self.downloadDict[task.bookId] = task
@@ -84,6 +86,9 @@ class DownloadView(QtWidgets.QWidget, Ui_Download):
 
     def Close(self):
         self.timer.stop()
+
+    def UpdateDownloadNum(self):
+        Setting.DownloadNum.SetValue(int(self.downloadNumBox.currentText()))
 
     def GetDownloadEpsId(self, bookId):
         if bookId not in self.downloadDict:
@@ -153,7 +158,7 @@ class DownloadView(QtWidgets.QWidget, Ui_Download):
         self.HandlerConvertList()
 
     def HandlerDownloadList(self):
-        downloadNum = config.DownloadThreadNum
+        downloadNum = int(Setting.DownloadNum.value)
         addNum = downloadNum - len(self.downloadingList)
 
         if addNum <= 0:
@@ -203,11 +208,11 @@ class DownloadView(QtWidgets.QWidget, Ui_Download):
         self.tableWidget.setItem(info.tableRow, 0, QTableWidgetItem(info.bookId))
         self.tableWidget.setItem(info.tableRow, 1, QTableWidgetItem(info.title))
         self.tableWidget.setItem(info.tableRow, 2, QTableWidgetItem(info.domain))
-        self.tableWidget.setItem(info.tableRow, 3, QTableWidgetItem(Str.GetStr(info.status)))
-        self.tableWidget.setItem(info.tableRow, 4,
+        self.tableWidget.setItem(info.tableRow, 6, QTableWidgetItem(Str.GetStr(info.status)))
+        self.tableWidget.setItem(info.tableRow, 3,
                                  QTableWidgetItem("{}/{}".format(str(info.curDownloadPic), str(info.maxDownloadPic))))
-        self.tableWidget.setItem(info.tableRow, 5, QTableWidgetItem(ToolUtil.GetDownloadSize(info.size)))
-        self.tableWidget.setItem(info.tableRow, 6, QTableWidgetItem(info.speedStr))
+        self.tableWidget.setItem(info.tableRow, 4, QTableWidgetItem(ToolUtil.GetDownloadSize(info.size)))
+        self.tableWidget.setItem(info.tableRow, 5, QTableWidgetItem(info.speedStr))
         self.tableWidget.setItem(info.tableRow, 7, QTableWidgetItem("{}/{}".format(str(info.curConvertCnt), str(info.convertCnt))))
         self.tableWidget.setItem(info.tableRow, 8, QTableWidgetItem("{}".format(str(info.convertTick))))
         self.tableWidget.setItem(info.tableRow, 9, QTableWidgetItem(Str.GetStr(info.convertStatus)))

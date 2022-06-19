@@ -13,6 +13,11 @@ class Status(object):
     NotFoundBook = Str.NotFoundBook
     ParseError = Str.ParseError
     NeedGoogle = Str.NeedGoogle
+    TimeOut = Str.TimeOut
+    SSLErr = Str.SSLErr
+    ResetErr = Str.ResetErr
+    ReadOut = Str.ReadOut
+
 
     UnderReviewBook = Str.UnderReviewBook
     SaveError = Str.SaveError

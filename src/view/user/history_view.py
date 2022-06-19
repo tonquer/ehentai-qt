@@ -13,13 +13,11 @@ from tools.str import Str
 class QtHistoryData(object):
     def __init__(self):
         self.bookId = ""         # bookId
-        self.token = ""          # token
-        self.site = ""           # site
+        self.token = ""
+        self.site = ""
         self.name = ""           # name
         self.picIndex = 0           # 图片Index
-        self.picIndex = 0           # 图片Index
         self.url = ""
-        self.path = ""
         self.tick = 0
 
 
@@ -43,14 +41,15 @@ class HistoryView(QtWidgets.QWidget, Ui_History):
 
         query = QSqlQuery(self.db)
         sql = """\
-            create table if not exists history(\
-            bookId varchar primary key,\
+            create table if not exists history_ehentai(\
+            bookId varchar,\
+            token varchar,\
+            site varchar,\
             name varchar,\
-            epsId int, \
             picIndex int,\
             url varchar,\
-            path varchar,\
-            tick int\
+            tick int,\
+            primary key(bookId, token)
             )\
             """
         suc = query.exec_(sql)
@@ -76,32 +75,32 @@ class HistoryView(QtWidgets.QWidget, Ui_History):
 
     def DelHistory(self, bookId):
         query = QSqlQuery(self.db)
-        sql = "delete from history where bookId='{}'".format(bookId)
+        sql = "delete from history_ehentai where bookId='{}'".format(bookId)
         suc = query.exec_(sql)
         if not suc:
             Log.Warn(query.lastError().text())
         return
 
-    def AddHistory(self, bookId, name, epsId, index, url, path):
+    def AddHistory(self, bookId, token, name, site, index, url):
         tick = int(time.time())
         info = self.history.get(bookId)
         if not info:
             info = QtHistoryData()
             self.history[bookId] = info
         info.bookId = bookId
+        info.token = token
         info.name = name
-        info.epsId = epsId
+        info.site = site
         info.picIndex = index
         info.url = url
-        info.path = path
         info.tick = tick
 
         query = QSqlQuery(self.db)
 
-        sql = "INSERT INTO history(bookId, name, epsId, picIndex, url, path, tick) " \
-              "VALUES ('{0}', '{1}', {2}, {3}, '{4}', '{5}', {6}) " \
-              "ON CONFLICT(bookId) DO UPDATE SET name='{1}', epsId={2}, picIndex={3}, url = '{4}', path='{5}', tick={6}".\
-            format(bookId, name.replace("'", "''"), epsId, index, url, path, tick)
+        sql = "INSERT INTO history_ehentai(bookId, token, name, site, url, picIndex, tick) " \
+              "VALUES ('{0}', '{1}', '{2}', '{3}', '{4}', {5}, {6}) " \
+              "ON CONFLICT(bookId, token) DO UPDATE SET name='{2}', site='{3}', url = '{4}', picIndex={5}, tick={6}".\
+            format(bookId, token, name.replace("'", "''"), site, url, index, tick)
         suc = query.exec_(sql)
         if not suc:
             Log.Warn(query.lastError().text())
@@ -111,18 +110,18 @@ class HistoryView(QtWidgets.QWidget, Ui_History):
         query = QSqlQuery(self.db)
         query.exec_(
             """
-            select * from history
+            select * from history_ehentai
             """
         )
         while query.next():
             # bookId, name, epsId, index, url, path
             info = QtHistoryData()
             info.bookId = query.value(0)
-            info.name = query.value(1)
-            info.epsId = query.value(2)
-            info.picIndex = query.value(3)
-            info.url = query.value(4)
-            info.path = query.value(5)
+            info.token = query.value(1)
+            info.name = query.value(3)
+            info.site = query.value(2)
+            info.url = query.value(5)
+            info.index = query.value(4)
             info.tick = query.value(6)
             self.history[info.bookId] = info
         pass

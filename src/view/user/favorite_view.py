@@ -58,9 +58,10 @@ class FavoriteView(QtWidgets.QWidget, Ui_Favority, QtTaskBase):
                 _id = info.baseInfo.id
                 title = info.baseInfo.title
                 url = info.baseInfo.imgUrl
+                token = info.baseInfo.token
                 category = ToolUtil.GetCategoryName(info.baseInfo.category)
                 path = "{}/{}_{}_cover".format(config.CurSite, _id, info.baseInfo.token)
-                self.bookList.AddBookItem(_id, title, Str.GetStr(Str.Classify)+ ":" +category, url, path, "")
+                self.bookList.AddBookItem(_id, title, Str.GetStr(Str.Classify)+ ":" +category, url, path, "", token=token)
         else:
             QtOwner().ShowMsg(Str.GetStr(st))
         pass

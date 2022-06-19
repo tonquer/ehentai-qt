@@ -34,6 +34,10 @@ class Str:
     PathError = 1018         # "路径错误"
     FileError = 1019         # "未发现源文件"
     FileFormatError = 1020   # "文件损坏"
+    TimeOut = 1021           # "连接超时"
+    ReadOut = 1022           # "读取超时"
+    SSLErr = 1023            # "ssl证书错误"
+    ResetErr = 1024          # "连接已被重置, 请尝试设置中禁用SNI"
 
     Success = 2001         # "下载完成"
     Reading = 2002         # "获取信息"
@@ -165,7 +169,7 @@ class Str:
     PressCtrlEnter = 105     # 按Ctrl+Enter发送消息
     DelWaifu2xConvert = 106     # 取消Waifu2x转换
     NeedResetSave = 107      # 需要重启保存
-    CheckUp = 108            # 检查更新
+    CheckUp = 108            # 检查更新中
     DailyUpdated = 109            # 今日已更新
     HaveUpdate = 110            # 有更新
     AlreadyUpdate = 111            # 已是最新
@@ -186,6 +190,7 @@ class Str:
     NotSelectAll = 126             # 反选
     LoginOut = 127                # 登出
     Sock5Error = 128              # Sock5设置出错
+    Copy = 129  # 复制
 
     @classmethod
     def Reload(cls):
@@ -211,6 +216,10 @@ class Str:
         cls.strDict[cls.PathError] = QCoreApplication.translate("cls.obj",  "路径错误", None)
         cls.strDict[cls.FileError] = QCoreApplication.translate("cls.obj",  "未发现源文件", None)
         cls.strDict[cls.FileFormatError] = QCoreApplication.translate("cls.obj",  "文件损坏", None)
+        cls.strDict[cls.TimeOut] = QCoreApplication.translate("cls.obj", "连接超时", None)
+        cls.strDict[cls.ReadOut] = QCoreApplication.translate("cls.obj", "读取超时", None)
+        cls.strDict[cls.SSLErr] = QCoreApplication.translate("cls.obj", "ssl证书错误", None)
+        cls.strDict[cls.ResetErr] = QCoreApplication.translate("cls.obj", "连接已被重置, 请尝试设置中禁用SNI", None)
 
         cls.strDict[cls.LoadingPicture] = QCoreApplication.translate("cls.obj",  "图片加载中...", None)
         cls.strDict[cls.LoadingFail] = QCoreApplication.translate("cls.obj",  "图片加载失败", None)
@@ -339,7 +348,7 @@ class Str:
         cls.strDict[cls.PressCtrlEnter] = QCoreApplication.translate("cls.obj",  "按Ctrl+Enter发送消息", None)
         cls.strDict[cls.DelWaifu2xConvert] = QCoreApplication.translate("cls.obj",  "取消Waifu2x转换", None)
         cls.strDict[cls.NeedResetSave] = QCoreApplication.translate("cls.obj",  "需要重启保存", None)
-        cls.strDict[cls.CheckUp] = QCoreApplication.translate("cls.obj",  "检查更新", None)
+        cls.strDict[cls.CheckUp] = QCoreApplication.translate("cls.obj",  "检查更新中", None)
         cls.strDict[cls.DailyUpdated] = QCoreApplication.translate("cls.obj",  "今日已更新", None)
         cls.strDict[cls.HaveUpdate] = QCoreApplication.translate("cls.obj",  "有更新", None)
         cls.strDict[cls.AlreadyUpdate] = QCoreApplication.translate("cls.obj",  "已是最新", None)
@@ -360,6 +369,7 @@ class Str:
         cls.strDict[cls.NotSelectAll] = QCoreApplication.translate("cls.obj",  "反选", None)
         cls.strDict[cls.LoginOut] = QCoreApplication.translate("cls.obj",  "登出", None)
         cls.strDict[cls.Sock5Error] = QCoreApplication.translate("cls.obj",  "Sock5设置出错", None)
+        cls.strDict[cls.Copy] = QCoreApplication.translate("cls.obj", "复制", None)
 
     @classmethod
     def GetStr(cls, enumType):

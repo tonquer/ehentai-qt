@@ -1,16 +1,16 @@
-from PySide2.QtCore import QPropertyAnimation, QRect, QEasingCurve, QFile, QEvent, Qt
-from PySide2.QtGui import QPixmap
+from PySide2.QtCore import QPropertyAnimation, QRect, QEasingCurve, QFile, QEvent, Qt, QSize
+from PySide2.QtGui import QPixmap, QIcon
 from PySide2.QtWidgets import QWidget
 
 from config import config
 from config.setting import Setting
 from interface.ui_navigation import Ui_Navigation
 from qt_owner import QtOwner
-from server import req
 from task.qt_task import QtTaskBase
 from tools.status import Status
 from tools.str import Str
 from view.user.login_view import LoginView
+from server import req, Server
 
 
 class NavigationWidget(QWidget, Ui_Navigation, QtTaskBase):
@@ -27,6 +27,8 @@ class NavigationWidget(QWidget, Ui_Navigation, QtTaskBase):
         self.picLabel.SetPicture(f.readAll())
         f.close()
         self.pushButton.clicked.connect(self.OpenLoginView)
+        self.swichButton.clicked.connect(self.SwitchSite)
+        self.swichButton.setText(Str.GetStr(Str.SwitchSite))
         self.picLabel.installEventFilter(self)
         self.picData = None
 
@@ -74,18 +76,28 @@ class NavigationWidget(QWidget, Ui_Navigation, QtTaskBase):
             self.limitLabel.setText("{}/{}".format(curNum, maxNum))
 
     def OpenLoginView(self):
+        isAutoLogin = Setting.AutoLogin.value
         if self.isLogin:
-            self.SwitchSite()
-            return
+            # self.SwitchSite()
+            self.Logout()
+            isAutoLogin = 0
 
-        loginView = LoginView(QtOwner().owner)
+        loginView = LoginView(QtOwner().owner, isAutoLogin)
         loginView.show()
         loginView.closed.connect(self.LoginSucBack)
         return
 
+    def Logout(self):
+        Server().isLogin = False
+        self.isLogin = False
+        self.pushButton.setText(Str.GetStr(Str.Login))
+        self.SetUserName("")
+        self.SwitchSiteBack({"st": Status.Ok}, "e-hentai")
+        return
+
     def LoginSucBack(self):
         if self.isLogin:
-            self.pushButton.setText(Str.GetStr(Str.SwitchSite))
+            self.pushButton.setText(Str.GetStr(Str.LoginOut))
 
     def ShowUserImg(self, data, st):
         if st == Status.Ok:
@@ -135,3 +147,9 @@ class NavigationWidget(QWidget, Ui_Navigation, QtTaskBase):
                 return False
         else:
             return super(self.__class__, self).eventFilter(obj, event)
+
+    def SetNewUpdate(self):
+        icon2 = QIcon()
+        icon2.addFile(u":/png/icon/new.svg", QSize(), QIcon.Normal, QIcon.Off)
+        self.helpButton.setIcon(icon2)
+        return

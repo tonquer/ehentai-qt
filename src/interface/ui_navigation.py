@@ -51,6 +51,13 @@ class Ui_Navigation(object):
 
         self.verticalLayout.addWidget(self.pushButton, 0, Qt.AlignHCenter)
 
+        self.swichButton = QPushButton(self.widget)
+        self.swichButton.setObjectName(u"swichButton")
+        sizePolicy.setHeightForWidth(self.swichButton.sizePolicy().hasHeightForWidth())
+        self.swichButton.setSizePolicy(sizePolicy)
+
+        self.verticalLayout.addWidget(self.swichButton, 0, Qt.AlignHCenter)
+
         self.gridLayout = QGridLayout()
         self.gridLayout.setObjectName(u"gridLayout")
         self.nameLabel = QLabel(self.widget)
@@ -100,7 +107,7 @@ class Ui_Navigation(object):
         self.scrollArea.setWidgetResizable(True)
         self.scrollAreaWidgetContents = QWidget()
         self.scrollAreaWidgetContents.setObjectName(u"scrollAreaWidgetContents")
-        self.scrollAreaWidgetContents.setGeometry(QRect(0, -101, 211, 240))
+        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 215, 274))
         self.verticalLayout_3 = QVBoxLayout(self.scrollAreaWidgetContents)
         self.verticalLayout_3.setSpacing(6)
         self.verticalLayout_3.setObjectName(u"verticalLayout_3")
@@ -130,6 +137,20 @@ class Ui_Navigation(object):
         self.collectButton.setToolButtonStyle(Qt.ToolButtonTextBesideIcon)
 
         self.verticalLayout_3.addWidget(self.collectButton)
+
+        self.historyButton = QToolButton(self.scrollAreaWidgetContents)
+        self.buttonGroup.addButton(self.historyButton)
+        self.historyButton.setObjectName(u"historyButton")
+        sizePolicy1.setHeightForWidth(self.historyButton.sizePolicy().hasHeightForWidth())
+        self.historyButton.setSizePolicy(sizePolicy1)
+        self.historyButton.setMinimumSize(QSize(150, 40))
+        self.historyButton.setFocusPolicy(Qt.NoFocus)
+        self.historyButton.setIcon(icon)
+        self.historyButton.setIconSize(QSize(32, 32))
+        self.historyButton.setCheckable(True)
+        self.historyButton.setToolButtonStyle(Qt.ToolButtonTextBesideIcon)
+
+        self.verticalLayout_3.addWidget(self.historyButton)
 
         self.line = QFrame(self.scrollAreaWidgetContents)
         self.line.setObjectName(u"line")
@@ -244,6 +265,7 @@ class Ui_Navigation(object):
         Navigation.setWindowTitle(QCoreApplication.translate("Navigation", u"\u5bfc\u822a", None))
         self.picLabel.setText("")
         self.pushButton.setText(QCoreApplication.translate("Navigation", u"\u767b\u5f55", None))
+        self.swichButton.setText(QCoreApplication.translate("Navigation", u"\u8868\u91cc\u5207\u6362", None))
         self.nameLabel.setText("")
         self.label_4.setText(QCoreApplication.translate("Navigation", u"\u8d26\u53f7\uff1a", None))
         self.label_5.setText(QCoreApplication.translate("Navigation", u"\u56fe\u7247\u9650\u5236\uff1a", None))
@@ -252,6 +274,7 @@ class Ui_Navigation(object):
         self.siteLabel.setText(QCoreApplication.translate("Navigation", u"e-hentai", None))
         self.label.setText(QCoreApplication.translate("Navigation", u"\u7528\u6237", None))
         self.collectButton.setText(QCoreApplication.translate("Navigation", u"\u6211\u7684\u6536\u85cf", None))
+        self.historyButton.setText(QCoreApplication.translate("Navigation", u"\u672c\u5730\u8bb0\u5f55", None))
         self.label_2.setText(QCoreApplication.translate("Navigation", u"\u5bfc\u822a", None))
         self.searchButton.setText(QCoreApplication.translate("Navigation", u"\u641c\u7d22", None))
         self.label_3.setText(QCoreApplication.translate("Navigation", u"\u5176\u4ed6", None))

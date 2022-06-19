@@ -32,6 +32,42 @@
         </spacer>
        </item>
        <item>
+        <widget class="QLabel" name="label">
+         <property name="text">
+          <string>同时下载数</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QComboBox" name="downloadNumBox">
+         <item>
+          <property name="text">
+           <string>1</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>2</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>3</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>4</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>5</string>
+          </property>
+         </item>
+        </widget>
+       </item>
+       <item>
         <widget class="QPushButton" name="pushButton">
          <property name="text">
           <string>全部开始</string>
@@ -93,11 +129,6 @@
        </column>
        <column>
         <property name="text">
-         <string>下载状态</string>
-        </property>
-       </column>
-       <column>
-        <property name="text">
          <string>下载进度</string>
         </property>
        </column>
@@ -109,6 +140,11 @@
        <column>
         <property name="text">
          <string>下载速度</string>
+        </property>
+       </column>
+       <column>
+        <property name="text">
+         <string>下载状态</string>
         </property>
        </column>
        <column>

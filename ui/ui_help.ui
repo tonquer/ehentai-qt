@@ -27,9 +27,9 @@ QScrollArea {background-color:transparent;}</string>
       <property name="geometry">
        <rect>
         <x>0</x>
-        <y>0</y>
-        <width>525</width>
-        <height>566</height>
+        <y>-46</y>
+        <width>512</width>
+        <height>612</height>
        </rect>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_3">
@@ -108,6 +108,43 @@ QScrollArea {background-color:transparent;}</string>
             <item>
              <widget class="QWidget" name="widget_2" native="true">
               <layout class="QGridLayout" name="gridLayout">
+               <item row="0" column="0">
+                <widget class="QLabel" name="label_4">
+                 <property name="minimumSize">
+                  <size>
+                   <width>80</width>
+                   <height>50</height>
+                  </size>
+                 </property>
+                 <property name="font">
+                  <font>
+                   <pointsize>12</pointsize>
+                  </font>
+                 </property>
+                 <property name="text">
+                  <string>版本号:</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="2" column="1">
+                <widget class="QLabel" name="waifu2x">
+                 <property name="font">
+                  <font>
+                   <pointsize>12</pointsize>
+                  </font>
+                 </property>
+                 <property name="text">
+                  <string>v1.0.8</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="5" column="1">
+                <widget class="QPushButton" name="openCmd">
+                 <property name="text">
+                  <string>打开控制台</string>
+                 </property>
+                </widget>
+               </item>
                <item row="3" column="2">
                 <widget class="QPushButton" name="logButton">
                  <property name="text">
@@ -130,36 +167,6 @@ QScrollArea {background-color:transparent;}</string>
                  </property>
                  <property name="text">
                   <string>waifu2x版本:</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="1" column="1">
-                <widget class="QLabel" name="upTimeLabel">
-                 <property name="font">
-                  <font>
-                   <pointsize>12</pointsize>
-                  </font>
-                 </property>
-                 <property name="text">
-                  <string>2021-11-27</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="0" column="0">
-                <widget class="QLabel" name="label_4">
-                 <property name="minimumSize">
-                  <size>
-                   <width>80</width>
-                   <height>50</height>
-                  </size>
-                 </property>
-                 <property name="font">
-                  <font>
-                   <pointsize>12</pointsize>
-                  </font>
-                 </property>
-                 <property name="text">
-                  <string>版本号:</string>
                  </property>
                 </widget>
                </item>
@@ -212,22 +219,51 @@ QScrollArea {background-color:transparent;}</string>
                  </property>
                 </widget>
                </item>
-               <item row="2" column="1">
-                <widget class="QLabel" name="waifu2x">
+               <item row="1" column="1">
+                <widget class="QLabel" name="upTimeLabel">
                  <property name="font">
                   <font>
                    <pointsize>12</pointsize>
                   </font>
                  </property>
                  <property name="text">
-                  <string>v1.0.8</string>
+                  <string>2021-11-27</string>
                  </property>
                 </widget>
                </item>
-               <item row="5" column="1">
-                <widget class="QPushButton" name="openCmd">
+              </layout>
+             </widget>
+            </item>
+            <item>
+             <widget class="QWidget" name="updateWidget" native="true">
+              <layout class="QVBoxLayout" name="verticalLayout_5">
+               <item>
+                <widget class="QLabel" name="label_10">
+                 <property name="font">
+                  <font>
+                   <pointsize>16</pointsize>
+                  </font>
+                 </property>
                  <property name="text">
-                  <string>打开控制台</string>
+                  <string>新版本：</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QLabel" name="updateLabel">
+                 <property name="text">
+                  <string/>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QPushButton" name="updateButton">
+                 <property name="text">
+                  <string>前往更新</string>
+                 </property>
+                 <property name="icon">
+                  <iconset resource="../res/images.qrc">
+                   <normaloff>:/png/icon/new.svg</normaloff>:/png/icon/new.svg</iconset>
                  </property>
                 </widget>
                </item>
@@ -281,6 +317,7 @@ QScrollArea {background-color:transparent;}</string>
  </customwidgets>
  <resources>
   <include location="../res/images.qrc"/>
+  <include location="../../pybika-new/res/images.qrc"/>
  </resources>
  <connections/>
 </ui>

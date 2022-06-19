@@ -19,9 +19,7 @@ class Ui_Login(object):
             Login.setObjectName(u"Login")
         Login.resize(400, 444)
         Login.setMaximumSize(QSize(400, 599))
-        Login.setStyleSheet(u"*{\n"
-"	background-color: rgb(255, 255, 255);\n"
-"}\n"
+        Login.setStyleSheet(u"\n"
 "QDialog#Login\n"
 "{\n"
 "	border-radius: 5px\n"
@@ -29,21 +27,8 @@ class Ui_Login(object):
 "QLineEdit {\n"
 "    border: none;\n"
 "    padding: 5px 2px 5px 10px;\n"
-"    font: 15px 'Microsoft YaHei Light';\n"
-"    selection-background-color: rgb(0, 153, 188);\n"
 "}\n"
-"\n"
-"QLineEdit:focus {\n"
-"    background: rgb(250,250,250);\n"
-"}\n"
-"\n"
-"QLineEdit:!focus {\n"
-"    background: rgb(230,230,230);\n"
-"}\n"
-"\n"
-"QLineEdit:hover:!focus {\n"
-"    background: rgb(215,215,215);\n"
-"}")
+"")
         self.verticalLayout_2 = QVBoxLayout(Login)
         self.verticalLayout_2.setObjectName(u"verticalLayout_2")
         self.verticalLayout_2.setContentsMargins(0, 0, 0, 0)
@@ -167,6 +152,11 @@ class Ui_Login(object):
 
         self.verticalLayout.addWidget(self.stackedWidget)
 
+        self.autoLogin = QCheckBox(Login)
+        self.autoLogin.setObjectName(u"autoLogin")
+
+        self.verticalLayout.addWidget(self.autoLogin)
+
 
         self.verticalLayout_2.addLayout(self.verticalLayout)
 
@@ -174,9 +164,7 @@ class Ui_Login(object):
         self.downWidget.setObjectName(u"downWidget")
         self.downWidget.setMinimumSize(QSize(0, 80))
         self.downWidget.setMaximumSize(QSize(16777215, 80))
-        self.downWidget.setStyleSheet(u"QWidget#downWidget{\n"
-"background-color: rgb(243,243,243);\n"
-"}")
+        self.downWidget.setStyleSheet(u"")
         self.horizontalLayout_2 = QHBoxLayout(self.downWidget)
         self.horizontalLayout_2.setObjectName(u"horizontalLayout_2")
         self.horizontalLayout_2.setContentsMargins(25, 9, 25, -1)
@@ -226,6 +214,7 @@ class Ui_Login(object):
         self.label_6.setText(QCoreApplication.translate("Login", u"ipb_pass_hash", None))
         self.label_7.setText(QCoreApplication.translate("Login", u"igneous", None))
         self.igneousLabel.setPlaceholderText(QCoreApplication.translate("Login", u"\u9009\u586b", None))
+        self.autoLogin.setText(QCoreApplication.translate("Login", u"\u81ea\u52a8\u767b\u5f55", None))
         self.loginButton.setText(QCoreApplication.translate("Login", u"\u767b\u5f55", None))
 #if QT_CONFIG(shortcut)
         self.loginButton.setShortcut(QCoreApplication.translate("Login", u"Return", None))

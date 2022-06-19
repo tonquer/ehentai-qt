@@ -19,13 +19,29 @@ class Ui_History(object):
     def setupUi(self, History):
         if not History.objectName():
             History.setObjectName(u"History")
-        History.resize(400, 292)
+        History.resize(628, 334)
         self.gridLayout_2 = QGridLayout(History)
         self.gridLayout_2.setObjectName(u"gridLayout_2")
+        self.gridLayout_3 = QGridLayout()
+        self.gridLayout_3.setObjectName(u"gridLayout_3")
+        self.bookList = ComicListWidget(History)
+        self.bookList.setObjectName(u"bookList")
+        self.bookList.setStyleSheet(u"")
+
+        self.gridLayout_3.addWidget(self.bookList, 0, 0, 1, 1)
+
+
+        self.gridLayout_2.addLayout(self.gridLayout_3, 0, 0, 1, 1)
+
         self.gridLayout_4 = QGridLayout()
         self.gridLayout_4.setObjectName(u"gridLayout_4")
         self.horizontalLayout = QHBoxLayout()
         self.horizontalLayout.setObjectName(u"horizontalLayout")
+        self.msgLabel = QLabel(History)
+        self.msgLabel.setObjectName(u"msgLabel")
+
+        self.horizontalLayout.addWidget(self.msgLabel)
+
         self.horizontalSpacer = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
 
         self.horizontalLayout.addItem(self.horizontalSpacer)
@@ -45,7 +61,6 @@ class Ui_History(object):
 
         self.pages = QLabel(History)
         self.pages.setObjectName(u"pages")
-        self.pages.setMinimumSize(QSize(0, 30))
 
         self.horizontalLayout.addWidget(self.pages)
 
@@ -56,9 +71,18 @@ class Ui_History(object):
 
         self.horizontalLayout.addWidget(self.line)
 
+        self.line_4 = QFrame(History)
+        self.line_4.setObjectName(u"line_4")
+        self.line_4.setFrameShape(QFrame.VLine)
+        self.line_4.setFrameShadow(QFrame.Sunken)
+
+        self.horizontalLayout.addWidget(self.line_4)
+
         self.spinBox = QSpinBox(History)
         self.spinBox.setObjectName(u"spinBox")
         self.spinBox.setMinimumSize(QSize(50, 30))
+        self.spinBox.setMinimum(1)
+        self.spinBox.setMaximum(1)
 
         self.horizontalLayout.addWidget(self.spinBox)
 
@@ -81,17 +105,6 @@ class Ui_History(object):
 
         self.gridLayout_2.addLayout(self.gridLayout_4, 1, 0, 1, 1)
 
-        self.gridLayout_3 = QGridLayout()
-        self.gridLayout_3.setObjectName(u"gridLayout_3")
-        self.bookList = ComicListWidget(History)
-        self.bookList.setObjectName(u"bookList")
-        self.bookList.setStyleSheet(u"QListWidget {background-color:transparent;}")
-
-        self.gridLayout_3.addWidget(self.bookList, 0, 0, 1, 1)
-
-
-        self.gridLayout_2.addLayout(self.gridLayout_3, 0, 0, 1, 1)
-
 
         self.retranslateUi(History)
         self.jumpButton.clicked.connect(History.JumpPage)
@@ -100,8 +113,9 @@ class Ui_History(object):
     # setupUi
 
     def retranslateUi(self, History):
-        History.setWindowTitle(QCoreApplication.translate("History", u"\u5386\u53f2\u8bb0\u5f55", None))
-        self.nums.setText(QCoreApplication.translate("History", u"\u6536\u85cf\u6570\uff1a", None))
+        History.setWindowTitle(QCoreApplication.translate("History", u"\u6536\u85cf", None))
+        self.msgLabel.setText("")
+        self.nums.setText(QCoreApplication.translate("History", u"\u8bb0\u5f55\u6570\uff1a", None))
         self.pages.setText(QCoreApplication.translate("History", u"\u9875", None))
         self.jumpButton.setText(QCoreApplication.translate("History", u"\u8df3\u8f6c", None))
 #if QT_CONFIG(shortcut)

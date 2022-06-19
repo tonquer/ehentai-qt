@@ -6,19 +6,36 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
-    <height>292</height>
+    <width>628</width>
+    <height>334</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>历史记录</string>
+   <string>收藏</string>
   </property>
-
   <layout class="QGridLayout" name="gridLayout_2">
+   <item row="0" column="0">
+    <layout class="QGridLayout" name="gridLayout_3">
+     <item row="0" column="0">
+      <widget class="ComicListWidget" name="bookList">
+       <property name="styleSheet">
+        <string notr="true"/>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
    <item row="1" column="0">
     <layout class="QGridLayout" name="gridLayout_4">
      <item row="0" column="0">
       <layout class="QHBoxLayout" name="horizontalLayout">
+       <item>
+        <widget class="QLabel" name="msgLabel">
+         <property name="text">
+          <string/>
+         </property>
+        </widget>
+       </item>
        <item>
         <spacer name="horizontalSpacer">
          <property name="orientation">
@@ -48,18 +65,12 @@
           </size>
          </property>
          <property name="text">
-          <string>收藏数：</string>
+          <string>记录数：</string>
          </property>
         </widget>
        </item>
        <item>
         <widget class="QLabel" name="pages">
-         <property name="minimumSize">
-          <size>
-           <width>0</width>
-           <height>30</height>
-          </size>
-         </property>
          <property name="text">
           <string>页</string>
          </property>
@@ -73,12 +84,25 @@
         </widget>
        </item>
        <item>
+        <widget class="Line" name="line_4">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+        </widget>
+       </item>
+       <item>
         <widget class="QSpinBox" name="spinBox">
          <property name="minimumSize">
           <size>
            <width>50</width>
            <height>30</height>
           </size>
+         </property>
+         <property name="minimum">
+          <number>1</number>
+         </property>
+         <property name="maximum">
+          <number>1</number>
          </property>
         </widget>
        </item>
@@ -109,17 +133,6 @@
      </item>
     </layout>
    </item>
-   <item row="0" column="0">
-    <layout class="QGridLayout" name="gridLayout_3">
-     <item row="0" column="0">
-      <widget class="ComicListWidget" name="bookList">
-       <property name="styleSheet">
-        <string notr="true">QListWidget {background-color:transparent;}</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </item>
   </layout>
  </widget>
  <customwidgets>
@@ -138,17 +151,18 @@
    <slot>JumpPage()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>342</x>
-     <y>213</y>
+     <x>439</x>
+     <y>280</y>
     </hint>
     <hint type="destinationlabel">
      <x>361</x>
-     <y>352</y>
+     <y>291</y>
     </hint>
    </hints>
   </connection>
  </connections>
  <slots>
   <slot>JumpPage()</slot>
+  <slot>RefreshDataFocus()</slot>
  </slots>
 </ui>

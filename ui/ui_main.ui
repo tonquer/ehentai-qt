@@ -96,6 +96,7 @@
             <widget class="Waifu2xToolView" name="waifu2xToolView"/>
             <widget class="LoginWebView" name="loginWebView"/>
             <widget class="CommentView" name="commentView"/>
+            <widget class="SearchView" name="searchView2"/>
            </widget>
           </item>
          </layout>

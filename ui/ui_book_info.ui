@@ -492,10 +492,9 @@ QListWidget::item {
         </layout>
        </item>
        <item>
-        <widget class="BaseListWidget" name="epsListWidget">
+        <widget class="QScrollArea" name="tagScrollArea">
          <property name="styleSheet">
-          <string notr="true">QListWidget {background-color:transparent;}
-QListWidget::item {
+          <string notr="true">QPushButton {
     background-color:rgb(251, 239, 243);
     color: rgb(196, 95, 125);
 	border:2px solid red;
@@ -503,29 +502,27 @@ QListWidget::item {
 	border-color:rgb(196, 95, 125);
 }
 /* 鼠标在按钮上时，按钮颜色 */
- QListWidget::item:hover 
+ QPushButton:hover 
 {
     background-color:rgb(21, 85, 154);
     border-radius: 10px;
     color: rgb(0, 0, 0);
-}
-</string>
+}</string>
          </property>
-         <property name="frameShape">
-          <enum>QFrame::NoFrame</enum>
+         <property name="widgetResizable">
+          <bool>true</bool>
          </property>
-         <property name="textElideMode">
-          <enum>Qt::ElideRight</enum>
-         </property>
-         <property name="verticalScrollMode">
-          <enum>QAbstractItemView::ScrollPerPixel</enum>
-         </property>
-         <property name="horizontalScrollMode">
-          <enum>QAbstractItemView::ScrollPerPixel</enum>
-         </property>
-         <property name="spacing">
-          <number>6</number>
-         </property>
+         <widget class="QWidget" name="tagWidgetContents">
+          <property name="geometry">
+           <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>798</width>
+            <height>224</height>
+           </rect>
+          </property>
+          <layout class="QVBoxLayout" name="verticalLayout"/>
+         </widget>
         </widget>
        </item>
       </layout>
@@ -545,11 +542,6 @@ QListWidget::item {
    <class>TagListWidget</class>
    <extends>QListWidget</extends>
    <header location="global">component.list.tag_list_widget.h</header>
-  </customwidget>
-  <customwidget>
-   <class>BaseListWidget</class>
-   <extends>QListWidget</extends>
-   <header location="global">component.list.base_list_widget.h</header>
   </customwidget>
   <customwidget>
    <class>IconToolButton</class>

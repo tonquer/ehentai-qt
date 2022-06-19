@@ -15,6 +15,7 @@ from PySide2.QtWidgets import *
 from component.scroll_area.smooth_scroll_area import SmoothScrollArea
 
 import images_rc
+import images_rc
 
 class Ui_Help(object):
     def setupUi(self, Help):
@@ -30,7 +31,7 @@ class Ui_Help(object):
         self.scrollArea.setWidgetResizable(True)
         self.scrollAreaWidgetContents = QWidget()
         self.scrollAreaWidgetContents.setObjectName(u"scrollAreaWidgetContents")
-        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 525, 566))
+        self.scrollAreaWidgetContents.setGeometry(QRect(0, -46, 512, 612))
         self.verticalLayout_3 = QVBoxLayout(self.scrollAreaWidgetContents)
         self.verticalLayout_3.setObjectName(u"verticalLayout_3")
         self.horizontalLayout = QHBoxLayout()
@@ -76,6 +77,24 @@ class Ui_Help(object):
         self.widget_2.setObjectName(u"widget_2")
         self.gridLayout = QGridLayout(self.widget_2)
         self.gridLayout.setObjectName(u"gridLayout")
+        self.label_4 = QLabel(self.widget_2)
+        self.label_4.setObjectName(u"label_4")
+        self.label_4.setMinimumSize(QSize(80, 50))
+        self.label_4.setFont(font)
+
+        self.gridLayout.addWidget(self.label_4, 0, 0, 1, 1)
+
+        self.waifu2x = QLabel(self.widget_2)
+        self.waifu2x.setObjectName(u"waifu2x")
+        self.waifu2x.setFont(font)
+
+        self.gridLayout.addWidget(self.waifu2x, 2, 1, 1, 1)
+
+        self.openCmd = QPushButton(self.widget_2)
+        self.openCmd.setObjectName(u"openCmd")
+
+        self.gridLayout.addWidget(self.openCmd, 5, 1, 1, 1)
+
         self.logButton = QPushButton(self.widget_2)
         self.logButton.setObjectName(u"logButton")
 
@@ -87,19 +106,6 @@ class Ui_Help(object):
         self.label_6.setFont(font)
 
         self.gridLayout.addWidget(self.label_6, 2, 0, 1, 1)
-
-        self.upTimeLabel = QLabel(self.widget_2)
-        self.upTimeLabel.setObjectName(u"upTimeLabel")
-        self.upTimeLabel.setFont(font)
-
-        self.gridLayout.addWidget(self.upTimeLabel, 1, 1, 1, 1)
-
-        self.label_4 = QLabel(self.widget_2)
-        self.label_4.setObjectName(u"label_4")
-        self.label_4.setMinimumSize(QSize(80, 50))
-        self.label_4.setFont(font)
-
-        self.gridLayout.addWidget(self.label_4, 0, 0, 1, 1)
 
         self.verCheck = QPushButton(self.widget_2)
         self.verCheck.setObjectName(u"verCheck")
@@ -125,19 +131,42 @@ class Ui_Help(object):
 
         self.gridLayout.addWidget(self.label_9, 1, 0, 1, 1)
 
-        self.waifu2x = QLabel(self.widget_2)
-        self.waifu2x.setObjectName(u"waifu2x")
-        self.waifu2x.setFont(font)
+        self.upTimeLabel = QLabel(self.widget_2)
+        self.upTimeLabel.setObjectName(u"upTimeLabel")
+        self.upTimeLabel.setFont(font)
 
-        self.gridLayout.addWidget(self.waifu2x, 2, 1, 1, 1)
-
-        self.openCmd = QPushButton(self.widget_2)
-        self.openCmd.setObjectName(u"openCmd")
-
-        self.gridLayout.addWidget(self.openCmd, 5, 1, 1, 1)
+        self.gridLayout.addWidget(self.upTimeLabel, 1, 1, 1, 1)
 
 
         self.verticalLayout_2.addWidget(self.widget_2)
+
+        self.updateWidget = QWidget(self.widget)
+        self.updateWidget.setObjectName(u"updateWidget")
+        self.verticalLayout_5 = QVBoxLayout(self.updateWidget)
+        self.verticalLayout_5.setObjectName(u"verticalLayout_5")
+        self.label_10 = QLabel(self.updateWidget)
+        self.label_10.setObjectName(u"label_10")
+        font1 = QFont()
+        font1.setPointSize(16)
+        self.label_10.setFont(font1)
+
+        self.verticalLayout_5.addWidget(self.label_10)
+
+        self.updateLabel = QLabel(self.updateWidget)
+        self.updateLabel.setObjectName(u"updateLabel")
+
+        self.verticalLayout_5.addWidget(self.updateLabel)
+
+        self.updateButton = QPushButton(self.updateWidget)
+        self.updateButton.setObjectName(u"updateButton")
+        icon = QIcon()
+        icon.addFile(u":/png/icon/new.svg", QSize(), QIcon.Normal, QIcon.Off)
+        self.updateButton.setIcon(icon)
+
+        self.verticalLayout_5.addWidget(self.updateButton)
+
+
+        self.verticalLayout_2.addWidget(self.updateWidget)
 
         self.verticalSpacer = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
 
@@ -169,15 +198,18 @@ class Ui_Help(object):
         self.label_2.setText(QCoreApplication.translate("Help", u"\u9700\u8981\u53cd\u9988\u4f7f\u7528\u8fc7\u7a0b\u4e2d\u7684\u95ee\u9898\uff1f", None))
         self.label_3.setText(QCoreApplication.translate("Help", u"\u60f3\u63d0\u4f9b\u4e00\u4e9b\u5efa\u8bae\uff1f", None))
         self.pushButton.setText(QCoreApplication.translate("Help", u"Github Issue", None))
+        self.label_4.setText(QCoreApplication.translate("Help", u"\u7248\u672c\u53f7:", None))
+        self.waifu2x.setText(QCoreApplication.translate("Help", u"v1.0.8", None))
+        self.openCmd.setText(QCoreApplication.translate("Help", u"\u6253\u5f00\u63a7\u5236\u53f0", None))
         self.logButton.setText(QCoreApplication.translate("Help", u"\u6253\u5f00\u65e5\u5fd7\u76ee\u5f55", None))
         self.label_6.setText(QCoreApplication.translate("Help", u"waifu2x\u7248\u672c:", None))
-        self.upTimeLabel.setText(QCoreApplication.translate("Help", u"2021-11-27", None))
-        self.label_4.setText(QCoreApplication.translate("Help", u"\u7248\u672c\u53f7:", None))
         self.verCheck.setText(QCoreApplication.translate("Help", u"\u68c0\u6d4b\u66f4\u65b0", None))
         self.version.setText(QCoreApplication.translate("Help", u"v1.2.8", None))
         self.label_7.setText(QCoreApplication.translate("Help", u"\u65e5\u5fd7:", None))
         self.label_9.setText(QCoreApplication.translate("Help", u"\u4e0a\u6b21\u66f4\u65b0\u65f6\u95f4\uff1a", None))
-        self.waifu2x.setText(QCoreApplication.translate("Help", u"v1.0.8", None))
-        self.openCmd.setText(QCoreApplication.translate("Help", u"\u6253\u5f00\u63a7\u5236\u53f0", None))
+        self.upTimeLabel.setText(QCoreApplication.translate("Help", u"2021-11-27", None))
+        self.label_10.setText(QCoreApplication.translate("Help", u"\u65b0\u7248\u672c\uff1a", None))
+        self.updateLabel.setText("")
+        self.updateButton.setText(QCoreApplication.translate("Help", u"\u524d\u5f80\u66f4\u65b0", None))
     # retranslateUi
 

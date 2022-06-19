@@ -141,6 +141,7 @@ class Setting:
     AutoLogin = SettingValue("Other", 0, False)
     SavePassword = SettingValue("Other", 1, False)
     IsShowCmd = SettingValue("Other", 0, False)
+    DownloadNum = SettingValue("Other", 1, False)
     
     @staticmethod
     def InitLoadSetting():
@@ -211,3 +212,4 @@ class Setting:
     #
     #         from tools.log import Log
     #         Log.Error(es)
+

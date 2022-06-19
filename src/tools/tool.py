@@ -506,7 +506,7 @@ class ToolUtil(object):
         comment = soup.find("div", id="cdiv")
         for tag in comment.find_all("div", class_="c1"):
             times = tag.find("div", class_="c3").text
-            data = tag.find("div", class_="c6").text
+            data = tag.find("div", class_="c6").get_text(separator="\n")
             info.comment.append([times, data])
         base = book.baseInfo
         data = soup.find_all("script", {'type': "text/javascript"})
@@ -675,3 +675,42 @@ class ToolUtil(object):
         f = open(path + "." + mat, "wb+")
         f.write(data)
         f.close()
+
+    @staticmethod
+    def GetUpdateStrByTick(tick):
+        now = int(time.time())
+        day = (now - tick) // (24*3600)
+        hour = (now - tick) // 3600
+        minute = (now - tick) // 60
+        second = (now - tick)
+
+        from tools.str import Str
+        if day > 0:
+            return "{}".format(day) + Str.GetStr(Str.DayAgo)
+        elif hour > 0:
+            return "{}".format(hour) + Str.GetStr(Str.HourAgo)
+        elif minute > 0:
+            return "{}".format(minute) + Str.GetStr(Str.MinuteAgo)
+        else:
+            return "{}".format(second) + Str.GetStr(Str.SecondAgo)
+
+    @staticmethod
+    def GetStrMaxLen(str, maxLen=6):
+        if len(str) > maxLen:
+            return str[:maxLen] + "..."
+        else:
+            return str
+
+    @staticmethod
+    def ConvertEhentaiDate(data):
+        try:
+            v = data.split(" by")
+            timeArray = time.strptime(v[0], "Posted on %d %B %Y, %H:%M")
+            tick = time.mktime(timeArray)
+            return tick, v[1]
+        except Exception as es:
+            Log.Error(es)
+
+    @staticmethod
+    def ConvertDate(tick):
+        return time.strftime("%Y-%m-%d %H:%M", time.localtime(tick))

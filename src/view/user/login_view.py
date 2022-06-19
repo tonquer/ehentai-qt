@@ -1,8 +1,10 @@
 import requests
+from PySide2.QtCore import Signal, Qt, QTimer
 
+from functools import partial
 from component.dialog.base_mask_dialog import BaseMaskDialog
 from config import config
-from config.setting import Setting
+from config.setting import Setting, SettingValue
 from interface.ui_login import Ui_Login
 from qt_owner import QtOwner
 from server import req, Server
@@ -13,7 +15,9 @@ from tools.str import Str
 
 
 class LoginView(BaseMaskDialog, Ui_Login, QtTaskBase):
-    def __init__(self, parent=None):
+    CloseLogin = Signal()
+
+    def __init__(self, parent=None, isAutoLogin=False):
         BaseMaskDialog.__init__(self, parent)
         Ui_Login.__init__(self)
         QtTaskBase.__init__(self)
@@ -36,6 +40,23 @@ class LoginView(BaseMaskDialog, Ui_Login, QtTaskBase):
             self.hashLabel.setText(Setting.IpbPassHash.value)
             self.igneousLabel.setText(Setting.Igneous.value)
 
+        self.timer = QTimer()
+        self.timer.setInterval(1000)
+        self.timer.timeout.connect(self._AutoLogin)
+        self.autoLogin.setChecked(bool(Setting.AutoLogin.value))
+        self.autoLogin.clicked.connect(partial(self.CheckButtonEvent, Setting.AutoLogin, self.autoLogin))
+        if isAutoLogin:
+            self.timer.start()
+
+    def closeEvent(self, arg__1) -> None:
+        BaseMaskDialog.closeEvent(self, arg__1)
+        self.timer.stop()
+
+    def CheckButtonEvent(self, setItem, button):
+        assert isinstance(setItem, SettingValue)
+        setItem.SetValue(int(button.isChecked()))
+        return
+
     def _SwitchLoginMode(self):
         self.loginModel = not self.loginModel
         self.SetLoginMode()
@@ -55,6 +76,11 @@ class LoginView(BaseMaskDialog, Ui_Login, QtTaskBase):
         else:
             self.stackedWidget.setCurrentIndex(0)
             self.switchButton.setText(Str.GetStr(Str.LoginCookie))
+        return
+
+    def _AutoLogin(self):
+        self.timer.stop()
+        self.loginButton.click()
         return
 
     def Login(self):
@@ -118,11 +144,14 @@ class LoginView(BaseMaskDialog, Ui_Login, QtTaskBase):
             passHash = data["ipb_pass_hash"]
             Setting.IpbMemberId.SetValue(memberId)
             Setting.IpbPassHash.SetValue(passHash)
+            Server().isLogin = True
             self.AddHttpTask(req.GetUserIdReq(), self._GetUserBack, {})
             self.isTestLogin = True
         elif st == Status.UserError:
+            Server().isLogin = False
             self.SetErrMsg(Str.UserError)
         elif st == Status.NeedGoogle:
+            Server().isLogin = False
             self.SetErrMsg(Str.NeedGoogle)
             self.isTestLogin = True
             self.isLogin = False
@@ -130,6 +159,7 @@ class LoginView(BaseMaskDialog, Ui_Login, QtTaskBase):
         else:
             self.isTestLogin = True
             self.isLogin = False
+            Server().isLogin = True
             self.OpenLoginUrl()
 
     def OpenLoginUrl(self):
@@ -149,11 +179,13 @@ class LoginView(BaseMaskDialog, Ui_Login, QtTaskBase):
             Log.Warn("login fail, relogin")
             self.cookie.clear()
             self.isLogin = False
-            self.SetErrMsg(Str.LoginFail)
+            Server().isLogin = False
+            self.SetErrMsg(data["st"])
         else:
             Log.Warn("login success, {}, cookie".format(data, load_cookies))
             userName = data.get("userName", "")
             QtOwner().owner.LoginSucBack(userName)
+            Server().isLogin = True
             self.close()
             # if load_cookies:
                 # QtOwner().owner.settingForm.SetSettingV("ipb_member_id", load_cookies.get("ipb_member_id", ""))

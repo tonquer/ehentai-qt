@@ -61,6 +61,10 @@ class MainView(Main, QtTaskBase):
         self.subStackWidget.setCurrentIndex(0)
         self.settingView.LoadSetting()
 
+        self.searchView.searchTab.hide()
+        self.searchView2.searchWidget.hide()
+        self.searchView2.tagWidget.hide()
+
     @property
     def subStackList(self):
         return self.subStackWidget.subStackList
@@ -83,6 +87,7 @@ class MainView(Main, QtTaskBase):
         self.navigationWidget.collectButton.clicked.connect(partial(self.SwitchWidgetAndClear, self.subStackWidget.indexOf(self.favorityView)))
         # self.navigationWidget.lookButton.clicked.connect(partial(self.SwitchWidgetAndClear, self.subStackWidget.indexOf(self.historyView)))
         self.navigationWidget.helpButton.clicked.connect(partial(self.SwitchWidgetAndClear, self.subStackWidget.indexOf(self.helpView)))
+        self.navigationWidget.historyButton.clicked.connect(partial(self.SwitchWidgetAndClear, self.subStackWidget.indexOf(self.historyView)))
 
     def RetranslateUi(self):
         Main.retranslateUi(self, self)
@@ -267,7 +272,7 @@ class MainView(Main, QtTaskBase):
 
     def closeEvent(self, a0) -> None:
         if self.totalStackWidget.currentIndex() == 1:
-            self.totalStackWidget.setCurrentIndex(0)
+            self.readView.Close()
             a0.ignore()
             return
         super().closeEvent(a0)
@@ -345,7 +350,7 @@ class MainView(Main, QtTaskBase):
         TaskDownload().Stop()
         Server().Stop()
         QtReadImgPoolManager().Stop()
+        QtOwner().SaveCacheWord()
         from tools.login_proxy import Stop
         Stop()
         # QtTask().Stop()
-

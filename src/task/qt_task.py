@@ -70,13 +70,17 @@ class QtTaskBase:
     # downloadCallBack(data, laveFileSize)
     # downloadCompleteBack(data, st)
     # downloadCompleteBack(data, st, backParam)
-    def AddDownloadTask(self, url, path, downloadCallBack=None, completeCallBack=None, backParam=None, isSaveCache=True, isSaveFile=False, filePath=""):
+    def AddDownloadTask(self, url, path, downloadCallBack=None, completeCallBack=None, backParam=None, isSaveCache=True, isSaveFile=False, filePath="", isReload=False):
         from tools.qt_domain import QtDomainMgr
         from task.task_download import TaskDownload
         if not Setting.IsOpenDohPicture.value:
-            return TaskDownload().DownloadTask(url, path, downloadCallBack, completeCallBack, backParam, isSaveCache, self.__taskFlagId, isSaveFile, filePath)
+            return TaskDownload().DownloadTask(url, path, downloadCallBack, completeCallBack, backParam, isSaveCache, self.__taskFlagId, isSaveFile, filePath, isReload)
         else:
-            return QtDomainMgr.AddDownloadTask(url, path, downloadCallBack, completeCallBack, backParam, isSaveCache, self.__taskFlagId, isSaveFile, filePath)
+            return QtDomainMgr.AddDownloadTask(url, path, downloadCallBack, completeCallBack, backParam, isSaveCache, self.__taskFlagId, isSaveFile, filePath, isReload)
+
+    @classmethod
+    def GetCoverKey(cls, bookId, token, site):
+        return "{}/{}_{}_cover".format(site, bookId, token)
 
     # completeCallBack(saveData, taskId, backParam, tick)
     def AddConvertTask(self, path, imgData, model, completeCallBack, backParam=None):

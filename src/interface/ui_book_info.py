@@ -14,7 +14,6 @@ from PySide2.QtWidgets import *
 
 from component.scroll_area.smooth_scroll_area import SmoothScrollArea
 from component.list.tag_list_widget import TagListWidget
-from component.list.base_list_widget import BaseListWidget
 from component.button.icon_tool_button import IconToolButton
 
 import images_rc
@@ -288,10 +287,9 @@ class Ui_BookInfo(object):
 
         self.verticalLayout_3.addLayout(self.gridLayout_3)
 
-        self.epsListWidget = BaseListWidget(self.scrollAreaWidgetContents)
-        self.epsListWidget.setObjectName(u"epsListWidget")
-        self.epsListWidget.setStyleSheet(u"QListWidget {background-color:transparent;}\n"
-"QListWidget::item {\n"
+        self.tagScrollArea = QScrollArea(self.scrollAreaWidgetContents)
+        self.tagScrollArea.setObjectName(u"tagScrollArea")
+        self.tagScrollArea.setStyleSheet(u"QPushButton {\n"
 "    background-color:rgb(251, 239, 243);\n"
 "    color: rgb(196, 95, 125);\n"
 "	border:2px solid red;\n"
@@ -299,20 +297,21 @@ class Ui_BookInfo(object):
 "	border-color:rgb(196, 95, 125);\n"
 "}\n"
 "/* \u9f20\u6807\u5728\u6309\u94ae\u4e0a\u65f6\uff0c\u6309\u94ae\u989c\u8272 */\n"
-" QListWidget::item:hover \n"
+" QPushButton:hover \n"
 "{\n"
 "    background-color:rgb(21, 85, 154);\n"
 "    border-radius: 10px;\n"
 "    color: rgb(0, 0, 0);\n"
-"}\n"
-"")
-        self.epsListWidget.setFrameShape(QFrame.NoFrame)
-        self.epsListWidget.setTextElideMode(Qt.ElideRight)
-        self.epsListWidget.setVerticalScrollMode(QAbstractItemView.ScrollPerPixel)
-        self.epsListWidget.setHorizontalScrollMode(QAbstractItemView.ScrollPerPixel)
-        self.epsListWidget.setSpacing(6)
+"}")
+        self.tagScrollArea.setWidgetResizable(True)
+        self.tagWidgetContents = QWidget()
+        self.tagWidgetContents.setObjectName(u"tagWidgetContents")
+        self.tagWidgetContents.setGeometry(QRect(0, 0, 798, 224))
+        self.verticalLayout = QVBoxLayout(self.tagWidgetContents)
+        self.verticalLayout.setObjectName(u"verticalLayout")
+        self.tagScrollArea.setWidget(self.tagWidgetContents)
 
-        self.verticalLayout_3.addWidget(self.epsListWidget)
+        self.verticalLayout_3.addWidget(self.tagScrollArea)
 
         self.scrollArea.setWidget(self.scrollAreaWidgetContents)
 

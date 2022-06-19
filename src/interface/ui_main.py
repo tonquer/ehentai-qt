@@ -108,6 +108,9 @@ class Ui_Main(object):
         self.commentView = CommentView()
         self.commentView.setObjectName(u"commentView")
         self.subStackWidget.addWidget(self.commentView)
+        self.searchView2 = SearchView()
+        self.searchView2.setObjectName(u"searchView2")
+        self.subStackWidget.addWidget(self.searchView2)
 
         self.verticalLayout.addWidget(self.subStackWidget)
 

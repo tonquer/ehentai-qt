@@ -1,7 +1,10 @@
 import json
+from functools import partial
 
-from PySide2.QtWidgets import QWidget, QAbstractItemView
+from PySide2.QtWidgets import QWidget, QAbstractItemView, QVBoxLayout, QLabel, QPushButton
 
+from component.layout.flow_layout import FlowLayout
+from component.scroll_area.smooth_scroll_area import SmoothScrollArea
 from config import config
 from config.setting import Setting
 from interface.ui_search import Ui_Search
@@ -24,7 +27,7 @@ class SearchView(QWidget, Ui_Search, QtTaskBase):
         self.bookList.LoadCallBack = self.LoadNextPage
 
         self.searchButton.clicked.connect(self.lineEdit.Search)
-        self.tagWidget.itemClicked.connect(self.ClickKeywordListItem)
+        self.tagWidget.clicked.connect(self.ClickKeywordListItem)
         self.tagWidget.setHorizontalScrollMode(QAbstractItemView.ScrollPerPixel)
 
     def retranslateUi(self, search):
@@ -36,7 +39,11 @@ class SearchView(QWidget, Ui_Search, QtTaskBase):
             else:
                 search.tagWidget.AddItem(value)
 
-    def ClickKeywordListItem(self, item):
+    def ClickKeywordListItem(self, modelIndex):
+        index = modelIndex.row()
+        item = self.autorList.item(index)
+        if not item:
+            return
         data = item.text()
         self.categories = data
         self.lineEdit.setText("")
@@ -46,7 +53,7 @@ class SearchView(QWidget, Ui_Search, QtTaskBase):
         self.SendSearchCategories(1)
 
     def InitWord(self):
-        pass
+        self.lineEdit.InitCacheWords()
         # self.AddSqlTask("book", "", SqlServer.TaskTypeSelectWord, self.InitWordBack)
         return
 
@@ -59,6 +66,8 @@ class SearchView(QWidget, Ui_Search, QtTaskBase):
         text = kwargs.get("text")
         refresh = kwargs.get("refresh")
         self.categories = kwargs.get("categories", "")
+        if self.CheckDirechLink(text):
+            return
 
         if self.categories:
             self.lineEdit.setText("")
@@ -70,6 +79,7 @@ class SearchView(QWidget, Ui_Search, QtTaskBase):
             self.lineEdit.setText(self.text)
             self.bookList.clear()
             self.SendSearch(1)
+            self.lineEdit.AddCacheWord(self.text)
         elif refresh:
             self.text = ""
             self.lineEdit.setText(self.text)
@@ -100,9 +110,10 @@ class SearchView(QWidget, Ui_Search, QtTaskBase):
                     _id = info.baseInfo.id
                     title = info.baseInfo.title
                     url = info.baseInfo.imgUrl
+                    token = info.baseInfo.token
                     category = ToolUtil.GetCategoryName(info.baseInfo.category)
                     path = "{}/{}_{}_cover".format(config.CurSite, _id, info.baseInfo.token)
-                    self.bookList.AddBookItem(_id, title, Str.GetStr(Str.Classify) + ":" + category, url, path, "")
+                    self.bookList.AddBookItem(_id, title, Str.GetStr(Str.Classify) + ":" + category, url, path, "", token=token)
                 # self.CheckCategoryShowItem()
             else:
                 QtOwner().ShowError(Str.GetStr(st))
@@ -133,3 +144,19 @@ class SearchView(QWidget, Ui_Search, QtTaskBase):
         else:
             self.SendSearchCategories(self.bookList.page + 1)
         return
+
+    def CheckDirechLink(self, text):
+        if not text:
+            return False
+        import re
+        mo = re.search("(?<=/g/).*", text)
+        if mo:
+            data = mo.group().split("/")
+            if len(data) >= 2:
+                bookId = data[0]
+                token = data[1]
+                if bookId and bookId.isdigit():
+                    self.lineEdit.AddCacheWord(text)
+                    QtOwner().OpenBookInfo(bookId, token)
+                    return True
+        return False

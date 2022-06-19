@@ -197,6 +197,7 @@ class SettingView(QtWidgets.QWidget, Ui_SettingNew):
         self.titleBox.setChecked(Setting.IsNotUseTitleBar.value)
         self.dohLine.setText(Setting.DohAddress.value)
         self.dohRadio.setChecked(Setting.IsOpenDoh.value)
+        self.sniRadio.setChecked(Setting.IsCloseSNI.value)
 
         for index in range(self.encodeSelect.count()):
             if Setting.SelectEncodeGpu.value == self.encodeSelect.itemText(index):

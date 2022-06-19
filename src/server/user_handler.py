@@ -18,41 +18,40 @@ from .server import handler, Task, Server
 class CheckUpdateHandler(object):
     def __call__(self, task):
         data = {"st": task.status, "data": ""}
-        if not task.res.GetText() or task.status == Status.NetError:
-            if task.backParam:
-                TaskBase.taskObj.taskBack.emit(task.backParam, pickle.dumps(data))
-            return
-        if task.res.raw.status_code != 200:
-            if task.backParam:
-                TaskBase.taskObj.taskBack.emit(task.backParam, pickle.dumps(data))
-            return
-
-        updateInfo = re.findall(r"<meta property=\"og:description\" content=\"([^\"]*)\"", task.res.raw.text)
-        if updateInfo:
-            rawData = updateInfo[0]
-        else:
-            rawData = ""
-
-        versionInfo = re.findall("<meta property=\"og:url\" content=\".*tag/([^\"]*)\"", task.res.raw.text)
-        if versionInfo:
-            verData = versionInfo[0]
-        else:
-            verData = ""
-
-        info = verData.replace("v", "").split(".")
         try:
+            if not task.res.GetText() or task.status == Status.NetError:
+                return
+            if task.res.raw.status_code != 200:
+                return
+
+            updateInfo = re.findall(r"<meta property=\"og:description\" content=\"([^\"]*)\"", task.res.raw.text)
+            if updateInfo:
+                rawData = updateInfo[0]
+            else:
+                rawData = ""
+
+            versionInfo = re.findall("<meta property=\"og:url\" content=\".*tag/([^\"]*)\"", task.res.raw.text)
+            if versionInfo:
+                verData = versionInfo[0]
+            else:
+                verData = ""
+
+            info = verData.replace("v", "").split(".")
             version = int(info[0]) * 100 + int(info[1]) * 10 + int(info[2]) * 1
             info2 = re.findall(r"\d+\d*", os.path.basename(config.UpdateVersion))
             curversion = int(info2[0]) * 100 + int(info2[1]) * 10 + int(info2[2]) * 1
 
             rawData = "\n\nv" + ".".join(info) + "\n" + rawData
 
-            data["data"] = rawData
             if version > curversion:
-                if task.backParam:
-                    TaskBase.taskObj.taskBack.emit(task.backParam, pickle.dumps(data))
+                data["data"] = rawData
+            else:
+                data["data"] = "no"
         except Exception as es:
-            TaskBase.taskObj.taskBack.emit(task.backParam, pickle.dumps(data))
+            pass
+        finally:
+            if task.backParam:
+                TaskBase.taskObj.taskBack.emit(task.backParam, pickle.dumps(data))
 
 
 @handler(req.GetUserIdReq)
@@ -69,6 +68,7 @@ class GetUserIdReqHandler(object):
                 data["userName"] = userName
         except Exception as es:
             data["st"] = Status.ParseError
+            Log.Info(task.res.GetText())
             Log.Error(es)
         finally:
             if task.backParam:
@@ -105,6 +105,7 @@ class LoginReqHandler(object):
             # print(cookies)
         except Exception as es:
             data["st"] = Status.ParseError
+            Log.Info(task.res.GetText())
             Log.Error(es)
         finally:
             if task.backParam:
@@ -125,6 +126,7 @@ class HomeReqHandler(object):
             pass
         except Exception as es:
             data["st"] = Status.ParseError
+            Log.Info(task.res.GetText())
             Log.Error(es)
         finally:
             if task.backParam:
@@ -162,6 +164,7 @@ class GetIndexInfoReqHandler(object):
                 data["maxPages"] = maxPages
         except Exception as es:
             data["st"] = Status.ParseError
+            Log.Info(task.res.GetText())
             Log.Error(es)
         finally:
             if task.backParam:
@@ -185,6 +188,7 @@ class GetFavoritesReqHandler(object):
             data["favoriteList"] = favoriteList
         except Exception as es:
             data["st"] = Status.ParseError
+            Log.Info(task.res.GetText())
             Log.Error(es)
         finally:
             if task.backParam:
@@ -215,6 +219,7 @@ class BookInfoReqHandler(object):
             data["st"] = st
         except Exception as es:
             data["st"] = Status.ParseError
+            Log.Info(task.res.GetText())
             Log.Error(es)
         finally:
             if task.backParam:
@@ -228,13 +233,18 @@ class SendCommentReqHandler(object):
         try:
             if task.status != Status.Ok:
                 return
-            info, maxPage, errMsg = ToolUtil.ParseBookInfo(task.res.raw.text)
-            from tools.book import BookMgr
-            BookMgr().UpdateBookInfo(task.req.bookId, info, task.req.page, maxPage, task.req.site)
-            data["st"] = Status.Ok
-            data["msg"] = errMsg
+            st, errMsg, info, maxPage, commentError = ToolUtil.ParseBookInfo(task.res.raw.text)
+            if not commentError:
+                from tools.book import BookMgr
+                BookMgr().UpdateBookInfo(task.req.bookId, info, task.req.page, maxPage, task.req.site)
+                data["st"] = Status.Ok
+                data["msg"] = commentError
+            else:
+                data["st"] = Status.Ok
+                data["msg"] = commentError
         except Exception as es:
             data["st"] = Status.ParseError
+            Log.Info(task.res.GetText())
             Log.Error(es)
         finally:
             if task.backParam:
@@ -255,6 +265,7 @@ class GetBookImgUrlReqHandler(object):
             data["st"] = Status.Ok
         except Exception as es:
             data["st"] = Status.ParseError
+            Log.Info(task.res.GetText())
             Log.Error(es)
         finally:
             if task.backParam:
@@ -274,6 +285,7 @@ class GetBookImgUrl2ReqHandler(object):
             data["st"] = Status.Ok
         except Exception as es:
             data["st"] = Status.ParseError
+            Log.Info(task.res.GetText())
             Log.Error(es)
         finally:
             if task.backParam:
@@ -294,6 +306,7 @@ class AddFavoritesReqHandler(object):
             data["update"] = isUpdate
         except Exception as es:
             data["st"] = Status.ParseError
+            Log.Info(task.res.GetText())
             Log.Error(es)
         finally:
             if task.backParam:
@@ -308,6 +321,7 @@ class AddFavorites2ReqHandler(object):
             return
         except Exception as es:
             data["st"] = Status.ParseError
+            Log.Info(task.res.GetText())
             Log.Error(es)
         finally:
             if task.backParam:
@@ -322,6 +336,7 @@ class DelFavoritesReqHandler(object):
             return
         except Exception as es:
             data["st"] = Status.ParseError
+            Log.Info(task.res.GetText())
             Log.Error(es)
         finally:
             if task.backParam:
@@ -390,6 +405,7 @@ class SpeedTestPingHandler(object):
                 data["data"] = str(task.res.raw.elapsed.total_seconds())
         except Exception as es:
             data["st"] = Status.ParseError
+            Log.Info(task.res.GetText())
             Log.Error(es)
         finally:
             if task.backParam:
@@ -407,6 +423,7 @@ class DnsOverHttpsReqHandler(object):
             data['Answer'] = info.get("Answer")
         except Exception as es:
             data["st"] = Status.ParseError
+            Log.Info(task.res.GetText())
             Log.Error(es)
         finally:
             if task.backParam:

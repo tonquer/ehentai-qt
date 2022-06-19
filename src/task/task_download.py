@@ -155,7 +155,7 @@ class TaskDownload(TaskBase, QtTaskBase):
         except Exception as es:
             Log.Error(es)
 
-    def DownloadTask(self, url, path, downloadCallBack=None, completeCallBack=None, backParam=None, isSaveCache=True, cleanFlag=None, isSaveFile=False, filePath=""):
+    def DownloadTask(self, url, path, downloadCallBack=None, completeCallBack=None, backParam=None, isSaveCache=True, cleanFlag=None, isSaveFile=False, filePath="", isReload=False):
         self.taskId += 1
         data = QtDownloadTask(self.taskId)
         data.downloadCallBack = downloadCallBack
@@ -183,7 +183,7 @@ class TaskDownload(TaskBase, QtTaskBase):
         else:
             savePath = ""
 
-        Server().Download(req.DownloadBookReq(url, isSaveCache, savePath), backParams=self.taskId, cacheAndLoadPath=data.cacheAndLoadPath, loadPath=data.loadPath)
+        Server().Download(req.DownloadBookReq(url, isSaveCache, savePath, isReload), backParams=self.taskId, cacheAndLoadPath=data.cacheAndLoadPath, loadPath=data.loadPath)
         return self.taskId
 
     def HandlerTask(self, downloadId, laveFileSize, data, isCallBack=True):

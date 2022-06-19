@@ -47,6 +47,8 @@
 	<file>icon/loading/loading_8.png</file>
 	<file>icon/loading/loading_9.png</file>
 	<file>icon/loading/loading_10.png</file>
+    <file>icon/new.svg</file>
+
   </qresource>
   <qresource prefix="icon">
     <file>theme/dark_pink/disabled/base.svg</file>

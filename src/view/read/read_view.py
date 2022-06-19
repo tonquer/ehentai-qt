@@ -3,8 +3,8 @@ from functools import partial
 
 from PySide2 import QtWidgets
 from PySide2.QtCore import Qt, QSize
-from PySide2.QtGui import QImage, QCursor, QGuiApplication, QPixmap
-from PySide2.QtWidgets import QMenu
+from PySide2.QtGui import QImage, QCursor, QGuiApplication, QPixmap, QClipboard
+from PySide2.QtWidgets import QMenu, QApplication
 
 from config import config
 from config.setting import Setting
@@ -65,13 +65,18 @@ class ReadView(QtWidgets.QWidget, QtTaskBase):
 
     def SelectMenu(self):
         popMenu = QMenu(self)
-        action = popMenu.addAction(Str.GetStr(Str.Menu))
+        action = popMenu.addAction(Str.GetStr(Str.Menu)+"(F12)")
         action.triggered.connect(self.ShowAndCloseTool)
 
-        action = popMenu.addAction(Str.GetStr(Str.FullSwitch))
+        action = popMenu.addAction(Str.GetStr(Str.FullSwitch)+"(F11)")
         action.triggered.connect(self.qtTool.FullScreen)
 
+        action = popMenu.addAction(Str.GetStr(Str.Copy))
+        action.triggered.connect(self.Copy)
+
         menu2 = popMenu.addMenu(Str.GetStr(Str.ReadMode))
+        action = menu2.addAction("切换双页对齐(F10)")
+        action.triggered.connect(self.ChangeDoublePage)
 
         def AddReadMode(name, value):
             action = menu2.addAction(name)
@@ -86,7 +91,7 @@ class ReadView(QtWidgets.QWidget, QtTaskBase):
         AddReadMode(Str.GetStr(Str.LeftRightScroll), 4)
         AddReadMode(Str.GetStr(Str.RightLeftScroll), 5)
 
-        menu3 = popMenu.addMenu(Str.GetStr(Str.Scale))
+        menu3 = popMenu.addMenu(Str.GetStr(Str.Scale)+ "(- +)")
 
         def AddScaleMode(name, value):
             action = menu3.addAction(name)
@@ -113,10 +118,10 @@ class ReadView(QtWidgets.QWidget, QtTaskBase):
         # action = menu3.addAction(Str.GetStr(Str.NextChapter))
         # action.triggered.connect(self.qtTool.OpenNextEps)
 
-        action = popMenu.addAction(Str.GetStr(Str.AutoScroll))
+        action = popMenu.addAction(Str.GetStr(Str.AutoScroll)+"(F5)")
         action.triggered.connect(self.qtTool.SwitchScrollAndTurn)
 
-        action = popMenu.addAction(Str.GetStr(Str.Exit))
+        action = popMenu.addAction(Str.GetStr(Str.Exit) + "(Esc)")
         action.triggered.connect(self.Close)
 
         if self.qtTool.IsStartScrollAndTurn():
@@ -131,6 +136,7 @@ class ReadView(QtWidgets.QWidget, QtTaskBase):
         return self.frame.qtTool
 
     def Close(self):
+        QtOwner().SetSubTitle("")
         self.ReturnPage()
         self.frame.scrollArea.ClearPixItem()
         self.Clear()
@@ -413,11 +419,9 @@ class ReadView(QtWidgets.QWidget, QtTaskBase):
         return True
 
     def AddHistory(self):
-        # TODO
-        # bookName = QtOwner().bookInfoView.bookName
-        # url = QtOwner().bookInfoView.url
-        # path = QtOwner().bookInfoView.path
-        # QtOwner().historyView.AddHistory(self.bookId, bookName, self.epsId, self.curIndex, url, path)
+        url = QtOwner().bookInfoView.url
+        site = QtOwner().bookInfoView.site
+        QtOwner().historyView.AddHistory(self.bookId, self.token, self.epsName, site, self.curIndex, url)
         return
 
     def ShowAndCloseTool(self):
@@ -490,3 +494,25 @@ class ReadView(QtWidgets.QWidget, QtTaskBase):
 
     def ChangeReadMode(self, index):
         self.qtTool.comboBox.setCurrentIndex(index)
+
+    def ChangeDoublePage(self):
+        if self.stripModel not in [ReadMode.RightLeftDouble, ReadMode.LeftRightDouble]:
+            return
+        if self.curIndex < self.maxPic:
+            self.curIndex += 1
+        self.frame.oldValue = 0
+        self.qtTool.SetData(isInit=True)
+        self.scrollArea.ResetScrollValue(self.curIndex)
+        self.scrollArea.changeNextPage.emit(self.curIndex)
+
+    def Copy(self):
+        p = self.pictureData.get(self.curIndex)
+        if not p:
+            return
+        assert isinstance(p, QtFileData)
+        c = QApplication.clipboard()
+        if p.cacheWaifu2xImage:
+            c.setPixmap(QPixmap(p.cacheWaifu2xImage))
+        elif p.cacheImage:
+            c.setPixmap(QPixmap(p.cacheImage))
+        return

@@ -28,6 +28,21 @@ class Ui_Download(object):
 
         self.horizontalLayout.addItem(self.horizontalSpacer)
 
+        self.label = QLabel(Download)
+        self.label.setObjectName(u"label")
+
+        self.horizontalLayout.addWidget(self.label)
+
+        self.downloadNumBox = QComboBox(Download)
+        self.downloadNumBox.addItem("")
+        self.downloadNumBox.addItem("")
+        self.downloadNumBox.addItem("")
+        self.downloadNumBox.addItem("")
+        self.downloadNumBox.addItem("")
+        self.downloadNumBox.setObjectName(u"downloadNumBox")
+
+        self.horizontalLayout.addWidget(self.downloadNumBox)
+
         self.pushButton = QPushButton(Download)
         self.pushButton.setObjectName(u"pushButton")
 
@@ -101,6 +116,13 @@ class Ui_Download(object):
 
     def retranslateUi(self, Download):
         Download.setWindowTitle(QCoreApplication.translate("Download", u"\u4e0b\u8f7d", None))
+        self.label.setText(QCoreApplication.translate("Download", u"\u540c\u65f6\u4e0b\u8f7d\u6570", None))
+        self.downloadNumBox.setItemText(0, QCoreApplication.translate("Download", u"1", None))
+        self.downloadNumBox.setItemText(1, QCoreApplication.translate("Download", u"2", None))
+        self.downloadNumBox.setItemText(2, QCoreApplication.translate("Download", u"3", None))
+        self.downloadNumBox.setItemText(3, QCoreApplication.translate("Download", u"4", None))
+        self.downloadNumBox.setItemText(4, QCoreApplication.translate("Download", u"5", None))
+
         self.pushButton.setText(QCoreApplication.translate("Download", u"\u5168\u90e8\u5f00\u59cb", None))
         self.pushButton_3.setText(QCoreApplication.translate("Download", u"\u5168\u90e8\u6682\u505c", None))
         self.pushButton_2.setText(QCoreApplication.translate("Download", u"\u5f00\u59cb\u8f6c\u6362", None))
