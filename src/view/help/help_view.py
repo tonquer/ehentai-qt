@@ -99,7 +99,7 @@ class HelpView(QWidget, Ui_Help, QtTaskBase):
         return
 
     def OpenUrl(self):
-        UrlList = [config.Issues1, config.Issues2, config.Issues3],
+        UrlList = [config.Issues1, config.Issues2, config.Issues3]
         url = UrlList[0] if self.checkUpdateIndex >= len(UrlList) else UrlList[self.checkUpdateIndex]
         QDesktopServices.openUrl(QUrl(url))
 
