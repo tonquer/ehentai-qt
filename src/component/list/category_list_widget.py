@@ -109,11 +109,11 @@ class CategoryListWidget(BaseListWidget):
     def Waifu2xPicture(self, index, isIfSize=False):
         widget = self.indexWidget(index)
         if widget and widget.picData:
-            w, h, mat = ToolUtil.GetPictureSize(widget.picData)
+            w, h, mat, _ = ToolUtil.GetPictureSize(widget.picData)
             if max(w, h) <= Setting.CoverMaxNum.value or not isIfSize:
                 model = ToolUtil.GetModelByIndex(Setting.CoverLookNoise.value, Setting.CoverLookScale.value, Setting.CoverLookModel.value, mat)
                 widget.isWaifu2xLoading = True
-                self.AddConvertTask(widget.path, widget.picData, model, self.Waifu2xPictureBack, index)
+                self.AddConvertTask(widget.path, widget.picData, model, self.Waifu2xPictureBack, backParam=index)
 
     def CancleWaifu2xPicture(self, index):
         widget = self.indexWidget(index)

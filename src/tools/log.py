@@ -9,8 +9,10 @@ from config.setting import Setting
 class Log(object):
     logger = logging.getLogger()
     logger.setLevel(logging.DEBUG)
+
     ch = None
     fh = None
+    ParseHandle = None
 
     @staticmethod
     def UpdateLoggingLevel():
@@ -43,6 +45,7 @@ class Log(object):
         if not os.path.isdir(logPath):
             os.makedirs(logPath)
         day = time.strftime('%Y%m%d', time.localtime(time.time()))
+
         logfile = os.path.join(logPath, day+".log")
         fh = logging.FileHandler(logfile, mode='a', encoding="utf-8")
         Log.fh = fh
@@ -54,6 +57,17 @@ class Log(object):
         Log.Info = Log.logger.info
         Log.Warn = Log.logger.warning
         Log.Error = Log.logger.exception
+
+        logfile = os.path.join(logPath, os.path.join("parse_error", day+".log"))
+        if not os.path.isdir(os.path.dirname(logfile)):
+            os.makedirs(os.path.dirname(logfile))
+
+        fh = logging.FileHandler(logfile, mode='a', encoding="utf-8")
+        Log.ParseHandle = fh
+        fh.setLevel(logging.CRITICAL)
+        formatter = logging.Formatter("%(asctime)s - %(filename)s[line:%(lineno)d] - %(levelname)s: %(message)s")
+        fh.setFormatter(formatter)
+        Log.logger.addHandler(fh)
         return
 
     @staticmethod
@@ -71,6 +85,11 @@ class Log(object):
     @staticmethod
     def Error(es):
         Log.logger.error(es, exc_info=True)
+
+    @staticmethod
+    def ParseError(es, url, text):
+        # 解析失败保存下日志
+        Log.logger.critical(str(es) +"\n"+url+"\n"+text+"\n\n")
 
     @staticmethod
     def InstallFilter(stream2):

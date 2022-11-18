@@ -21,7 +21,7 @@ from tools.tool import CTime, ToolUtil
 class QtTaskQObject(QObject):
     taskBack = Signal(int, bytes)
     downloadBack = Signal(int, int, bytes)
-    downloadStBack = Signal(int, str)
+    downloadStBack = Signal(int, dict)
     convertBack = Signal(int)
     imageBack = Signal(int, QImage)
 
@@ -45,6 +45,10 @@ class QtTaskBase:
         QtTaskBase.Id += 1
 
     @property
+    def cleanFlag(self):
+        return self.__taskFlagId
+
+    @property
     def req(self):
         return
 
@@ -62,30 +66,61 @@ class QtTaskBase:
     # downloadCallBack(data, laveFileSize)
     # downloadCompleteBack(data, st)
     # downloadCompleteBack(data, st, backParam)
-    def AddDownloadBook(self, bookId, index, token="", domain=config.CurSite, statusBack=None, downloadCallBack=None, completeCallBack=None, backParam=None, isSaveCache=True, isSaveFile=False, filePath=""):
+    def AddDownloadBook(self, bookId, index, token="", domain=config.CurSite, statusBack=None, downloadCallBack=None, completeCallBack=None, backParam=None, loadPath="", cachePath="", savePath="", cleanFlag="", isInit=False):
         from task.task_download import TaskDownload
-        return TaskDownload().DownloadBook(bookId, index, token, domain, statusBack, downloadCallBack, completeCallBack, backParam, isSaveCache, self.__taskFlagId, isSaveFile, filePath)
+        if not cleanFlag:
+            cleanFlag = self.__taskFlagId
+        if not cachePath and not savePath:
+            if Setting.SavePath.value:
+                path = "{}/{}_{}/{}".format(domain, bookId, token, index+ 1)
+                cachePath = os.path.join(os.path.join(Setting.SavePath.value, config.CachePathDir), path)
+        return TaskDownload().DownloadBook(bookId, index, token, domain, statusBack, downloadCallBack, completeCallBack, backParam, loadPath, cachePath, savePath, cleanFlag, isInit)
+
+    def AddDownloadBookCache(self, loadPath, completeCallBack=None, backParam=0, cleanFlag=""):
+        from task.task_download import TaskDownload
+        if not cleanFlag:
+            cleanFlag = self.__taskFlagId
+        return TaskDownload().DownloadCache(loadPath, completeCallBack, backParam, cleanFlag)
 
     # downloadCallBack(data, laveFileSize, backParam)
     # downloadCallBack(data, laveFileSize)
     # downloadCompleteBack(data, st)
     # downloadCompleteBack(data, st, backParam)
-    def AddDownloadTask(self, url, path, downloadCallBack=None, completeCallBack=None, backParam=None, isSaveCache=True, isSaveFile=False, filePath="", isReload=False):
+    def AddDownloadTask(self, url, path, downloadCallBack=None, completeCallBack=None, downloadStCallBack=None, backParam=None, loadPath="", cachePath="", savePath="",  cleanFlag="", isReload=False):
         from tools.qt_domain import QtDomainMgr
         from task.task_download import TaskDownload
+        if not cleanFlag:
+            cleanFlag = self.__taskFlagId
+
+        if not cachePath and not savePath:
+            if Setting.SavePath.value and path:
+                filePath2 = os.path.join(os.path.join(Setting.SavePath.value, config.CachePathDir), path)
+                cachePath = filePath2
+
         if not Setting.IsOpenDohPicture.value:
-            return TaskDownload().DownloadTask(url, path, downloadCallBack, completeCallBack, backParam, isSaveCache, self.__taskFlagId, isSaveFile, filePath, isReload)
+            return TaskDownload().DownloadTask(url, path, downloadCallBack, completeCallBack, downloadStCallBack, backParam, loadPath, cachePath, savePath, cleanFlag, isReload)
         else:
-            return QtDomainMgr.AddDownloadTask(url, path, downloadCallBack, completeCallBack, backParam, isSaveCache, self.__taskFlagId, isSaveFile, filePath, isReload)
+            return QtDomainMgr.AddDownloadTask(url, path, downloadCallBack, completeCallBack, downloadStCallBack, backParam, loadPath, cachePath, savePath, cleanFlag, isReload)
 
     @classmethod
     def GetCoverKey(cls, bookId, token, site):
         return "{}/{}_{}_cover".format(site, bookId, token)
 
+    @classmethod
+    def GetPreCoverKey(cls, bookId, token, site, index):
+        return "{}/{}_{}_pre_{}_cover".format(site, bookId, token, index)
+
     # completeCallBack(saveData, taskId, backParam, tick)
-    def AddConvertTask(self, path, imgData, model, completeCallBack, backParam=None):
+    def AddConvertTask(self, path, imgData, model, completeCallBack, backParam=None, preDownPath=None):
         from task.task_waifu2x import TaskWaifu2x
-        return TaskWaifu2x().AddConvertTaskByData(path, imgData, model, completeCallBack, backParam, self.__taskFlagId)
+        return TaskWaifu2x().AddConvertTaskByData(path, imgData, model, completeCallBack, backParam, preDownPath, self.__taskFlagId)
+
+    # completeCallBack(saveData, taskId, backParam, tick)
+    def AddConvertTaskByPath(self, loadPath, savePath, completeCallBack, backParam=None, cleanFlag=""):
+        from task.task_waifu2x import TaskWaifu2x
+        if not cleanFlag:
+            cleanFlag = self.__taskFlagId
+        return TaskWaifu2x().AddConvertTaskByPath(loadPath, savePath, completeCallBack, backParam, cleanFlag)
 
     def AddQImageTask(self, data, callBack=None, backParam=None):
         from task.task_qimage import TaskQImage
@@ -110,51 +145,6 @@ class QtTaskBase:
     def ClearQImageTask(self):
         from task.task_qimage import TaskQImage
         return TaskQImage().Cancel(self.__taskFlagId)
-
-
-class QtDownloadTask(object):
-    Waiting = Str.Waiting
-    Reading = Str.Reading
-    ReadingPicture = Str.ReadingPicture
-    Downloading = Str.Downloading
-    Success = Str.Success
-    Error = Str.Error
-
-    def __init__(self, downloadId=0):
-        self.downloadId = downloadId
-        self.downloadCallBack = None       # addData, laveSize
-        self.downloadCompleteBack = None   # data, status
-
-        self.status = self.Waiting
-        self.statusBack = None             # data, status
-        self.domain = config.CurSite
-        self.fileSize = 0
-        self.saveData = b""
-        self.bookId = ""
-        self.index = ""
-        self.site = ""
-        self.token = ""
-        self.isSaveCache = ""
-        self.isSaveFile = False
-        self.resetCnt = 0
-        self.cacheCallBack = ""   # 临时保存一个callback，因为
-
-        self.originalName = ""
-        self.backParam = None
-        self.cleanFlag = ""
-        self.tick = 0
-        self.cacheAndLoadPath = ""   # 保存和加载
-        self.loadPath = ""           # 只加载
-
-        self.imgData = b""
-        self.scale = 0
-        self.noise = 0
-        self.model = {
-            "model": 1,
-            "scale": 2,
-            "toH": 100,
-            "toW": 100,
-        }
 
 
 class TaskBase(Singleton):

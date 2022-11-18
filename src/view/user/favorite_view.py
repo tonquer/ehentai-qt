@@ -32,14 +32,19 @@ class FavoriteView(QtWidgets.QWidget, Ui_Favority, QtTaskBase):
             self.bookList.clear()
             self.GetFavorites()
 
-    def GetFavorites(self, page=1):
+    def GetFavorites(self, nextId=""):
         curIndex = self.comboBox.currentIndex()
         if curIndex <= 0:
             favcat = ""
         else:
             favcat = str(curIndex-1)
         QtOwner().ShowLoading()
-        self.AddHttpTask(req.GetFavoritesReq(favcat, page), self.GetFavoritesBack, page)
+        if nextId:
+            page = self.bookList.page+1
+        else:
+            page = 1
+        QtOwner().ShowLoading()
+        self.AddHttpTask(req.GetFavoritesReq(favcat, nextId), self.GetFavoritesBack, page)
 
     def GetFavoritesBack(self, data, page):
         QtOwner().CloseLoading()
@@ -47,9 +52,15 @@ class FavoriteView(QtWidgets.QWidget, Ui_Favority, QtTaskBase):
         st = data['st']
         if st == Status.Ok:
             bookList = data["bookList"]
-            maxPages = data["maxPages"]
+            nextId = data["nextId"]
             favoriteList = data["favoriteList"]
-            self.bookList.UpdatePage(page, maxPages)
+            if nextId:
+                self.bookList.UpdatePage(page, page+1)
+                self.bookList.nextId = nextId
+                self.jumpButton.setEnabled(True)
+            else:
+                self.bookList.UpdatePage(page, page)
+                self.jumpButton.setEnabled(False)
             allNum = sum(favoriteList.values())
             self.comboBox.setItemText(0, Str.GetStr(Str.All)+" ({})".format(str(allNum)))
             for k, v in favoriteList.items():
@@ -67,22 +78,26 @@ class FavoriteView(QtWidgets.QWidget, Ui_Favority, QtTaskBase):
         pass
 
     def JumpPage(self):
-        page = int(self.spinBox.text())
-        if page > self.bookList.pages:
+        if self.bookList.page >= self.bookList.pages:
             return
-        self.bookList.page = page
+        if not self.bookList.nextId:
+            return
         self.bookList.clear()
-        self.GetFavorites(page)
+        self.bookList.nextId = ""
+        self.GetFavorites(self.bookList.nextId)
         return
 
     def JumpFavcat(self):
         self.bookList.UpdatePage(1, 1)
         self.bookList.clear()
-        self.GetFavorites(1)
+        self.bookList.nextId = ""
+        self.GetFavorites()
         return
 
     def LoadNextPage(self):
-        self.GetFavorites(self.bookList.page + 1)
+        if not self.bookList.nextId:
+            return
+        self.GetFavorites(self.bookList.nextId)
         return
 
     def DelCallBack(self):

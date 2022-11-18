@@ -9,19 +9,27 @@ from component.scroll.smooth_scroll_bar import SmoothScrollBar
 class TagListWidget(BaseListWidget):
     def __init__(self, parent):
         BaseListWidget.__init__(self, parent)
-        self.setViewMode(self.ViewMode.ListMode)
-        self.setFlow(self.Flow.LeftToRight)
-        self.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
-        self.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+        self.setViewMode(self.ListMode)
+        self.setFlow(self.LeftToRight)
+        self.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+        self.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         self.setMaximumHeight(30)
-        self.setFocusPolicy(Qt.FocusPolicy.NoFocus)
+        self.setFocusPolicy(Qt.NoFocus)
         self.hScrollBar = SmoothScrollBar()
-        self.hScrollBar.setOrientation(Qt.Orientation.Horizontal)
+        self.hScrollBar.setOrientation(Qt.Horizontal)
         self.setHorizontalScrollBar(self.hScrollBar)
-        self.setHorizontalScrollMode(QAbstractItemView.ScrollMode.ScrollPerPixel)
+        self.setHorizontalScrollMode(QAbstractItemView.ScrollPerPixel)
         self.horizontalScrollBar().setSingleStep(30)
 
     def wheelEvent(self, arg__1) -> None:
+        if not self.wheelStatus:
+            return
+        if -arg__1.angleDelta().y() > 0 and abs(self.horizontalScrollBar().value() - self.horizontalScrollBar().maximum()) <= 2:
+            arg__1.ignore()
+            return
+        elif -arg__1.angleDelta().y() < 0 and abs(self.horizontalScrollBar().value() - self.horizontalScrollBar().minimum()) <= 2:
+            arg__1.ignore()
+            return
         self.hScrollBar.ScrollValue(-arg__1.angleDelta().y())
 
     def AddItem(self, name, isSelectable=False):
@@ -45,3 +53,5 @@ class TagListWidget(BaseListWidget):
         item.setSizeHint(QSize(width, height) + QSize(20, 0))
         if not isSelectable:
             item.setFlags(item.flags() & (~Qt.ItemIsSelectable))
+
+        self.addItem(item)

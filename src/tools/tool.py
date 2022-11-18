@@ -157,23 +157,26 @@ class ToolUtil(object):
     @staticmethod
     def GetPictureSize(data):
         if not data:
-            return 0, 0, "jpg"
+            return 0, 0, "jpg", False
         try:
             from PIL import Image
             from io import BytesIO
             a = BytesIO(data)
             img = Image.open(a)
-            a.close()
+            isAnima = getattr(img, "is_animated", False)
             if img.format == "PNG":
                 mat = "png"
             elif img.format == "GIF":
                 mat = "gif"
+            elif img.format == "WEBP":
+                mat = "webp"
             else:
                 mat = "jpg"
-            return img.width, img.height, mat
+            a.close()
+            return img.width, img.height, mat, isAnima
         except Exception as es:
             Log.Error(es)
-        return 0, 0, "jpg"
+        return 0, 0, "jpg", False
 
     @staticmethod
     def GetLookModel(category):
@@ -229,7 +232,7 @@ class ToolUtil(object):
     def LoadCachePicture(filePath):
         try:
             c = CTime()
-            for mat in [".jpg", ".png", ".gif"]:
+            for mat in [".jpg", ".png", ".gif", ".webp", ".bmp", ".apng"]:
                 path = filePath + mat
                 if not os.path.isfile(path):
                     continue
@@ -304,16 +307,21 @@ class ToolUtil(object):
                 if b.baseInfo.id:
                     bookInfos.append(b)
 
-        table = soup.find("table", class_="ptt")
-        maxPage = 1
-        for td in table.tr.children:
-            if getattr(td, "a", None):
-                pages = td.a.text
-                datas = re.findall(r"\d+", pages)
-                if not datas:
-                    continue
-                maxPage = max(maxPage, int(datas[0]))
-        return bookInfos, maxPage
+        table = soup.find("a", id="unext")
+        nextId = ""
+        if table and table.attrs.get("href"):
+            url = table.attrs.get("href")
+            mo = re.search("(?<=next=)\w+", url)
+            if mo:
+                nextId = mo.group()
+        # for td in table.tr.children:
+        #     if getattr(td, "a", None):
+        #         pages = td.a.text
+        #         datas = re.findall(r"\d+", pages)
+        #         if not datas:
+        #             continue
+        #         maxPage = max(maxPage, int(datas[0]))
+        return bookInfos, nextId
 
     @staticmethod
     def ParseBookBaseInfoGlt(tr):
@@ -492,6 +500,9 @@ class ToolUtil(object):
             url = tag.a.attrs.get('href')
             index = int(tag.a.img.attrs.get('alt'))
             info.picUrl[index] = url
+            preUrl = tag.a.img.attrs.get("src")
+            if preUrl and "ehgt.org/g/blank.gif" not in preUrl:
+                info.preUrl[index] = preUrl
 
         table = soup.find("table", class_="ptt")
         maxPage = 1
@@ -539,6 +550,10 @@ class ToolUtil(object):
         commentError = ""
         if tag:
             commentError = tag.text
+
+        tags = soup.find_all("div", class_="gdtl")
+
+
         return Status.Ok, "", book, maxPage, commentError
 
     @staticmethod
@@ -714,3 +729,20 @@ class ToolUtil(object):
     @staticmethod
     def ConvertDate(tick):
         return time.strftime("%Y-%m-%d %H:%M", time.localtime(tick))
+
+    @staticmethod
+    def GetAnimationFormat(data):
+        try:
+            from PIL import Image
+            from io import BytesIO
+            a = BytesIO(data)
+            img = Image.open(a)
+
+            format = ""
+            if getattr(img, "is_animated", ""):
+                format = img.format
+            a.close()
+            return format
+        except Exception as es:
+            Log.Error(es)
+        return ""

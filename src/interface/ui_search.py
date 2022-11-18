@@ -147,15 +147,6 @@ class Ui_Search(object):
 
         self.horizontalLayout.addWidget(self.line_5)
 
-        self.spinBox = QSpinBox(Search)
-        self.spinBox.setObjectName(u"spinBox")
-        self.spinBox.setMinimumSize(QSize(50, 0))
-        self.spinBox.setStyleSheet(u"background-color:transparent;")
-        self.spinBox.setMinimum(1)
-        self.spinBox.setMaximum(1)
-
-        self.horizontalLayout.addWidget(self.spinBox)
-
         self.line_6 = QFrame(Search)
         self.line_6.setObjectName(u"line_6")
         self.line_6.setFrameShape(QFrame.VLine)
@@ -188,6 +179,6 @@ class Ui_Search(object):
         self.label_2.setText(QCoreApplication.translate("Search", u"\u641c\u7d22\uff1a", None))
         self.searchButton.setText(QCoreApplication.translate("Search", u"\u641c\u7d22", None))
         self.label.setText(QCoreApplication.translate("Search", u"\u9875\uff1a0/0", None))
-        self.jumpPage.setText(QCoreApplication.translate("Search", u"\u8df3\u8f6c", None))
+        self.jumpPage.setText(QCoreApplication.translate("Search", u"\u4e0b\u4e00\u9875", None))
     # retranslateUi
 

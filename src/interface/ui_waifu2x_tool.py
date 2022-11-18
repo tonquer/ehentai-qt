@@ -230,11 +230,28 @@ class Ui_Waifu2xTool(object):
 
         self.gpuLabel = QLabel(Waifu2xTool)
         self.gpuLabel.setObjectName(u"gpuLabel")
+        self.gpuLabel.setWordWrap(True)
 
         self.horizontalLayout_11.addWidget(self.gpuLabel)
 
 
         self.verticalLayout_3.addLayout(self.horizontalLayout_11)
+
+        self.horizontalLayout = QHBoxLayout()
+        self.horizontalLayout.setObjectName(u"horizontalLayout")
+        self.label = QLabel(Waifu2xTool)
+        self.label.setObjectName(u"label")
+        self.label.setMaximumSize(QSize(60, 16777215))
+
+        self.horizontalLayout.addWidget(self.label)
+
+        self.format = QLabel(Waifu2xTool)
+        self.format.setObjectName(u"format")
+
+        self.horizontalLayout.addWidget(self.format)
+
+
+        self.verticalLayout_3.addLayout(self.horizontalLayout)
 
         self.horizontalLayout_10 = QHBoxLayout()
         self.horizontalLayout_10.setObjectName(u"horizontalLayout_10")
@@ -282,6 +299,12 @@ class Ui_Waifu2xTool(object):
 
         self.verticalLayout_3.addWidget(self.saveButton, 0, Qt.AlignLeft)
 
+        self.headButton = QPushButton(Waifu2xTool)
+        self.headButton.setObjectName(u"headButton")
+        self.headButton.setMaximumSize(QSize(100, 16777215))
+
+        self.verticalLayout_3.addWidget(self.headButton, 0, Qt.AlignLeft)
+
 
         self.verticalLayout.addLayout(self.verticalLayout_3)
 
@@ -322,6 +345,7 @@ class Ui_Waifu2xTool(object):
         self.comboBox.currentIndexChanged.connect(Waifu2xTool.ChangeModel)
         self.changeButton.clicked.connect(Waifu2xTool.StartWaifu2x)
         self.noiseCombox.currentIndexChanged.connect(Waifu2xTool.CheckScaleRadio)
+        self.headButton.clicked.connect(Waifu2xTool.SetHead)
 
         QMetaObject.connectSlotsByName(Waifu2xTool)
     # setupUi
@@ -356,11 +380,14 @@ class Ui_Waifu2xTool(object):
         self.sizeLabel.setText(QCoreApplication.translate("Waifu2xTool", u"\u65e0\u4fe1\u606f", None))
         self.label_9.setText(QCoreApplication.translate("Waifu2xTool", u"\u8f6c\u6362\u6a21\u5f0f\uff1a", None))
         self.gpuLabel.setText(QCoreApplication.translate("Waifu2xTool", u"GPU", None))
+        self.label.setText(QCoreApplication.translate("Waifu2xTool", u"\u683c\u5f0f", None))
+        self.format.setText("")
         self.label_6.setText(QCoreApplication.translate("Waifu2xTool", u"\u8017\u65f6\uff1a", None))
         self.tickLabel.setText("")
         self.oepnButton.setText(QCoreApplication.translate("Waifu2xTool", u"\u6253\u5f00\u56fe\u7247", None))
         self.pushButton_3.setText(QCoreApplication.translate("Waifu2xTool", u"\u7f29\u5c0f", None))
         self.pushButton.setText(QCoreApplication.translate("Waifu2xTool", u"\u653e\u5927", None))
         self.saveButton.setText(QCoreApplication.translate("Waifu2xTool", u"\u4fdd\u5b58\u56fe\u7247", None))
+        self.headButton.setText(QCoreApplication.translate("Waifu2xTool", u"\u8bbe\u7f6e\u4e3a\u5934\u50cf", None))
     # retranslateUi
 

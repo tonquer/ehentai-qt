@@ -35,9 +35,15 @@ class Str:
     FileError = 1019         # "未发现源文件"
     FileFormatError = 1020   # "文件损坏"
     TimeOut = 1021           # "连接超时"
-    ReadOut = 1022           # "读取超时"
+    ConnectErr = 1022        # "无法连接"
     SSLErr = 1023            # "ssl证书错误"
     ResetErr = 1024          # "连接已被重置, 请尝试设置中禁用SNI"
+    ProxyError = 1025        # "无法连接代理"
+    DownloadFail = 1026      # "下载失败"
+    OfflineModel = 1027      # "离线模式中"
+    NotDownload = 1028       # "未下载"
+    AccountAlready = 1029    # "账号已被注册"
+    NotAdult = 1030          # "未成年禁止注册"
 
     Success = 2001         # "下载完成"
     Reading = 2002         # "获取信息"
@@ -61,6 +67,7 @@ class Str:
     WaifuStateEnd = 3007       # "转换完成"
     WaifuStateFail = 3008      # "转换失败"
     OverResolution = 3009      # "超过设置分辨率"
+    AnimationNotAuto = 3010      # "动图不自动转换"
 
     LoadingPicture = 1     # "图片加载中..."
     LoadingFail = 2        # "图片加载失败"
@@ -186,11 +193,23 @@ class Str:
     SwitchSite = 122               # 表里切换
     DelFavoriteSuc = 123           # 删除收藏成功
     AllComment = 124               # 所有评论
-    SelectAll = 125                # 全选
-    NotSelectAll = 126             # 反选
-    LoginOut = 127                # 登出
-    Sock5Error = 128              # Sock5设置出错
-    Copy = 129  # 复制
+    Move = 125               # 移动
+    Add = 126                # 新增
+    SelectAll = 127                # 全选
+    NotSelectAll = 128             # 反选
+    MyComment = 129          # 我的评论
+    LoginOut = 130                # 登出
+    Sock5Error = 131              # Sock5设置出错
+    OpenAutoWaifu2x = 132        # 开启自动waifu2x
+    OpenCurWaifu2x = 133          # 开启本张图waifu2x
+    CloseAutoWaifu2x = 134        # 关闭自动waifu2x
+    CloseCurWaifu2x = 135          # 关闭本张图waifu2x
+    RightLeftDouble2 = 136         # 右左双页(滚轮正序)
+    Copy = 137  # 复制
+    CopyPicture = 138  # 复制图片到剪贴板
+    CopyFile = 139     # 保存文件
+    MainUi = 140     # 主界面
+    ShowMin = 141     # 最小化
 
     @classmethod
     def Reload(cls):
@@ -217,9 +236,15 @@ class Str:
         cls.strDict[cls.FileError] = QCoreApplication.translate("cls.obj",  "未发现源文件", None)
         cls.strDict[cls.FileFormatError] = QCoreApplication.translate("cls.obj",  "文件损坏", None)
         cls.strDict[cls.TimeOut] = QCoreApplication.translate("cls.obj", "连接超时", None)
-        cls.strDict[cls.ReadOut] = QCoreApplication.translate("cls.obj", "读取超时", None)
+        cls.strDict[cls.ConnectErr] = QCoreApplication.translate("cls.obj", "无法连接", None)
         cls.strDict[cls.SSLErr] = QCoreApplication.translate("cls.obj", "ssl证书错误", None)
         cls.strDict[cls.ResetErr] = QCoreApplication.translate("cls.obj", "连接已被重置, 请尝试设置中禁用SNI", None)
+        cls.strDict[cls.ProxyError] = QCoreApplication.translate("cls.obj", "无法连接代理", None)
+        cls.strDict[cls.DownloadFail] = QCoreApplication.translate("cls.obj", "下载失败", None)
+        cls.strDict[cls.OfflineModel] = QCoreApplication.translate("cls.obj", "离线模式中", None)
+        cls.strDict[cls.NotDownload] = QCoreApplication.translate("cls.obj", "未下载", None)
+        cls.strDict[cls.AccountAlready] = QCoreApplication.translate("cls.obj", "账号已被注册", None)
+        cls.strDict[cls.NotAdult] = QCoreApplication.translate("cls.obj", "未成年禁止注册", None)
 
         cls.strDict[cls.LoadingPicture] = QCoreApplication.translate("cls.obj",  "图片加载中...", None)
         cls.strDict[cls.LoadingFail] = QCoreApplication.translate("cls.obj",  "图片加载失败", None)
@@ -248,6 +273,7 @@ class Str:
         cls.strDict[cls.WaifuStateEnd] = QCoreApplication.translate("cls.obj",  "转换完成", None)
         cls.strDict[cls.WaifuStateFail] = QCoreApplication.translate("cls.obj",  "转换失败", None)
         cls.strDict[cls.OverResolution] = QCoreApplication.translate("cls.obj",  "超过设置分辨率", None)
+        cls.strDict[cls.AnimationNotAuto] = QCoreApplication.translate("cls.obj",  "动图不自动转换", None)
 
         cls.strDict[cls.Menu] = QCoreApplication.translate("cls.obj",  "菜单", None)
         cls.strDict[cls.FullSwitch] = QCoreApplication.translate("cls.obj",  "全屏切换", None)
@@ -365,11 +391,23 @@ class Str:
         cls.strDict[cls.SwitchSite] = QCoreApplication.translate("cls.obj",  "表里切换", None)
         cls.strDict[cls.DelFavoriteSuc] = QCoreApplication.translate("cls.obj",  "删除收藏成功", None)
         cls.strDict[cls.AllComment] = QCoreApplication.translate("cls.obj",  "所有评论", None)
+        cls.strDict[cls.Move] = QCoreApplication.translate("cls.obj",  "移动", None)
+        cls.strDict[cls.Add] = QCoreApplication.translate("cls.obj",  "新增", None)
         cls.strDict[cls.SelectAll] = QCoreApplication.translate("cls.obj",  "全选", None)
         cls.strDict[cls.NotSelectAll] = QCoreApplication.translate("cls.obj",  "反选", None)
+        cls.strDict[cls.MyComment] = QCoreApplication.translate("cls.obj",  "我的评论", None)
         cls.strDict[cls.LoginOut] = QCoreApplication.translate("cls.obj",  "登出", None)
         cls.strDict[cls.Sock5Error] = QCoreApplication.translate("cls.obj",  "Sock5设置出错", None)
+        cls.strDict[cls.OpenAutoWaifu2x] = QCoreApplication.translate("cls.obj", "开启自动waifu2x", None)
+        cls.strDict[cls.CloseAutoWaifu2x] = QCoreApplication.translate("cls.obj", "关闭自动waifu2x", None)
+        cls.strDict[cls.OpenCurWaifu2x] = QCoreApplication.translate("cls.obj", "开启本张图waifu2x", None)
+        cls.strDict[cls.CloseCurWaifu2x] = QCoreApplication.translate("cls.obj", "关闭本张图waifu2x", None)
+        cls.strDict[cls.RightLeftDouble2] = QCoreApplication.translate("cls.obj", "右左双页(滚轮正序)", None)
         cls.strDict[cls.Copy] = QCoreApplication.translate("cls.obj", "复制", None)
+        cls.strDict[cls.CopyPicture] = QCoreApplication.translate("cls.obj", "复制图片到剪贴板", None)
+        cls.strDict[cls.CopyFile] = QCoreApplication.translate("cls.obj", "保存文件", None)
+        cls.strDict[cls.MainUi] = QCoreApplication.translate("cls.obj", "主界面", None)
+        cls.strDict[cls.ShowMin] = QCoreApplication.translate("cls.obj", "最小化", None)
 
     @classmethod
     def GetStr(cls, enumType):

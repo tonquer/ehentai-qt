@@ -4,8 +4,8 @@ import time
 from PySide2 import QtWidgets, QtCore
 from PySide2.QtCore import Qt, QRectF, QPointF, QSizeF, QEvent
 from PySide2.QtGui import QPainter, QPixmap, QDoubleValidator, \
-    QIntValidator, QMouseEvent
-from PySide2.QtWidgets import QFrame, QGraphicsPixmapItem, QGraphicsScene, QApplication, QFileDialog
+    QIntValidator, QMouseEvent, QImage
+from PySide2.QtWidgets import QFrame, QGraphicsPixmapItem, QGraphicsScene, QApplication, QFileDialog, QLabel
 
 from config import config
 from interface.ui_waifu2x_tool import Ui_Waifu2xTool
@@ -14,6 +14,7 @@ from task.qt_task import QtTaskBase
 from tools.log import Log
 from tools.str import Str
 from tools.tool import ToolUtil
+from view.read.read_qgraphics_proxy_widget import ReadQGraphicsProxyWidget
 
 
 class Waifu2xToolView(QtWidgets.QWidget, Ui_Waifu2xTool, QtTaskBase):
@@ -25,7 +26,7 @@ class Waifu2xToolView(QtWidgets.QWidget, Ui_Waifu2xTool, QtTaskBase):
         self.bookId = ""
         self.epsId = 0
         self.curIndex = 0
-        self.resize(800, 900)
+        # self.resize(800, 900)
         self.checkBox.setChecked(True)
         self.index = 0
         self.comboBox.setCurrentIndex(self.index)
@@ -33,35 +34,39 @@ class Waifu2xToolView(QtWidgets.QWidget, Ui_Waifu2xTool, QtTaskBase):
         self.heighEdit.setValidator(validator)
         self.widthEdit.setValidator(validator)
         exp = QDoubleValidator(0.1, 64, 1)
-        exp.setNotation(exp.Notation.StandardNotation)
+        exp.setNotation(exp.StandardNotation)
         self.scaleEdit.setValidator(exp)
-        # self.setWindowFlags(Qt.WindowType.FramelessWindowHint)
+        # self.setWindowFlags(Qt.FramelessWindowHint)
 
-        self.graphicsView.setFrameStyle(QFrame.Shape.NoFrame)
+        self.graphicsView.setFrameStyle(QFrame.NoFrame)
         self.graphicsView.setObjectName("graphicsView")
 
-        # self.graphicsView.setBackgroundBrush(QColor(Qt.GlobalColor.white))
-        self.graphicsView.setCursor(Qt.CursorShape.OpenHandCursor)
-        self.graphicsView.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
-        self.graphicsView.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
-        self.graphicsView.setRenderHints(QPainter.RenderHint.Antialiasing |
-                                         QPainter.RenderHint.SmoothPixmapTransform)
-        self.graphicsView.setCacheMode(self.graphicsView.CacheModeFlag.CacheBackground)
-        self.graphicsView.setViewportUpdateMode(self.graphicsView.ViewportUpdateMode.SmartViewportUpdate)
+        # self.graphicsView.setBackgroundBrush(QColor(Qt.white))
+        self.graphicsView.setCursor(Qt.OpenHandCursor)
+        self.graphicsView.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+        self.graphicsView.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+        self.graphicsView.setRenderHints(QPainter.Antialiasing |
+                                         QPainter.SmoothPixmapTransform)
+        self.graphicsView.setCacheMode(self.graphicsView.CacheBackground)
+        self.graphicsView.setViewportUpdateMode(self.graphicsView.SmartViewportUpdate)
 
-        self.graphicsItem = QGraphicsPixmapItem()
-        self.graphicsItem.setFlags(QGraphicsPixmapItem.GraphicsItemFlag.ItemIsFocusable |
-                                   QGraphicsPixmapItem.GraphicsItemFlag.ItemIsMovable)
-        self.setContextMenuPolicy(Qt.ContextMenuPolicy.CustomContextMenu)
+        self.graphicsItem = ReadQGraphicsProxyWidget()
+        self.graphicsItem.setFlags(QGraphicsPixmapItem.ItemIsFocusable |
+                                   QGraphicsPixmapItem.ItemIsMovable)
+        self.setContextMenuPolicy(Qt.CustomContextMenu)
         self.customContextMenuRequested.connect(self.CopyPicture)
 
         self.graphicsScene = QGraphicsScene(self)  # 场景
         self.graphicsView.setScene(self.graphicsScene)
-        self.graphicsItem.setTransformationMode(Qt.TransformationMode.SmoothTransformation)
+        self.graphicsItem.setWidget(QLabel())
+        # self.graphicsItem.setPixmap(QPixmap())
+        # self.graphicsItem.setTransformationMode(Qt.SmoothTransformation)
         self.graphicsScene.addItem(self.graphicsItem)
+        self.graphicsItem.setPos(QPointF(0, 0))
         self.graphicsView.setMinimumSize(10, 10)
-        self.pixMap = QPixmap(Str.GetStr(Str.LoadingPicture))
-        self.graphicsItem.setPixmap(self.pixMap)
+        # self.pixMapData = None
+        self.pixMap = QImage(Str.GetStr(Str.LoadingPicture))
+        # self.graphicsItem.setPixmap(self.pixMap)
         # self.radioButton.setChecked(True)
         self.isStripModel = False
 
@@ -70,9 +75,7 @@ class Waifu2xToolView(QtWidgets.QWidget, Ui_Waifu2xTool, QtTaskBase):
         # self.graphicsItem.installSceneEventFilter(self.graphicsItem)
         # self.graphicsView.installEventFilter(self)
         self.graphicsScene.installEventFilter(self)
-        self.graphicsView.setWindowFlag(Qt.WindowType.FramelessWindowHint)
-        # tta有BUG，暂时屏蔽 TODO
-        self.ttaModel.setEnabled(False)
+        self.graphicsView.setWindowFlag(Qt.FramelessWindowHint)
 
         self._delta = 0.1
         self.scaleCnt = 0
@@ -83,6 +86,7 @@ class Waifu2xToolView(QtWidgets.QWidget, Ui_Waifu2xTool, QtTaskBase):
 
     def SwitchCurrent(self, **kwargs):
         data = kwargs.get("data")
+        self.gpuLabel.setText(config.EncodeGpu)
         if data:
             self.data = data
             self.waifu2xData = None
@@ -91,6 +95,9 @@ class Waifu2xToolView(QtWidgets.QWidget, Ui_Waifu2xTool, QtTaskBase):
                 self.comboBox.setEnabled(True)
                 self.changeButton.setEnabled(True)
             self.changeButton.setText(Str.GetStr(Str.Convert))
+            self.backStatus = ""
+            self.CheckScaleRadio()
+
         else:
             return
 
@@ -110,19 +117,21 @@ class Waifu2xToolView(QtWidgets.QWidget, Ui_Waifu2xTool, QtTaskBase):
     def ShowImg(self, data):
         self.gpuLabel.setText(config.EncodeGpu)
         self.scaleCnt = 0
-        p = QPixmap()
-        p.loadFromData(data)
-        # radio = self.devicePixelRatioF()
+        # radio = self.devicePixelRatio()
         # p.setDevicePixelRatio(radio)
-        self.pixMap = p
+        # self.pixMapData = data
         self.show()
-        self.graphicsItem.setPixmap(self.pixMap)
+        self.pixMap = QImage()
+        self.pixMap.loadFromData(data)
+
+        self.graphicsItem.SetGifData(data, self.pixMap.width(), self.pixMap.height())
         self.graphicsView.setSceneRect(QRectF(QPointF(0, 0), QPointF(self.pixMap.width(), self.pixMap.height())))
         # self.graphicsView.setSceneRect(QRectF(QPointF(0, 0), QPointF(self.pixMap.width()*radio, self.pixMap.height()*radio)))
 
         size = ToolUtil.GetDownloadSize(len(data))
         self.sizeLabel.setText(size)
-        weight, height, mat = ToolUtil.GetPictureSize(data)
+        weight, height, mat, _ = ToolUtil.GetPictureSize(data)
+        self.format.setText(mat)
         self.resolutionLabel.setText(str(weight) + "x" + str(height))
         self.ScalePicture()
         self.CheckScaleRadio()
@@ -235,7 +244,7 @@ class Waifu2xToolView(QtWidgets.QWidget, Ui_Waifu2xTool, QtTaskBase):
 
     def CopyPicture(self):
         clipboard = QApplication.clipboard()
-        clipboard.setPixmap(self.pixMap)
+        clipboard.setImage(self.pixMap)
         QtOwner().ShowMsg(Str.GetStr(Str.CopySuc))
         return
 
@@ -249,7 +258,7 @@ class Waifu2xToolView(QtWidgets.QWidget, Ui_Waifu2xTool, QtTaskBase):
 
     def OpenPicture(self):
         try:
-            filename = QFileDialog.getOpenFileName(self, "Open Image", ".", "Image Files(*.jpg *.png)")
+            filename = QFileDialog.getOpenFileName(self, "Open Image", ".", "Image Files(*.jpg *.png *.gif *.webp)")
             if filename and len(filename) >= 1:
                 name = filename[0]
                 if os.path.isfile(name):
@@ -304,6 +313,8 @@ class Waifu2xToolView(QtWidgets.QWidget, Ui_Waifu2xTool, QtTaskBase):
         else:
             model['width'] = int(self.widthEdit.text())
             model['high'] = int(self.heighEdit.text())
+        # _, _, mat = ToolUtil.GetPictureSize(self.data)
+        # model["format"] = mat
         self.backStatus = self.GetStatus()
         self.AddConvertTask("", self.data, model, self.AddConvertBack)
         self.changeButton.setText(Str.GetStr(Str.Converting))
@@ -329,9 +340,11 @@ class Waifu2xToolView(QtWidgets.QWidget, Ui_Waifu2xTool, QtTaskBase):
             return
         try:
             today = time.strftime("%Y%m%d%H%M%S", time.localtime(time.time()))
-            filepath = QFileDialog.getSaveFileName(self, Str.GetStr(Str.Save), "{}.jpg".format(today))
+            filepath = QFileDialog.getSaveFileName(self, Str.GetStr(Str.Save), "{}.{}".format(today, self.format.text()))
             if filepath and len(filepath) >= 1:
                 name = filepath[0]
+                if not name:
+                    return
                 f = open(name, "wb")
                 f.write(data)
                 f.close()
@@ -403,9 +416,10 @@ class Waifu2xToolView(QtWidgets.QWidget, Ui_Waifu2xTool, QtTaskBase):
             self.changeButton.setText(Str.GetStr(Str.Convert))
 
     def SetHead(self):
-        data = self.waifu2xData if self.waifu2xData else self.data
-        if not data:
-            return
-        QtOwner().owner.navigationWidget.UpdatePictureData(data)
-        QtOwner().ShowMsg(Str.GetStr(Str.HeadUpload))
+        return
+        # data = self.waifu2xData if self.waifu2xData else self.data
+        # if not data:
+        #     return
+        # QtOwner().owner.navigationWidget.UpdatePictureData(data)
+        # QtOwner().ShowMsg(Str.GetStr(Str.HeadUpload))
         # QtImgMgr().SetHeadStatus(not self.isHeadUp)

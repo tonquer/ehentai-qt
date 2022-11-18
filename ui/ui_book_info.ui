@@ -492,9 +492,19 @@ QListWidget::item {
         </layout>
        </item>
        <item>
-        <widget class="QScrollArea" name="tagScrollArea">
-         <property name="styleSheet">
-          <string notr="true">QPushButton {
+        <widget class="QTabWidget" name="tabWidget">
+         <property name="currentIndex">
+          <number>1</number>
+         </property>
+         <widget class="QWidget" name="tab">
+          <attribute name="title">
+           <string>Tags</string>
+          </attribute>
+          <layout class="QVBoxLayout" name="verticalLayout_2">
+           <item>
+            <widget class="QScrollArea" name="tagScrollArea">
+             <property name="styleSheet">
+              <string notr="true">QPushButton {
     background-color:rgb(251, 239, 243);
     color: rgb(196, 95, 125);
 	border:2px solid red;
@@ -508,20 +518,34 @@ QListWidget::item {
     border-radius: 10px;
     color: rgb(0, 0, 0);
 }</string>
-         </property>
-         <property name="widgetResizable">
-          <bool>true</bool>
-         </property>
-         <widget class="QWidget" name="tagWidgetContents">
-          <property name="geometry">
-           <rect>
-            <x>0</x>
-            <y>0</y>
-            <width>798</width>
-            <height>224</height>
-           </rect>
-          </property>
-          <layout class="QVBoxLayout" name="verticalLayout"/>
+             </property>
+             <property name="widgetResizable">
+              <bool>true</bool>
+             </property>
+             <widget class="QWidget" name="tagWidgetContents">
+              <property name="geometry">
+               <rect>
+                <x>0</x>
+                <y>0</y>
+                <width>774</width>
+                <height>178</height>
+               </rect>
+              </property>
+              <layout class="QVBoxLayout" name="verticalLayout"/>
+             </widget>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+         <widget class="QWidget" name="tab_2">
+          <attribute name="title">
+           <string>预览</string>
+          </attribute>
+          <layout class="QVBoxLayout" name="verticalLayout_4">
+           <item>
+            <widget class="ComicListWidget" name="preListWidget"/>
+           </item>
+          </layout>
          </widget>
         </widget>
        </item>
@@ -537,6 +561,11 @@ QListWidget::item {
    <extends>QScrollArea</extends>
    <header location="global">component.scroll_area.smooth_scroll_area.h</header>
    <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>ComicListWidget</class>
+   <extends>QListWidget</extends>
+   <header location="global">component.list.comic_list_widget.h</header>
   </customwidget>
   <customwidget>
    <class>TagListWidget</class>

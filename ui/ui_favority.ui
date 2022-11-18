@@ -124,43 +124,6 @@
         </widget>
        </item>
        <item>
-        <widget class="QLabel" name="pages">
-         <property name="text">
-          <string>页</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="Line" name="line">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="Line" name="line_4">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QSpinBox" name="spinBox">
-         <property name="minimumSize">
-          <size>
-           <width>50</width>
-           <height>30</height>
-          </size>
-         </property>
-         <property name="minimum">
-          <number>1</number>
-         </property>
-         <property name="maximum">
-          <number>1</number>
-         </property>
-        </widget>
-       </item>
-       <item>
         <widget class="Line" name="line_3">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
@@ -176,7 +139,7 @@
           </size>
          </property>
          <property name="text">
-          <string>跳转</string>
+          <string>下一页</string>
          </property>
          <property name="shortcut">
           <string>Return</string>

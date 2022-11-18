@@ -29,6 +29,7 @@ class SearchView(QWidget, Ui_Search, QtTaskBase):
         self.searchButton.clicked.connect(self.lineEdit.Search)
         self.tagWidget.clicked.connect(self.ClickKeywordListItem)
         self.tagWidget.setHorizontalScrollMode(QAbstractItemView.ScrollPerPixel)
+        self.jumpPage.clicked.connect(self.JumpPage)
 
     def retranslateUi(self, search):
         Ui_Search.retranslateUi(self, search)
@@ -41,16 +42,20 @@ class SearchView(QWidget, Ui_Search, QtTaskBase):
 
     def ClickKeywordListItem(self, modelIndex):
         index = modelIndex.row()
-        item = self.autorList.item(index)
+        item = self.tagWidget.item(index)
+
         if not item:
             return
-        data = item.text()
+        widget = self.tagWidget.itemWidget(item)
+        data = widget.text()
         self.categories = data
         self.lineEdit.setText("")
         self.lineEdit.setText("")
         self.lineEdit.setPlaceholderText(self.categories)
         self.bookList.clear()
-        self.SendSearchCategories(1)
+        self.bookList.UpdatePage(1, 1)
+        self.bookList.nextId = ""
+        self.SendSearchCategories()
 
     def InitWord(self):
         self.lineEdit.InitCacheWords()
@@ -73,25 +78,36 @@ class SearchView(QWidget, Ui_Search, QtTaskBase):
             self.lineEdit.setText("")
             self.lineEdit.setPlaceholderText(self.categories)
             self.bookList.clear()
-            self.SendSearchCategories(1)
+            self.bookList.UpdatePage(1, 1)
+            self.bookList.nextId = ""
+            self.SendSearchCategories()
         elif text is not None:
             self.text = text
             self.lineEdit.setText(self.text)
             self.bookList.clear()
-            self.SendSearch(1)
+            self.bookList.UpdatePage(1, 1)
+            self.bookList.nextId = ""
+            self.SendSearch()
             self.lineEdit.AddCacheWord(self.text)
         elif refresh:
             self.text = ""
             self.lineEdit.setText(self.text)
+            self.bookList.nextId = ""
             self.bookList.clear()
-            self.SendSearch(1)
+            self.bookList.UpdatePage(1,  1)
+            self.SendSearch()
         pass
 
-    def SendSearchCategories(self, page):
+    def SendSearchCategories(self, nextId=""):
         for k, v in ToolUtil.Category.items():
             if v == self.categories or k == self.categories:
                 QtOwner().ShowLoading()
-                self.AddHttpTask(req.GetCategoryInfoReq(page, k), self.SendSearchBack, page)
+                QtOwner().ShowLoading()
+                if nextId:
+                    page = self.bookList.page+1
+                else:
+                    page = 1
+                self.AddHttpTask(req.GetCategoryInfoReq(nextId, k), self.SendSearchBack, page)
 
                 break
 
@@ -101,9 +117,14 @@ class SearchView(QWidget, Ui_Search, QtTaskBase):
             self.bookList.UpdateState()
             st = data.get("st")
             if st == Status.Ok:
-                pages = data.get("maxPages")
-                self.bookList.UpdatePage(page, pages)
-                self.spinBox.setMaximum(pages)
+                nextId = data.get("nextId")
+                if nextId:
+                    self.bookList.UpdatePage(page, page + 1)
+                    self.bookList.nextId = nextId
+                    self.jumpPage.setEnabled(True)
+                else:
+                    self.bookList.UpdatePage(page, page)
+                    self.jumpPage.setEnabled(False)
                 pageText = Str.GetStr(Str.Page) + str(self.bookList.page) + "/" + str(self.bookList.pages)
                 self.label.setText(pageText)
                 for info in data.get("bookList"):
@@ -122,27 +143,33 @@ class SearchView(QWidget, Ui_Search, QtTaskBase):
             Log.Error(es)
         pass
 
-    def SendSearch(self, page):
+    def SendSearch(self, nextId=""):
         QtOwner().ShowLoading()
-        self.AddHttpTask(req.GetIndexInfoReq(page, self.text), self.SendSearchBack, page)
+        if nextId:
+            page = self.bookList.page+1
+        else:
+            page = 1
+        self.AddHttpTask(req.GetIndexInfoReq(nextId, self.text), self.SendSearchBack, page)
 
     def JumpPage(self):
-        page = int(self.spinBox.text())
-        if page > self.bookList.pages:
+        if self.bookList.page >= self.bookList.pages:
             return
-        self.bookList.page = page
+        if not self.bookList.nextId:
+            return
         self.bookList.clear()
         if not self.categories:
-            self.SendSearch(page)
+            self.SendSearch(self.bookList.nextId)
         else:
-            self.SendSearchCategories(page)
+            self.SendSearchCategories(self.bookList.nextId)
         return
 
     def LoadNextPage(self):
+        if not self.bookList.nextId:
+            return
         if not self.categories:
-            self.SendSearch(self.bookList.page + 1)
+            self.SendSearch(self.bookList.nextId)
         else:
-            self.SendSearchCategories(self.bookList.page + 1)
+            self.SendSearchCategories(self.bookList.nextId)
         return
 
     def CheckDirechLink(self, text):

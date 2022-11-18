@@ -34,6 +34,13 @@ class NavigationWidget(QWidget, Ui_Navigation, QtTaskBase):
 
         self.isLogin = False
 
+        self.offlineButton.SetState(False)
+        self.offlineButton.Switch.connect(self.SwitchOffline)
+
+    def SwitchOffline(self, state):
+        QtOwner().isOfflineModel = state
+        return
+
     def SwitchSite(self):
         QtOwner().ShowLoading()
         if config.CurSite == "exhentai":

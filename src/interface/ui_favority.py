@@ -65,33 +65,6 @@ class Ui_Favority(object):
 
         self.horizontalLayout.addWidget(self.nums)
 
-        self.pages = QLabel(Favority)
-        self.pages.setObjectName(u"pages")
-
-        self.horizontalLayout.addWidget(self.pages)
-
-        self.line = QFrame(Favority)
-        self.line.setObjectName(u"line")
-        self.line.setFrameShape(QFrame.VLine)
-        self.line.setFrameShadow(QFrame.Sunken)
-
-        self.horizontalLayout.addWidget(self.line)
-
-        self.line_4 = QFrame(Favority)
-        self.line_4.setObjectName(u"line_4")
-        self.line_4.setFrameShape(QFrame.VLine)
-        self.line_4.setFrameShadow(QFrame.Sunken)
-
-        self.horizontalLayout.addWidget(self.line_4)
-
-        self.spinBox = QSpinBox(Favority)
-        self.spinBox.setObjectName(u"spinBox")
-        self.spinBox.setMinimumSize(QSize(50, 30))
-        self.spinBox.setMinimum(1)
-        self.spinBox.setMaximum(1)
-
-        self.horizontalLayout.addWidget(self.spinBox)
-
         self.line_3 = QFrame(Favority)
         self.line_3.setObjectName(u"line_3")
         self.line_3.setFrameShape(QFrame.VLine)
@@ -146,8 +119,7 @@ class Ui_Favority(object):
         self.comboBox.setItemText(10, QCoreApplication.translate("Favority", u"\u6536\u85cf9", None))
 
         self.nums.setText(QCoreApplication.translate("Favority", u"\u6536\u85cf\u6570\uff1a", None))
-        self.pages.setText(QCoreApplication.translate("Favority", u"\u9875", None))
-        self.jumpButton.setText(QCoreApplication.translate("Favority", u"\u8df3\u8f6c", None))
+        self.jumpButton.setText(QCoreApplication.translate("Favority", u"\u4e0b\u4e00\u9875", None))
 #if QT_CONFIG(shortcut)
         self.jumpButton.setShortcut(QCoreApplication.translate("Favority", u"Return", None))
 #endif // QT_CONFIG(shortcut)

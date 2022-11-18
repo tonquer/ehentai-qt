@@ -391,6 +391,33 @@
            <property name="text">
             <string>GPU</string>
            </property>
+           <property name="wordWrap">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout">
+         <item>
+          <widget class="QLabel" name="label">
+           <property name="maximumSize">
+            <size>
+             <width>60</width>
+             <height>16777215</height>
+            </size>
+           </property>
+           <property name="text">
+            <string>格式</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="format">
+           <property name="text">
+            <string/>
+           </property>
           </widget>
          </item>
         </layout>
@@ -477,6 +504,19 @@
          </property>
          <property name="text">
           <string>保存图片</string>
+         </property>
+        </widget>
+       </item>
+       <item alignment="Qt::AlignLeft">
+        <widget class="QPushButton" name="headButton">
+         <property name="maximumSize">
+          <size>
+           <width>100</width>
+           <height>16777215</height>
+          </size>
+         </property>
+         <property name="text">
+          <string>设置为头像</string>
          </property>
         </widget>
        </item>
@@ -736,6 +776,22 @@
     <hint type="destinationlabel">
      <x>386</x>
      <y>173</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>headButton</sender>
+   <signal>clicked()</signal>
+   <receiver>Waifu2xTool</receiver>
+   <slot>SetHead()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>346</x>
+     <y>491</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>380</x>
+     <y>491</y>
     </hint>
    </hints>
   </connection>

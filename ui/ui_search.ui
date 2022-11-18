@@ -240,25 +240,6 @@ QListWidget::item {
       </widget>
      </item>
      <item>
-      <widget class="QSpinBox" name="spinBox">
-       <property name="minimumSize">
-        <size>
-         <width>50</width>
-         <height>0</height>
-        </size>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">background-color:transparent;</string>
-       </property>
-       <property name="minimum">
-        <number>1</number>
-       </property>
-       <property name="maximum">
-        <number>1</number>
-       </property>
-      </widget>
-     </item>
-     <item>
       <widget class="Line" name="line_6">
        <property name="orientation">
         <enum>Qt::Vertical</enum>
@@ -280,7 +261,7 @@ QListWidget::item {
         </size>
        </property>
        <property name="text">
-        <string>跳转</string>
+        <string>下一页</string>
        </property>
       </widget>
      </item>

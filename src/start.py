@@ -9,6 +9,7 @@ import traceback
 
 from qt_error import showError, showError2
 from tools.log import Log
+from tools.str import Str
 
 if sys.platform == 'darwin':
     # 确保工作区为当前可执行文件所在目录
@@ -67,11 +68,9 @@ if __name__ == "__main__":
     Log.Warn("init scene ratio: {}".format(app.devicePixelRatio()))
     try:
         from qt_owner import QtOwner
+        Str.Reload()
         QtOwner().SetApp(app)
-        if sys.platform == "win32":
-            f = QFont("微软雅黑")
-            # f.setBold(True)
-            app.setFont(f)
+        QtOwner().SetFont()
         from view.main.main_view import MainView
         main = MainView()
         main.show()  # 显示窗体

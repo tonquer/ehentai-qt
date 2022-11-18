@@ -84,6 +84,13 @@ class Setting:
     ScaleLevel = SettingValue("GeneraSetting", 0, True, ["Auto", 100, 125, 150, 175, 200])
     IsNotUseTitleBar = SettingValue("GeneraSetting", 0, True)
 
+    FontName = SettingValue("GeneraSetting", "", True)
+    FontSize = SettingValue("GeneraSetting", "", True)
+    FontStyle = SettingValue("GeneraSetting", 0, True)
+
+    IsNotShowCloseTip = SettingValue("GeneraSetting", 0, False)
+    ShowCloseType = SettingValue("GeneraSetting", 0, False)
+
     # 代理设置
     IsHttpProxy = SettingValue("ProxySetting", 0, False, ["", "Http", "Sock5"])
     HttpProxy = SettingValue("ProxySetting", "", False)
@@ -99,10 +106,12 @@ class Setting:
 
     # 下载与缓存
     SavePath = SettingValue("DownloadSetting", "", False)
+    SaveNameType = SettingValue("DownloadSetting", 0, False)
 
     # Waifu2x设置
     SelectEncodeGpu = SettingValue("Waifu2xSetting", "", True)
     Waifu2xCpuCore = SettingValue("Waifu2xSetting", 0, True)
+    Waifu2xTileSize = SettingValue("Waifu2xSetting", 0, False, [0, 200, 100, 32])
 
     # 封面 Waifu2x
     CoverIsOpenWaifu = SettingValue("Waifu2xSetting", 0, False)
@@ -127,6 +136,7 @@ class Setting:
     LookReadFull = SettingValue("ReadSetting", 0, False)
     TurnSpeed = SettingValue("ReadSetting", 5000, False)
     ScrollSpeed = SettingValue("ReadSetting", 400, False)
+    PreDownWaifu2x = SettingValue("ReadSetting", 1, False)
 
     # Other
     UserId = SettingValue("Other", "", False)
@@ -142,7 +152,9 @@ class Setting:
     SavePassword = SettingValue("Other", 1, False)
     IsShowCmd = SettingValue("Other", 0, False)
     DownloadNum = SettingValue("Other", 1, False)
-    
+    IsGrabGesture: SettingValue = SettingValue("Other", 0, True)
+    IsReDownload = SettingValue("Other", 0, False)
+
     @staticmethod
     def InitLoadSetting():
         path = os.path.join(Setting.GetConfigPath(), "config.ini")

@@ -2,6 +2,7 @@ import json
 import os
 import pickle
 import re
+import time
 
 import requests
 
@@ -68,8 +69,7 @@ class GetUserIdReqHandler(object):
                 data["userName"] = userName
         except Exception as es:
             data["st"] = Status.ParseError
-            Log.Info(task.res.GetText())
-            Log.Error(es)
+            Log.ParseError(es, task.req.url, task.res.GetText())
         finally:
             if task.backParam:
                 TaskBase.taskObj.taskBack.emit(task.backParam, pickle.dumps(data))
@@ -105,8 +105,7 @@ class LoginReqHandler(object):
             # print(cookies)
         except Exception as es:
             data["st"] = Status.ParseError
-            Log.Info(task.res.GetText())
-            Log.Error(es)
+            Log.ParseError(es, task.req.url, task.res.GetText())
         finally:
             if task.backParam:
                 TaskBase.taskObj.taskBack.emit(task.backParam, pickle.dumps(data))
@@ -126,8 +125,7 @@ class HomeReqHandler(object):
             pass
         except Exception as es:
             data["st"] = Status.ParseError
-            Log.Info(task.res.GetText())
-            Log.Error(es)
+            Log.ParseError(es, task.req.url, task.res.GetText())
         finally:
             if task.backParam:
                 TaskBase.taskObj.taskBack.emit(task.backParam, pickle.dumps(data))
@@ -156,16 +154,15 @@ class GetIndexInfoReqHandler(object):
                             if igneous:
                                 data["igneous"] = igneous
                                 break
-                bookList, maxPages = ToolUtil.ParseBookIndex(task.res.raw.text)
+                bookList, nextId = ToolUtil.ParseBookIndex(task.res.raw.text)
                 from tools.book import BookMgr
                 BookMgr().UpdateBookInfoList(bookList, task.req.site)
                 data["st"] = Status.Ok
                 data["bookList"] = bookList
-                data["maxPages"] = maxPages
+                data["nextId"] = nextId
         except Exception as es:
             data["st"] = Status.ParseError
-            Log.Info(task.res.GetText())
-            Log.Error(es)
+            Log.ParseError(es, task.req.url, task.res.GetText())
         finally:
             if task.backParam:
                 TaskBase.taskObj.taskBack.emit(task.backParam, pickle.dumps(data))
@@ -178,18 +175,17 @@ class GetFavoritesReqHandler(object):
         try:
             if task.status != Status.Ok:
                 return
-            bookList, maxPages = ToolUtil.ParseBookIndex(task.res.raw.text)
+            bookList, nextId = ToolUtil.ParseBookIndex(task.res.raw.text)
             favoriteList = ToolUtil.ParseFavorite(task.res.raw.text)
             from tools.book import BookMgr
             BookMgr().UpdateBookInfoList(bookList, task.req.site)
             data["st"] = Status.Ok
             data["bookList"] = bookList
-            data["maxPages"] = maxPages
+            data["nextId"] = nextId
             data["favoriteList"] = favoriteList
         except Exception as es:
             data["st"] = Status.ParseError
-            Log.Info(task.res.GetText())
-            Log.Error(es)
+            Log.ParseError(es, task.req.url, task.res.GetText())
         finally:
             if task.backParam:
                 TaskBase.taskObj.taskBack.emit(task.backParam, pickle.dumps(data))
@@ -219,8 +215,7 @@ class BookInfoReqHandler(object):
             data["st"] = st
         except Exception as es:
             data["st"] = Status.ParseError
-            Log.Info(task.res.GetText())
-            Log.Error(es)
+            Log.ParseError(es, task.req.url, task.res.GetText())
         finally:
             if task.backParam:
                 TaskBase.taskObj.taskBack.emit(task.backParam, pickle.dumps(data))
@@ -244,8 +239,7 @@ class SendCommentReqHandler(object):
                 data["msg"] = commentError
         except Exception as es:
             data["st"] = Status.ParseError
-            Log.Info(task.res.GetText())
-            Log.Error(es)
+            Log.ParseError(es, task.req.url, task.res.GetText())
         finally:
             if task.backParam:
                 TaskBase.taskObj.taskBack.emit(task.backParam, pickle.dumps(data))
@@ -265,8 +259,7 @@ class GetBookImgUrlReqHandler(object):
             data["st"] = Status.Ok
         except Exception as es:
             data["st"] = Status.ParseError
-            Log.Info(task.res.GetText())
-            Log.Error(es)
+            Log.ParseError(es, task.req.url, task.res.GetText())
         finally:
             if task.backParam:
                 TaskBase.taskObj.taskBack.emit(task.backParam, pickle.dumps(data))
@@ -285,8 +278,7 @@ class GetBookImgUrl2ReqHandler(object):
             data["st"] = Status.Ok
         except Exception as es:
             data["st"] = Status.ParseError
-            Log.Info(task.res.GetText())
-            Log.Error(es)
+            Log.ParseError(es, task.req.url, task.res.GetText())
         finally:
             if task.backParam:
                 TaskBase.taskObj.taskBack.emit(task.backParam, pickle.dumps(data))
@@ -306,8 +298,7 @@ class AddFavoritesReqHandler(object):
             data["update"] = isUpdate
         except Exception as es:
             data["st"] = Status.ParseError
-            Log.Info(task.res.GetText())
-            Log.Error(es)
+            Log.ParseError(es, task.req.url, task.res.GetText())
         finally:
             if task.backParam:
                 TaskBase.taskObj.taskBack.emit(task.backParam, pickle.dumps(data))
@@ -321,8 +312,7 @@ class AddFavorites2ReqHandler(object):
             return
         except Exception as es:
             data["st"] = Status.ParseError
-            Log.Info(task.res.GetText())
-            Log.Error(es)
+            Log.ParseError(es, task.req.url, task.res.GetText())
         finally:
             if task.backParam:
                 TaskBase.taskObj.taskBack.emit(task.backParam, pickle.dumps(data))
@@ -336,8 +326,7 @@ class DelFavoritesReqHandler(object):
             return
         except Exception as es:
             data["st"] = Status.ParseError
-            Log.Info(task.res.GetText())
-            Log.Error(es)
+            Log.ParseError(es, task.req.url, task.res.GetText())
         finally:
             if task.backParam:
                 TaskBase.taskObj.taskBack.emit(task.backParam, pickle.dumps(data))
@@ -359,39 +348,50 @@ class DownloadBookReq(object):
                 fileSize = int(r.headers.get('Content-Length', 0))
                 getSize = 0
                 data = b""
-                for chunk in r.iter_content(chunk_size=40960):
-                    if backData.backParam:
-                        TaskBase.taskObj.downloadBack.emit(backData.backParam, fileSize-getSize, chunk)
+
+                now = time.time()
+
+                # 网速快，太卡了，优化成最多100ms一次
+                for chunk in r.iter_content(chunk_size=4096):
+                    cur = time.time()
+                    tick = cur - now
+                    if tick >= 0.1:
+                        if backData.backParam and fileSize - getSize > 0:
+                            TaskBase.taskObj.downloadBack.emit(backData.backParam, fileSize - getSize, b"")
+                        now = cur
+
                     getSize += len(chunk)
                     data += chunk
-                if backData.backParam:
-                    TaskBase.taskObj.downloadBack.emit(backData.backParam, 0, b"")
+
                 # Log.Info("size:{}, url:{}".format(ToolUtil.GetDownloadSize(fileSize), backData.req.url))
-                _, _, mat = ToolUtil.GetPictureSize(data)
-                if backData.cacheAndLoadPath and config.IsUseCache and len(data) > 0:
-                    filePath = backData.cacheAndLoadPath
-                    fileDir = os.path.dirname(filePath)
-                    if not os.path.isdir(fileDir):
-                        os.makedirs(fileDir)
+                _, _, mat, _ = ToolUtil.GetPictureSize(data)
+                if config.IsUseCache and len(data) > 0:
+                    try:
+                        for path in [backData.req.cachePath, backData.req.savePath]:
+                            filePath = path
+                            if not path:
+                                continue
+                            fileDir = os.path.dirname(filePath)
+                            if not os.path.isdir(fileDir):
+                                os.makedirs(fileDir)
 
-                    with open(filePath + "." + mat, "wb+") as f:
-                        f.write(data)
-                    Log.Debug("add download cache, cachePath:{}".format(filePath))
+                            with open(filePath+"."+mat, "wb+") as f:
+                                f.write(data)
+                            Log.Debug("add download cache, cachePath:{}".format(filePath))
+                    except Exception as es:
+                        Log.Error(es)
+                        # 保存失败了
+                        if backData.backParam:
+                            TaskBase.taskObj.downloadBack.emit(backData.backParam, -2, b"")
 
-                if backData.req.saveFile:
-                    filePath = backData.req.saveFile
-                    fileDir = os.path.dirname(filePath)
-                    if not os.path.isdir(fileDir):
-                        os.makedirs(fileDir)
-
-                    with open(filePath + "." + mat, "wb+") as f:
-                        f.write(data)
-                    Log.Debug("add download file, filePath:{}".format(filePath))
+                if backData.backParam:
+                    TaskBase.taskObj.downloadBack.emit(backData.backParam, 0, data)
 
             except Exception as es:
+                backData.status = Status.DownloadFail
                 Log.Error(es)
                 if backData.backParam:
-                    TaskBase.taskObj.downloadBack.emit(backData.backParam, -1, b"")
+                    TaskBase.taskObj.downloadBack.emit(backData.backParam, -backData.status, b"")
 
 
 @handler(req.SpeedTestPingReq)
@@ -405,8 +405,7 @@ class SpeedTestPingHandler(object):
                 data["data"] = str(task.res.raw.elapsed.total_seconds())
         except Exception as es:
             data["st"] = Status.ParseError
-            Log.Info(task.res.GetText())
-            Log.Error(es)
+            Log.ParseError(es, task.req.url, task.res.GetText())
         finally:
             if task.backParam:
                 TaskBase.taskObj.taskBack.emit(task.backParam, pickle.dumps(data))
@@ -423,8 +422,7 @@ class DnsOverHttpsReqHandler(object):
             data['Answer'] = info.get("Answer")
         except Exception as es:
             data["st"] = Status.ParseError
-            Log.Info(task.res.GetText())
-            Log.Error(es)
+            Log.ParseError(es, task.req.url, task.res.GetText())
         finally:
             if task.backParam:
                 TaskBase.taskObj.taskBack.emit(task.backParam, pickle.dumps(data))

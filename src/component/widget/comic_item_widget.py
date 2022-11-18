@@ -15,6 +15,7 @@ class ComicItemWidget(QWidget, Ui_ComicItem):
         QWidget.__init__(self)
         Ui_ComicItem.__init__(self)
         self.setupUi(self)
+        self.isPicture = False
         self.picData = None
         self.id = ""
         self.token = ""

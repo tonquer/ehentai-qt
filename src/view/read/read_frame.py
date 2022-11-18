@@ -31,7 +31,7 @@ class ReadFrame(QFrame):
         self.process.hide()
         self.waifu2xProcess = GifLabel(self)
         self.waifu2xProcess.setVisible(False)
-        f = QFile(":/png/icon/loading_gif.gif")
+        f = QFile(":/png/icon/loading_gif.webp")
         f.open(QFile.ReadOnly)
         self.waifu2xProcess.Init(f.readAll())
         f.close()
@@ -55,7 +55,7 @@ class ReadFrame(QFrame):
         label = self.helpLabel
         font = QFont()
         font.setPointSize(64)
-        fm = QFontMetrics(font)
+        # fm = QFontMetrics(font)
         label.resize(self.width(), self.height())
         p = QPixmap(self.width(), self.height())
         p.fill(Qt.transparent)

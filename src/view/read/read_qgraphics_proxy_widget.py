@@ -2,6 +2,8 @@ from PySide2.QtCore import QByteArray, QBuffer, Qt, QSize
 from PySide2.QtGui import QPixmap, QMovie
 from PySide2.QtWidgets import QGraphicsProxyWidget
 
+from tools.tool import ToolUtil
+
 
 class ReadQGraphicsProxyWidget(QGraphicsProxyWidget):
     def __init__(self):
@@ -37,7 +39,7 @@ class ReadQGraphicsProxyWidget(QGraphicsProxyWidget):
             self.movie = None
             self.bBuffer = None
             self.byteArray = None
-        self.widget().setText("")
+        # self.widget().setText("")
         widget = data.width() // max(1, data.devicePixelRatioF())
         height = data.height()//max(1, data.devicePixelRatioF())
         self.widget().setFixedWidth(widget)
@@ -59,20 +61,30 @@ class ReadQGraphicsProxyWidget(QGraphicsProxyWidget):
             self.movie.stop()
             self.widget().setMovie(None)
             self.movie.setDevice(None)
-        self.movie = QMovie()
-        self.gifWidth = width
-        self.gifHeight = height
-        self.widget().setFixedWidth(width)
-        self.widget().setFixedHeight(height)
-        self.byteArray = QByteArray(data)
-        self.bBuffer = QBuffer(self.byteArray)
-        # self.movie.frameChanged.connect(self.FrameChange)
-        self.movie.setFormat(QByteArray(b"GIF"))
-        self.movie.setCacheMode(QMovie.CacheMode.CacheNone)
-        self.movie.setDevice(self.bBuffer)
-        # self.movie.setScaledSize(QSize(self.width(), self.height()))
-        self.widget().setMovie(self.movie)
-        self.widget().setScaledContents(True)
+        animationFormat = ToolUtil.GetAnimationFormat(data)
+        if animationFormat:
+            self.movie = QMovie()
+            self.gifWidth = width
+            self.gifHeight = height
+            self.widget().setFixedWidth(width)
+            self.widget().setFixedHeight(height)
+            self.byteArray = QByteArray(data)
+            self.bBuffer = QBuffer(self.byteArray)
+            # self.movie.frameChanged.connect(self.FrameChange)
+            self.movie.setFormat(QByteArray(animationFormat.encode("utf-8")))
+            self.movie.setCacheMode(QMovie.CacheMode.CacheAll)
+            self.movie.setDevice(self.bBuffer)
+            self.movie.setScaledSize(QSize(self.width(), self.height()))
+            self.widget().setMovie(self.movie)
+            # self.widget().setScaledContents(True)
+        else:
+            pic = QPixmap()
+            pic.loadFromData(data)
+            radio = self.widget().devicePixelRatio()
+            pic.setDevicePixelRatio(radio)
+            newPic = pic.scaled(width*radio, height*radio, Qt.KeepAspectRatio, Qt.SmoothTransformation)
+            self.setPixmap(newPic)
+            # self.widget().setScaledContents(True)
 
     # def FrameChange(self):
     #     currentPixmap = self.movie.currentPixmap()

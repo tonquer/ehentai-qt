@@ -6,7 +6,7 @@ from functools import partial
 
 from PySide2 import QtWidgets
 from PySide2.QtCore import QSettings, Qt, QSize, QUrl, QFile, QTranslator, QLocale
-from PySide2.QtGui import QDesktopServices
+from PySide2.QtGui import QDesktopServices, QFontDatabase
 from PySide2.QtWidgets import QFileDialog
 
 from config import config
@@ -33,22 +33,30 @@ class SettingView(QtWidgets.QWidget, Ui_SettingNew):
         self.translate = QTranslator()
         self.translate2 = QTranslator()
 
+        for name in QFontDatabase().families():
+            self.fontBox.addItem(name)
+
         # RadioButton:
         self.themeGroup.buttonClicked.connect(partial(self.ButtonClickEvent, Setting.ThemeIndex))
         self.languageGroup.buttonClicked.connect(partial(self.ButtonClickEvent, Setting.Language))
         self.logGroup.buttonClicked.connect(partial(self.ButtonClickEvent, Setting.LogIndex))
         self.mainScaleGroup.buttonClicked.connect(partial(self.ButtonClickEvent, Setting.ScaleLevel))
         self.proxyGroup.buttonClicked.connect(partial(self.ButtonClickEvent, Setting.IsHttpProxy))
+        self.saveNameGroup.buttonClicked.connect(partial(self.ButtonClickEvent, Setting.SaveNameType))
+        self.showCloseButtonGroup.buttonClicked.connect(partial(self.ButtonClickEvent, Setting.ShowCloseType))
 
         # CheckButton:
         self.checkBox_IsUpdate.clicked.connect(partial(self.CheckButtonEvent, Setting.IsUpdate, self.checkBox_IsUpdate))
         self.readCheckBox.clicked.connect(partial(self.CheckButtonEvent, Setting.IsOpenWaifu, self.readCheckBox))
+        self.preDownWaifu2x.clicked.connect(partial(self.CheckButtonEvent, Setting.PreDownWaifu2x, self.preDownWaifu2x))
         self.coverCheckBox.clicked.connect(partial(self.CheckButtonEvent, Setting.CoverIsOpenWaifu, self.coverCheckBox))
         self.downAuto.clicked.connect(partial(self.CheckButtonEvent, Setting.DownloadAuto, self.downAuto))
         self.titleBox.clicked.connect(partial(self.CheckButtonEvent, Setting.IsNotUseTitleBar, self.titleBox))
         self.dohRadio.clicked.connect(partial(self.CheckButtonEvent, Setting.IsOpenDoh, self.dohRadio))
         self.dohPictureRadio.clicked.connect(partial(self.CheckButtonEvent, Setting.IsOpenDohPicture, self.dohPictureRadio))
         self.sniRadio.clicked.connect(partial(self.CheckButtonEvent, Setting.IsCloseSNI, self.sniRadio))
+        self.grabGestureBox.clicked.connect(partial(self.CheckButtonEvent, Setting.IsGrabGesture, self.grabGestureBox))
+        # self.isShowClose.clicked.connect(partial(self.CheckButtonEvent, Setting.IsNotShowCloseTip, self.isShowClose))
 
         # LineEdit:
         self.httpEdit.editingFinished.connect(partial(self.LineEditEvent, Setting.HttpProxy, self.httpEdit))
@@ -67,6 +75,10 @@ class SettingView(QtWidgets.QWidget, Ui_SettingNew):
         self.downNoise.currentIndexChanged.connect(partial(self.CheckRadioEvent, Setting.DownloadNoise))
         self.encodeSelect.currentTextChanged.connect(partial(self.CheckRadioEvent, Setting.SelectEncodeGpu))
         self.threadSelect.currentIndexChanged.connect(partial(self.CheckRadioEvent, Setting.Waifu2xCpuCore))
+        self.fontBox.currentTextChanged.connect(partial(self.CheckRadioEvent, Setting.FontName))
+        self.fontSize.currentTextChanged.connect(partial(self.CheckRadioEvent, Setting.FontSize))
+        self.fontStyle.currentIndexChanged.connect(partial(self.CheckRadioEvent, Setting.FontStyle))
+        self.tileComboBox.currentIndexChanged.connect(partial(self.CheckRadioEvent, Setting.Waifu2xTileSize))
 
         # spinBox
         # self.preDownNum.valueChanged.connect(partial(self.SpinBoxEvent, "", self.preDownNum))
@@ -92,6 +104,9 @@ class SettingView(QtWidgets.QWidget, Ui_SettingNew):
         self.dohButton.clicked.connect(self.OpenDohView)
 
         self.msgLabel.setVisible(False)
+        # if Setting.IsGrabGesture.value:
+        #     QScroller.grabGesture(self.scrollArea, QScroller.LeftMouseButtonGesture)
+        self.grabGestureBox.setVisible(False)
 
     def MoveToLabel(self, label):
         p = label.pos()
@@ -189,12 +204,16 @@ class SettingView(QtWidgets.QWidget, Ui_SettingNew):
         self.SetRadioGroup("languageButton", Setting.Language.value)
         self.SetRadioGroup("mainScaleButton", Setting.ScaleLevel.value)
         self.SetRadioGroup("proxy", Setting.IsHttpProxy.value)
+        self.SetRadioGroup("saveNameButton", Setting.SaveNameType.value)
+        self.SetRadioGroup("showCloseButton", Setting.ShowCloseType.value)
         self.coverSize.setValue(Setting.CoverSize.value)
         self.categorySize.setValue(Setting.CategorySize.value)
         self.SetRadioGroup("logutton", Setting.LogIndex.value)
         self.httpEdit.setText(Setting.HttpProxy.value)
         self.sockEdit.setText(Setting.Sock5Proxy.value)
         self.titleBox.setChecked(Setting.IsNotUseTitleBar.value)
+        self.grabGestureBox.setChecked(Setting.IsGrabGesture.value)
+        # self.isShowClose.setChecked(Setting.IsNotShowCloseTip.value)
         self.dohLine.setText(Setting.DohAddress.value)
         self.dohRadio.setChecked(Setting.IsOpenDoh.value)
         self.sniRadio.setChecked(Setting.IsCloseSNI.value)
@@ -203,11 +222,23 @@ class SettingView(QtWidgets.QWidget, Ui_SettingNew):
             if Setting.SelectEncodeGpu.value == self.encodeSelect.itemText(index):
                 self.encodeSelect.setCurrentIndex(index)
 
+        for index in range(self.fontSize.count()):
+            if str(Setting.FontSize.value) == self.fontSize.itemText(index):
+                self.fontSize.setCurrentIndex(index)
+
+        self.fontStyle.setCurrentIndex(int(Setting.FontStyle.value))
+
+        for index in range(self.fontBox.count()):
+            if str(Setting.FontName.value) == self.fontBox.itemText(index):
+                self.fontBox.setCurrentIndex(index)
+
         self.readCheckBox.setChecked(Setting.IsOpenWaifu.value)
+        self.preDownWaifu2x.setChecked(Setting.PreDownWaifu2x.value)
         self.readNoise.setCurrentIndex(Setting.LookNoise.value)
         self.readScale.setValue(Setting.LookScale.value)
         self.readModel.setCurrentIndex(Setting.LookModel.value)
 
+        self.tileComboBox.setCurrentIndex(Setting.Waifu2xTileSize.value)
         self.coverCheckBox.setChecked(Setting.CoverIsOpenWaifu.value)
         self.coverNoise.setCurrentIndex(Setting.CoverLookNoise.value)
         self.coverScale.setValue(Setting.CoverLookScale.value)

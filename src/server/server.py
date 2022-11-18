@@ -1,3 +1,4 @@
+import pickle
 import threading
 from queue import Queue
 
@@ -7,6 +8,7 @@ import urllib3
 import server.res as res
 from config import config
 from config.setting import Setting
+from qt_owner import QtOwner
 from tools.tool import ToolUtil
 from tools.singleton import Singleton
 from tools.log import Log
@@ -52,13 +54,11 @@ def handler(request):
 
 
 class Task(object):
-    def __init__(self, request, backParam="", cacheAndLoadPath="", loadPath=""):
+    def __init__(self, request, backParam=""):
         self.req = request
         self.res = None
         self.backParam = backParam
         self.status = Status.Ok
-        self.cacheAndLoadPath = cacheAndLoadPath
-        self.loadPath = loadPath
 
     @property
     def timeout(self):
@@ -94,7 +94,7 @@ class Server(Singleton, threading.Thread):
             thread.setDaemon(True)
             thread.start()
 
-        for i in range(self.downloadNum):
+        for i in range(Setting.DownloadNum.value):
             thread = threading.Thread(target=self.RunDownload)
             thread.setDaemon(True)
             thread.start()
@@ -156,6 +156,13 @@ class Server(Singleton, threading.Thread):
     def _Send(self, task):
         try:
             Log.Info("request-> backId:{}, {}".format(task.backParam, task.req))
+            if QtOwner().isOfflineModel:
+                task.status = Status.OfflineModel
+                data = {"st": Status.OfflineModel, "data": ""}
+                from task.qt_task import TaskBase
+                TaskBase.taskObj.taskBack.emit(task.backParam, pickle.dumps(data))
+                return
+
             if task.req.method.lower() == "post":
                 self.Post(task)
             elif task.req.method.lower() == "get":
@@ -164,16 +171,18 @@ class Server(Singleton, threading.Thread):
                 return
         except Exception as es:
             if isinstance(es, requests.exceptions.ConnectTimeout):
-                task.status = Status.TimeOut
+                task.status = Status.ConnectErr
             elif isinstance(es, requests.exceptions.ReadTimeout):
-                task.status = Status.ReadOut
+                task.status = Status.TimeOut
             elif isinstance(es, requests.exceptions.SSLError):
                 if "WSAECONNRESET" in es.__repr__():
                     task.status = Status.ResetErr
                 else:
                     task.status = Status.SSLErr
-            # elif isinstance(es, ConnectionResetError):
-            #     task.status = Status.ResetErr
+            elif isinstance(es, requests.exceptions.ProxyError):
+                task.status = Status.ProxyError
+            elif isinstance(es, ConnectionResetError):
+                task.status = Status.ResetErr
             else:
                 task.status = Status.NetError
             Log.Warn(task.req.url + " " + es.__repr__())
@@ -222,9 +231,9 @@ class Server(Singleton, threading.Thread):
         task.res = res.BaseRes(r, request.isParseRes)
         return task
 
-    def Download(self, request, token="", backParams="", cacheAndLoadPath="", loadPath= "", isASync=True):
+    def Download(self, request, token="", backParams="", isASync=True):
         self.__DealHeaders(request, token)
-        task = Task(request, backParams, cacheAndLoadPath, loadPath)
+        task = Task(request, backParams)
         if isASync:
             self._downloadQueue.put(task)
         else:
@@ -233,14 +242,14 @@ class Server(Singleton, threading.Thread):
     def _Download(self, task):
         try:
             if not task.req.isReload:
-                for cachePath in [task.cacheAndLoadPath, task.loadPath]:
+                for cachePath in [task.req.loadPath, task.req.cachePath]:
                     if cachePath and task.backParam:
                         data = ToolUtil.LoadCachePicture(cachePath)
                         if data:
                             from task.qt_task import TaskBase
-                            TaskBase.taskObj.downloadBack.emit(task.backParam, len(data), data)
-                            TaskBase.taskObj.downloadBack.emit(task.backParam, 0, b"")
-                            Log.Info("response cache -> backId:{}, {}".format(task.backParam, task.req))
+                            TaskBase.taskObj.downloadBack.emit(task.backParam, len(data), b"")
+                            TaskBase.taskObj.downloadBack.emit(task.backParam, 0, data)
+                            Log.Info("request cache -> backId:{}, {}".format(task.backParam, task.req))
                             return
             request = task.req
             if request.params == None:
@@ -259,7 +268,21 @@ class Server(Singleton, threading.Thread):
         #     Log.Warn(task.req.url + " " + es.__repr__())
         #     task.status = Status.Timeout
         except Exception as es:
-            task.status = Status.NetError
+            if isinstance(es, requests.exceptions.ConnectTimeout):
+                task.status = Status.ConnectErr
+            elif isinstance(es, requests.exceptions.ReadTimeout):
+                task.status = Status.TimeOut
+            elif isinstance(es, requests.exceptions.SSLError):
+                if "WSAECONNRESET" in es.__repr__():
+                    task.status = Status.ResetErr
+                else:
+                    task.status = Status.SSLErr
+            elif isinstance(es, requests.exceptions.ProxyError):
+                task.status = Status.ProxyError
+            elif isinstance(es, ConnectionResetError):
+                task.status = Status.ResetErr
+            else:
+                task.status = Status.NetError
             Log.Warn(task.req.url + " " + es.__repr__())
         self.handler.get(task.req.__class__)(task)
         if task.res:

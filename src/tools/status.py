@@ -16,8 +16,10 @@ class Status(object):
     TimeOut = Str.TimeOut
     SSLErr = Str.SSLErr
     ResetErr = Str.ResetErr
-    ReadOut = Str.ReadOut
-
+    ConnectErr = Str.ConnectErr
+    ProxyError = Str.ProxyError
+    DownloadFail = Str.DownloadFail
+    OfflineModel = Str.OfflineModel
 
     UnderReviewBook = Str.UnderReviewBook
     SaveError = Str.SaveError

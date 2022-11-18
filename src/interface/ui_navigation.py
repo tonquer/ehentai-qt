@@ -12,8 +12,9 @@ from PySide2.QtCore import *
 from PySide2.QtGui import *
 from PySide2.QtWidgets import *
 
-from component.label.head_label import HeadLabel
 from component.scroll_area.smooth_scroll_area import SmoothScrollArea
+from component.label.head_label import HeadLabel
+from component.button.switch_button import SwitchButton
 
 import images_rc
 
@@ -102,12 +103,27 @@ class Ui_Navigation(object):
 
         self.verticalLayout.addWidget(self.line_4)
 
+        self.horizontalLayout_4 = QHBoxLayout()
+        self.horizontalLayout_4.setObjectName(u"horizontalLayout_4")
+        self.label_7 = QLabel(self.widget)
+        self.label_7.setObjectName(u"label_7")
+
+        self.horizontalLayout_4.addWidget(self.label_7)
+
+        self.offlineButton = SwitchButton(self.widget)
+        self.offlineButton.setObjectName(u"offlineButton")
+
+        self.horizontalLayout_4.addWidget(self.offlineButton)
+
+
+        self.verticalLayout.addLayout(self.horizontalLayout_4)
+
         self.scrollArea = SmoothScrollArea(self.widget)
         self.scrollArea.setObjectName(u"scrollArea")
         self.scrollArea.setWidgetResizable(True)
         self.scrollAreaWidgetContents = QWidget()
         self.scrollAreaWidgetContents.setObjectName(u"scrollAreaWidgetContents")
-        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 215, 274))
+        self.scrollAreaWidgetContents.setGeometry(QRect(0, -247, 211, 332))
         self.verticalLayout_3 = QVBoxLayout(self.scrollAreaWidgetContents)
         self.verticalLayout_3.setSpacing(6)
         self.verticalLayout_3.setObjectName(u"verticalLayout_3")
@@ -207,6 +223,20 @@ class Ui_Navigation(object):
 
         self.verticalLayout_3.addWidget(self.downloadButton)
 
+        self.waifu2xButton = QToolButton(self.scrollAreaWidgetContents)
+        self.buttonGroup.addButton(self.waifu2xButton)
+        self.waifu2xButton.setObjectName(u"waifu2xButton")
+        sizePolicy1.setHeightForWidth(self.waifu2xButton.sizePolicy().hasHeightForWidth())
+        self.waifu2xButton.setSizePolicy(sizePolicy1)
+        self.waifu2xButton.setMinimumSize(QSize(150, 40))
+        self.waifu2xButton.setFocusPolicy(Qt.NoFocus)
+        self.waifu2xButton.setIcon(icon)
+        self.waifu2xButton.setIconSize(QSize(32, 32))
+        self.waifu2xButton.setCheckable(True)
+        self.waifu2xButton.setToolButtonStyle(Qt.ToolButtonTextBesideIcon)
+
+        self.verticalLayout_3.addWidget(self.waifu2xButton)
+
         self.verticalSpacer = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
 
         self.verticalLayout_3.addItem(self.verticalSpacer)
@@ -272,6 +302,7 @@ class Ui_Navigation(object):
         self.limitLabel.setText("")
         self.label_6.setText(QCoreApplication.translate("Navigation", u"\u7ad9\u70b9\uff1a", None))
         self.siteLabel.setText(QCoreApplication.translate("Navigation", u"e-hentai", None))
+        self.label_7.setText(QCoreApplication.translate("Navigation", u"\u79bb\u7ebf\u6a21\u5f0f\uff1a", None))
         self.label.setText(QCoreApplication.translate("Navigation", u"\u7528\u6237", None))
         self.collectButton.setText(QCoreApplication.translate("Navigation", u"\u6211\u7684\u6536\u85cf", None))
         self.historyButton.setText(QCoreApplication.translate("Navigation", u"\u672c\u5730\u8bb0\u5f55", None))
@@ -279,6 +310,7 @@ class Ui_Navigation(object):
         self.searchButton.setText(QCoreApplication.translate("Navigation", u"\u641c\u7d22", None))
         self.label_3.setText(QCoreApplication.translate("Navigation", u"\u5176\u4ed6", None))
         self.downloadButton.setText(QCoreApplication.translate("Navigation", u"\u4e0b\u8f7d", None))
+        self.waifu2xButton.setText(QCoreApplication.translate("Navigation", u"Waifu2x", None))
         self.helpButton.setText(QCoreApplication.translate("Navigation", u"\u5e2e\u52a9", None))
         self.settingButton.setText(QCoreApplication.translate("Navigation", u"\u8bbe\u7f6e", None))
     # retranslateUi

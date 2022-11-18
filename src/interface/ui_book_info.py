@@ -13,6 +13,7 @@ from PySide2.QtGui import *
 from PySide2.QtWidgets import *
 
 from component.scroll_area.smooth_scroll_area import SmoothScrollArea
+from component.list.comic_list_widget import ComicListWidget
 from component.list.tag_list_widget import TagListWidget
 from component.button.icon_tool_button import IconToolButton
 
@@ -287,7 +288,13 @@ class Ui_BookInfo(object):
 
         self.verticalLayout_3.addLayout(self.gridLayout_3)
 
-        self.tagScrollArea = QScrollArea(self.scrollAreaWidgetContents)
+        self.tabWidget = QTabWidget(self.scrollAreaWidgetContents)
+        self.tabWidget.setObjectName(u"tabWidget")
+        self.tab = QWidget()
+        self.tab.setObjectName(u"tab")
+        self.verticalLayout_2 = QVBoxLayout(self.tab)
+        self.verticalLayout_2.setObjectName(u"verticalLayout_2")
+        self.tagScrollArea = QScrollArea(self.tab)
         self.tagScrollArea.setObjectName(u"tagScrollArea")
         self.tagScrollArea.setStyleSheet(u"QPushButton {\n"
 "    background-color:rgb(251, 239, 243);\n"
@@ -306,12 +313,26 @@ class Ui_BookInfo(object):
         self.tagScrollArea.setWidgetResizable(True)
         self.tagWidgetContents = QWidget()
         self.tagWidgetContents.setObjectName(u"tagWidgetContents")
-        self.tagWidgetContents.setGeometry(QRect(0, 0, 798, 224))
+        self.tagWidgetContents.setGeometry(QRect(0, 0, 774, 178))
         self.verticalLayout = QVBoxLayout(self.tagWidgetContents)
         self.verticalLayout.setObjectName(u"verticalLayout")
         self.tagScrollArea.setWidget(self.tagWidgetContents)
 
-        self.verticalLayout_3.addWidget(self.tagScrollArea)
+        self.verticalLayout_2.addWidget(self.tagScrollArea)
+
+        self.tabWidget.addTab(self.tab, "")
+        self.tab_2 = QWidget()
+        self.tab_2.setObjectName(u"tab_2")
+        self.verticalLayout_4 = QVBoxLayout(self.tab_2)
+        self.verticalLayout_4.setObjectName(u"verticalLayout_4")
+        self.preListWidget = ComicListWidget(self.tab_2)
+        self.preListWidget.setObjectName(u"preListWidget")
+
+        self.verticalLayout_4.addWidget(self.preListWidget)
+
+        self.tabWidget.addTab(self.tab_2, "")
+
+        self.verticalLayout_3.addWidget(self.tabWidget)
 
         self.scrollArea.setWidget(self.scrollAreaWidgetContents)
 
@@ -323,6 +344,9 @@ class Ui_BookInfo(object):
         self.downloadButton.clicked.connect(BookInfo.AddDownload)
         self.startRead.clicked.connect(BookInfo.StartRead)
         self.commentButton.clicked.connect(BookInfo.OpenComment)
+
+        self.tabWidget.setCurrentIndex(1)
+
 
         QMetaObject.connectSlotsByName(BookInfo)
     # setupUi
@@ -346,5 +370,7 @@ class Ui_BookInfo(object):
         self.commentButton.setText("")
         self.downloadButton.setText("")
         self.startRead.setText(QCoreApplication.translate("BookInfo", u"\u5f00\u59cb\u9605\u8bfb", None))
+        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab), QCoreApplication.translate("BookInfo", u"Tags", None))
+        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_2), QCoreApplication.translate("BookInfo", u"\u9884\u89c8", None))
     # retranslateUi
 

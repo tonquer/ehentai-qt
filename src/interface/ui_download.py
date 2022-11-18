@@ -28,6 +28,11 @@ class Ui_Download(object):
 
         self.horizontalLayout.addItem(self.horizontalSpacer)
 
+        self.redownloadRadio = QCheckBox(Download)
+        self.redownloadRadio.setObjectName(u"redownloadRadio")
+
+        self.horizontalLayout.addWidget(self.redownloadRadio)
+
         self.label = QLabel(Download)
         self.label.setObjectName(u"label")
 
@@ -116,6 +121,7 @@ class Ui_Download(object):
 
     def retranslateUi(self, Download):
         Download.setWindowTitle(QCoreApplication.translate("Download", u"\u4e0b\u8f7d", None))
+        self.redownloadRadio.setText(QCoreApplication.translate("Download", u"\u4e0b\u8f7d\u5931\u8d25\u540e1\u5206\u949f\u81ea\u52a8\u91cd\u8bd5", None))
         self.label.setText(QCoreApplication.translate("Download", u"\u540c\u65f6\u4e0b\u8f7d\u6570", None))
         self.downloadNumBox.setItemText(0, QCoreApplication.translate("Download", u"1", None))
         self.downloadNumBox.setItemText(1, QCoreApplication.translate("Download", u"2", None))
@@ -135,13 +141,13 @@ class Ui_Download(object):
         ___qtablewidgetitem2 = self.tableWidget.horizontalHeaderItem(2)
         ___qtablewidgetitem2.setText(QCoreApplication.translate("Download", u"\u7ad9\u70b9", None));
         ___qtablewidgetitem3 = self.tableWidget.horizontalHeaderItem(3)
-        ___qtablewidgetitem3.setText(QCoreApplication.translate("Download", u"\u4e0b\u8f7d\u72b6\u6001", None));
+        ___qtablewidgetitem3.setText(QCoreApplication.translate("Download", u"\u4e0b\u8f7d\u8fdb\u5ea6", None));
         ___qtablewidgetitem4 = self.tableWidget.horizontalHeaderItem(4)
-        ___qtablewidgetitem4.setText(QCoreApplication.translate("Download", u"\u4e0b\u8f7d\u8fdb\u5ea6", None));
+        ___qtablewidgetitem4.setText(QCoreApplication.translate("Download", u"\u4e0b\u8f7d\u5927\u5c0f", None));
         ___qtablewidgetitem5 = self.tableWidget.horizontalHeaderItem(5)
-        ___qtablewidgetitem5.setText(QCoreApplication.translate("Download", u"\u4e0b\u8f7d\u5927\u5c0f", None));
+        ___qtablewidgetitem5.setText(QCoreApplication.translate("Download", u"\u4e0b\u8f7d\u901f\u5ea6", None));
         ___qtablewidgetitem6 = self.tableWidget.horizontalHeaderItem(6)
-        ___qtablewidgetitem6.setText(QCoreApplication.translate("Download", u"\u4e0b\u8f7d\u901f\u5ea6", None));
+        ___qtablewidgetitem6.setText(QCoreApplication.translate("Download", u"\u4e0b\u8f7d\u72b6\u6001", None));
         ___qtablewidgetitem7 = self.tableWidget.horizontalHeaderItem(7)
         ___qtablewidgetitem7.setText(QCoreApplication.translate("Download", u"\u8f6c\u6362\u8fdb\u5ea6", None));
         ___qtablewidgetitem8 = self.tableWidget.horizontalHeaderItem(8)

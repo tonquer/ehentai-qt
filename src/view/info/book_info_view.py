@@ -59,16 +59,25 @@ class BookInfoView(QtWidgets.QWidget, Ui_BookInfo, QtTaskBase):
         # self.epsListWidget.itemClicked.connect(self.ClickTagsItem)
         self.nameToTag = {}
         self.ReloadHistory.connect(self.LoadHistory)
+        self.tabWidget.setCurrentIndex(0)
+        self.preListWidget.LoadCallBack = self.LoadNextPage
 
     def Clear(self):
         self.ClearTask()
+        self.preListWidget.clear()
         # self.epsListWidget.clear()
         self.nameToTag.clear()
+        self.tabWidget.setCurrentIndex(0)
 
     def SwitchCurrent(self, **kwargs):
         bookId = kwargs.get("bookId")
         token = kwargs.get("token", "")
         site = kwargs.get("site", "")
+        task = kwargs.get("task")
+        if task:
+            self.OpenBookByDownloadTask(task)
+            return
+
         if not bookId:
             return
 
@@ -82,12 +91,33 @@ class BookInfoView(QtWidgets.QWidget, Ui_BookInfo, QtTaskBase):
         self.Clear()
         QtOwner().ShowLoading()
         QtOwner().SetDirty()
+        self.startRead.setEnabled(False)
         self.AddHttpTask(req.BookInfoReq(bookId, token=token, site=self.site), self.OpenBookBack)
+
+    def OpenBookByDownloadTask(self, task):
+        from view.download.download_item import DownloadItem
+        assert isinstance(task, DownloadItem)
+        self.Clear()
+        self.bookId = task.bookId
+        self.bookName = task.title
+        self.token = task.token
+        self.site = task.site
+        self.idLabel.setText("https://{}.org/g/{}/{}".format(self.site, self.bookId, self.token))
+        self.title.setText(self.bookName)
+
+        if QtOwner().isOfflineModel:
+            self.startRead.setEnabled(True)
+            self.AddDownloadTask(self.url, self.GetCoverKey(self.bookId, self.token, config.CurSite), completeCallBack=self.UpdatePicture)
+            return
+        self.startRead.setEnabled(False)
+        self.AddHttpTask(req.BookInfoReq(self.bookId, token=self.token, site=self.site), self.OpenBookBack)
+        return
 
     def OpenBookBack(self, data):
         QtOwner().CloseLoading()
         st = data.get("st")
         if st == Status.Ok:
+            self.startRead.setEnabled(True)
             maxPages = data.get("maxPages")
             # self.listWidget.UpdatePage(1, maxPages)
             # self.listWidget.UpdateState()
@@ -141,7 +171,15 @@ class BookInfoView(QtWidgets.QWidget, Ui_BookInfo, QtTaskBase):
                 # self.nameToTag[label.text()] = tag
 
             if config.IsLoadingPicture:
-                self.AddDownloadTask(self.url, self.GetCoverKey(self.bookId, self.token, config.CurSite), completeCallBack=self.UpdatePicture)
+                self.AddDownloadTask(self.url, self.GetCoverKey(self.bookId, self.token, config.CurSite), completeCallBack=self.UpdatePicture, isReload=True)
+            self.preListWidget.UpdatePage(1, maxPages)
+            self.preListWidget.UpdateState()
+            for index in range(1, 21):
+                if index in info.pageInfo.preUrl:
+                    self.preListWidget.AddPicutreItem(self.bookId, self.token, str(index), info.pageInfo.preUrl[index])
+                else:
+                    break
+
             self.lastEpsId = -1
             self.LoadHistory()
         else:
@@ -168,16 +206,59 @@ class BookInfoView(QtWidgets.QWidget, Ui_BookInfo, QtTaskBase):
         return
 
     def LoadNextPage(self):
+        page = self.preListWidget.page+1
+        maxPage = self.preListWidget.pages
+        if page > maxPage:
+            return
+        start = (page-1) * 20+1
+        end = page * 20 + 1
+        info = BookMgr().GetBookBySite(self.bookId, self.site)
+        if not info:
+            return
+
+        if start not in info.pageInfo.preUrl:
+            QtOwner().ShowLoading()
+            self.AddHttpTask(req.BookInfoReq(self.bookId, token=self.token, site=self.site, page=page), self.LoadNextPageBack)
+            return
+        self.preListWidget.UpdateState()
+        for index in range(start, end):
+            if index in info.pageInfo.preUrl:
+                self.preListWidget.AddPicutreItem(self.bookId, self.token, str(index), info.pageInfo.preUrl[index])
+            else:
+                break
         return
 
+    def LoadNextPageBack(self, raw):
+        QtOwner().CloseLoading()
+        self.preListWidget.UpdateState()
+        st = raw["st"]
+        if st == Status.Ok:
+            page = self.preListWidget.page+1
+            self.preListWidget.UpdatePage(self.preListWidget.page+1, self.preListWidget.pages)
+            info = BookMgr().GetBookBySite(self.bookId, self.site)
+            if not info:
+                return
+            start = (page - 1) * 20+1
+            end = page * 20 + 1
+            for index in range(start, end):
+                if index in info.pageInfo.preUrl:
+                    self.preListWidget.AddPicutreItem(self.bookId, self.token, str(index), info.pageInfo.preUrl[index])
+                else:
+                    break
+
     def StartRead(self):
-        QtOwner().OpenReadView(self.bookId, self.title.text(), self.lastIndex)
+        QtOwner().OpenReadView(self.bookId, self.token, self.site, self.title.text(), self.lastIndex)
+        return
+
+    def StartReadIndex(self, index):
+        QtOwner().OpenReadView(self.bookId, self.token, self.site, self.title.text(), index)
         return
 
     def LoadHistory(self):
         info = QtOwner().historyView.GetHistory(self.bookId)
         if not info:
             self.startRead.setText(Str.GetStr(Str.LookFirst))
+            self.lastIndex = 0
             return
         self.lastIndex = info.picIndex
         self.startRead.setText(Str.GetStr(Str.LastLook) + str(info.picIndex + 1) + Str.GetStr(Str.Page))

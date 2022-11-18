@@ -33,8 +33,10 @@ class ServerReq(object):
         self.timeout = 5
         if Setting.IsHttpProxy.value == 1:
             self.proxy = {"http": Setting.HttpProxy.value, "https": Setting.HttpProxy.value}
-        else:
+        elif Setting.IsHttpProxy.value == 3:
             self.proxy = {}
+        else:
+            self.proxy = {"http": None, "https": None}
 
     def __str__(self):
         # if Setting.LogIndex.value == 0:
@@ -49,11 +51,12 @@ class ServerReq(object):
 
 # 下载图片
 class DownloadBookReq(ServerReq):
-    def __init__(self, url, isSaveCache=False, saveFile="", isReload=False):
+    def __init__(self, url, loadPath="", cachePath="", savePath="", isReload=False):
         method = "Download"
         self.url = url
-        self.isSaveCache = isSaveCache
-        self.saveFile = saveFile
+        self.loadPath = loadPath
+        self.cachePath = cachePath
+        self.savePath = savePath
         self.isReload = isReload
         super(self.__class__, self).__init__(url, ToolUtil.GetHeader(url, method),
                                              {}, method)
@@ -138,6 +141,7 @@ class BookInfoReq(ServerReq):
         else:
             params["hc"] = "1"
             params["nw"] = "always"
+        params["inline_set"] = "ts_l"
         data = ToolUtil.DictToUrl(params)
         if data:
             url += "/?" + data
@@ -189,15 +193,15 @@ class GetBookImgUrl2(ServerReq):
 
 # 获得首页
 class GetIndexInfoReq(ServerReq):
-    def __init__(self, page=1, f_search="", site=""):
+    def __init__(self, nextId='', f_search="", site=""):
         self.site = config.CurSite
         if site:
             self.site = site
 
         url = get_url(site)
         data = {}
-        if page > 1:
-            data['page'] = str(page - 1)
+        if nextId:
+            data['next'] = str(nextId)
 
         if f_search:
             data['f_search'] = str(f_search)
@@ -212,11 +216,11 @@ class GetIndexInfoReq(ServerReq):
 
 # 获得分类
 class GetCategoryInfoReq(ServerReq):
-    def __init__(self, page=1, category=""):
+    def __init__(self, nextId="", category=""):
         url = get_url() + "/" + category.replace(" ", "").lower()
         data = {}
-        if page > 1:
-            data['page'] = str(page - 1)
+        if nextId:
+            data['next'] = str(nextId)
 
         data["inline_set"] = "dm_l"
         param = ToolUtil.DictToUrl(data)
@@ -230,11 +234,11 @@ class GetCategoryInfoReq(ServerReq):
 
 # 获得收藏
 class GetFavoritesReq(ServerReq):
-    def __init__(self, favcat="", page=1):
+    def __init__(self, favcat="", nextId=""):
         url = get_url() + "/favorites.php"
         data = {}
-        if page > 1:
-            data['page'] = str(page - 1)
+        if nextId:
+            data['next'] = str(nextId)
         else:
             data["nw"] = "always"
         if favcat != "":
@@ -353,12 +357,15 @@ class DnsOverHttpsReq(ServerReq):
 
 # 测试Ping
 class SpeedTestPingReq(ServerReq):
-    def __init__(self, domain):
-        url = "https://{}".format(domain)
+    def __init__(self, ip, domain):
+        url = "https://{}".format(ip)
         method = "GET"
         header = ToolUtil.GetHeader(url, method)
+
+        header["host"] = domain
         header['cache-control'] = 'no-cache'
         header['expires'] = '0'
         header['pragma'] = 'no-cache'
         super(self.__class__, self).__init__(url, header,
                                              {}, method)
+        self.timeout = 2

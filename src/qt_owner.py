@@ -1,4 +1,5 @@
 import os
+import sys
 import weakref
 
 from PySide2.QtCore import QFile
@@ -16,6 +17,8 @@ class QtOwner(Singleton):
         self._owner = None
         self._app = None
         self.backSock = None
+        self.closeType = 1   # 1普通， 2关闭弹窗触发， 3任务栏触发
+        self.isOfflineModel = False
         self.cacheWord = []
 
     @property
@@ -67,6 +70,44 @@ class QtOwner(Singleton):
     def SetApp(self, app):
         self._app = weakref.ref(app)
 
+    @staticmethod
+    def SetFont():
+        try:
+            from tools.log import Log
+            from config.setting import Setting
+            from PySide2.QtGui import QFont
+            f = QFont()
+            from tools.langconv import Converter
+            if Converter('zh-hans').convert(Setting.FontName.value) == "默认":
+                Setting.FontName.InitValue("", "FontName")
+
+            if not Setting.FontName.value and sys.platform == "win32":
+                Setting.FontName.InitValue("微软雅黑", "FontName")
+
+            if Converter('zh-hans').convert(str(Setting.FontSize.value)) == "默认":
+                Setting.FontSize.InitValue("", "FontSize")
+
+            if Converter('zh-hans').convert(str(Setting.FontStyle.value)) == "默认":
+                Setting.FontStyle.InitValue(0, "FontStyle")
+
+            if not Setting.FontName.value and not Setting.FontSize.value and not Setting.FontStyle.value:
+                return
+
+            if Setting.FontName.value:
+                f = QFont(Setting.FontName.value)
+
+            if Setting.FontSize.value:
+                f.setPointSize(int(Setting.FontSize.value))
+
+            if Setting.FontStyle.value:
+                fontStyleList = [QFont.Light, QFont.Normal, QFont.DemiBold, QFont.Bold, QFont.Black]
+                f.setWeight(fontStyleList[Setting.FontStyle.value - 1])
+
+            QtOwner().app.setFont(f)
+
+        except Exception as es:
+            Log.Error(es)
+
     @property
     def app(self):
         return self._app()
@@ -81,9 +122,12 @@ class QtOwner(Singleton):
         assert isinstance(self._owner(), MainView)
         return self._owner()
 
-    def OpenReadView(self, bookId, name, pageIndex):
+    def StartReadIndex(self, index):
+        self.owner.bookInfoView.StartReadIndex(index)
+
+    def OpenReadView(self, bookId, token, site, name, pageIndex):
         self.owner.totalStackWidget.setCurrentIndex(1)
-        self.owner.readView.OpenPage(bookId, name, pageIndex=pageIndex)
+        self.owner.readView.OpenPage(bookId, token, site, name, pageIndex=pageIndex)
 
     def OpenFavoriteInfo(self, bookId, bookName):
         from view.user.favorite_info_view import FavoriteInfoView
@@ -94,6 +138,10 @@ class QtOwner(Singleton):
 
     def OpenBookInfo(self, bookId, token="", site=""):
         arg = {"bookId": bookId, "token": token, "site": site}
+        self.owner.SwitchWidget(self.owner.bookInfoView, **arg)
+
+    def OpenBookInfoExt(self, task):
+        arg = {"task": task}
         self.owner.SwitchWidget(self.owner.bookInfoView, **arg)
 
     def OpenSearch(self, text):

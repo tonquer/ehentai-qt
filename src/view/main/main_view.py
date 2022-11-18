@@ -6,6 +6,7 @@ from PySide2.QtWidgets import QButtonGroup, QToolButton, QLabel, QMainWindow, QA
 
 from component.dialog.loading_dialog import LoadingDialog
 from component.label.msg_label import MsgLabel
+from component.system_tray_icon.my_system_tray_icon import MySystemTrayIcon
 from component.widget.main_widget import Main
 from config import config
 from config.setting import Setting
@@ -64,6 +65,8 @@ class MainView(Main, QtTaskBase):
         self.searchView.searchTab.hide()
         self.searchView2.searchWidget.hide()
         self.searchView2.tagWidget.hide()
+        self.myTrayIcon = MySystemTrayIcon()
+        self.myTrayIcon.show()
 
     @property
     def subStackList(self):
@@ -88,6 +91,7 @@ class MainView(Main, QtTaskBase):
         # self.navigationWidget.lookButton.clicked.connect(partial(self.SwitchWidgetAndClear, self.subStackWidget.indexOf(self.historyView)))
         self.navigationWidget.helpButton.clicked.connect(partial(self.SwitchWidgetAndClear, self.subStackWidget.indexOf(self.helpView)))
         self.navigationWidget.historyButton.clicked.connect(partial(self.SwitchWidgetAndClear, self.subStackWidget.indexOf(self.historyView)))
+        self.navigationWidget.waifu2xButton.clicked.connect(partial(self.SwitchWidgetAndClear, self.subStackWidget.indexOf(self.waifu2xToolView)))
 
     def RetranslateUi(self):
         Main.retranslateUi(self, self)
@@ -106,7 +110,7 @@ class MainView(Main, QtTaskBase):
 
     def Init(self):
         IsCanUse = False
-        # self.downloadView.Init()
+        self.downloadView.Init()
         if config.CanWaifu2x:
             from waifu2x_vulkan import waifu2x_vulkan
             stat = waifu2x_vulkan.init()
@@ -122,6 +126,7 @@ class MainView(Main, QtTaskBase):
             IsCanUse = True
             gpuInfo = waifu2x_vulkan.getGpuInfo()
             cpuNum = waifu2x_vulkan.getCpuCoreNum()
+            gpuNum = waifu2x_vulkan.getGpuCoreNum(0)
             self.settingView.SetGpuInfos(gpuInfo, cpuNum)
             # if not gpuInfo or (gpuInfo and config.Encode < 0) or (gpuInfo and config.Encode >= len(gpuInfo)):
             #     config.Encode = 0
@@ -131,11 +136,12 @@ class MainView(Main, QtTaskBase):
             version = waifu2x_vulkan.getVersion()
             config.Waifu2xVersion = version
             self.helpView.waifu2x.setText(config.Waifu2xVersion)
-            Log.Warn("Waifu2x init: " + str(stat) + " encode: " + str(
-                config.Encode) + " version:" + version + " code:" + str(sts) + " cpuNum:" + str(config.UseCpuNum))
+            Log.Warn("Waifu2x init:{}, encode:{}, version:{}, code:{}, cpuNum:{}/{}, gpuNum:{}, gpuList:{}".format(
+                stat, config.Encode, version, sts, config.UseCpuNum, cpuNum, gpuNum, gpuInfo
+            ))
         else:
-            pass
-            # QtOwner().ShowError(self.tr("waifu2x无法启用, ") + config.ErrorMsg)
+            QtOwner().ShowError("Waifu2x Error, " + config.ErrorMsg)
+            Log.Warn("Waifu2x Error: " + str(config.ErrorMsg))
 
         if not IsCanUse:
             self.settingView.readCheckBox.setEnabled(False)
@@ -275,6 +281,28 @@ class MainView(Main, QtTaskBase):
             self.readView.Close()
             a0.ignore()
             return
+        if not self.isHidden():
+            if Setting.ShowCloseType.value == 1 and QtOwner().closeType == 1:
+                QtOwner().app.setQuitOnLastWindowClosed(False)
+                self.myTrayIcon.show()
+                self.hide()
+                a0.ignore()
+                return
+            # if not Setting.IsNotShowCloseTip.value and QtOwner().closeType == 1:
+                # log = ShowCloseDialog(QtOwner().owner)
+                # log.show()
+                # log.LoadSetting()
+                # a0.ignore()
+                # return
+
+            # if  Setting.ShowCloseType.value == 2:
+            #     self.myTrayIcon.show()
+            #     self.hide()
+            #     a0.ignore()
+            #     return
+        self.myTrayIcon.hide()
+        self.myTrayIcon = None
+        QtOwner().app.setQuitOnLastWindowClosed(True)
         super().closeEvent(a0)
         # reply = QtOwner().ShowMsgBox(QMessageBox.Question, self.tr('提示'), self.tr('确定要退出吗？'))
         self.GetExitScreen()

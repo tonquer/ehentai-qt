@@ -13,6 +13,7 @@ from tools.status import Status
 class QtDomainMgr(Singleton):
     def __init__(self):
         self.cache_dns = {}  # host: ip
+        self.all_dns = {}  # host: ip
         self.fail_dns = set()  # host
         self.wait_dns = set()  # host
 
@@ -45,8 +46,11 @@ class QtDomainMgr(Singleton):
             else:
                 address = random.choice(addresss)
                 self.cache_dns[host] = address
+                self.all_dns[host] = addresss
                 Server().UpdateDns(host, address)
                 UpdateDns(host, address)
+                if host in config.DomainDns:
+                    self.GetBestIp(host)
                 Log.Info("Dns parse suc, host:{}:{}, {}".format(host, address, addresss))
         else:
             self.fail_dns.add(host)
@@ -88,6 +92,7 @@ class QtDomainMgr(Singleton):
                 else:
                     address = random.choice(addresss)
                     self.cache_dns[host] = address
+                    self.all_dns[host] = addresss
                     Server().UpdateDns(host, address)
                     UpdateDns(host, address)
                     Log.Info("Dns parse suc, host:{}:{}, {}".format(host, address, addresss))
@@ -102,6 +107,19 @@ class QtDomainMgr(Singleton):
             TaskDownload().DownloadTask(*arg1, **arg2)
         if host in self.download_dns_task:
             self.download_dns_task.pop(host)
+
+    def GetBestIp(self, domain):
+        from task.task_http import TaskHttp
+        allIps = self.all_dns.get(domain, [])
+        for count, ip in enumerate(allIps):
+            TaskHttp().AddHttpTask(req=req.SpeedTestPingReq(ip, domain), callBack=self.GetBestIpBack, backParam=(domain, ip, count))
+
+    def GetBestIpBack(self, raw, v):
+        domain, ip, count = v
+        if raw["data"] != "0":
+            self.cache_dns[domain] = ip
+            Server().UpdateDns(domain, ip)
+            Log.Info("Dns best ip suc, host:{}:{}, {}".format(domain, ip, count))
 
     def Init(self):
         for host in config.DomainDns:

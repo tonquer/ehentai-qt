@@ -42,6 +42,7 @@ class BookPageInfo(object):
         self.pages = 0        # 分页
         self.favorites = 0     # 收藏数
         self.picUrl = {}       # index: url
+        self.preUrl = {}       # index: url
         self.picRealUrl = {}   # 每张图片对应的下载链接
         self.showKey = ""      # 上下切页需要用的，showKey
         self.comment = []
@@ -64,6 +65,7 @@ class BookPageInfo(object):
         self.pages = o.pages
         self.favorites = o.favorites
         self.picUrl.update(o.picUrl)
+        self.preUrl.update(o.preUrl)
         if len(o.comment) > len(self.comment):
             self.comment = o.comment
 

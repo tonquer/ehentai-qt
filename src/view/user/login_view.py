@@ -41,7 +41,7 @@ class LoginView(BaseMaskDialog, Ui_Login, QtTaskBase):
             self.igneousLabel.setText(Setting.Igneous.value)
 
         self.timer = QTimer()
-        self.timer.setInterval(1000)
+        self.timer.setInterval(2000)
         self.timer.timeout.connect(self._AutoLogin)
         self.autoLogin.setChecked(bool(Setting.AutoLogin.value))
         self.autoLogin.clicked.connect(partial(self.CheckButtonEvent, Setting.AutoLogin, self.autoLogin))

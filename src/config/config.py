@@ -3,8 +3,9 @@ ExUrl = "https://exhentai.org"       # 域名
 FormUrl = "https://forums.e-hentai.org"       # 域名
 ApiUrl = "https://api.e-hentai.org/api.php"
 
-ThreadNum = 10                                # 线程
-DownloadThreadNum = 5                        # 下载线程
+ThreadNum = 10                 # 线程
+DownloadThreadNum = 5          # 下载线程
+ConvertThreadNum = 3           # 同时转换数量
 
 SavePath = ''
 SavePathDir = "commies"       # 下载目录
@@ -18,16 +19,23 @@ PreLook = 4                    # 预显示
 
 IsLoadingPicture = True
 
-UpdateUrl = "https://github.com/tonquer/ehentai-qt/releases/latest"
-UpdateUrlBack = "https://github.com/tonquer/ehentai-qt"
-UpdateUrl2 = "https://hub.fastgit.xyz/tonquer/ehentai-qt/releases/latest"
-UpdateUrl2Back = "https://hub.fastgit.xyz/tonquer/ehentai-qt"
-Issues = "https://github.com/tonquer/ehentai-qt/issues"
+UpdateUrl2 = "https://github.com/tonquer/ehentai-qt/releases/latest"
+UpdateUrl2Back = "https://github.com/tonquer/ehentai-qt"
 
-UpdateVersion = "v1.0.7"
-RealVersion = "v1.0.7"
-Waifu2xVersion = "1.1.1"
-TimeVersion = "2022-6-18"
+UpdateUrl = "https://hub2.ggo.icu/tonquer/ehentai-qt/releases/latest"
+UpdateUrlBack = "https://hub2.ggo.icu/tonquer/ehentai-qt"
+
+UpdateUrl3 = "https://raw.bika.life/tonquer/ehentai-qt/releases/latest"
+UpdateUrl3Back = "https://raw.bika.life/tonquer/ehentai-qt"
+
+Issues2 = "https://github.com/tonquer/ehentai-qt/issues"
+Issues1 = "https://hub2.ggo.icu/tonquer/ehentai-qt/issues"
+Issues3 = "https://raw.bika.life/tonquer/ehentai-qt/issues"
+
+UpdateVersion = "v1.0.8"
+RealVersion = "v1.0.8"
+Waifu2xVersion = "1.1.4"
+TimeVersion = "2022-11-18"
 
 CurSite = "e-hentai"   # 当前站点
 CurLoginName = ""      # 当前登录名
