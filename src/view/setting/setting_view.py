@@ -187,9 +187,9 @@ class SettingView(QtWidgets.QWidget, Ui_SettingNew):
         self.CheckMsgLabel()
         return
 
-    def OpenDohView(self):
-        view = DohDnsView(QtOwner().owner)
-        view.exec_()
+    # def OpenDohView(self):
+    #     view = DohDnsView(QtOwner().owner)
+    #     view.exec_()
 
     def SwitchCurrent(self, **kwargs):
         refresh = kwargs.get("refresh")

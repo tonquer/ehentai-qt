@@ -57,7 +57,7 @@ class QtTaskBase:
     # callBack(data)
     # callBack(data, backParam)
     def AddHttpTask(self, req, callBack=None, backParam=None):
-        from tools.qt_domain import QtDomainMgr
+
         from task.task_http import TaskHttp
         # if not Setting.IsOpenDoh.value:
         return TaskHttp().AddHttpTask(req, callBack, backParam, cleanFlag=self.__taskFlagId)
@@ -89,7 +89,7 @@ class QtTaskBase:
     # downloadCompleteBack(data, st)
     # downloadCompleteBack(data, st, backParam)
     def AddDownloadTask(self, url, path, downloadCallBack=None, completeCallBack=None, downloadStCallBack=None, backParam=None, loadPath="", cachePath="", savePath="",  cleanFlag="", isReload=False):
-        from tools.qt_domain import QtDomainMgr
+
         from task.task_download import TaskDownload
         if not cleanFlag:
             cleanFlag = self.__taskFlagId

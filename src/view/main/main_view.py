@@ -17,9 +17,7 @@ from task.task_download import TaskDownload
 from task.task_qimage import TaskQImage
 from task.task_waifu2x import TaskWaifu2x
 from tools.log import Log
-from tools.qt_domain import QtDomainMgr
 from view.download.download_dir_view import DownloadDirView
-from view.read.read_pool import QtReadImgPoolManager
 
 
 class MainView(Main, QtTaskBase):

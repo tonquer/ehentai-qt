@@ -5,7 +5,7 @@ from config.setting import Setting
 from server.server import Server
 from server import req
 from tools.log import Log
-from tools.login_proxy import UpdateDns, ClearDns
+# from tools.login_proxy import UpdateDns, ClearDns
 from tools.singleton import Singleton
 from tools.status import Status
 
@@ -48,7 +48,7 @@ class QtDomainMgr(Singleton):
                 self.cache_dns[host] = address
                 self.all_dns[host] = addresss
                 Server().UpdateDns(host, address)
-                UpdateDns(host, address)
+                # UpdateDns(host, address)
                 if host in config.DomainDns:
                     self.GetBestIp(host)
                 Log.Info("Dns parse suc, host:{}:{}, {}".format(host, address, addresss))
@@ -94,7 +94,7 @@ class QtDomainMgr(Singleton):
                     self.cache_dns[host] = address
                     self.all_dns[host] = addresss
                     Server().UpdateDns(host, address)
-                    UpdateDns(host, address)
+                    # UpdateDns(host, address)
                     Log.Info("Dns parse suc, host:{}:{}, {}".format(host, address, addresss))
             else:
                 self.fail_dns.add(host)
@@ -134,5 +134,5 @@ class QtDomainMgr(Singleton):
             self.Init()
         else:
             Server().ClearDns()
-            ClearDns()
+            # ClearDns()
         return
