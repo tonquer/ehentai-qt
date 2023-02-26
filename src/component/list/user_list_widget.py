@@ -1,7 +1,7 @@
 from functools import partial
 
-from PySide2.QtCore import Qt
-from PySide2.QtWidgets import QListWidgetItem
+from PySide6.QtCore import Qt
+from PySide6.QtWidgets import QListWidgetItem
 
 from component.list.base_list_widget import BaseListWidget
 from component.widget.comment_item_widget import CommentItemWidget
@@ -101,7 +101,7 @@ class UserListWidget(BaseListWidget):
         else:
             item = self.item(index)
             widget = self.itemWidget(item)
-            widget.SetPictureErr()
+            widget.SetPictureErr(status)
         return
 
     def LoadingHeadComplete(self, data, status, index):

@@ -1,6 +1,6 @@
-from PySide2.QtCore import QPropertyAnimation, QRect, QEasingCurve, QFile, QEvent, Qt, QSize
-from PySide2.QtGui import QPixmap, QIcon
-from PySide2.QtWidgets import QWidget
+from PySide6.QtCore import QPropertyAnimation, QRect, QEasingCurve, QFile, QEvent, Qt, QSize
+from PySide6.QtGui import QPixmap, QIcon
+from PySide6.QtWidgets import QWidget, QScroller, QScrollerProperties
 
 from config import config
 from config.setting import Setting
@@ -37,6 +37,14 @@ class NavigationWidget(QWidget, Ui_Navigation, QtTaskBase):
         self.offlineButton.SetState(False)
         self.offlineButton.Switch.connect(self.SwitchOffline)
 
+        if Setting.IsGrabGesture.value:
+            QScroller.grabGesture(self.scrollArea, QScroller.LeftMouseButtonGesture)
+            propertiesOne = QScroller.scroller(self.scrollArea).scrollerProperties()
+            propertiesOne.setScrollMetric(QScrollerProperties.MousePressEventDelay, 0)
+            propertiesOne.setScrollMetric(QScrollerProperties.VerticalOvershootPolicy, QScrollerProperties.OvershootAlwaysOff)
+            propertiesOne.setScrollMetric(QScrollerProperties.HorizontalOvershootPolicy, QScrollerProperties.OvershootAlwaysOff)
+            QScroller.scroller(self.scrollArea).setScrollerProperties(propertiesOne)
+
     def SwitchOffline(self, state):
         QtOwner().isOfflineModel = state
         return
@@ -61,6 +69,12 @@ class NavigationWidget(QWidget, Ui_Navigation, QtTaskBase):
             QtOwner().ShowMsg(Str.GetStr(Str.Ok))
             self.searchButton.click()
             # QtOwner().owner.SwitchWidgetAndClear(QtOwner().owner.subStackWidget.indexOf(QtOwner().owner.searchView))
+        elif data.get("igneous") is not None:
+            igneous = data.get("igneous")
+            if igneous == "mystery":
+                QtOwner().ShowError(Str.GetStr(Str.IgneousMystery))
+            else:
+                QtOwner().ShowError(Str.GetStr(Str.NotIgneous))
         else:
             QtOwner().ShowError(Str.GetStr(st))
         return

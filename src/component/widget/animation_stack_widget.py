@@ -1,8 +1,8 @@
 from enum import Enum
 
-from PySide2.QtCore import QPropertyAnimation, QRectF, Property
-from PySide2.QtGui import QPaintEvent, QPainter, QPixmap
-from PySide2.QtWidgets import QStackedWidget
+from PySide6.QtCore import QPropertyAnimation, QRectF, Property
+from PySide6.QtGui import QPaintEvent, QPainter, QPixmap
+from PySide6.QtWidgets import QStackedWidget
 
 
 class AnimationEnum(Enum):

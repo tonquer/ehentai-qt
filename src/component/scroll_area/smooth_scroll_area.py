@@ -1,6 +1,6 @@
-from PySide2.QtCore import Qt
-from PySide2.QtGui import QWheelEvent
-from PySide2.QtWidgets import QScrollArea
+from PySide6.QtCore import Qt
+from PySide6.QtGui import QWheelEvent
+from PySide6.QtWidgets import QScrollArea
 
 from component.scroll.smooth_scroll_bar import SmoothScrollBar
 

@@ -1,11 +1,11 @@
 import os
 import time
 
-from PySide2 import QtWidgets, QtCore
-from PySide2.QtCore import Qt, QRectF, QPointF, QSizeF, QEvent
-from PySide2.QtGui import QPainter, QPixmap, QDoubleValidator, \
+from PySide6 import QtWidgets, QtCore
+from PySide6.QtCore import Qt, QRectF, QPointF, QSizeF, QEvent
+from PySide6.QtGui import QPainter, QPixmap, QDoubleValidator, \
     QIntValidator, QMouseEvent, QImage
-from PySide2.QtWidgets import QFrame, QGraphicsPixmapItem, QGraphicsScene, QApplication, QFileDialog, QLabel
+from PySide6.QtWidgets import QFrame, QGraphicsPixmapItem, QGraphicsScene, QApplication, QFileDialog, QLabel
 
 from config import config
 from interface.ui_waifu2x_tool import Ui_Waifu2xTool

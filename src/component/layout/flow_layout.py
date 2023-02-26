@@ -1,6 +1,6 @@
-from PySide2.QtCore import QRect, QSize, QPoint, QMargins
-from PySide2.QtGui import Qt
-from PySide2.QtWidgets import QLayout, QSizePolicy
+from PySide6.QtCore import QRect, QSize, QPoint, QMargins
+from PySide6.QtGui import Qt
+from PySide6.QtWidgets import QLayout, QSizePolicy
 
 
 class FlowLayout(QLayout):

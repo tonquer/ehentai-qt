@@ -1,0 +1,525 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>LoginProxyWidget</class>
+ <widget class="QWidget" name="LoginProxyWidget">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>495</width>
+    <height>483</height>
+   </rect>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>450</width>
+    <height>0</height>
+   </size>
+  </property>
+  <property name="windowTitle">
+   <string>代理设置</string>
+  </property>
+  <layout class="QGridLayout" name="gridLayout">
+   <property name="spacing">
+    <number>12</number>
+   </property>
+   <item row="0" column="0">
+    <widget class="SmoothScrollArea" name="scrollArea">
+     <property name="widgetResizable">
+      <bool>true</bool>
+     </property>
+     <widget class="QWidget" name="scrollAreaWidgetContents">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>-109</y>
+        <width>458</width>
+        <height>572</height>
+       </rect>
+      </property>
+      <layout class="QVBoxLayout" name="verticalLayout">
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_11">
+         <item>
+          <widget class="QRadioButton" name="proxy_0">
+           <property name="text">
+            <string>无代理</string>
+           </property>
+           <attribute name="buttonGroup">
+            <string notr="true">radioProxyGroup</string>
+           </attribute>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout">
+         <item>
+          <widget class="QRadioButton" name="proxy_1">
+           <property name="minimumSize">
+            <size>
+             <width>90</width>
+             <height>0</height>
+            </size>
+           </property>
+           <property name="text">
+            <string>HTTP代理</string>
+           </property>
+           <attribute name="buttonGroup">
+            <string notr="true">radioProxyGroup</string>
+           </attribute>
+          </widget>
+         </item>
+         <item>
+          <widget class="Line" name="line">
+           <property name="orientation">
+            <enum>Qt::Vertical</enum>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="label">
+           <property name="text">
+            <string>代理地址</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignCenter</set>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLineEdit" name="httpLine">
+           <property name="toolTip">
+            <string>http://127.0.0.1:10809</string>
+           </property>
+           <property name="placeholderText">
+            <string/>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_10">
+         <item>
+          <widget class="QRadioButton" name="proxy_2">
+           <property name="minimumSize">
+            <size>
+             <width>90</width>
+             <height>0</height>
+            </size>
+           </property>
+           <property name="text">
+            <string>Sock5代理</string>
+           </property>
+           <attribute name="buttonGroup">
+            <string notr="true">radioProxyGroup</string>
+           </attribute>
+          </widget>
+         </item>
+         <item>
+          <widget class="Line" name="line_2">
+           <property name="orientation">
+            <enum>Qt::Vertical</enum>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="label_5">
+           <property name="text">
+            <string>代理地址</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLineEdit" name="sockEdit">
+           <property name="toolTip">
+            <string>127.0.0.1:10808</string>
+           </property>
+           <property name="placeholderText">
+            <string/>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_12">
+         <item>
+          <widget class="QRadioButton" name="proxy_3">
+           <property name="text">
+            <string>使用系统代理</string>
+           </property>
+           <attribute name="buttonGroup">
+            <string notr="true">radioProxyGroup</string>
+           </attribute>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <widget class="Line" name="line_3">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_9">
+         <item>
+          <widget class="QCheckBox" name="httpsBox">
+           <property name="text">
+            <string>启用Https（如果出现连接被重置，建议关闭试试）</string>
+           </property>
+           <property name="checked">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_2">
+         <item>
+          <widget class="QCheckBox" name="ipDirect">
+           <property name="text">
+            <string>启用IP直连（有代理可关闭此功能）</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <widget class="QPushButton" name="testSpeedButton">
+         <property name="text">
+          <string>测速</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="Line" name="line_4">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <layout class="QGridLayout" name="gridLayout_2">
+         <item row="1" column="2">
+          <widget class="QLabel" name="label_6">
+           <property name="text">
+            <string>延迟</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignCenter</set>
+           </property>
+          </widget>
+         </item>
+         <item row="9" column="2">
+          <widget class="QLabel" name="label_ex_2">
+           <property name="text">
+            <string/>
+           </property>
+          </widget>
+         </item>
+         <item row="9" column="1">
+          <widget class="QRadioButton" name="radio_ex_2">
+           <property name="text">
+            <string>178.175.132.20</string>
+           </property>
+           <attribute name="buttonGroup">
+            <string notr="true">exGroup</string>
+           </attribute>
+          </widget>
+         </item>
+         <item row="4" column="2">
+          <widget class="QLabel" name="label_e_3">
+           <property name="text">
+            <string/>
+           </property>
+          </widget>
+         </item>
+         <item row="10" column="2">
+          <widget class="QLabel" name="label_ex_3">
+           <property name="text">
+            <string/>
+           </property>
+          </widget>
+         </item>
+         <item row="12" column="1">
+          <widget class="QRadioButton" name="radio_eh_2">
+           <property name="text">
+            <string>81.171.10.48</string>
+           </property>
+           <attribute name="buttonGroup">
+            <string notr="true">ehGroup</string>
+           </attribute>
+          </widget>
+         </item>
+         <item row="8" column="0">
+          <widget class="QLabel" name="label_ex">
+           <property name="text">
+            <string>exhentai.org</string>
+           </property>
+          </widget>
+         </item>
+         <item row="10" column="1">
+          <widget class="QRadioButton" name="radio_ex_3">
+           <property name="text">
+            <string>178.175.128.252</string>
+           </property>
+           <attribute name="buttonGroup">
+            <string notr="true">exGroup</string>
+           </attribute>
+          </widget>
+         </item>
+         <item row="11" column="0">
+          <widget class="QLabel" name="label_eh">
+           <property name="text">
+            <string>ehgt.org</string>
+           </property>
+          </widget>
+         </item>
+         <item row="6" column="1">
+          <widget class="QRadioButton" name="radio_api_2">
+           <property name="text">
+            <string>178.162.147.246</string>
+           </property>
+           <attribute name="buttonGroup">
+            <string notr="true">apiGroup</string>
+           </attribute>
+          </widget>
+         </item>
+         <item row="4" column="1">
+          <widget class="QRadioButton" name="radio_e_3">
+           <property name="text">
+            <string>172.67.0.127</string>
+           </property>
+           <attribute name="buttonGroup">
+            <string notr="true">eGroup</string>
+           </attribute>
+          </widget>
+         </item>
+         <item row="8" column="2">
+          <widget class="QLabel" name="label_ex_1">
+           <property name="text">
+            <string/>
+           </property>
+          </widget>
+         </item>
+         <item row="7" column="2">
+          <widget class="QLabel" name="label_api_3">
+           <property name="text">
+            <string/>
+           </property>
+          </widget>
+         </item>
+         <item row="3" column="1">
+          <widget class="QRadioButton" name="radio_e_2">
+           <property name="text">
+            <string>104.20.135.21</string>
+           </property>
+           <attribute name="buttonGroup">
+            <string notr="true">eGroup</string>
+           </attribute>
+          </widget>
+         </item>
+         <item row="3" column="2">
+          <widget class="QLabel" name="label_e_2">
+           <property name="text">
+            <string/>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="2">
+          <widget class="QLabel" name="label_e_1">
+           <property name="text">
+            <string/>
+           </property>
+          </widget>
+         </item>
+         <item row="5" column="2">
+          <widget class="QLabel" name="label_api_1">
+           <property name="text">
+            <string/>
+           </property>
+          </widget>
+         </item>
+         <item row="6" column="2">
+          <widget class="QLabel" name="label_api_2">
+           <property name="text">
+            <string/>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="0">
+          <widget class="QLabel" name="label_e">
+           <property name="text">
+            <string>e-hentai.org</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="1">
+          <widget class="QLabel" name="label_2">
+           <property name="text">
+            <string>IP</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignCenter</set>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="1">
+          <widget class="QRadioButton" name="radio_e_1">
+           <property name="text">
+            <string>104.20.134.21</string>
+           </property>
+           <property name="checked">
+            <bool>true</bool>
+           </property>
+           <attribute name="buttonGroup">
+            <string notr="true">eGroup</string>
+           </attribute>
+          </widget>
+         </item>
+         <item row="5" column="0">
+          <widget class="QLabel" name="label_api">
+           <property name="text">
+            <string>api.e-hentai.org</string>
+           </property>
+          </widget>
+         </item>
+         <item row="5" column="1">
+          <widget class="QRadioButton" name="radio_api_1">
+           <property name="toolTip">
+            <string>所以分流不可使用时，自动解锁</string>
+           </property>
+           <property name="text">
+            <string>37.48.89.16</string>
+           </property>
+           <attribute name="buttonGroup">
+            <string notr="true">apiGroup</string>
+           </attribute>
+          </widget>
+         </item>
+         <item row="8" column="1">
+          <widget class="QRadioButton" name="radio_ex_1">
+           <property name="text">
+            <string>178.175.129.252</string>
+           </property>
+           <attribute name="buttonGroup">
+            <string notr="true">exGroup</string>
+           </attribute>
+          </widget>
+         </item>
+         <item row="7" column="1">
+          <widget class="QRadioButton" name="radio_api_3">
+           <property name="text">
+            <string>81.171.10.55</string>
+           </property>
+           <attribute name="buttonGroup">
+            <string notr="true">apiGroup</string>
+           </attribute>
+          </widget>
+         </item>
+         <item row="13" column="1">
+          <widget class="QRadioButton" name="radio_eh_3">
+           <property name="text">
+            <string>178.162.139.24</string>
+           </property>
+           <attribute name="buttonGroup">
+            <string notr="true">ehGroup</string>
+           </attribute>
+          </widget>
+         </item>
+         <item row="11" column="2">
+          <widget class="QLabel" name="label_eh_1">
+           <property name="text">
+            <string/>
+           </property>
+          </widget>
+         </item>
+         <item row="11" column="1">
+          <widget class="QRadioButton" name="radio_eh_1">
+           <property name="text">
+            <string>37.48.89.44</string>
+           </property>
+           <attribute name="buttonGroup">
+            <string notr="true">ehGroup</string>
+           </attribute>
+          </widget>
+         </item>
+         <item row="12" column="2">
+          <widget class="QLabel" name="label_eh_2">
+           <property name="text">
+            <string/>
+           </property>
+          </widget>
+         </item>
+         <item row="13" column="2">
+          <widget class="QLabel" name="label_eh_3">
+           <property name="text">
+            <string/>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="0">
+          <widget class="QLabel" name="label_3">
+           <property name="text">
+            <string>IP直连配置</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_8"/>
+       </item>
+      </layout>
+     </widget>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>SmoothScrollArea</class>
+   <extends>QScrollArea</extends>
+   <header location="global">component.scroll_area.smooth_scroll_area.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>testSpeedButton</sender>
+   <signal>clicked()</signal>
+   <receiver>LoginProxyWidget</receiver>
+   <slot>SpeedTest()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>73</x>
+     <y>81</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>458</x>
+     <y>47</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>Login()</slot>
+  <slot>OpenRegister()</slot>
+  <slot>SpeedTest()</slot>
+  <slot>SaveSetting()</slot>
+  <slot>OpenUrl()</slot>
+ </slots>
+ <buttongroups>
+  <buttongroup name="eGroup"/>
+  <buttongroup name="exGroup"/>
+  <buttongroup name="apiGroup"/>
+  <buttongroup name="radioProxyGroup"/>
+  <buttongroup name="ehGroup"/>
+ </buttongroups>
+</ui>

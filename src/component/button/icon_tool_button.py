@@ -1,4 +1,4 @@
-from PySide2.QtWidgets import QToolButton
+from PySide6.QtWidgets import QToolButton
 
 
 class IconToolButton(QToolButton):

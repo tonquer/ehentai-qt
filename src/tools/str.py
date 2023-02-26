@@ -1,4 +1,4 @@
-from PySide2.QtCore import QObject, QCoreApplication
+from PySide6.QtCore import QObject, QCoreApplication
 
 
 class QtStrObj(QObject):
@@ -18,7 +18,7 @@ class Str:
     Load = 1002            # "加载"
     Error = 1003           # "错误"
     WaitLoad = 1004        # "等待"
-    NetError = 1005        # "网络错误，请检查代理设置"
+    NetError = 1005        # "网络错误"
     UserError = 1006       # "用户名密码错误"
     RegisterError = 1007   # "注册失败"
     UnKnowError = 1008     # "未知错误，"
@@ -36,14 +36,17 @@ class Str:
     FileFormatError = 1020   # "文件损坏"
     TimeOut = 1021           # "连接超时"
     ConnectErr = 1022        # "无法连接"
-    SSLErr = 1023            # "ssl证书错误"
-    ResetErr = 1024          # "连接已被重置, 请尝试设置中禁用SNI"
+    SSLErr = 1023            # "证书错误"
+    ResetErr = 1024          # "连接被重置"
     ProxyError = 1025        # "无法连接代理"
     DownloadFail = 1026      # "下载失败"
     OfflineModel = 1027      # "离线模式中"
     NotDownload = 1028       # "未下载"
     AccountAlready = 1029    # "账号已被注册"
     NotAdult = 1030          # "未成年禁止注册"
+    SpaceEps = 1031          # "空白章节"
+    NotIgneous = 1032        # "未获取到igneous值"
+    IgneousMystery = 1033    # "获取igneous=mystery，无法切换"
 
     Success = 2001         # "下载完成"
     Reading = 2002         # "获取信息"
@@ -68,6 +71,14 @@ class Str:
     WaifuStateFail = 3008      # "转换失败"
     OverResolution = 3009      # "超过设置分辨率"
     AnimationNotAuto = 3010      # "动图不自动转换"
+
+    NotFoundEps = 4001            # "未找到该章节"
+    NotFoundPictureIndex = 4002   # "超过索引"
+    NotFoundPicture = 4003        # "未找到该图片"
+    NotZIPFile = 4004        # "不是ZIP文件"
+    ErrorPath = 4005        # "错误的路径"
+    NotPictureFile = 4006        # "没有发现图片文件"
+    FileLock = 4007        # "文件已加密"
 
     LoadingPicture = 1     # "图片加载中..."
     LoadingFail = 2        # "图片加载失败"
@@ -176,7 +187,7 @@ class Str:
     PressCtrlEnter = 105     # 按Ctrl+Enter发送消息
     DelWaifu2xConvert = 106     # 取消Waifu2x转换
     NeedResetSave = 107      # 需要重启保存
-    CheckUp = 108            # 检查更新中
+    CheckUp = 108            # 检查更新
     DailyUpdated = 109            # 今日已更新
     HaveUpdate = 110            # 有更新
     AlreadyUpdate = 111            # 已是最新
@@ -210,6 +221,14 @@ class Str:
     CopyFile = 139     # 保存文件
     MainUi = 140     # 主界面
     ShowMin = 141     # 最小化
+    DownloadAll = 143            # 批量下载
+    ImportSimple = 144        # 导入单本目录
+    ImportSimpleZip = 145     # 导入单本Zip
+    ImportSimpleDir = 146     # 批量导入单本目录
+    ImportChipDir = 147       # 批量导入带章节目录
+    SupportDrop = 148         # 支持拖拽文件导入
+    AlreadyHave = 149         # 已存在
+    SameWight = 150    # 等宽模式
 
     @classmethod
     def Reload(cls):
@@ -219,7 +238,7 @@ class Str:
         cls.strDict[cls.Load] = QCoreApplication.translate("cls.obj",  "加载", None)
         cls.strDict[cls.Error] = QCoreApplication.translate("cls.obj",  "错误", None)
         cls.strDict[cls.WaitLoad] = QCoreApplication.translate("cls.obj",  "等待", None)
-        cls.strDict[cls.NetError] = QCoreApplication.translate("cls.obj",  "网络错误，请检查代理设置", None)
+        cls.strDict[cls.NetError] = QCoreApplication.translate("cls.obj",  "网络错误", None)
         cls.strDict[cls.UserError] = QCoreApplication.translate("cls.obj",  "用户名密码错误", None)
         cls.strDict[cls.RegisterError] = QCoreApplication.translate("cls.obj",  "注册失败", None)
         cls.strDict[cls.UnKnowError] = QCoreApplication.translate("cls.obj",  "未知错误", None)
@@ -237,14 +256,17 @@ class Str:
         cls.strDict[cls.FileFormatError] = QCoreApplication.translate("cls.obj",  "文件损坏", None)
         cls.strDict[cls.TimeOut] = QCoreApplication.translate("cls.obj", "连接超时", None)
         cls.strDict[cls.ConnectErr] = QCoreApplication.translate("cls.obj", "无法连接", None)
-        cls.strDict[cls.SSLErr] = QCoreApplication.translate("cls.obj", "ssl证书错误", None)
-        cls.strDict[cls.ResetErr] = QCoreApplication.translate("cls.obj", "连接已被重置, 请尝试设置中禁用SNI", None)
+        cls.strDict[cls.SSLErr] = QCoreApplication.translate("cls.obj", "证书错误", None)
+        cls.strDict[cls.ResetErr] = QCoreApplication.translate("cls.obj", "连接被重置", None)
         cls.strDict[cls.ProxyError] = QCoreApplication.translate("cls.obj", "无法连接代理", None)
         cls.strDict[cls.DownloadFail] = QCoreApplication.translate("cls.obj", "下载失败", None)
         cls.strDict[cls.OfflineModel] = QCoreApplication.translate("cls.obj", "离线模式中", None)
         cls.strDict[cls.NotDownload] = QCoreApplication.translate("cls.obj", "未下载", None)
         cls.strDict[cls.AccountAlready] = QCoreApplication.translate("cls.obj", "账号已被注册", None)
         cls.strDict[cls.NotAdult] = QCoreApplication.translate("cls.obj", "未成年禁止注册", None)
+        cls.strDict[cls.SpaceEps] = QCoreApplication.translate("cls.obj", "空白章节", None)
+        cls.strDict[cls.NotIgneous] = QCoreApplication.translate("cls.obj", "未获取到igneous值", None)
+        cls.strDict[cls.IgneousMystery] = QCoreApplication.translate("cls.obj", "获取igneous=mystery，无法切换", None)
 
         cls.strDict[cls.LoadingPicture] = QCoreApplication.translate("cls.obj",  "图片加载中...", None)
         cls.strDict[cls.LoadingFail] = QCoreApplication.translate("cls.obj",  "图片加载失败", None)
@@ -274,6 +296,14 @@ class Str:
         cls.strDict[cls.WaifuStateFail] = QCoreApplication.translate("cls.obj",  "转换失败", None)
         cls.strDict[cls.OverResolution] = QCoreApplication.translate("cls.obj",  "超过设置分辨率", None)
         cls.strDict[cls.AnimationNotAuto] = QCoreApplication.translate("cls.obj",  "动图不自动转换", None)
+
+        cls.strDict[cls.NotFoundEps] = QCoreApplication.translate("cls.obj",  "未找到该章节", None)
+        cls.strDict[cls.NotFoundPictureIndex] = QCoreApplication.translate("cls.obj",  "超过索引", None)
+        cls.strDict[cls.NotFoundPicture] = QCoreApplication.translate("cls.obj",  "未找到该图片", None)
+        cls.strDict[cls.NotZIPFile] = QCoreApplication.translate("cls.obj",  "不是ZIP文件", None)
+        cls.strDict[cls.ErrorPath] = QCoreApplication.translate("cls.obj",  "错误的路径", None)
+        cls.strDict[cls.NotPictureFile] = QCoreApplication.translate("cls.obj",  "没有发现图片文件", None)
+        cls.strDict[cls.FileLock] = QCoreApplication.translate("cls.obj",  "文件已加密", None)
 
         cls.strDict[cls.Menu] = QCoreApplication.translate("cls.obj",  "菜单", None)
         cls.strDict[cls.FullSwitch] = QCoreApplication.translate("cls.obj",  "全屏切换", None)
@@ -374,7 +404,7 @@ class Str:
         cls.strDict[cls.PressCtrlEnter] = QCoreApplication.translate("cls.obj",  "按Ctrl+Enter发送消息", None)
         cls.strDict[cls.DelWaifu2xConvert] = QCoreApplication.translate("cls.obj",  "取消Waifu2x转换", None)
         cls.strDict[cls.NeedResetSave] = QCoreApplication.translate("cls.obj",  "需要重启保存", None)
-        cls.strDict[cls.CheckUp] = QCoreApplication.translate("cls.obj",  "检查更新中", None)
+        cls.strDict[cls.CheckUp] = QCoreApplication.translate("cls.obj",  "检查更新", None)
         cls.strDict[cls.DailyUpdated] = QCoreApplication.translate("cls.obj",  "今日已更新", None)
         cls.strDict[cls.HaveUpdate] = QCoreApplication.translate("cls.obj",  "有更新", None)
         cls.strDict[cls.AlreadyUpdate] = QCoreApplication.translate("cls.obj",  "已是最新", None)
@@ -408,6 +438,14 @@ class Str:
         cls.strDict[cls.CopyFile] = QCoreApplication.translate("cls.obj", "保存文件", None)
         cls.strDict[cls.MainUi] = QCoreApplication.translate("cls.obj", "主界面", None)
         cls.strDict[cls.ShowMin] = QCoreApplication.translate("cls.obj", "最小化", None)
+        cls.strDict[cls.DownloadAll] = QCoreApplication.translate("cls.obj", "批量下载", None)
+        cls.strDict[cls.ImportSimple] = QCoreApplication.translate("cls.obj", "导入单本目录", None)
+        cls.strDict[cls.ImportSimpleZip] = QCoreApplication.translate("cls.obj", "导入单本Zip", None)
+        cls.strDict[cls.ImportSimpleDir] = QCoreApplication.translate("cls.obj", "批量导入单本目录", None)
+        cls.strDict[cls.ImportChipDir] = QCoreApplication.translate("cls.obj", "批量导入带章节目录", None)
+        cls.strDict[cls.SupportDrop] = QCoreApplication.translate("cls.obj", "支持拖拽文件导入", None)
+        cls.strDict[cls.AlreadyHave] = QCoreApplication.translate("cls.obj", "已存在", None)
+        cls.strDict[cls.SameWight] = QCoreApplication.translate("cls.obj", "等宽模式", None)
 
     @classmethod
     def GetStr(cls, enumType):

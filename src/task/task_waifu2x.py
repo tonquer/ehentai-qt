@@ -23,6 +23,7 @@ class QConvertTask(object):
         self.tick = 0
         self.loadPath = ""  #
         self.preDownPath = ""  #
+        self.saveParams = ""  #
         self.cachePath = ""  #
         self.savePath = ""  #
         self.imgData = b""
@@ -159,13 +160,13 @@ class TaskWaifu2x(TaskBase):
             info.saveData = data
             info.tick = tick
             try:
-                w, h, mat, _ = ToolUtil.GetPictureSize(data)
+                # w, h, mat, _ = ToolUtil.GetPictureSize(data)
                 for path in [info.cachePath, info.savePath]:
                     if path and not os.path.isdir(os.path.dirname(path)):
                         os.makedirs(os.path.dirname(path))
 
                     if path and data:
-                        path = path + "." + mat
+                        path = path + "." + format
                         with open(path, "wb+") as f:
                             f.write(data)
             except Exception as es:
@@ -175,7 +176,7 @@ class TaskWaifu2x(TaskBase):
             self.taskObj.convertBack.emit(taskId)
             t1.Refresh("RunLoad")
 
-    def AddConvertTaskByData(self, path, imgData, model, callBack, backParam=None, preDownPath=None, cleanFlag=None):
+    def AddConvertTaskByData(self, path, imgData, model, callBack, backParam=None, preDownPath=None, noSaveCache=False, cleanFlag=None):
         info = QConvertTask()
         info.callBack = callBack
         info.backParam = backParam
@@ -185,7 +186,7 @@ class TaskWaifu2x(TaskBase):
         info.imgData = imgData
         info.model = model
         info.preDownPath = preDownPath
-        if path and Setting.SavePath.value:
+        if not noSaveCache and path and Setting.SavePath.value:
             a = crc32(json.dumps(model).encode("utf-8"))
             if Setting.SavePath.value:
                 path2 = os.path.join(os.path.join(Setting.SavePath.value, config.CachePathDir), config.Waifu2xPath)

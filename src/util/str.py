@@ -1,6 +1,6 @@
 from enum import Enum
 
-from PySide2.QtCore import QObject
+from PySide6.QtCore import QObject
 
 
 class QtStrObj(QObject):

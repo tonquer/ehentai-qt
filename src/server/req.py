@@ -30,6 +30,7 @@ class ServerReq(object):
         self.params = params
         self.method = method
         self.isParseRes = False
+        self.isUseHttps = True
         self.timeout = 5
         if Setting.IsHttpProxy.value == 1:
             self.proxy = {"http": Setting.HttpProxy.value, "https": Setting.HttpProxy.value}
@@ -46,7 +47,12 @@ class ServerReq(object):
         # headers = dict()
         # headers.update(self.headers)
         params = self.params
-        return "{}, url:{}, proxy:{}, method:{}, params:{}".format(self.__class__.__name__, self.url, not not self.proxy, self.method, params)
+        if "host" in self.headers:
+            host = self.headers["host"]
+        else:
+            host = ""
+        haveProxy = bool(self.proxy) and self.proxy.get("http") != None
+        return "{}, url:{}, host:{}, proxy:{}, method:{}, params:{}".format(self.__class__.__name__, self.url, host, haveProxy, self.method, params)
 
 
 # 下载图片
@@ -118,6 +124,14 @@ class CheckUpdateReq(ServerReq):
         super(self.__class__, self).__init__(url, {}, {}, method)
         self.isParseRes = False
 
+
+# 检查Pre更新
+class CheckPreUpdateReq(ServerReq):
+    def __init__(self, url=config.UpdateUrl):
+        method = "GET"
+        super(self.__class__, self).__init__(url.replace("/latest", ""), {}, {}, method)
+        self.isParseRes = False
+        self.useImgProxy = False
 
 # 本子信息
 class BookInfoReq(ServerReq):
@@ -359,7 +373,11 @@ class DnsOverHttpsReq(ServerReq):
 class SpeedTestPingReq(ServerReq):
     def __init__(self, ip, domain):
         url = "https://{}".format(ip)
-        method = "GET"
+        if "api" in domain:
+            method = "POST"
+            url = "https://api.e-hentai.org/api.php"
+        else:
+            method = "GET"
         header = ToolUtil.GetHeader(url, method)
 
         header["host"] = domain

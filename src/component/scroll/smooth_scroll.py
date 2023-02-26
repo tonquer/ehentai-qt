@@ -2,9 +2,9 @@ from collections import deque
 from enum import Enum
 from math import cos, pi
 
-from PySide2.QtCore import QPoint, Qt, QDateTime, QTimer
-from PySide2.QtGui import QWheelEvent
-from PySide2.QtWidgets import QApplication
+from PySide6.QtCore import QPoint, Qt, QDateTime, QTimer
+from PySide6.QtGui import QWheelEvent
+from PySide6.QtWidgets import QApplication
 
 from view.read.read_enum import ReadMode
 

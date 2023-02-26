@@ -4,10 +4,10 @@ import re
 import sys
 from functools import partial
 
-from PySide2 import QtWidgets
-from PySide2.QtCore import QSettings, Qt, QSize, QUrl, QFile, QTranslator, QLocale
-from PySide2.QtGui import QDesktopServices, QFontDatabase
-from PySide2.QtWidgets import QFileDialog
+from PySide6 import QtWidgets
+from PySide6.QtCore import QSettings, Qt, QSize, QUrl, QFile, QTranslator, QLocale
+from PySide6.QtGui import QDesktopServices, QFontDatabase
+from PySide6.QtWidgets import QFileDialog, QScroller, QScrollerProperties
 
 from config import config
 from config.setting import Setting, SettingValue
@@ -16,6 +16,7 @@ from qt_owner import QtOwner
 from tools.log import Log
 from tools.str import Str
 from view.tool.doh_dns_view import DohDnsView
+from view.user.login_view import LoginView
 
 
 class SettingView(QtWidgets.QWidget, Ui_SettingNew):
@@ -36,6 +37,11 @@ class SettingView(QtWidgets.QWidget, Ui_SettingNew):
         for name in QFontDatabase().families():
             self.fontBox.addItem(name)
 
+        # self.dohRadio.hide()
+        # self.dohPictureRadio.hide()
+        # self.dohLine.hide()
+        # self.dohButton.hide()
+
         # RadioButton:
         self.themeGroup.buttonClicked.connect(partial(self.ButtonClickEvent, Setting.ThemeIndex))
         self.languageGroup.buttonClicked.connect(partial(self.ButtonClickEvent, Setting.Language))
@@ -52,16 +58,16 @@ class SettingView(QtWidgets.QWidget, Ui_SettingNew):
         self.coverCheckBox.clicked.connect(partial(self.CheckButtonEvent, Setting.CoverIsOpenWaifu, self.coverCheckBox))
         self.downAuto.clicked.connect(partial(self.CheckButtonEvent, Setting.DownloadAuto, self.downAuto))
         self.titleBox.clicked.connect(partial(self.CheckButtonEvent, Setting.IsNotUseTitleBar, self.titleBox))
-        self.dohRadio.clicked.connect(partial(self.CheckButtonEvent, Setting.IsOpenDoh, self.dohRadio))
-        self.dohPictureRadio.clicked.connect(partial(self.CheckButtonEvent, Setting.IsOpenDohPicture, self.dohPictureRadio))
-        self.sniRadio.clicked.connect(partial(self.CheckButtonEvent, Setting.IsCloseSNI, self.sniRadio))
+        # self.dohRadio.clicked.connect(partial(self.CheckButtonEvent, Setting.IsOpenDoh, self.dohRadio))
+        # self.dohPictureRadio.clicked.connect(partial(self.CheckButtonEvent, Setting.IsOpenDohPicture, self.dohPictureRadio))
+        # self.sniRadio.clicked.connect(partial(self.CheckButtonEvent, Setting.IsCloseSNI, self.sniRadio))
         self.grabGestureBox.clicked.connect(partial(self.CheckButtonEvent, Setting.IsGrabGesture, self.grabGestureBox))
         # self.isShowClose.clicked.connect(partial(self.CheckButtonEvent, Setting.IsNotShowCloseTip, self.isShowClose))
 
         # LineEdit:
         self.httpEdit.editingFinished.connect(partial(self.LineEditEvent, Setting.HttpProxy, self.httpEdit))
         self.sockEdit.editingFinished.connect(partial(self.LineEditEvent, Setting.Sock5Proxy, self.sockEdit))
-        self.dohLine.editingFinished.connect(partial(self.LineEditEvent, Setting.DohAddress, self.dohLine))
+        # self.dohLine.editingFinished.connect(partial(self.LineEditEvent, Setting.DohAddress, self.dohLine))
 
         # Button:
 
@@ -101,12 +107,18 @@ class SettingView(QtWidgets.QWidget, Ui_SettingNew):
         # self.openChatDir.clicked.connect(partial(self.OpenDir, self.chatDir))
         self.openCacheDir.clicked.connect(partial(self.OpenDir, self.cacheDir))
         self.openWaifu2xDir.clicked.connect(partial(self.OpenDir, self.waifu2xDir))
-        self.dohButton.clicked.connect(self.OpenDohView)
-
+        # self.dohButton.clicked.connect(self.OpenDohView)
+        self.openProxy.clicked.connect(self.OpenProxy)
         self.msgLabel.setVisible(False)
-        # if Setting.IsGrabGesture.value:
-        #     QScroller.grabGesture(self.scrollArea, QScroller.LeftMouseButtonGesture)
-        self.grabGestureBox.setVisible(False)
+        if Setting.IsGrabGesture.value:
+            QScroller.grabGesture(self.scrollArea, QScroller.LeftMouseButtonGesture)
+            propertiesOne = QScroller.scroller(self).scrollerProperties()
+            propertiesOne.setScrollMetric(QScrollerProperties.MousePressEventDelay, 0)
+            propertiesOne.setScrollMetric(QScrollerProperties.VerticalOvershootPolicy, QScrollerProperties.OvershootAlwaysOff)
+            propertiesOne.setScrollMetric(QScrollerProperties.HorizontalOvershootPolicy, QScrollerProperties.OvershootAlwaysOff)
+            QScroller.scroller(self.scrollArea).setScrollerProperties(propertiesOne)
+
+        # self.grabGestureBox.setVisible(False)
 
     def MoveToLabel(self, label):
         p = label.pos()
@@ -151,8 +163,6 @@ class SettingView(QtWidgets.QWidget, Ui_SettingNew):
         setItem.SetValue(int(button.isChecked()))
         QtOwner().ShowMsgOne(Str.GetStr(Str.SaveSuc))
         self.CheckMsgLabel()
-        if setItem == Setting.IsCloseSNI:
-            self.SetSNI()
         return
 
     def CheckRadioEvent(self, setItem, value):
@@ -191,8 +201,7 @@ class SettingView(QtWidgets.QWidget, Ui_SettingNew):
         self.InitSetting()
         self.SetTheme()
         self.SetLanguage()
-        self.SetSock5Proxy(True)
-        self.SetSNI()
+        self.SetSock5Proxy()
         return
 
     def ExitSaveSetting(self, mainQsize):
@@ -214,9 +223,9 @@ class SettingView(QtWidgets.QWidget, Ui_SettingNew):
         self.titleBox.setChecked(Setting.IsNotUseTitleBar.value)
         self.grabGestureBox.setChecked(Setting.IsGrabGesture.value)
         # self.isShowClose.setChecked(Setting.IsNotShowCloseTip.value)
-        self.dohLine.setText(Setting.DohAddress.value)
-        self.dohRadio.setChecked(Setting.IsOpenDoh.value)
-        self.sniRadio.setChecked(Setting.IsCloseSNI.value)
+        # self.dohLine.setText(Setting.DohAddress.value)
+        # self.dohRadio.setChecked(Setting.IsOpenDoh.value)
+        # self.sniRadio.setChecked(Setting.IsCloseSNI.value)
 
         for index in range(self.encodeSelect.count()):
             if Setting.SelectEncodeGpu.value == self.encodeSelect.itemText(index):
@@ -250,6 +259,16 @@ class SettingView(QtWidgets.QWidget, Ui_SettingNew):
         self.downModel.setCurrentIndex(Setting.DownloadModel.value)
         self.SetDownloadLabel()
 
+    def OpenProxy(self):
+        loginView = LoginView(QtOwner().owner, False)
+        loginView.tabWidget.setCurrentIndex(1)
+        loginView.tabWidget.removeTab(0)
+        loginView.loginButton.setText(Str.GetStr(Str.Save))
+        loginView.show()
+
+        # loginView.closed.connect(QtOwner().owner.navigationWidget.UpdateProxyName)
+        return
+
     def retranslateUi(self, SettingNew):
         Ui_SettingNew.retranslateUi(self, SettingNew)
         self.SetDownloadLabel()
@@ -259,55 +278,25 @@ class SettingView(QtWidgets.QWidget, Ui_SettingNew):
         if radio:
             radio.setChecked(True)
 
-    def SetSock5Proxy(self, isInit=False):
+    def SetSock5Proxy(self):
         try:
             import socket
             import socks
-            from server import Server
             if not QtOwner().backSock:
                 QtOwner().backSock = socket.socket
-            isSetCheck = True
             if Setting.IsHttpProxy.value == 2 and Setting.Sock5Proxy.value:
                 data = Setting.Sock5Proxy.value.replace("http://", "").replace("https://", "").replace("sock5://", "").replace("socks5://", "")
                 data = data.split(":")
-                isSetCheck = False
                 if len(data) == 2:
                     host = data[0]
                     port = data[1]
                     socks.set_default_proxy(socks.SOCKS5, host, int(port))
                     socket.socket = socks.socksocket
-
                 else:
                     QtOwner().ShowMsg(Str.GetStr(Str.Sock5Error))
-
             else:
                 socks.set_default_proxy()
                 socket.socket = QtOwner().backSock
-
-            if Setting.IsHttpProxy.value == 1:
-                isSetCheck = False
-
-            if isSetCheck:
-                if not self.sniRadio.isChecked():
-                    if not isInit:
-                        self.sniRadio.click()
-                    else:
-                        self.sniRadio.setChecked(True)
-            else:
-                if self.sniRadio.isChecked():
-                    if not isInit:
-                        self.sniRadio.click()
-                    else:
-                        self.sniRadio.setChecked(False)
-
-        except Exception as es:
-            Log.Error(es)
-            QtOwner().ShowMsg(Str.GetStr(Str.Sock5Error))
-
-    def SetSNI(self):
-        try:
-            from server import Server
-            Server().UpdateSni()
         except Exception as es:
             Log.Error(es)
             QtOwner().ShowMsg(Str.GetStr(Str.Sock5Error))

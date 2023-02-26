@@ -1,4 +1,4 @@
-from PySide2.QtWidgets import QDoubleSpinBox
+from PySide6.QtWidgets import QDoubleSpinBox
 
 
 class WheelDoubleSpinBox(QDoubleSpinBox):

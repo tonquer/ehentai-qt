@@ -3,29 +3,35 @@
 ################################################################################
 ## Form generated from reading UI file 'ui_main.ui'
 ##
-## Created by: Qt User Interface Compiler version 5.15.2
+## Created by: Qt User Interface Compiler version 6.2.4
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
 
-from PySide2.QtCore import *
-from PySide2.QtGui import *
-from PySide2.QtWidgets import *
+from PySide6.QtCore import (QCoreApplication, QDate, QDateTime, QLocale,
+    QMetaObject, QObject, QPoint, QRect,
+    QSize, QTime, QUrl, Qt)
+from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
+    QFont, QFontDatabase, QGradient, QIcon,
+    QImage, QKeySequence, QLinearGradient, QPainter,
+    QPalette, QPixmap, QRadialGradient, QTransform)
+from PySide6.QtWidgets import (QApplication, QHBoxLayout, QLabel, QMainWindow,
+    QPushButton, QSizePolicy, QSpacerItem, QStackedWidget,
+    QVBoxLayout, QWidget)
 
-from view.read.read_view import ReadView
-from view.setting.setting_view import SettingView
-from view.download.download_view import DownloadView
-from component.widget.navigation_widget import NavigationWidget
 from component.widget.animation_stack_widget import AnimationStackWidget
+from component.widget.navigation_widget import NavigationWidget
+from view.comment.comment_view import CommentView
+from view.download.download_view import DownloadView
+from view.help.help_view import HelpView
+from view.info.book_info_view import BookInfoView
+from view.read.read_view import ReadView
 from view.search.search_view import SearchView
+from view.setting.setting_view import SettingView
+from view.tool.local_read_view import LocalReadView
+from view.tool.waifu2x_tool_view import Waifu2xToolView
 from view.user.favorite_view import FavoriteView
 from view.user.history_view import HistoryView
-from view.info.book_info_view import BookInfoView
-from view.tool.waifu2x_tool_view import Waifu2xToolView
-from view.help.help_view import HelpView
-from view.user.login_web_view import LoginWebView
-from view.comment.comment_view import CommentView
-
 
 class Ui_Main(object):
     def setupUi(self, Main):
@@ -102,9 +108,9 @@ class Ui_Main(object):
         self.waifu2xToolView = Waifu2xToolView()
         self.waifu2xToolView.setObjectName(u"waifu2xToolView")
         self.subStackWidget.addWidget(self.waifu2xToolView)
-        self.loginWebView = LoginWebView()
-        self.loginWebView.setObjectName(u"loginWebView")
-        self.subStackWidget.addWidget(self.loginWebView)
+        self.localReadView = LocalReadView()
+        self.localReadView.setObjectName(u"localReadView")
+        self.subStackWidget.addWidget(self.localReadView)
         self.commentView = CommentView()
         self.commentView.setObjectName(u"commentView")
         self.subStackWidget.addWidget(self.commentView)

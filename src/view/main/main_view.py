@@ -1,8 +1,8 @@
 from functools import partial
 
-from PySide2.QtCore import Qt, QEvent, QPoint, Signal
-from PySide2.QtGui import QIcon, QMouseEvent, QGuiApplication
-from PySide2.QtWidgets import QButtonGroup, QToolButton, QLabel, QMainWindow, QApplication
+from PySide6.QtCore import Qt, QEvent, QPoint, Signal
+from PySide6.QtGui import QIcon, QMouseEvent, QGuiApplication
+from PySide6.QtWidgets import QButtonGroup, QToolButton, QLabel, QMainWindow, QApplication
 
 from component.dialog.loading_dialog import LoadingDialog
 from component.label.msg_label import MsgLabel
@@ -64,7 +64,7 @@ class MainView(Main, QtTaskBase):
 
         self.searchView.searchTab.hide()
         self.searchView2.searchWidget.hide()
-        self.searchView2.tagWidget.hide()
+        self.searchView2.tagList.hide()
         self.myTrayIcon = MySystemTrayIcon()
         self.myTrayIcon.show()
 
@@ -92,6 +92,7 @@ class MainView(Main, QtTaskBase):
         self.navigationWidget.helpButton.clicked.connect(partial(self.SwitchWidgetAndClear, self.subStackWidget.indexOf(self.helpView)))
         self.navigationWidget.historyButton.clicked.connect(partial(self.SwitchWidgetAndClear, self.subStackWidget.indexOf(self.historyView)))
         self.navigationWidget.waifu2xButton.clicked.connect(partial(self.SwitchWidgetAndClear, self.subStackWidget.indexOf(self.waifu2xToolView)))
+        self.navigationWidget.localReadButton.clicked.connect(partial(self.SwitchWidgetAndClear, self.subStackWidget.indexOf(self.localReadView)))
 
     def RetranslateUi(self):
         Main.retranslateUi(self, self)
@@ -107,6 +108,7 @@ class MainView(Main, QtTaskBase):
         self.readView.retranslateUi(self.readView)
         self.helpView.retranslateUi(self.helpView)
         self.waifu2xToolView.retranslateUi(self.waifu2xToolView)
+        self.localReadView.retranslateUi(self.localReadView)
 
     def Init(self):
         IsCanUse = False
@@ -165,11 +167,11 @@ class MainView(Main, QtTaskBase):
         self.msgLabel = MsgLabel(self)
         self.msgLabel.hide()
 
-        from tools.login_proxy import Init
-        Init()
-        QtDomainMgr().Update()
-        self.loginWebView.Init()
-        QtReadImgPoolManager().Init()
+        # from tools.login_proxy import Init
+        # Init()
+        # QtDomainMgr().Update()
+        # self.loginWebView.Init()
+        # QtReadImgPoolManager().Init()
 
         if not Setting.SavePath.value:
             view = DownloadDirView(self)
@@ -212,7 +214,7 @@ class MainView(Main, QtTaskBase):
 
     def OpenLoginView(self):
         # 如果以前登录过才弹出登录
-        if Setting.IpbMemberId.value:
+        if Setting.LoginOpen.value:
             self.navigationWidget.OpenLoginView()
         else:
             self.LoginSucBack("")
@@ -377,8 +379,21 @@ class MainView(Main, QtTaskBase):
         TaskQImage().Stop()
         TaskDownload().Stop()
         Server().Stop()
-        QtReadImgPoolManager().Stop()
         QtOwner().SaveCacheWord()
-        from tools.login_proxy import Stop
-        Stop()
+        # from tools.login_proxy import Stop
+        # Stop()
         # QtTask().Stop()
+
+    def OnNewConnection(self):
+        socket = QtOwner().localServer.nextPendingConnection()
+        socket.readyRead.connect(self.OnReadConnection)
+        return
+
+    def OnReadConnection(self):
+        conn = self.sender()
+        if not conn:
+            return
+        data = conn.readAll()
+        if data == b"restart":
+            self.show()
+            self.showNormal()

@@ -1,4 +1,4 @@
-from PySide2.QtWidgets import QTableWidgetItem
+from PySide6.QtWidgets import QTableWidgetItem
 
 from component.dialog.base_mask_dialog import BaseMaskDialog
 from interface.ui_doh_dns import Ui_DohDns

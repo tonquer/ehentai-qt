@@ -3,19 +3,24 @@
 ################################################################################
 ## Form generated from reading UI file 'ui_search.ui'
 ##
-## Created by: Qt User Interface Compiler version 5.15.2
+## Created by: Qt User Interface Compiler version 6.2.4
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
 
-from PySide2.QtCore import *
-from PySide2.QtGui import *
-from PySide2.QtWidgets import *
+from PySide6.QtCore import (QCoreApplication, QDate, QDateTime, QLocale,
+    QMetaObject, QObject, QPoint, QRect,
+    QSize, QTime, QUrl, Qt)
+from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
+    QFont, QFontDatabase, QGradient, QIcon,
+    QImage, QKeySequence, QLinearGradient, QPainter,
+    QPalette, QPixmap, QRadialGradient, QTransform)
+from PySide6.QtWidgets import (QApplication, QFrame, QHBoxLayout, QLabel,
+    QLayout, QListWidgetItem, QPushButton, QSizePolicy,
+    QSpacerItem, QVBoxLayout, QWidget)
 
-from component.list.comic_list_widget import ComicListWidget
 from component.line_edit.search_line_edit import SearchLineEdit
-from component.list.tag_list_widget import TagListWidget
-
+from component.list.comic_list_widget import ComicListWidget
 
 class Ui_Search(object):
     def setupUi(self, Search):
@@ -86,17 +91,9 @@ class Ui_Search(object):
 
         self.verticalLayout.addWidget(self.searchWidget)
 
-        self.tagWidget = TagListWidget(Search)
-        self.tagWidget.setObjectName(u"tagWidget")
-        sizePolicy3 = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Preferred)
-        sizePolicy3.setHorizontalStretch(0)
-        sizePolicy3.setVerticalStretch(0)
-        sizePolicy3.setHeightForWidth(self.tagWidget.sizePolicy().hasHeightForWidth())
-        self.tagWidget.setSizePolicy(sizePolicy3)
-        self.tagWidget.setMinimumSize(QSize(0, 40))
-        self.tagWidget.setMaximumSize(QSize(16777215, 60))
-        self.tagWidget.setStyleSheet(u"QListWidget {background-color:transparent;}\n"
-"QListWidget::item {\n"
+        self.tagList = QWidget(Search)
+        self.tagList.setObjectName(u"tagList")
+        self.tagList.setStyleSheet(u"QPushButton {\n"
 "    background-color:rgb(251, 239, 243);\n"
 "    color: rgb(196, 95, 125);\n"
 "	border:2px solid red;\n"
@@ -104,16 +101,15 @@ class Ui_Search(object):
 "	border-color:rgb(196, 95, 125);\n"
 "}\n"
 "/* \u9f20\u6807\u5728\u6309\u94ae\u4e0a\u65f6\uff0c\u6309\u94ae\u989c\u8272 */\n"
-" QListWidget::item:hover \n"
+"QPushButton:hover \n"
 "{\n"
 "    background-color:rgb(21, 85, 154);\n"
 "    border-radius: 10px;\n"
 "    color: rgb(0, 0, 0);\n"
 "}\n"
 "")
-        self.tagWidget.setFrameShape(QFrame.NoFrame)
 
-        self.verticalLayout.addWidget(self.tagWidget)
+        self.verticalLayout.addWidget(self.tagList)
 
         self.bookList = ComicListWidget(Search)
         self.bookList.setObjectName(u"bookList")

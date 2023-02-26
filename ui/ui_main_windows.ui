@@ -115,7 +115,7 @@
            <widget class="HistoryView" name="historyView"/>
            <widget class="BookInfoView" name="bookInfoView"/>
            <widget class="Waifu2xToolView" name="waifu2xToolView"/>
-           <widget class="LoginWebView" name="loginWebView"/>
+           <widget class="LocalReadView" name="localReadView"/>
            <widget class="CommentView" name="commentView"/>
            <widget class="SearchView" name="searchView2"/>
           </widget>
@@ -197,9 +197,9 @@
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>LoginWebView</class>
+   <class>LocalReadView</class>
    <extends>QWidget</extends>
-   <header location="global">view.user.login_web_view.h</header>
+   <header location="global">view.tool.local_read_view.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>

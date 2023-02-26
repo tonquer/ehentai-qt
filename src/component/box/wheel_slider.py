@@ -1,4 +1,4 @@
-from PySide2.QtWidgets import QSlider
+from PySide6.QtWidgets import QSlider
 
 
 class WheelSlider(QSlider):

@@ -1,8 +1,8 @@
 from functools import partial
 
-from PySide2.QtCore import Qt
-from PySide2.QtGui import QCursor
-from PySide2.QtWidgets import QListWidgetItem, QMenu, QApplication
+from PySide6.QtCore import Qt
+from PySide6.QtGui import QCursor
+from PySide6.QtWidgets import QListWidgetItem, QMenu, QApplication
 
 from component.list.base_list_widget import BaseListWidget
 from component.widget.comic_item_widget import ComicItemWidget
@@ -32,14 +32,17 @@ class ComicListWidget(BaseListWidget):
         self.nextId = ""
         self.isDelMenu = False
         self.isGame = False
+        self.isLocal = False
+        self.isMoveMenu = False
 
     def SelectMenuBook(self, pos):
         index = self.indexAt(pos)
         widget = self.indexWidget(index)
         if index.isValid() and widget:
             popMenu = QMenu(self)
-            action = popMenu.addAction(Str.GetStr(Str.Open))
-            action.triggered.connect(partial(self.OpenBookInfoHandler, index))
+            if not self.isLocal:
+                action = popMenu.addAction(Str.GetStr(Str.Open))
+                action.triggered.connect(partial(self.OpenBookInfoHandler, index))
             action = popMenu.addAction(Str.GetStr(Str.LookCover))
             action.triggered.connect(partial(self.OpenPicture, index))
             action = popMenu.addAction(Str.GetStr(Str.ReDownloadCover))
@@ -55,11 +58,18 @@ class ComicListWidget(BaseListWidget):
                     action.triggered.connect(partial(self.CancleWaifu2xPicture, index))
             action = popMenu.addAction(Str.GetStr(Str.CopyTitle))
             action.triggered.connect(partial(self.CopyHandler, index))
-            action = popMenu.addAction(Str.GetStr(Str.Download))
-            action.triggered.connect(partial(self.DownloadHandler, index))
+            if not self.isLocal:
+                action = popMenu.addAction(Str.GetStr(Str.Download))
+                action.triggered.connect(partial(self.DownloadHandler, index))
             if self.isDelMenu:
                 action = popMenu.addAction(Str.GetStr(Str.Delete))
                 action.triggered.connect(partial(self.DelHandler, index))
+            if self.isMoveMenu:
+                action = popMenu.addAction(Str.GetStr(Str.OpenDir))
+                action.triggered.connect(partial(self.OpenDirHandler, index))
+
+                action = popMenu.addAction(Str.GetStr(Str.Move))
+                action.triggered.connect(partial(self.MoveHandler, index))
             popMenu.exec_(QCursor.pos())
         return
 
@@ -81,6 +91,41 @@ class ComicListWidget(BaseListWidget):
     #     finished = v.get("finished")
     #     pagesCount = v.get("pagesCount")
     #     self.AddBookItem(_id, title, categoryStr, url, path, likesCount, "", pagesCount, finished)
+
+    def AddBookByLocal(self, v, category=""):
+        from task.task_local import LocalData
+        assert isinstance(v, LocalData)
+        index = self.count()
+        widget = ComicItemWidget()
+        widget.setFocusPolicy(Qt.NoFocus)
+        widget.id = v.id
+        title = v.title
+        widget.index = index
+        widget.title = v.title
+        widget.picNum = v.picCnt
+        widget.url = v.file
+        title += "<font color=#d5577c>{}</font>".format("(" + str(v.picCnt) + "P)")
+        if v.lastReadTime:
+            categories = "{} {}".format(ToolUtil.GetUpdateStrByTick(v.lastReadTime), Str.GetStr(Str.Looked))
+
+            widget.timeLabel.setText(categories)
+        else:
+            widget.timeLabel.setVisible(False)
+            widget.starButton.setVisible(False)
+
+        widget.categoryLabel.setVisible(False)
+        if category:
+            widget.categoryLabel.setText(category)
+            widget.categoryLabel.setVisible(True)
+
+        # widget.toolButton.setVisible(False)
+        widget.nameLable.setText(title)
+        item = QListWidgetItem(self)
+        item.setFlags(item.flags() & ~Qt.ItemIsSelectable)
+        item.setSizeHint(widget.sizeHint())
+        self.setItemWidget(item, widget)
+        widget.picLabel.setText(Str.GetStr(Str.LoadingPicture))
+        widget.PicLoad.connect(self.LoadingPicture)
 
     # def AddBookItemByBook(self, v, isShowHistory=False):
     #     title = v.title
@@ -182,6 +227,7 @@ class ComicListWidget(BaseListWidget):
             if not widget:
                 return
             widget.SetPicture(data)
+            assert isinstance(widget, ComicItemWidget)
             if Setting.CoverIsOpenWaifu.value:
                 item = self.item(index)
                 indexModel = self.indexFromItem(item)
@@ -192,7 +238,8 @@ class ComicListWidget(BaseListWidget):
             widget = self.itemWidget(item)
             if not widget:
                 return
-            widget.SetPictureErr()
+            assert isinstance(widget, ComicItemWidget)
+            widget.SetPictureErr(status)
         return
 
     def SelectItem(self, item):
@@ -204,6 +251,8 @@ class ComicListWidget(BaseListWidget):
 
         if self.isGame:
             QtOwner().OpenGameInfo(widget.id)
+        elif self.isLocal:
+            QtOwner().OpenLocalBook(widget.id)
         else:
 
             QtOwner().OpenBookInfo(widget.id, widget.token)
@@ -239,7 +288,10 @@ class ComicListWidget(BaseListWidget):
             if max(w, h) <= Setting.CoverMaxNum.value or not isIfSize:
                 model = ToolUtil.GetModelByIndex(Setting.CoverLookNoise.value, Setting.CoverLookScale.value, Setting.CoverLookModel.value, mat)
                 widget.isWaifu2xLoading = True
-                self.AddConvertTask(widget.path, widget.picData, model, self.Waifu2xPictureBack, backParam=index)
+                if self.isLocal:
+                    self.AddConvertTask(widget.path, widget.picData, model, self.Waifu2xPictureBack, index, noSaveCache=True)
+                else:
+                    self.AddConvertTask(widget.path, widget.picData, model, self.Waifu2xPictureBack, backParam=index)
 
     def CancleWaifu2xPicture(self, index):
         widget = self.indexWidget(index)
@@ -277,3 +329,9 @@ class ComicListWidget(BaseListWidget):
             QtOwner().downloadView.AddDownload(bookId, token, config.CurSite)
             QtOwner().ShowMsg(Str.GetStr(Str.AddDownload))
         pass
+
+    def MoveHandler(self, index):
+        return
+
+    def OpenDirHandler(self, index):
+        return

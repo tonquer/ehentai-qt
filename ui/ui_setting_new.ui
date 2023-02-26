@@ -95,9 +95,9 @@
         <property name="geometry">
          <rect>
           <x>0</x>
-          <y>-1667</y>
+          <y>-2023</y>
           <width>673</width>
-          <height>2937</height>
+          <height>2768</height>
          </rect>
         </property>
         <property name="styleSheet">
@@ -1083,72 +1083,17 @@
               </item>
              </layout>
             </item>
-           </layout>
-          </widget>
-         </item>
-         <item>
-          <widget class="QFrame" name="frame">
-           <layout class="QVBoxLayout" name="verticalLayout_14">
             <item>
-             <widget class="QLabel" name="label_30">
-              <property name="font">
-               <font>
-                <pointsize>12</pointsize>
-               </font>
-              </property>
-              <property name="text">
-               <string>Doh DNS配置（启用后能避免SNI阻断和DNS拦截，如果使用了代理，可不启用）：</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QCheckBox" name="sniRadio">
-              <property name="text">
-               <string>禁用SNI（如果出现SSL证书错误，请关闭）</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QCheckBox" name="dohRadio">
-              <property name="text">
-               <string>Api启用Doh</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QCheckBox" name="dohPictureRadio">
-              <property name="text">
-               <string>图片启用Doh（开启会加长图片加载速度）</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <layout class="QHBoxLayout" name="horizontalLayout_23">
+             <layout class="QHBoxLayout" name="horizontalLayout_28">
               <item>
-               <widget class="QLabel" name="label_31">
-                <property name="minimumSize">
-                 <size>
-                  <width>60</width>
-                  <height>0</height>
-                 </size>
-                </property>
+               <widget class="QPushButton" name="openProxy">
                 <property name="text">
-                 <string>DoH地址：</string>
+                 <string>打开分流设置</string>
                 </property>
                </widget>
               </item>
               <item>
-               <widget class="QLineEdit" name="dohLine">
-                <property name="minimumSize">
-                 <size>
-                  <width>150</width>
-                  <height>0</height>
-                 </size>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <spacer name="horizontalSpacer_22">
+               <spacer name="horizontalSpacer_26">
                 <property name="orientation">
                  <enum>Qt::Horizontal</enum>
                 </property>
@@ -1161,13 +1106,6 @@
                </spacer>
               </item>
              </layout>
-            </item>
-            <item>
-             <widget class="QCommandLinkButton" name="dohButton">
-              <property name="text">
-               <string>查看DoH DNS解析</string>
-              </property>
-             </widget>
             </item>
            </layout>
           </widget>
@@ -2493,12 +2431,12 @@
  <resources/>
  <connections/>
  <buttongroups>
-  <buttongroup name="languageGroup"/>
-  <buttongroup name="mainScaleGroup"/>
-  <buttongroup name="proxyGroup"/>
   <buttongroup name="logGroup"/>
   <buttongroup name="showCloseButtonGroup"/>
+  <buttongroup name="languageGroup"/>
   <buttongroup name="saveNameGroup"/>
+  <buttongroup name="mainScaleGroup"/>
   <buttongroup name="themeGroup"/>
+  <buttongroup name="proxyGroup"/>
  </buttongroups>
 </ui>

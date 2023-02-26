@@ -1,7 +1,8 @@
 import json
 from functools import partial
 
-from PySide2.QtWidgets import QWidget, QAbstractItemView, QVBoxLayout, QLabel, QPushButton
+from PySide6 import QtCore
+from PySide6.QtWidgets import QWidget, QAbstractItemView, QVBoxLayout, QLabel, QPushButton
 
 from component.layout.flow_layout import FlowLayout
 from component.scroll_area.smooth_scroll_area import SmoothScrollArea
@@ -21,34 +22,51 @@ class SearchView(QWidget, Ui_Search, QtTaskBase):
         Ui_Search.__init__(self)
         QtTaskBase.__init__(self)
         self.setupUi(self)
+        self.flowLayout = FlowLayout(self.tagList)
+        self.retranslateUi(self)
+
         self.isInit = False
         self.categories = ""
         self.text = ""
         self.bookList.LoadCallBack = self.LoadNextPage
 
         self.searchButton.clicked.connect(self.lineEdit.Search)
-        self.tagWidget.clicked.connect(self.ClickKeywordListItem)
-        self.tagWidget.setHorizontalScrollMode(QAbstractItemView.ScrollPerPixel)
+        # self.tagWidget.clicked.connect(self.ClickKeywordListItem)
+        # self.tagWidget.setHorizontalScrollMode(QAbstractItemView.ScrollPerPixel)
         self.jumpPage.clicked.connect(self.JumpPage)
 
     def retranslateUi(self, search):
+        if not hasattr(self, "flowLayout"):
+            return
         Ui_Search.retranslateUi(self, search)
-        search.tagWidget.clear()
+        search.ClearTags()
         for key, value in ToolUtil.Category.items():
             if Setting.Language.autoValue == 3:
-                search.tagWidget.AddItem(key)
+                search.AddTags(key)
             else:
-                search.tagWidget.AddItem(value)
+                search.AddTags(value)
 
-    def ClickKeywordListItem(self, modelIndex):
-        index = modelIndex.row()
-        item = self.tagWidget.item(index)
+    def AddTags(self, name):
+        box = QPushButton(name)
+        # box.setMinimumWidth(160)
+        # self.allBox[text] = box
+        box.clicked.connect(self.ClickTagsItem)
+        self.flowLayout.addWidget(box)
+        return
 
-        if not item:
-            return
-        widget = self.tagWidget.itemWidget(item)
-        data = widget.text()
-        self.categories = data
+    def ClearTags(self):
+        while 1:
+            child = self.flowLayout.takeAt(0)
+            if not child:
+                break
+            if child.widget():
+                child.widget().setParent(None)
+            del child
+        return
+
+    def ClickTagsItem(self):
+        text = self.sender().text()
+        self.categories = text
         self.lineEdit.setText("")
         self.lineEdit.setText("")
         self.lineEdit.setPlaceholderText(self.categories)

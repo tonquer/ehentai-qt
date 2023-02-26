@@ -3,19 +3,25 @@
 ################################################################################
 ## Form generated from reading UI file 'ui_navigation.ui'
 ##
-## Created by: Qt User Interface Compiler version 5.15.2
+## Created by: Qt User Interface Compiler version 6.2.4
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
 
-from PySide2.QtCore import *
-from PySide2.QtGui import *
-from PySide2.QtWidgets import *
+from PySide6.QtCore import (QCoreApplication, QDate, QDateTime, QLocale,
+    QMetaObject, QObject, QPoint, QRect,
+    QSize, QTime, QUrl, Qt)
+from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
+    QFont, QFontDatabase, QGradient, QIcon,
+    QImage, QKeySequence, QLinearGradient, QPainter,
+    QPalette, QPixmap, QRadialGradient, QTransform)
+from PySide6.QtWidgets import (QApplication, QButtonGroup, QFrame, QGridLayout,
+    QHBoxLayout, QLabel, QPushButton, QSizePolicy,
+    QSpacerItem, QToolButton, QVBoxLayout, QWidget)
 
-from component.scroll_area.smooth_scroll_area import SmoothScrollArea
-from component.label.head_label import HeadLabel
 from component.button.switch_button import SwitchButton
-
+from component.label.head_label import HeadLabel
+from component.scroll_area.smooth_scroll_area import SmoothScrollArea
 import images_rc
 
 class Ui_Navigation(object):
@@ -123,7 +129,7 @@ class Ui_Navigation(object):
         self.scrollArea.setWidgetResizable(True)
         self.scrollAreaWidgetContents = QWidget()
         self.scrollAreaWidgetContents.setObjectName(u"scrollAreaWidgetContents")
-        self.scrollAreaWidgetContents.setGeometry(QRect(0, -247, 211, 332))
+        self.scrollAreaWidgetContents.setGeometry(QRect(0, -293, 211, 378))
         self.verticalLayout_3 = QVBoxLayout(self.scrollAreaWidgetContents)
         self.verticalLayout_3.setSpacing(6)
         self.verticalLayout_3.setObjectName(u"verticalLayout_3")
@@ -223,6 +229,20 @@ class Ui_Navigation(object):
 
         self.verticalLayout_3.addWidget(self.downloadButton)
 
+        self.localReadButton = QToolButton(self.scrollAreaWidgetContents)
+        self.buttonGroup.addButton(self.localReadButton)
+        self.localReadButton.setObjectName(u"localReadButton")
+        sizePolicy1.setHeightForWidth(self.localReadButton.sizePolicy().hasHeightForWidth())
+        self.localReadButton.setSizePolicy(sizePolicy1)
+        self.localReadButton.setMinimumSize(QSize(0, 40))
+        self.localReadButton.setFocusPolicy(Qt.NoFocus)
+        self.localReadButton.setIcon(icon)
+        self.localReadButton.setIconSize(QSize(32, 32))
+        self.localReadButton.setCheckable(True)
+        self.localReadButton.setToolButtonStyle(Qt.ToolButtonTextBesideIcon)
+
+        self.verticalLayout_3.addWidget(self.localReadButton)
+
         self.waifu2xButton = QToolButton(self.scrollAreaWidgetContents)
         self.buttonGroup.addButton(self.waifu2xButton)
         self.waifu2xButton.setObjectName(u"waifu2xButton")
@@ -310,6 +330,7 @@ class Ui_Navigation(object):
         self.searchButton.setText(QCoreApplication.translate("Navigation", u"\u641c\u7d22", None))
         self.label_3.setText(QCoreApplication.translate("Navigation", u"\u5176\u4ed6", None))
         self.downloadButton.setText(QCoreApplication.translate("Navigation", u"\u4e0b\u8f7d", None))
+        self.localReadButton.setText(QCoreApplication.translate("Navigation", u"\u672c\u5730\u6f2b\u753b", None))
         self.waifu2xButton.setText(QCoreApplication.translate("Navigation", u"Waifu2x", None))
         self.helpButton.setText(QCoreApplication.translate("Navigation", u"\u5e2e\u52a9", None))
         self.settingButton.setText(QCoreApplication.translate("Navigation", u"\u8bbe\u7f6e", None))

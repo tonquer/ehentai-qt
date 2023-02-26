@@ -6,8 +6,8 @@ import time
 from queue import Queue
 from zlib import crc32
 
-from PySide2.QtCore import Signal, QObject
-from PySide2.QtGui import QImage
+from PySide6.QtCore import Signal, QObject
+from PySide6.QtGui import QImage
 
 from config import config
 from config.setting import Setting
@@ -24,6 +24,8 @@ class QtTaskQObject(QObject):
     downloadStBack = Signal(int, dict)
     convertBack = Signal(int)
     imageBack = Signal(int, QImage)
+    localBack = Signal(int, int, list)
+    localReadBack = Signal(int, int, bytes)
 
     def __init__(self):
         super(self.__class__, self).__init__()
@@ -57,10 +59,10 @@ class QtTaskBase:
     def AddHttpTask(self, req, callBack=None, backParam=None):
         from tools.qt_domain import QtDomainMgr
         from task.task_http import TaskHttp
-        if not Setting.IsOpenDoh.value:
-            return TaskHttp().AddHttpTask(req, callBack, backParam, cleanFlag=self.__taskFlagId)
-        else:
-            return QtDomainMgr().AddHttpTask(req, callBack, backParam, cleanFlag=self.__taskFlagId)
+        # if not Setting.IsOpenDoh.value:
+        return TaskHttp().AddHttpTask(req, callBack, backParam, cleanFlag=self.__taskFlagId)
+        # else:
+        #     return QtDomainMgr().AddHttpTask(req, callBack, backParam, cleanFlag=self.__taskFlagId)
 
     # downloadCallBack(data, laveFileSize, backParam)
     # downloadCallBack(data, laveFileSize)
@@ -97,10 +99,10 @@ class QtTaskBase:
                 filePath2 = os.path.join(os.path.join(Setting.SavePath.value, config.CachePathDir), path)
                 cachePath = filePath2
 
-        if not Setting.IsOpenDohPicture.value:
-            return TaskDownload().DownloadTask(url, path, downloadCallBack, completeCallBack, downloadStCallBack, backParam, loadPath, cachePath, savePath, cleanFlag, isReload)
-        else:
-            return QtDomainMgr.AddDownloadTask(url, path, downloadCallBack, completeCallBack, downloadStCallBack, backParam, loadPath, cachePath, savePath, cleanFlag, isReload)
+        # if not Setting.IsOpenDohPicture.value:
+        return TaskDownload().DownloadTask(url, path, downloadCallBack, completeCallBack, downloadStCallBack, backParam, loadPath, cachePath, savePath, cleanFlag, isReload)
+        # else:
+        #     return QtDomainMgr.AddDownloadTask(url, path, downloadCallBack, completeCallBack, downloadStCallBack, backParam, loadPath, cachePath, savePath, cleanFlag, isReload)
 
     @classmethod
     def GetCoverKey(cls, bookId, token, site):
@@ -111,9 +113,9 @@ class QtTaskBase:
         return "{}/{}_{}_pre_{}_cover".format(site, bookId, token, index)
 
     # completeCallBack(saveData, taskId, backParam, tick)
-    def AddConvertTask(self, path, imgData, model, completeCallBack, backParam=None, preDownPath=None):
+    def AddConvertTask(self, path, imgData, model, completeCallBack, backParam=None, preDownPath=None, noSaveCache=None):
         from task.task_waifu2x import TaskWaifu2x
-        return TaskWaifu2x().AddConvertTaskByData(path, imgData, model, completeCallBack, backParam, preDownPath, self.__taskFlagId)
+        return TaskWaifu2x().AddConvertTaskByData(path, imgData, model, completeCallBack, backParam, preDownPath, noSaveCache, self.__taskFlagId)
 
     # completeCallBack(saveData, taskId, backParam, tick)
     def AddConvertTaskByPath(self, loadPath, savePath, completeCallBack, backParam=None, cleanFlag=""):
@@ -122,9 +124,21 @@ class QtTaskBase:
             cleanFlag = self.__taskFlagId
         return TaskWaifu2x().AddConvertTaskByPath(loadPath, savePath, completeCallBack, backParam, cleanFlag)
 
-    def AddQImageTask(self, data, callBack=None, backParam=None):
+    def AddQImageTask(self, data, radio, toW, toH, model, callBack=None, backParam=None):
         from task.task_qimage import TaskQImage
-        return TaskQImage().AddQImageTask(data, callBack, backParam, cleanFlag=self.__taskFlagId)
+        return TaskQImage().AddQImageTask(data, radio, toW, toH, model, callBack, backParam, cleanFlag=self.__taskFlagId)
+
+    def AddLocalTaskLoad(self, type, dir, backparam=None, callBack=None):
+        from task.task_local import TaskLocal
+        return TaskLocal().AddLoadRead(type, dir, backparam, callBack, cleanFlag=self.__taskFlagId)
+
+    def AddLocalTaskLoadPicture(self, v, index, backparam=None, callBack=None):
+        from task.task_local import TaskLocal
+        return TaskLocal().AddLoadReadPicture(v, index, backparam, callBack, cleanFlag=self.__taskFlagId)
+
+    def ClearQImageTaskById(self, taskId):
+        from task.task_qimage import TaskQImage
+        return TaskQImage().ClearQImageTaskById(taskId)
 
     def ClearTask(self):
         from task.task_http import TaskHttp

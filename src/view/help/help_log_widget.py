@@ -4,9 +4,9 @@ import re
 import sys
 from io import TextIOWrapper
 
-from PySide2.QtCore import QUrl, Signal, QTimer
-from PySide2.QtGui import QDesktopServices, Qt, QTextCursor, QColor
-from PySide2.QtWidgets import QWidget, QMessageBox, QTextEdit, QStyle
+from PySide6.QtCore import QUrl, Signal, QTimer
+from PySide6.QtGui import QDesktopServices, Qt, QTextCursor, QColor
+from PySide6.QtWidgets import QWidget, QMessageBox, QTextEdit, QStyle
 from interface.ui_help_log_widget import Ui_HelpLogWidget
 from task.qt_task import QtTaskBase
 from tools.log import Log

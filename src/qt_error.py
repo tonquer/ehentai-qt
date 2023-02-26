@@ -1,7 +1,7 @@
 import sys
 
-from PySide2.QtCore import Qt
-from PySide2.QtWidgets import QStyle, QErrorMessage, QLabel, QCheckBox, QPushButton
+from PySide6.QtCore import Qt
+from PySide6.QtWidgets import QStyle, QErrorMessage, QLabel, QCheckBox, QPushButton
 
 
 def showError(message, app):

@@ -1,5 +1,5 @@
-from PySide2.QtGui import QIcon
-from PySide2.QtWidgets import QSystemTrayIcon, QMenu, QApplication, QAction
+from PySide6.QtGui import QIcon, QAction
+from PySide6.QtWidgets import QSystemTrayIcon, QMenu, QApplication
 
 from qt_owner import QtOwner
 from tools.str import Str

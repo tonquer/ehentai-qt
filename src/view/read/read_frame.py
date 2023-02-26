@@ -1,8 +1,8 @@
 import weakref
 
-from PySide2.QtCore import Qt, QEvent, QPoint, QRect, QFile
-from PySide2.QtGui import QPainter, QColor, QPixmap, QFont, QFontMetrics, QPen, QBrush
-from PySide2.QtWidgets import QFrame, QLabel
+from PySide6.QtCore import Qt, QEvent, QPoint, QRect, QFile
+from PySide6.QtGui import QPainter, QColor, QPixmap, QFont, QFontMetrics, QPen, QBrush
+from PySide6.QtWidgets import QFrame, QLabel
 
 from component.label.gif_label import GifLabel
 from component.progress_bar.dwater_progress_bar import DWaterProgress
@@ -88,7 +88,7 @@ class ReadFrame(QFrame):
         painter.drawText(QRect(0, self.height() // 4 * 1, self.width(), self.height()),Str.GetStr(Str.Menu))
         painter.drawText(QRect(self.width()*2 // 3, self.height() // 4 * 1, self.width(), self.height()), Str.GetStr(Str.Menu))
 
-        if self.qtTool.stripModel in [ReadMode.UpDown, ReadMode.LeftRight]:
+        if self.qtTool.stripModel in [ReadMode.UpDown, ReadMode.LeftRight, ReadMode.Samewight]:
             painter.drawText(QRect(self.width() // 3, self.height() // 4 * 1, self.width(), self.height()), Str.GetStr(Str.LastScroll))
             painter.drawText(QRect(self.width() // 3, self.height() // 4 * 3, self.width(), self.height()), Str.GetStr(Str.NextScroll))
         self.helpPixMap = p

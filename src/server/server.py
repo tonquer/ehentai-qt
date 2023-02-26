@@ -16,34 +16,29 @@ from tools.status import Status
 
 urllib3.disable_warnings()
 
-import urllib3.contrib.pyopenssl
-
-from urllib3.util import connection
-
-
-_orig_create_connection = connection.create_connection
+# _orig_create_connection = connection.create_connection
 # https://ehwiki.org/wiki/IPs
 host_table = {}
 
 
-def _dns_resolver(host):
-    if host in host_table:
-        return host_table[host]
-    else:
-        return host
+# def _dns_resolver(host):
+#     if host in host_table:
+#         return host_table[host]
+#     else:
+#         return host
+#
+#
+# def patched_create_connection(address, *args, **kwargs):
+#     host, port = address
+#     hostname = _dns_resolver(host)
+#     return _orig_create_connection((hostname, port), *args, **kwargs)
 
 
-def patched_create_connection(address, *args, **kwargs):
-    host, port = address
-    hostname = _dns_resolver(host)
-    return _orig_create_connection((hostname, port), *args, **kwargs)
+# connection.create_connection = patched_create_connection
 
 
-connection.create_connection = patched_create_connection
-
-
-urllib3.contrib.pyopenssl.HAS_SNI = False
-urllib3.contrib.pyopenssl.inject_into_urllib3()
+# urllib3.contrib.pyopenssl.HAS_SNI = False
+# urllib3.contrib.pyopenssl.inject_into_urllib3()
 
 
 def handler(request):
@@ -59,6 +54,20 @@ class Task(object):
         self.res = None
         self.backParam = backParam
         self.status = Status.Ok
+
+    @property
+    def host(self):
+        if "host" in self.req.headers:
+            return self.req.headers["host"]
+        return ""
+
+    @property
+    def bakParam(self):
+        return self.backParam
+
+    @bakParam.setter
+    def bakParam(self, v):
+        self.backParam = v
 
     @property
     def timeout(self):
@@ -133,25 +142,36 @@ class Server(Singleton, threading.Thread):
         host_table[domain] = address
 
     def UpdateSni(self):
-        if Setting.IsCloseSNI.value:
-            urllib3.contrib.pyopenssl.HAS_SNI = False
-            urllib3.contrib.pyopenssl.inject_into_urllib3()
-        else:
-            urllib3.contrib.pyopenssl.HAS_SNI = True
-            urllib3.contrib.pyopenssl.inject_into_urllib3()
+        pass
+        # if Setting.IsCloseSNI.value:
+        #     urllib3.contrib.pyopenssl.HAS_SNI = False
+        #     urllib3.contrib.pyopenssl.inject_into_urllib3()
+        # else:
+        #     urllib3.contrib.pyopenssl.HAS_SNI = True
+        #     urllib3.contrib.pyopenssl.inject_into_urllib3()
 
     def ClearDns(self):
         host_table.clear()
 
     def __DealHeaders(self, request, token):
         host = ToolUtil.GetUrlHost(request.url)
+        mapHost = config.DomainMapping.get(host, host)
+
+        if Setting.IpDirect.value:
+            if mapHost in host_table:
+                ip = host_table[mapHost]
+                request.headers["host"] = host
+                request.url = request.url.replace(host, ip)
+
+        if not request.isUseHttps:
+            request.url = request.url.replace("https://", "http://")
 
     def Send(self, request, token="", backParam="", isASync=True):
-        self.__DealHeaders(request, token)
-        if isASync:
-            self._inQueue.put(Task(request, backParam))
-        else:
-            self._Send(Task(request, backParam))
+            self.__DealHeaders(request, token)
+            if isASync:
+                self._inQueue.put(Task(request, backParam))
+            else:
+                self._Send(Task(request, backParam))
 
     def _Send(self, task):
         try:
@@ -182,6 +202,8 @@ class Server(Singleton, threading.Thread):
             elif isinstance(es, requests.exceptions.ProxyError):
                 task.status = Status.ProxyError
             elif isinstance(es, ConnectionResetError):
+                task.status = Status.ResetErr
+            elif "ConnectionResetError" in es.__repr__():
                 task.status = Status.ResetErr
             else:
                 task.status = Status.NetError

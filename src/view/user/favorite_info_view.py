@@ -1,4 +1,4 @@
-from PySide2 import QtWidgets, QtCore
+from PySide6 import QtWidgets, QtCore
 
 from component.dialog.base_mask_dialog import BaseMaskDialog
 from interface.ui_favorite_info import Ui_FavoriteInfo

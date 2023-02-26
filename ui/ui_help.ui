@@ -27,9 +27,9 @@ QScrollArea {background-color:transparent;}</string>
       <property name="geometry">
        <rect>
         <x>0</x>
-        <y>-46</y>
-        <width>512</width>
-        <height>612</height>
+        <y>0</y>
+        <width>508</width>
+        <height>632</height>
        </rect>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_3">
@@ -228,6 +228,13 @@ QScrollArea {background-color:transparent;}</string>
                  </property>
                  <property name="text">
                   <string>2021-11-27</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="0" column="2">
+                <widget class="QCheckBox" name="preCheckBox">
+                 <property name="text">
+                  <string>接受Beta版本更新</string>
                  </property>
                 </widget>
                </item>

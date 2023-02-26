@@ -1,7 +1,7 @@
 # coding:utf-8
 
-from PySide2.QtCore import QPropertyAnimation
-from PySide2.QtWidgets import QGraphicsOpacityEffect, QStackedWidget
+from PySide6.QtCore import QPropertyAnimation
+from PySide6.QtWidgets import QGraphicsOpacityEffect, QStackedWidget
 
 
 class OpacityAniStackedWidget(QStackedWidget):

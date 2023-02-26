@@ -1,6 +1,6 @@
-from PySide2.QtCore import Qt, QSize, Signal
-from PySide2.QtGui import QPixmap, QIcon, QFont
-from PySide2.QtWidgets import QWidget
+from PySide6.QtCore import Qt, QSize, Signal
+from PySide6.QtGui import QPixmap, QIcon, QFont
+from PySide6.QtWidgets import QWidget
 
 from config import config
 from config.setting import Setting
@@ -95,8 +95,8 @@ class ComicItemWidget(QWidget, Ui_ComicItem):
         newPic = pic.scaled(self.picLabel.width()*radio, self.picLabel.height()*radio, Qt.AspectRatioMode.KeepAspectRatio, Qt.TransformationMode.SmoothTransformation)
         self.picLabel.setPixmap(newPic)
 
-    def SetPictureErr(self):
-        self.picLabel.setText(Str.GetStr(Str.LoadingFail))
+    def SetPictureErr(self, status):
+        self.picLabel.setText(Str.GetStr(status))
 
     def paintEvent(self, event) -> None:
         if self.url and not self.isLoadPicture and config.IsLoadingPicture:

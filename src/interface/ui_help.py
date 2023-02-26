@@ -3,17 +3,23 @@
 ################################################################################
 ## Form generated from reading UI file 'ui_help.ui'
 ##
-## Created by: Qt User Interface Compiler version 5.15.2
+## Created by: Qt User Interface Compiler version 6.2.4
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
 
-from PySide2.QtCore import *
-from PySide2.QtGui import *
-from PySide2.QtWidgets import *
+from PySide6.QtCore import (QCoreApplication, QDate, QDateTime, QLocale,
+    QMetaObject, QObject, QPoint, QRect,
+    QSize, QTime, QUrl, Qt)
+from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
+    QFont, QFontDatabase, QGradient, QIcon,
+    QImage, QKeySequence, QLinearGradient, QPainter,
+    QPalette, QPixmap, QRadialGradient, QTransform)
+from PySide6.QtWidgets import (QApplication, QCheckBox, QGridLayout, QHBoxLayout,
+    QLabel, QPushButton, QSizePolicy, QSpacerItem,
+    QVBoxLayout, QWidget)
 
 from component.scroll_area.smooth_scroll_area import SmoothScrollArea
-
 import images_rc
 import images_rc
 
@@ -31,7 +37,7 @@ class Ui_Help(object):
         self.scrollArea.setWidgetResizable(True)
         self.scrollAreaWidgetContents = QWidget()
         self.scrollAreaWidgetContents.setObjectName(u"scrollAreaWidgetContents")
-        self.scrollAreaWidgetContents.setGeometry(QRect(0, -46, 512, 612))
+        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 508, 632))
         self.verticalLayout_3 = QVBoxLayout(self.scrollAreaWidgetContents)
         self.verticalLayout_3.setObjectName(u"verticalLayout_3")
         self.horizontalLayout = QHBoxLayout()
@@ -137,6 +143,11 @@ class Ui_Help(object):
 
         self.gridLayout.addWidget(self.upTimeLabel, 1, 1, 1, 1)
 
+        self.preCheckBox = QCheckBox(self.widget_2)
+        self.preCheckBox.setObjectName(u"preCheckBox")
+
+        self.gridLayout.addWidget(self.preCheckBox, 0, 2, 1, 1)
+
 
         self.verticalLayout_2.addWidget(self.widget_2)
 
@@ -208,6 +219,7 @@ class Ui_Help(object):
         self.label_7.setText(QCoreApplication.translate("Help", u"\u65e5\u5fd7:", None))
         self.label_9.setText(QCoreApplication.translate("Help", u"\u4e0a\u6b21\u66f4\u65b0\u65f6\u95f4\uff1a", None))
         self.upTimeLabel.setText(QCoreApplication.translate("Help", u"2021-11-27", None))
+        self.preCheckBox.setText(QCoreApplication.translate("Help", u"\u63a5\u53d7Beta\u7248\u672c\u66f4\u65b0", None))
         self.label_10.setText(QCoreApplication.translate("Help", u"\u65b0\u7248\u672c\uff1a", None))
         self.updateLabel.setText("")
         self.updateButton.setText(QCoreApplication.translate("Help", u"\u524d\u5f80\u66f4\u65b0", None))

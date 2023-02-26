@@ -1,9 +1,9 @@
 import base64
 import pickle
 
-from PySide2.QtCore import QUrl, Qt
-from PySide2.QtGui import QDesktopServices
-from PySide2.QtWidgets import QWidget, QMessageBox
+from PySide6.QtCore import QUrl, Qt
+from PySide6.QtGui import QDesktopServices
+from PySide6.QtWidgets import QWidget, QMessageBox
 
 from config import config
 from config.setting import Setting
@@ -37,6 +37,7 @@ class HelpView(QWidget, Ui_Help, QtTaskBase):
         self.verCheck.clicked.connect(self.InitUpdate)
 
         self.updateUrl = [config.UpdateUrl, config.UpdateUrl2, config.UpdateUrl3]
+        self.updatePreUrl = [config.UpdateUrlApi, config.UpdateUrl2Api, config.UpdateUrl3Api]
         self.updateBackUrl = [config.UpdateUrlBack, config.UpdateUrl2Back, config.UpdateUrl3Back]
         self.checkUpdateIndex = 0
         self.helpLogWidget = HelpLogWidget()
@@ -48,12 +49,17 @@ class HelpView(QWidget, Ui_Help, QtTaskBase):
         self.updateWidget.setVisible(False)
         self.selectUrl = ""
         self.updateButton.clicked.connect(self.OpenUpdateUrl)
+        self.preCheckBox.setChecked(bool(Setting.IsPreUpdate.value))
+        self.preCheckBox.clicked.connect(self.SwitchCheckPre)
 
     def retranslateUi(self, Help):
         Ui_Help.retranslateUi(self, Help)
         self.version.setText(config.RealVersion)
         self.upTimeLabel.setText(config.TimeVersion)
         self.waifu2x.setText(config.Waifu2xVersion)
+
+    def SwitchCheckPre(self):
+        Setting.IsPreUpdate.SetValue(int(self.preCheckBox.isChecked()))
 
     def Init(self):
         pass
@@ -68,7 +74,10 @@ class HelpView(QWidget, Ui_Help, QtTaskBase):
         if self.checkUpdateIndex > len(self.updateUrl) -1:
             self.UpdateText(self.verCheck, Str.AlreadyUpdate, "#ff4081", True)
             return
-        self.AddHttpTask(req.CheckUpdateReq(self.updateUrl[self.checkUpdateIndex]), self.InitUpdateBack)
+        if Setting.IsPreUpdate.value:
+            self.AddHttpTask(req.CheckPreUpdateReq(self.updatePreUrl[self.checkUpdateIndex]), self.InitUpdateBack)
+        else:
+            self.AddHttpTask(req.CheckUpdateReq(self.updateUrl[self.checkUpdateIndex]), self.InitUpdateBack)
 
     def InitUpdateBack(self, raw):
         try:

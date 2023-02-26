@@ -1,6 +1,6 @@
 import os
 
-from PySide2.QtSql import QSqlDatabase, QSqlQuery
+from PySide6.QtSql import QSqlDatabase, QSqlQuery
 
 from config.setting import Setting
 from tools.log import Log

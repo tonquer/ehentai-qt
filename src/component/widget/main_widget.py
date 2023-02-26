@@ -1,7 +1,7 @@
 import os
 import sys
 
-from PySide2.QtCore import Qt
+from PySide6.QtCore import Qt
 
 from config.setting import Setting
 from tools.log import Log
@@ -49,7 +49,7 @@ if sys.platform == "win32" and not Setting.IsNotUseTitleBar.value:
 
 if not Main:
     from interface.ui_main import Ui_Main
-    from PySide2.QtWidgets import QMainWindow
+    from PySide6.QtWidgets import QMainWindow
 
     class MainWidget(QMainWindow, Ui_Main):
         def __init__(self):

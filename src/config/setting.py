@@ -104,6 +104,12 @@ class Setting:
     IsCloseSNI = SettingValue("ProxySetting", 1, False)
     DohAddress = SettingValue("ProxySetting", "https://101.6.6.6:8443/dns-query", True)
 
+    IpDirect = SettingValue("ProxySetting", 1, False)
+    ProxyEIndex = SettingValue("ProxySetting", 1, False)
+    ProxyApiIndex = SettingValue("ProxySetting", 1, False)
+    ProxyExIndex = SettingValue("ProxySetting", 1, False)
+    ProxyEhIndex = SettingValue("ProxySetting", 1, False)
+
     # 下载与缓存
     SavePath = SettingValue("DownloadSetting", "", False)
     SaveNameType = SettingValue("DownloadSetting", 0, False)
@@ -148,17 +154,19 @@ class Setting:
     IpbPassHash = SettingValue("Other", "", False)
     Igneous = SettingValue("Other", "", False)
 
-    AutoLogin = SettingValue("Other", 0, False)
+    AutoLogin = SettingValue("Other", 1, False)
+    LoginOpen = SettingValue("Other", 1, False)
     SavePassword = SettingValue("Other", 1, False)
     IsShowCmd = SettingValue("Other", 0, False)
     DownloadNum = SettingValue("Other", 1, False)
     IsGrabGesture: SettingValue = SettingValue("Other", 0, True)
     IsReDownload = SettingValue("Other", 0, False)
+    IsPreUpdate = SettingValue("Other", 0, False)
 
     @staticmethod
     def InitLoadSetting():
         path = os.path.join(Setting.GetConfigPath(), "config.ini")
-        from PySide2.QtCore import QSettings
+        from PySide6.QtCore import QSettings
         settings = QSettings(path, QSettings.Format.IniFormat)
         for name in dir(Setting):
             setItem = getattr(Setting, name)
@@ -172,7 +180,7 @@ class Setting:
     @staticmethod
     def SaveSetting():
         path = os.path.join(Setting.GetConfigPath(), "config.ini")
-        from PySide2.QtCore import QSettings
+        from PySide6.QtCore import QSettings
         settings = QSettings(path, QSettings.IniFormat)
         for name in dir(Setting):
             setItem = getattr(Setting, name)
@@ -183,7 +191,7 @@ class Setting:
     @staticmethod
     def SaveSettingV(setItem):
         path = os.path.join(Setting.GetConfigPath(), "config.ini")
-        from PySide2.QtCore import QSettings
+        from PySide6.QtCore import QSettings
         settings = QSettings(path, QSettings.IniFormat)
         if isinstance(setItem, SettingValue) and setItem.name:
             settings.setValue(setItem.tag + "/" + setItem.name, setItem.setV)
@@ -197,12 +205,19 @@ class Setting:
         return
 
     @staticmethod
+    def GetLocalHomePath():
+        from PySide6.QtCore import QDir
+        homePath = QDir.homePath()
+        projectName = ".comic-qt"
+        return os.path.join(homePath, projectName)
+
+    @staticmethod
     def GetConfigPath():
         if sys.platform == "win32":
             projectName = "data"
             return projectName
         else:
-            from PySide2.QtCore import QDir
+            from PySide6.QtCore import QDir
             homePath = QDir.homePath()
             projectName = ".ehentai"
             return os.path.join(homePath, projectName)

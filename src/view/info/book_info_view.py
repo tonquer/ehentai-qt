@@ -1,11 +1,11 @@
 import json
 from functools import partial
 
-from PySide2 import QtWidgets, QtCore, QtGui
-from PySide2.QtCore import Qt, QSize, QEvent, Signal
-from PySide2.QtGui import QColor, QFont, QPixmap, QIcon
-from PySide2.QtWidgets import QListWidgetItem, QLabel, QDesktopWidget, QPushButton, QVBoxLayout, QSpacerItem, \
-    QSizePolicy
+from PySide6 import QtWidgets, QtCore, QtGui
+from PySide6.QtCore import Qt, QSize, QEvent, Signal
+from PySide6.QtGui import QColor, QFont, QPixmap, QIcon
+from PySide6.QtWidgets import QListWidgetItem, QLabel, QPushButton, QVBoxLayout, QSpacerItem, \
+    QSizePolicy, QScroller, QScrollerProperties
 
 import config.config
 from component.layout.flow_layout import FlowLayout
@@ -61,6 +61,13 @@ class BookInfoView(QtWidgets.QWidget, Ui_BookInfo, QtTaskBase):
         self.ReloadHistory.connect(self.LoadHistory)
         self.tabWidget.setCurrentIndex(0)
         self.preListWidget.LoadCallBack = self.LoadNextPage
+        if Setting.IsGrabGesture.value:
+            QScroller.grabGesture(self.tagScrollArea, QScroller.LeftMouseButtonGesture)
+            propertiesOne = QScroller.scroller(self.tagScrollArea).scrollerProperties()
+            propertiesOne.setScrollMetric(QScrollerProperties.MousePressEventDelay, 0)
+            propertiesOne.setScrollMetric(QScrollerProperties.VerticalOvershootPolicy, QScrollerProperties.OvershootAlwaysOff)
+            propertiesOne.setScrollMetric(QScrollerProperties.HorizontalOvershootPolicy, QScrollerProperties.OvershootAlwaysOff)
+            QScroller.scroller(self.tagScrollArea).setScrollerProperties(propertiesOne)
 
     def Clear(self):
         self.ClearTask()

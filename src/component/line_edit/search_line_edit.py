@@ -1,8 +1,8 @@
 import json
 import re
 
-from PySide2.QtCore import QStringListModel, QPoint, Qt
-from PySide2.QtWidgets import QLineEdit, QLabel, QWidget, \
+from PySide6.QtCore import QStringListModel, QPoint, Qt
+from PySide6.QtWidgets import QLineEdit, QLabel, QWidget, \
     QHBoxLayout
 
 from interface.ui_line_edit_help_widget import Ui_LineEditHelp
@@ -88,7 +88,7 @@ class SearchLineEdit(QLineEdit):
         text = text.strip("|").strip("$")
         text2 = text.split(":")
         if len(text2) >= 2:
-            self.setText(text2[0] + ":\"" + text2[1] + "$\"")
+            self.setText(text2[0] + ":\"" + text2[1].replace("$\"", "").replace("\"", "") + "$\"")
         else:
             if len(data) > 1:
                 self.setText(text+"$")

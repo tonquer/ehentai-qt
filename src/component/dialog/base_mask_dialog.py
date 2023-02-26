@@ -1,6 +1,6 @@
 # coding:utf-8
-from PySide2.QtCore import QEasingCurve, QPropertyAnimation, Qt, Signal
-from PySide2.QtWidgets import (QDialog, QGraphicsDropShadowEffect,
+from PySide6.QtCore import QEasingCurve, QPropertyAnimation, Qt, Signal
+from PySide6.QtWidgets import (QDialog, QGraphicsDropShadowEffect,
                                QGraphicsOpacityEffect, QWidget, QSpacerItem, QSizePolicy, QVBoxLayout)
 
 

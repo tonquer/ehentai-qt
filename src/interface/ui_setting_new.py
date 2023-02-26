@@ -3,20 +3,27 @@
 ################################################################################
 ## Form generated from reading UI file 'ui_setting_new.ui'
 ##
-## Created by: Qt User Interface Compiler version 5.15.2
+## Created by: Qt User Interface Compiler version 6.2.4
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
 
-from PySide2.QtCore import *
-from PySide2.QtGui import *
-from PySide2.QtWidgets import *
+from PySide6.QtCore import (QCoreApplication, QDate, QDateTime, QLocale,
+    QMetaObject, QObject, QPoint, QRect,
+    QSize, QTime, QUrl, Qt)
+from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
+    QFont, QFontDatabase, QGradient, QIcon,
+    QImage, QKeySequence, QLinearGradient, QPainter,
+    QPalette, QPixmap, QRadialGradient, QTransform)
+from PySide6.QtWidgets import (QApplication, QButtonGroup, QCheckBox, QCommandLinkButton,
+    QFrame, QHBoxLayout, QLabel, QLineEdit,
+    QPushButton, QRadioButton, QSizePolicy, QSpacerItem,
+    QVBoxLayout, QWidget)
 
-from component.scroll_area.smooth_scroll_area import SmoothScrollArea
 from component.box.wheel_combo_box import WheelComboBox
 from component.box.wheel_double_spin_box import WheelDoubleSpinBox
 from component.box.wheel_spin_box import WheelSpinBox
-
+from component.scroll_area.smooth_scroll_area import SmoothScrollArea
 
 class Ui_SettingNew(object):
     def setupUi(self, SettingNew):
@@ -76,7 +83,7 @@ class Ui_SettingNew(object):
         self.scrollArea.setWidgetResizable(True)
         self.scrollAreaWidgetContents = QWidget()
         self.scrollAreaWidgetContents.setObjectName(u"scrollAreaWidgetContents")
-        self.scrollAreaWidgetContents.setGeometry(QRect(0, -1667, 673, 2937))
+        self.scrollAreaWidgetContents.setGeometry(QRect(0, -2023, 673, 2768))
         self.scrollAreaWidgetContents.setStyleSheet(u"")
         self.verticalLayout_4 = QVBoxLayout(self.scrollAreaWidgetContents)
         self.verticalLayout_4.setObjectName(u"verticalLayout_4")
@@ -620,62 +627,22 @@ class Ui_SettingNew(object):
 
         self.verticalLayout_19.addLayout(self.horizontalLayout_3)
 
+        self.horizontalLayout_28 = QHBoxLayout()
+        self.horizontalLayout_28.setObjectName(u"horizontalLayout_28")
+        self.openProxy = QPushButton(self.frame_5)
+        self.openProxy.setObjectName(u"openProxy")
+
+        self.horizontalLayout_28.addWidget(self.openProxy)
+
+        self.horizontalSpacer_26 = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
+
+        self.horizontalLayout_28.addItem(self.horizontalSpacer_26)
+
+
+        self.verticalLayout_19.addLayout(self.horizontalLayout_28)
+
 
         self.verticalLayout_4.addWidget(self.frame_5)
-
-        self.frame = QFrame(self.scrollAreaWidgetContents)
-        self.frame.setObjectName(u"frame")
-        self.verticalLayout_14 = QVBoxLayout(self.frame)
-        self.verticalLayout_14.setObjectName(u"verticalLayout_14")
-        self.label_30 = QLabel(self.frame)
-        self.label_30.setObjectName(u"label_30")
-        self.label_30.setFont(font1)
-
-        self.verticalLayout_14.addWidget(self.label_30)
-
-        self.sniRadio = QCheckBox(self.frame)
-        self.sniRadio.setObjectName(u"sniRadio")
-
-        self.verticalLayout_14.addWidget(self.sniRadio)
-
-        self.dohRadio = QCheckBox(self.frame)
-        self.dohRadio.setObjectName(u"dohRadio")
-
-        self.verticalLayout_14.addWidget(self.dohRadio)
-
-        self.dohPictureRadio = QCheckBox(self.frame)
-        self.dohPictureRadio.setObjectName(u"dohPictureRadio")
-
-        self.verticalLayout_14.addWidget(self.dohPictureRadio)
-
-        self.horizontalLayout_23 = QHBoxLayout()
-        self.horizontalLayout_23.setObjectName(u"horizontalLayout_23")
-        self.label_31 = QLabel(self.frame)
-        self.label_31.setObjectName(u"label_31")
-        self.label_31.setMinimumSize(QSize(60, 0))
-
-        self.horizontalLayout_23.addWidget(self.label_31)
-
-        self.dohLine = QLineEdit(self.frame)
-        self.dohLine.setObjectName(u"dohLine")
-        self.dohLine.setMinimumSize(QSize(150, 0))
-
-        self.horizontalLayout_23.addWidget(self.dohLine)
-
-        self.horizontalSpacer_22 = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
-
-        self.horizontalLayout_23.addItem(self.horizontalSpacer_22)
-
-
-        self.verticalLayout_14.addLayout(self.horizontalLayout_23)
-
-        self.dohButton = QCommandLinkButton(self.frame)
-        self.dohButton.setObjectName(u"dohButton")
-
-        self.verticalLayout_14.addWidget(self.dohButton)
-
-
-        self.verticalLayout_4.addWidget(self.frame)
 
         self.line_2 = QFrame(self.scrollAreaWidgetContents)
         self.line_2.setObjectName(u"line_2")
@@ -1376,12 +1343,7 @@ class Ui_SettingNew(object):
         self.proxy2.setText(QCoreApplication.translate("SettingNew", u"Sock5\u4ee3\u7406", None))
         self.label_36.setText(QCoreApplication.translate("SettingNew", u"\u4ee3\u7406\u5730\u5740", None))
         self.proxy3.setText(QCoreApplication.translate("SettingNew", u"\u4f7f\u7528\u7cfb\u7edf\u4ee3\u7406", None))
-        self.label_30.setText(QCoreApplication.translate("SettingNew", u"Doh DNS\u914d\u7f6e\uff08\u542f\u7528\u540e\u80fd\u907f\u514dSNI\u963b\u65ad\u548cDNS\u62e6\u622a\uff0c\u5982\u679c\u4f7f\u7528\u4e86\u4ee3\u7406\uff0c\u53ef\u4e0d\u542f\u7528\uff09\uff1a", None))
-        self.sniRadio.setText(QCoreApplication.translate("SettingNew", u"\u7981\u7528SNI\uff08\u5982\u679c\u51fa\u73b0SSL\u8bc1\u4e66\u9519\u8bef\uff0c\u8bf7\u5173\u95ed\uff09", None))
-        self.dohRadio.setText(QCoreApplication.translate("SettingNew", u"Api\u542f\u7528Doh", None))
-        self.dohPictureRadio.setText(QCoreApplication.translate("SettingNew", u"\u56fe\u7247\u542f\u7528Doh\uff08\u5f00\u542f\u4f1a\u52a0\u957f\u56fe\u7247\u52a0\u8f7d\u901f\u5ea6\uff09", None))
-        self.label_31.setText(QCoreApplication.translate("SettingNew", u"DoH\u5730\u5740\uff1a", None))
-        self.dohButton.setText(QCoreApplication.translate("SettingNew", u"\u67e5\u770bDoH DNS\u89e3\u6790", None))
+        self.openProxy.setText(QCoreApplication.translate("SettingNew", u"\u6253\u5f00\u5206\u6d41\u8bbe\u7f6e", None))
         self.waifu2xLabel.setText(QCoreApplication.translate("SettingNew", u"Waifu2x\u8bbe\u7f6e", None))
         self.label_11.setText(QCoreApplication.translate("SettingNew", u"CPU/GPU\u9009\u62e9\uff08\u9700\u91cd\u542f\u751f\u6548\uff09", None))
         self.label_20.setText(QCoreApplication.translate("SettingNew", u"\u4f7f\u7528CPU\u6570\u91cf\uff08CPU\u6a21\u5f0f\u751f\u6548\uff0c\u9700\u91cd\u542f\uff09", None))

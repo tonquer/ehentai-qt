@@ -1,9 +1,9 @@
 import os
 import time
 
-from PySide2.QtCore import Qt, QPoint, QPropertyAnimation, QEasingCurve, QParallelAnimationGroup, QRectF, Property
-from PySide2.QtGui import QPen, QPainterPath, QPainter, QColor
-from PySide2.QtWidgets import QWidget, QVBoxLayout, QLabel, QFileDialog
+from PySide6.QtCore import Qt, QPoint, QPropertyAnimation, QEasingCurve, QParallelAnimationGroup, QRectF, Property
+from PySide6.QtGui import QPen, QPainterPath, QPainter, QColor
+from PySide6.QtWidgets import QWidget, QVBoxLayout, QLabel, QFileDialog
 
 from tools.log import Log
 

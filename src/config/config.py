@@ -19,23 +19,27 @@ PreLook = 4                    # 预显示
 
 IsLoadingPicture = True
 
-UpdateUrl2 = "https://github.com/tonquer/ehentai-qt/releases/latest"
-UpdateUrl2Back = "https://github.com/tonquer/ehentai-qt"
+UpdateUrl = "https://github.com/tonquer/ehentai-qt/releases/latest"
+UpdateUrlApi = "https://api.github.com/repos/tonquer/ehentai-qt/releases"
+UpdateUrlBack = "https://github.com/tonquer/ehentai-qt"
 
-UpdateUrl = "https://hub2.ggo.icu/tonquer/ehentai-qt/releases/latest"
-UpdateUrlBack = "https://hub2.ggo.icu/tonquer/ehentai-qt"
+UpdateUrl2 = "https://hub.ggo.icu/tonquer/ehentai-qt/releases/latest"
+UpdateUrl2Api = "https://api.ggo.icu/repos/tonquer/ehentai-qt/releases"
+UpdateUrl2Back = "https://hub.ggo.icu/tonquer/ehentai-qt"
 
-UpdateUrl3 = "https://raw.bika.life/tonquer/ehentai-qt/releases/latest"
-UpdateUrl3Back = "https://raw.bika.life/tonquer/ehentai-qt"
+UpdateUrl3 = "https://hub.fastgit.xyz/tonquer/ehentai-qt/releases/latest"
+UpdateUrl3Api = "https://api.fastgit.xyz/repos/tonquer/ehentai-qt/releases"
+UpdateUrl3Back = "https://hub.fastgit.xyz/tonquer/ehentai-qt"
 
-Issues2 = "https://github.com/tonquer/ehentai-qt/issues"
-Issues1 = "https://hub2.ggo.icu/tonquer/ehentai-qt/issues"
-Issues3 = "https://raw.bika.life/tonquer/ehentai-qt/issues"
 
-UpdateVersion = "v1.0.8"
-RealVersion = "v1.0.8"
-Waifu2xVersion = "1.1.4"
-TimeVersion = "2022-11-18"
+Issues1 = "https://github.com/tonquer/ehentai-qt/issues"
+Issues2 = "https://hub.ggo.icu/tonquer/ehentai-qt/issues"
+Issues3 = "https://hub.fastgit.xyz/tonquer/ehentai-qt/issues"
+
+UpdateVersion = "v1.1.0"
+RealVersion = "v1.1.0"
+Waifu2xVersion = "1.1.6"
+TimeVersion = "2023-2-26"
 
 CurSite = "e-hentai"   # 当前站点
 CurLoginName = ""      # 当前登录名

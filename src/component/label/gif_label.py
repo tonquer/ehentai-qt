@@ -1,6 +1,6 @@
-from PySide2.QtCore import QByteArray, QBuffer, Qt, QTimer
-from PySide2.QtGui import QMovie, QPixmap
-from PySide2.QtWidgets import QLabel
+from PySide6.QtCore import QByteArray, QBuffer, Qt, QTimer
+from PySide6.QtGui import QMovie, QPixmap
+from PySide6.QtWidgets import QLabel
 
 
 class GifLabel(QLabel):

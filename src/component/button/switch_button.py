@@ -1,6 +1,6 @@
-from PySide2.QtCore import QRect, Signal, Qt
-from PySide2.QtGui import QPen, QColor, QBrush, QPainter, QFont
-from PySide2.QtWidgets import QWidget
+from PySide6.QtCore import QRect, Signal, Qt
+from PySide6.QtGui import QPen, QColor, QBrush, QPainter, QFont
+from PySide6.QtWidgets import QWidget
 
 
 class SwitchButton(QWidget):

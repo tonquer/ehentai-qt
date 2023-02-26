@@ -1,8 +1,8 @@
 import re
 
-from PySide2 import QtWidgets
-from PySide2.QtCore import QEvent, Qt, QSize, QFile
-from PySide2.QtGui import QPixmap, QIcon
+from PySide6 import QtWidgets
+from PySide6.QtCore import QEvent, Qt, QSize, QFile
+from PySide6.QtGui import QPixmap, QIcon
 
 from interface.ui_comment_item import Ui_CommentItem
 from qt_owner import QtOwner
@@ -54,8 +54,8 @@ class CommentItemWidget(QtWidgets.QWidget, Ui_CommentItem):
         self.pictureData = data
         self.picIcon.SetPicture(self.pictureData, self.headData)
 
-    def SetPictureErr(self):
-        self.picIcon.setText(Str.GetStr(Str.LoadingFail))
+    def SetPictureErr(self, status):
+        self.picIcon.setText(Str.GetStr(status))
 
     def SetHeadData(self, data):
         self.headData = data

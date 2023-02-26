@@ -1,8 +1,8 @@
 from functools import partial
 
-from PySide2.QtCore import Qt
-from PySide2.QtGui import QColor, QCursor
-from PySide2.QtWidgets import QListWidgetItem, QMenu
+from PySide6.QtCore import Qt
+from PySide6.QtGui import QColor, QCursor
+from PySide6.QtWidgets import QListWidgetItem, QMenu
 
 from component.list.base_list_widget import BaseListWidget
 from component.widget.comic_item_widget import ComicItemWidget
@@ -103,7 +103,7 @@ class CategoryListWidget(BaseListWidget):
         else:
             item = self.item(index)
             widget = self.itemWidget(item)
-            widget.SetPictureErr()
+            widget.SetPictureErr(status)
         return
 
     def Waifu2xPicture(self, index, isIfSize=False):

@@ -1,6 +1,6 @@
-from PySide2.QtCore import Qt
-from PySide2.QtGui import QPainterPath, QPixmap, QPainter
-from PySide2.QtWidgets import QLabel
+from PySide6.QtCore import Qt
+from PySide6.QtGui import QPainterPath, QPixmap, QPainter
+from PySide6.QtWidgets import QLabel
 
 
 class HeadLabel(QLabel):

@@ -1,6 +1,6 @@
-from PySide2.QtCore import Qt, QSize
-from PySide2.QtGui import QFont, QFontMetrics
-from PySide2.QtWidgets import QListWidgetItem, QLabel, QAbstractItemView
+from PySide6.QtCore import Qt, QSize
+from PySide6.QtGui import QFont, QFontMetrics
+from PySide6.QtWidgets import QListWidgetItem, QLabel, QAbstractItemView
 
 from component.list.base_list_widget import BaseListWidget
 from component.scroll.smooth_scroll_bar import SmoothScrollBar
@@ -55,3 +55,4 @@ class TagListWidget(BaseListWidget):
             item.setFlags(item.flags() & (~Qt.ItemIsSelectable))
 
         self.addItem(item)
+        return item

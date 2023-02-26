@@ -1,5 +1,5 @@
-from PySide2.QtCore import QPropertyAnimation, QEasingCurve, QAbstractAnimation
-from PySide2.QtWidgets import QScrollBar
+from PySide6.QtCore import QPropertyAnimation, QEasingCurve, QAbstractAnimation
+from PySide6.QtWidgets import QScrollBar
 
 from qt_owner import QtOwner
 

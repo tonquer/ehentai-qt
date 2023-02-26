@@ -2,7 +2,7 @@ import os
 import sys
 import weakref
 
-from PySide2.QtCore import QFile
+from PySide6.QtCore import QFile
 
 from component.label.msg_label import MsgLabel
 from config.setting import Setting
@@ -16,6 +16,7 @@ class QtOwner(Singleton):
         Singleton.__init__(self)
         self._owner = None
         self._app = None
+        self._localServer = None
         self.backSock = None
         self.closeType = 1   # 1普通， 2关闭弹窗触发， 3任务栏触发
         self.isOfflineModel = False
@@ -75,7 +76,7 @@ class QtOwner(Singleton):
         try:
             from tools.log import Log
             from config.setting import Setting
-            from PySide2.QtGui import QFont
+            from PySide6.QtGui import QFont
             f = QFont()
             from tools.langconv import Converter
             if Converter('zh-hans').convert(Setting.FontName.value) == "默认":
@@ -96,7 +97,7 @@ class QtOwner(Singleton):
             if Setting.FontName.value:
                 f = QFont(Setting.FontName.value)
 
-            if Setting.FontSize.value:
+            if Setting.FontSize.value and Setting.FontSize.value != "Defalut":
                 f.setPointSize(int(Setting.FontSize.value))
 
             if Setting.FontStyle.value:
@@ -113,8 +114,28 @@ class QtOwner(Singleton):
         return self._app()
 
     @property
+    def localServer(self):
+        return self._localServer()
+
+    @property
     def bookInfoView(self):
         return self.owner.bookInfoView
+
+    @property
+    def localReadView(self):
+        return self.owner.localReadView
+
+    @property
+    def favoriteView(self):
+        return self.owner.favorityView
+
+    @property
+    def indexView(self):
+        return self.owner.indexView
+
+    @property
+    def searchView(self):
+        return self.owner.searchView
 
     @property
     def owner(self):
@@ -127,7 +148,11 @@ class QtOwner(Singleton):
 
     def OpenReadView(self, bookId, token, site, name, pageIndex):
         self.owner.totalStackWidget.setCurrentIndex(1)
-        self.owner.readView.OpenPage(bookId, token, site, name, pageIndex=pageIndex)
+        self.owner.readView.OpenPage(bookId, token, site, name, pageIndex=pageIndex, isOffline=QtOwner().isOfflineModel)
+
+    def OpenLocalReadView(self, v):
+        self.owner.totalStackWidget.setCurrentIndex(1)
+        self.owner.readView.OpenLocalPage(v)
 
     def OpenFavoriteInfo(self, bookId, bookName):
         from view.user.favorite_info_view import FavoriteInfoView
@@ -139,6 +164,9 @@ class QtOwner(Singleton):
     def OpenBookInfo(self, bookId, token="", site=""):
         arg = {"bookId": bookId, "token": token, "site": site}
         self.owner.SwitchWidget(self.owner.bookInfoView, **arg)
+
+    def OpenLocalBook(self, bookId):
+        self.owner.localReadView.OpenLocalBook(bookId)
 
     def OpenBookInfoExt(self, task):
         arg = {"task": task}

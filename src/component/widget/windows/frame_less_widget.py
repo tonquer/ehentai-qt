@@ -1,15 +1,15 @@
 # coding:utf-8
 import sys
 from enum import Enum
-from PySide2.QtCore import Qt
+from PySide6.QtCore import Qt
 
 from ctypes import cast
 from ctypes.wintypes import MSG
 
 from ctypes import POINTER
 
-from PySide2.QtGui import QPainter, QBrush, QColor, QPainterPath, QGuiApplication
-from PySide2.QtWidgets import QWidget, QStyleOption, QStyle
+from PySide6.QtGui import QPainter, QBrush, QColor, QPainterPath, QGuiApplication
+from PySide6.QtWidgets import QWidget, QStyleOption, QStyle
 from win32 import win32api, win32gui
 from win32.lib import win32con
 

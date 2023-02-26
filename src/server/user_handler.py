@@ -55,6 +55,39 @@ class CheckUpdateHandler(object):
                 TaskBase.taskObj.taskBack.emit(task.backParam, pickle.dumps(data))
 
 
+@handler(req.CheckPreUpdateReq)
+class CheckPreUpdateReqHandler(object):
+    def __call__(self, task):
+        data = {"st": task.status, "data": ""}
+        try:
+            if not task.res.GetText() or task.status == Status.NetError:
+                return
+            if task.res.raw.status_code != 200:
+                return
+            rawData = json.loads(task.res.raw.text)
+            if not rawData:
+                return
+            v = rawData[0]
+            verData = v.get("tag_name")
+            info = verData.replace("v", "").split(".")
+            version = int(info[0]) * 100 + int(info[1]) * 10 + int(info[2]) * 1
+            info2 = re.findall(r"\d+\d*", os.path.basename(config.UpdateVersion))
+            curversion = int(info2[0]) * 100 + int(info2[1]) * 10 + int(info2[2]) * 1
+
+            rawData = v.get("body")
+
+            if version > curversion:
+                data["data"] = rawData
+            else:
+                data["data"] = "no"
+
+        except Exception as es:
+            pass
+        finally:
+            if task.bakParam:
+                TaskBase.taskObj.taskBack.emit(task.bakParam, pickle.dumps(data))
+
+
 @handler(req.GetUserIdReq)
 class GetUserIdReqHandler(object):
     def __call__(self, task: Task):
@@ -139,8 +172,6 @@ class GetIndexInfoReqHandler(object):
         try:
             if task.status != Status.Ok:
                 return
-            if not task.res.raw.text:
-                data["st"] = Status.Error
             else:
                 if task.req.site == "exhentai":
                     cookies = requests.utils.dict_from_cookiejar(task.res.raw.cookies)
@@ -154,6 +185,9 @@ class GetIndexInfoReqHandler(object):
                             if igneous:
                                 data["igneous"] = igneous
                                 break
+                if not task.res.raw.text:
+                    data["st"] = Status.Error
+                    return
                 bookList, nextId = ToolUtil.ParseBookIndex(task.res.raw.text)
                 from tools.book import BookMgr
                 BookMgr().UpdateBookInfoList(bookList, task.req.site)
@@ -397,18 +431,17 @@ class DownloadBookReq(object):
 @handler(req.SpeedTestPingReq)
 class SpeedTestPingHandler(object):
     def __call__(self, task):
-        data = {"st": task.status, "data": str(0)}
-        try:
-            if task.status != Status.Ok:
-                return
-            if hasattr(task.res.raw, "elapsed"):
-                data["data"] = str(task.res.raw.elapsed.total_seconds())
-        except Exception as es:
-            data["st"] = Status.ParseError
-            Log.ParseError(es, task.req.url, task.res.GetText())
-        finally:
-            if task.backParam:
-                TaskBase.taskObj.taskBack.emit(task.backParam, pickle.dumps(data))
+        data = {"st": task.status, "data": task.res.GetText()}
+        if hasattr(task.res.raw, "elapsed"):
+            if task.res.raw.status_code == 401 or task.res.raw.status_code == 200:
+                data["data"] = str(task.res.raw.elapsed.total_seconds()*1000)
+            else:
+                data["st"] = Status.Error
+                data["data"] = str(task.res.raw.elapsed.total_seconds()*1000)
+            TaskBase.taskObj.taskBack.emit(task.bakParam, pickle.dumps(data))
+        else:
+            data["data"] = "0"
+            TaskBase.taskObj.taskBack.emit(task.bakParam, pickle.dumps(data))
 
 
 @handler(req.DnsOverHttpsReq)
