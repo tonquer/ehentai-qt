@@ -47,7 +47,6 @@ class LoginWidget(QtWidgets.QWidget, Ui_LoginWidget, QtTaskBase):
         ipb_member_id = self.memberId.text()
         ipb_pass_hash = self.passHash.text()
         if not ipb_member_id or not ipb_pass_hash:
-            QtOwner().ShowError(Str.NotSpace)
             return
         Server().isLogin = True
         Setting.IpbMemberId.SetValue(ipb_member_id)

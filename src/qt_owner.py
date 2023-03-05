@@ -42,7 +42,7 @@ class QtOwner(Singleton):
         return self.owner.setSubTitle(text)
     
     def ShowError(self, msg):
-        return MsgLabel.ShowErrorEx(self.owner, msg)
+        return MsgLabel.ShowErrorEx(self.owner, str(msg))
 
     def ShowMsg(self, msg):
         return MsgLabel.ShowMsgEx(self.owner, msg)
