@@ -501,47 +501,47 @@
         <translation>v1.0.8</translation>
     </message>
     <message>
-        <location filename="../ui/ui_help.ui" line="144"/>
+        <location filename="../ui/ui_help.ui" line="237"/>
         <source>打开控制台</source>
         <translation>打開控制台</translation>
     </message>
     <message>
-        <location filename="../ui/ui_help.ui" line="151"/>
+        <location filename="../ui/ui_help.ui" line="144"/>
         <source>打开日志目录</source>
         <translation>打開日誌目錄</translation>
     </message>
     <message>
-        <location filename="../ui/ui_help.ui" line="169"/>
+        <location filename="../ui/ui_help.ui" line="162"/>
         <source>waifu2x版本:</source>
         <translation>waifu2x版本:</translation>
     </message>
     <message>
-        <location filename="../ui/ui_help.ui" line="176"/>
+        <location filename="../ui/ui_help.ui" line="169"/>
         <source>检测更新</source>
         <translation>檢測更新</translation>
     </message>
     <message>
-        <location filename="../ui/ui_help.ui" line="188"/>
+        <location filename="../ui/ui_help.ui" line="181"/>
         <source>v1.2.8</source>
         <translation>v1.2.8</translation>
     </message>
     <message>
-        <location filename="../ui/ui_help.ui" line="206"/>
+        <location filename="../ui/ui_help.ui" line="199"/>
         <source>日志:</source>
         <translation>日誌:</translation>
     </message>
     <message>
-        <location filename="../ui/ui_help.ui" line="218"/>
+        <location filename="../ui/ui_help.ui" line="211"/>
         <source>上次更新时间：</source>
         <translation>上次更新時間：</translation>
     </message>
     <message>
-        <location filename="../ui/ui_help.ui" line="230"/>
+        <location filename="../ui/ui_help.ui" line="223"/>
         <source>2021-11-27</source>
         <translation>2021-11-27</translation>
     </message>
     <message>
-        <location filename="../ui/ui_help.ui" line="237"/>
+        <location filename="../ui/ui_help.ui" line="230"/>
         <source>接受Beta版本更新</source>
         <translation>接受Beta版本更新</translation>
     </message>
@@ -1059,34 +1059,67 @@
         <translation>搜索</translation>
     </message>
     <message>
-        <location filename="../ui/component/ui_navigation.ui" line="361"/>
+        <location filename="../ui/component/ui_navigation.ui" line="369"/>
+        <source>排行榜</source>
+        <translation>排行榜</translation>
+    </message>
+    <message>
+        <location filename="../ui/component/ui_navigation.ui" line="411"/>
         <source>其他</source>
         <translation>其他</translation>
     </message>
     <message>
-        <location filename="../ui/component/ui_navigation.ui" line="383"/>
+        <location filename="../ui/component/ui_navigation.ui" line="433"/>
         <source>下载</source>
         <translation>下載</translation>
     </message>
     <message>
-        <location filename="../ui/component/ui_navigation.ui" line="424"/>
+        <location filename="../ui/component/ui_navigation.ui" line="474"/>
         <source>本地漫画</source>
         <translation>本地漫畫</translation>
     </message>
     <message>
-        <location filename="../ui/component/ui_navigation.ui" line="465"/>
+        <location filename="../ui/component/ui_navigation.ui" line="515"/>
         <source>Waifu2x</source>
         <translation>Waifu2x</translation>
     </message>
     <message>
-        <location filename="../ui/component/ui_navigation.ui" line="530"/>
+        <location filename="../ui/component/ui_navigation.ui" line="580"/>
         <source>帮助</source>
         <translation>幫助</translation>
     </message>
     <message>
-        <location filename="../ui/component/ui_navigation.ui" line="574"/>
+        <location filename="../ui/component/ui_navigation.ui" line="624"/>
         <source>设置</source>
         <translation>設置</translation>
+    </message>
+</context>
+<context>
+    <name>Rank</name>
+    <message>
+        <location filename="../ui/ui_rank.ui" line="14"/>
+        <source>排行榜</source>
+        <translation>排行榜</translation>
+    </message>
+    <message>
+        <location filename="../ui/ui_rank.ui" line="24"/>
+        <source>昨日</source>
+        <translation>昨日</translation>
+    </message>
+    <message>
+        <location filename="../ui/ui_rank.ui" line="34"/>
+        <source>上月</source>
+        <translation>上月</translation>
+    </message>
+    <message>
+        <location filename="../ui/ui_rank.ui" line="44"/>
+        <source>去年</source>
+        <translation>去年</translation>
+    </message>
+    <message>
+        <location filename="../ui/ui_rank.ui" line="54"/>
+        <source>全部</source>
+        <translation type="unfinished">全部</translation>
     </message>
 </context>
 <context>
@@ -1347,12 +1380,87 @@
         <translation>搜索：</translation>
     </message>
     <message>
-        <location filename="../ui/ui_search.ui" line="209"/>
+        <location filename="../ui/ui_search.ui" line="165"/>
+        <source>高级：</source>
+        <translation>高級：</translation>
+    </message>
+    <message>
+        <location filename="../ui/ui_search.ui" line="172"/>
+        <source>显示已删除的画廊</source>
+        <translation>顯示已刪除的畫廊</translation>
+    </message>
+    <message>
+        <location filename="../ui/ui_search.ui" line="186"/>
+        <source>页数范围 ：</source>
+        <translation>頁數範圍 ：</translation>
+    </message>
+    <message>
+        <location filename="../ui/ui_search.ui" line="200"/>
+        <source>-</source>
+        <translation>-</translation>
+    </message>
+    <message>
+        <location filename="../ui/ui_search.ui" line="221"/>
+        <source>评分：</source>
+        <translation>評分：</translation>
+    </message>
+    <message>
+        <location filename="../ui/ui_search.ui" line="229"/>
+        <source>无</source>
+        <translation>無</translation>
+    </message>
+    <message>
+        <location filename="../ui/ui_search.ui" line="234"/>
+        <source>2星</source>
+        <translation type="unfinished">2星</translation>
+    </message>
+    <message>
+        <location filename="../ui/ui_search.ui" line="239"/>
+        <source>3星</source>
+        <translation type="unfinished">3星</translation>
+    </message>
+    <message>
+        <location filename="../ui/ui_search.ui" line="244"/>
+        <source>4星</source>
+        <translation type="unfinished">4星</translation>
+    </message>
+    <message>
+        <location filename="../ui/ui_search.ui" line="249"/>
+        <source>5星</source>
+        <translation type="unfinished">5星</translation>
+    </message>
+    <message>
+        <location filename="../ui/ui_search.ui" line="264"/>
+        <source>禁用筛选：</source>
+        <translation>禁用篩選：</translation>
+    </message>
+    <message>
+        <location filename="../ui/ui_search.ui" line="271"/>
+        <source>语言</source>
+        <translation>語言</translation>
+    </message>
+    <message>
+        <location filename="../ui/ui_search.ui" line="278"/>
+        <source>上传者</source>
+        <translation>上傳者</translation>
+    </message>
+    <message>
+        <location filename="../ui/ui_search.ui" line="285"/>
+        <source>标签</source>
+        <translation>標簽</translation>
+    </message>
+    <message>
+        <location filename="../ui/ui_search.ui" line="321"/>
+        <source>分类：</source>
+        <translation type="unfinished">分類：</translation>
+    </message>
+    <message>
+        <location filename="../ui/ui_search.ui" line="395"/>
         <source>页：0/0</source>
         <translation>頁：0/0</translation>
     </message>
     <message>
-        <location filename="../ui/ui_search.ui" line="242"/>
+        <location filename="../ui/ui_search.ui" line="428"/>
         <source>下一页</source>
         <translation>下一頁</translation>
     </message>

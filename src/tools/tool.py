@@ -4,7 +4,7 @@ import re
 import time
 from urllib.parse import quote
 
-from bs4 import BeautifulSoup, Tag
+from bs4 import BeautifulSoup, Tag, NavigableString
 
 from config import config
 from config.setting import Setting
@@ -43,16 +43,29 @@ def time_me(fn):
 
 class ToolUtil(object):
     Category = dict()
+    CategoryId = dict()
     Category["doujinshi"] = "同人志"
+    CategoryId["doujinshi"] = 2
     Category["manga"] = "漫画"
+    CategoryId["manga"] = 4
     Category["artist cg"] = "艺术CG"
+    CategoryId["artist cg"] = 8
     Category["game cg"] = "游戏CG"
+    CategoryId["game cg"] = 16
     Category["western"] = "西方"
+    CategoryId["western"] = 512
     Category["non-h"] = "无H"
+    CategoryId["non-h"] = 256
     Category["image set"] = "图集"
+    CategoryId["image set"] = 32
     Category["cosplay"] = "COSPLAY"
+    CategoryId["cosplay"] = 64
     Category["asian porn"] = "亚洲色情"
+    CategoryId["asian porn"] = 128
     Category["misc"] = "杂项"
+    CategoryId["misc"] = 1
+    CategoryId["all"] = 1023
+    CategoryId[""] = 0
 
     @staticmethod
     def GetCategoryName(category):
@@ -143,8 +156,14 @@ class ToolUtil(object):
         return size
 
     @staticmethod
-    def GetLookScaleModel(category, mat="jpg"):
-        return ToolUtil.GetModelByIndex(Setting.LookNoise.value, Setting.LookScale.value, ToolUtil.GetLookModel(category), mat)
+    def GetLookScaleModel(category, w, h, mat="jpg"):
+        data = ToolUtil.GetModelByIndex(Setting.LookNoise.value, Setting.LookScale.value, ToolUtil.GetLookModel(category), mat)
+        # 放大倍数不能过大，如果图片超过4k了，QImage无法显示出来，bug
+        if min(w, h) > 3000:
+            data["scale"] = 1
+        elif min(w, h) > 2000:
+            data["scale"] = 1.5
+        return data
 
     @staticmethod
     def GetDownloadScaleModel(w, h, mat):
@@ -291,6 +310,8 @@ class ToolUtil(object):
         if "gld" not in tag.attrs.get("class", []):
 
             for tr in tag.children:
+                if isinstance(tr, NavigableString):
+                    continue
                 if "gltm" in tag.attrs.get("class", []):
                     b = ToolUtil.ParseBookBaseInfoGlm(tr)
                 elif "gltc" in tag.attrs.get("class", []):
@@ -322,6 +343,54 @@ class ToolUtil(object):
         #             continue
         #         maxPage = max(maxPage, int(datas[0]))
         return bookInfos, nextId
+    #
+    # @staticmethod
+    # def ParseTopBookIndex(data):
+    #     soup = BeautifulSoup(data, features="lxml")
+    #     tag = soup.find("table", class_=re.compile(r"itg gl\w+"))
+    #     if not tag:
+    #         tag = soup.find("div", class_=re.compile(r"itg gld"))
+    #
+    #     bookInfos = []
+    #     if not tag:
+    #         return [], 1
+    #
+    #     if "gld" not in tag.attrs.get("class", []):
+    #
+    #         for tr in tag.children:
+    #             if isinstance(tr, NavigableString):
+    #                 continue
+    #             if "gltm" in tag.attrs.get("class", []):
+    #                 b = ToolUtil.ParseBookBaseInfoGlm(tr)
+    #             elif "gltc" in tag.attrs.get("class", []):
+    #                 b = ToolUtil.ParseBookBaseInfoGlc(tr)
+    #             elif "glte" in tag.attrs.get("class", []):
+    #                 b = ToolUtil.ParseBookBaseInfoGle(tr)
+    #             else:
+    #                 return
+    #             if b.baseInfo.id:
+    #                 bookInfos.append(b)
+    #     else:
+    #         for tr in tag.find_all("div", class_="gl1t"):
+    #             b = ToolUtil.ParseBookBaseInfoGlt(tr)
+    #             if b.baseInfo.id:
+    #                 bookInfos.append(b)
+    #
+    #     table = soup.find("a", id="unext")
+    #     nextId = ""
+    #     if table and table.attrs.get("href"):
+    #         url = table.attrs.get("href")
+    #         mo = re.search("(?<=next=)\w+", url)
+    #         if mo:
+    #             nextId = mo.group()
+    #     # for td in table.tr.children:
+    #     #     if getattr(td, "a", None):
+    #     #         pages = td.a.text
+    #     #         datas = re.findall(r"\d+", pages)
+    #     #         if not datas:
+    #     #             continue
+    #     #         maxPage = max(maxPage, int(datas[0]))
+    #     return bookInfos, nextId
 
     @staticmethod
     def ParseBookBaseInfoGlt(tr):

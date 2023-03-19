@@ -84,11 +84,17 @@ jobs:
             --hidden-import view \
             --strip --windowed -i Icon.icns \
             start.py
-        rm -rf dist/EHentai
-        cp Icon.icns dist/
-        ln -s /Applications/   dist/Applications
-        create-dmg --volname "EHentai" --volicon "Icon.icns" --icon "Icon.icns" 200 190 \
-            --hide-extension "Icon.icns" ${{ env.PACKAGENAME }}.dmg dist/
+            
+        # rm -rf dist/EHentai
+        # cp Icon.icns dist/
+        # ln -s /Applications/   dist/Applications
+        create-dmg --volname "EHentai" --volicon "Icon.icns" --icon "EHentai.app" 200 190 \
+            --window-pos 200 120 \
+            --window-size 800 400 \
+            --icon-size 100 \
+            --hide-extension "EHentai.app" --app-drop-link 600 185 \
+            ${{ env.PACKAGENAME }}.dmg dist/EHentai.app
+
         zip -9 ehentai.zip ${{ env.PACKAGENAME }}.dmg
         mv ${{ env.PACKAGENAME }}.dmg ..
         mv ehentai.zip ..

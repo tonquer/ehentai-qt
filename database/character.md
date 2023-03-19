@@ -13,7 +13,7 @@ copyright: >
   对于标有(**)的条目，其描述文本复制/翻译自萌娘百科，遵循原始许可协议（即知识共享(Creative Commons) 署名-非商业性使用-相同方式共享
   3.0 协议）进行二次分发。
 rules:
-  - 优先写公认的中文翻译，不知道的也可以写日文原名。
+  - 优先写官方的中文名称，当无官方中译时可以使用公认的中文名称，本命名空间**暂不接受日文名称**。
   - 第一推荐萌娘百科，也可以用百度百科或维基百科查译名。
 example:
   raw: ruri gokou
@@ -4470,6 +4470,33 @@ example:
 | isumi saginomiya | 鹭之宫伊澄 | 所属作品: `p:hayate no gotoku` | [萌娘百科](https://zh.moegirl.org.cn/鹭之宫伊澄) [Fandom](https://hayatenogotoku.fandom.com/wiki/Isumi_Saginomiya) |
 | nagi sanzenin | 三千院凪 | 所属作品: `p:hayate no gotoku` | [萌娘百科](https://zh.moegirl.org.cn/zh/三千院凪) |
 | marie | 玛丽 |  |  |
+| fuyutsuki | 冬月 | 舰队collection角色 | [https://zh.kcwiki.cn/wiki/冬月](https://zh.kcwiki.cn/wiki/冬月) |
+| tsukasa ayatsuji | 绚辻词 |  |  |
+| ai nanasaki | 七咲逢 |  |  |
+| haruka morishima | 森岛遥 |  |  |
+| miya tachibana | 橘美也 |  |  |
+| sae nakata | 中多纱江 |  |  |
+| rihoko sakurai | 樱井梨穂子 |  |  |
+| yukiko amagi | 天城雪子 |  |  |
+| hatsumi sega | 濑贺初美 | 濑贺初美（Segami，セガミ）是海王星系列外传作品《超次元大战 海王星VS世嘉主机女孩 梦幻合体特别版》（超次元大战 ネプテューヌＶＳセガ·ハード·ガールズ 梦の合体スペシャル）的登场角色。 | [萌娘百科](https://zh.moegirl.org.cn/濑贺初美) |
+| fujisaki yua | 藤崎由爱 | ![](https://static.wikia.nocookie.net/virtualyoutuber/images/3/39/Fujisaki_YUA_Original_Design.png) | [萌娘百科](https://zh.moegirl.org.cn/zh/藤崎由爱) [Fandom](https://virtualyoutuber.fandom.com/wiki/Fujisaki_Yua) [Fandom](https://virtualyoutuber.fandom.com/zh-tw/wiki/藤崎由愛) |
+| dante | 但丁 | 卡普空旗下电子游戏鬼泣系列主角 |  |
+| vergil | 维吉尔 | 卡普空旗下电子游戏鬼泣系列角色 |  |
+| hanbei takenaka | 竹中半兵卫 |  |  |
+| kanae kochou | 胡蝶香奈惠 | 胡蝶忍的姐姐。同時也是栗花落香奈乎的義姐和恩人，与胡蝶忍從奴隶贩子手下救下了香奈乎。 | [萌娘百科](https://zh.moegirl.org.cn/胡蝶香奈惠) |
+| sanemi shinazugawa | 不死川实弥 |  | [萌娘百科](https://zh.moegirl.org.cn/不死川实弥) |
+| kisaki | 妃咲 |  |  |
+| mashiro shizuyama | 静山真白 | 所属作品: `p:blue archive`<br><br>![](https://static.wikia.nocookie.net/blue-archive/images/f/f8/Mashiro_Portrait.png) | [Fandom](https://bluearchive.fandom.com/wiki/Shizuyama_Mashiro) [介绍专栏](https://www.bilibili.com/read/cv10421669) |
+| tsurugi kensaki | 剑先剑 | 所属作品: `p:blue archive`<br><br>![](https://static.wikia.nocookie.net/blue-archive/images/4/49/Tsurugi_Portrait.png) | [Fandom](https://bluearchive.fandom.com/wiki/Kenzaki_Tsurugi) [碧蓝档案wiki](https://bluearchive.wiki/wiki/Tsurugi) [介绍专栏](https://www.bilibili.com/read/cv10003335) |
+| acerola | 阿塞萝拉 | 所属作品: `p:pokemon`<br><br>![](https://static.wikia.nocookie.net/pokemon/images/1/1e/Sun_Moon_Acerola.png) | [萌娘百科](https://zh.moegirl.org.cn/zh/阿塞萝拉) [神奇宝贝百科](https://wiki.52poke.com/zh/阿塞蘿拉) [Fandom](https://pokemon.fandom.com/wiki/Acerola) |
+| kou minamoto | 源光 | ![](https://static.wikia.nocookie.net/hanakokun/images/5/51/Kou%27s_anime_design.png) | [Fandom](https://hanako-kun.fandom.com/wiki/Minamoto_Kou) [萌娘百科](https://zh.moegirl.org.cn/源光) |
+| damian desmond | 达米安·德斯蒙 | ![](https://static.wikia.nocookie.net/spy-x-family9171/images/3/35/Damian_Desmond_Anime.png) | [萌娘百科](https://zh.moegirl.org.cn/zh/达米安·德斯蒙) [Fandom](https://spy-x-family.fandom.com/wiki/Damian_Desmond) |
+| cat noir | 黑猫诺儿 | 阿德里恩·艾格雷斯特 | [Fandom](https://hero.fandom.com/wiki/Cat_Noir) |
+| killua zoldyck | 杰诺·揍敌客 | 所属作品: `p:hunter x hunter` | [Fandom](https://hunterxhunter.fandom.com/wiki/Killua_Zoldyck) [维基百科（日语）](https://ja.wikipedia.org/wiki/ゾルディック家) |
+| mirai kamiki | 神木未来 | 圣凤学园初中部二年级学生，神木世海的姐姐，同时也是时尚杂志的模特，与弟弟一样，接受过次元霸王流的修炼。<br><br>![](https://static.wikia.nocookie.net/gundam/images/5/55/Mirai_Kamiki_Character_Sheet.png) | [bili游戏百科](https://wiki.biligame.com/gundam/神木未来) [百度百科](https://baike.baidu.com/item/神木未來/16603736) [pixiv](https://dic.pixiv.net/a/カミキ・ミライ) [Fandom](https://gundam.fandom.com/wiki/Mirai_Kamiki) |
+| megumi amatsuka | 天使惠 | 所属作品: `p:gj-bu`<br><br>![](https://static.wikia.nocookie.net/gj-bu/images/a/a1/Untitled.png) | [萌娘百科](https://zh.moegirl.org.cn/天使惠) [Fandom](https://gj-bu.fandom.com/wiki/Megumi_Amatsuka) |
+| mao amatsuka | 天使真央 | 所属作品: `p:gj-bu`<br><br>![](https://static.wikia.nocookie.net/gj-bu/images/8/81/Mao.png) | [Fandom](https://gj-bu.fandom.com/wiki/Mao_Amatsuka) [萌娘百科](https://zh.moegirl.org.cn/zh/天使真央) |
+| akane isshiki | 一色茜 | 所属作品: `p:vividred operation`<br><br>![](https://static.wikia.nocookie.net/vivid-red-operation/images/f/f9/Akane_isshiki.jpg) | [萌娘百科](https://zh.moegirl.org.cn/一色茜) [Fandom](https://vivid-red-operation.fandom.com/wiki/Akane_Isshiki) |
 
 <!--TEMPLATE: 
 |  |  |  |  |

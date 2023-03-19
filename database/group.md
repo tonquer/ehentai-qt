@@ -16,6 +16,8 @@ copyright: >
 rules:
   - 有官方或公认的中文名称时优先写中文名，否则写日文名。
   - 日文名中有汉字者优先写含汉字的名称。
+  - >-
+    可以依据[规则](https://zh.wikipedia.org/wiki/Wikipedia:汉字文化圈语言专有名词中译规则#日本语专有名词的中译)将日文名转写为中文名，但**不要混合中文汉字与假名**。
 example:
   raw: twinbox
   name: TwinBox
@@ -150,7 +152,7 @@ example:
 | electromagneticwave | ElectromagneticWave | ![logo](http://www.ne.jp/asahi/magneticwave/popcan/top5_logo.gif)<br>`moetan` 作者 `pop` 所在的社团<br>![萌单](http://www.ne.jp/asahi/magneticwave/popcan/cafe.jpg) | [社团官方网站](http://www.ne.jp/asahi/magneticwave/popcan/) |
 | usotsukiya | 嘘つき屋 | 大嘘的社团名，袜控，女子高中生画家<br>![大嘘作品](https://ehgt.org/72/3c/723ca0e20e7cbf1b9f83c3a082c37b560de437aa-2602261-1787-2500-jpg_250.jpg) |  |
 | archetype | ARCHETYPE | `akaza`的社团名，袜控。<br>![Akaza作品](# "https://ehgt.org/11/17/11178f56c948ea4caade26839057ec9c5ae65e36-691109-1409-2000-jpg_250.jpg") |  |
-| afterschool of the 5th year | 5年目の放課後 | `kantoku`的社团名。<br>![Kantoku作品](https://ehgt.org/8d/53/8d53fa5744869ad31d94189938d0f9a93d996f21-2008842-2492-3500-jpg_l.jpg) |  |
+| afterschool of the 5th year | 5年目の放课后 | ![Kantoku作品](https://ehgt.org/8d/53/8d53fa5744869ad31d94189938d0f9a93d996f21-2008842-2492-3500-jpg_l.jpg)<br><br>画师`kantoku`所属的同人的社团。 |  |
 | tsf no f | TSF的F | 以F为中心的“TSF的F社团”，以变身性转换作品为主![F的作品](# "https://ehgt.org/6e/15/6e1509306e069bea87b39b83821c9fff99c89dca-7153718-4299-6071-jpg_l.jpg") |  |
 | number2 | ![Logo](https://user-images.githubusercontent.com/13471233/115440941-e1840900-a242-11eb-9d2f-f5e290589979.png)Number2 | ![Banner](https://user-images.githubusercontent.com/13471233/115440864-ce713900-a242-11eb-9e51-7d239e3e1c5c.png)<br>![Number2](https://ehgt.org/5c/2d/5c2db0cbf62529b4dc0ec012aa3cf431d2136999-1711821-1281-1800-jpg_l.jpg) | [官方网站](http://number2-takuji.com) [Twitter](https://twitter.com/number2_takuji) |
 | plant | PLANT |  |  |
@@ -1395,7 +1397,7 @@ example:
 | sorairo inn | 空色イン |  |  |
 | ecchi na taikendan kokuhaku toukou otoko jyuku | エッチな体験談告白投稿男塾 |  |  |
 | kuramochi zukan | 仓持图鉴 |  |  |
-| uran no yakata | 雨蘭の館 |  |  |
+| uran no yakata | 雨兰の馆 | 画师`uran`所属同人社团 |  |
 | tears39 | Tears39 |  |  |
 | milkberry | milkberry | 如月みゆ |  |
 | gyoniku | 鱼肉 |  |  |
@@ -2078,7 +2080,7 @@ example:
 | white guardian | White Guardian |  |  |
 | creayus | CREAYUS |  |  |
 | chabashira chainsaw | チャバシラチェーンソー |  |  |
-| renai mangaka | 恋愛漫画家 |  |  |
+| renai mangaka | 恋爱漫画家 |  |  |
 | hakuto-can | 白桃缶 |  |  |
 | kemono ekaki no kousoku 2 | ケモノ絵描きの光速2 |  |  |
 | niji no magellan | にじのまぜらん |  |  |
@@ -6572,7 +6574,7 @@ example:
 | ketchup aji no mayonnaise | ケチャップ味のマヨネーズ |  |  |
 | ketsudon teishoku | ケツ丼定食 |  |  |
 | ketsune cyadokoro | けつね茶処 |  |  |
-| keumaya | 希有馬屋 |  |  |
+| keumaya | 希有马屋 |  |  |
 | keyspa | きーすぱ |  |  |
 | kezukaya | 毛塚屋 |  |  |
 | kf | KF |  |  |
@@ -12131,7 +12133,7 @@ example:
 | yappy-yappy | ヤッピーヤッピー |  |  |
 | yarakashidan | やらかし団 |  |  |
 | yareba dekiru ko. | やればできる娘。 |  |  |
-| yariiya | 槍衣屋 |  |  |
+| yariiya | 枪衣屋 |  |  |
 | yaritaihodai. | やりたいほうだい。 |  |  |
 | yasakanomagatama | 八坂の勾玉 |  |  |
 | yashiromori | ヤシロモリ |  |  |
@@ -12512,7 +12514,7 @@ example:
 | nipa nipa company | NIPA NIPA COMPANY |  |  |
 | omochi box | OMOCHI BOX |  |  |
 | kinokko | きのっ子 |  |  |
-| dark horse comics | 黑马漫画 | 仅次于DC和漫威的第三大漫画公司，是欧美游戏类漫画和设定集的主要出版商，但凡是有黑马漫画出版的内容在E站大多会隐藏或删除画廊。 |  |
+| dark horse comics | 黑马漫画 | 仅次于DC和漫威的第三大漫画公司，是欧美游戏类漫画和设定集的主要出版商，但凡是有黑马漫画出版的内容在E站大多会隐藏或删除图库。 |  |
 | mt.sushi | Mt.Sushi |  |  |
 | milk lamp | ミルクランプ |  |  |
 | germanium detroit | ゲルマニウム・デトロイト |  |  |
@@ -12562,6 +12564,13 @@ example:
 | touhikou | 陶惹好 |  |  |
 | yorunobando | 夜のバンド | 画师`mayonaka taroupho`所属同人社团。 |  |
 | shiba no shippo | しばのしっぽ | 画师`shiba aya`所属同人社团 |  |
+| futsu-no-tapioca-yasan | ふつうのタピオカやさん |  |  |
+| ushinomaruyaki | ウシノマルヤキ |  |  |
+| silver dog | シルバードッグ |  |  |
+| aburanabeshiki | 油锅式 |  |  |
+| gahahahahahaha | がはははははは! |  |  |
+| marshmalloya | ましゅまろや |  |  |
+| nanadou | 七堂 |  |  |
 
 <!--TEMPLATE: 
 |  |  |  |  |

@@ -15,9 +15,10 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QFont, QFontDatabase, QGradient, QIcon,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
-from PySide6.QtWidgets import (QApplication, QFrame, QHBoxLayout, QLabel,
-    QLayout, QListWidgetItem, QPushButton, QSizePolicy,
-    QSpacerItem, QVBoxLayout, QWidget)
+from PySide6.QtWidgets import (QApplication, QCheckBox, QComboBox, QFrame,
+    QHBoxLayout, QLabel, QLayout, QListWidgetItem,
+    QPushButton, QSizePolicy, QSpacerItem, QSpinBox,
+    QVBoxLayout, QWidget)
 
 from component.line_edit.search_line_edit import SearchLineEdit
 from component.list.comic_list_widget import ComicListWidget
@@ -26,7 +27,7 @@ class Ui_Search(object):
     def setupUi(self, Search):
         if not Search.objectName():
             Search.setObjectName(u"Search")
-        Search.resize(740, 551)
+        Search.resize(765, 551)
         Search.setMinimumSize(QSize(80, 0))
         self.verticalLayout = QVBoxLayout(Search)
         self.verticalLayout.setObjectName(u"verticalLayout")
@@ -91,9 +92,118 @@ class Ui_Search(object):
 
         self.verticalLayout.addWidget(self.searchWidget)
 
+        self.horizontalLayout_3 = QHBoxLayout()
+        self.horizontalLayout_3.setObjectName(u"horizontalLayout_3")
+        self.label_7 = QLabel(Search)
+        self.label_7.setObjectName(u"label_7")
+        self.label_7.setMinimumSize(QSize(60, 0))
+        self.label_7.setMaximumSize(QSize(60, 16777215))
+
+        self.horizontalLayout_3.addWidget(self.label_7)
+
+        self.f_sh = QCheckBox(Search)
+        self.f_sh.setObjectName(u"f_sh")
+
+        self.horizontalLayout_3.addWidget(self.f_sh)
+
+        self.line = QFrame(Search)
+        self.line.setObjectName(u"line")
+        self.line.setFrameShape(QFrame.VLine)
+        self.line.setFrameShadow(QFrame.Sunken)
+
+        self.horizontalLayout_3.addWidget(self.line)
+
+        self.label_3 = QLabel(Search)
+        self.label_3.setObjectName(u"label_3")
+
+        self.horizontalLayout_3.addWidget(self.label_3)
+
+        self.f_spf = QSpinBox(Search)
+        self.f_spf.setObjectName(u"f_spf")
+        self.f_spf.setMaximum(9999)
+
+        self.horizontalLayout_3.addWidget(self.f_spf)
+
+        self.label_4 = QLabel(Search)
+        self.label_4.setObjectName(u"label_4")
+
+        self.horizontalLayout_3.addWidget(self.label_4)
+
+        self.f_spt = QSpinBox(Search)
+        self.f_spt.setObjectName(u"f_spt")
+        self.f_spt.setMaximum(9999)
+
+        self.horizontalLayout_3.addWidget(self.f_spt)
+
+        self.line_2 = QFrame(Search)
+        self.line_2.setObjectName(u"line_2")
+        self.line_2.setFrameShape(QFrame.VLine)
+        self.line_2.setFrameShadow(QFrame.Sunken)
+
+        self.horizontalLayout_3.addWidget(self.line_2)
+
+        self.label_5 = QLabel(Search)
+        self.label_5.setObjectName(u"label_5")
+
+        self.horizontalLayout_3.addWidget(self.label_5)
+
+        self.f_srdd = QComboBox(Search)
+        self.f_srdd.addItem("")
+        self.f_srdd.addItem("")
+        self.f_srdd.addItem("")
+        self.f_srdd.addItem("")
+        self.f_srdd.addItem("")
+        self.f_srdd.setObjectName(u"f_srdd")
+
+        self.horizontalLayout_3.addWidget(self.f_srdd)
+
+        self.line_3 = QFrame(Search)
+        self.line_3.setObjectName(u"line_3")
+        self.line_3.setFrameShape(QFrame.VLine)
+        self.line_3.setFrameShadow(QFrame.Sunken)
+
+        self.horizontalLayout_3.addWidget(self.line_3)
+
+        self.label_6 = QLabel(Search)
+        self.label_6.setObjectName(u"label_6")
+
+        self.horizontalLayout_3.addWidget(self.label_6)
+
+        self.f_sfl = QCheckBox(Search)
+        self.f_sfl.setObjectName(u"f_sfl")
+
+        self.horizontalLayout_3.addWidget(self.f_sfl)
+
+        self.f_sfu = QCheckBox(Search)
+        self.f_sfu.setObjectName(u"f_sfu")
+
+        self.horizontalLayout_3.addWidget(self.f_sfu)
+
+        self.f_sft = QCheckBox(Search)
+        self.f_sft.setObjectName(u"f_sft")
+
+        self.horizontalLayout_3.addWidget(self.f_sft)
+
+        self.horizontalSpacer = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
+
+        self.horizontalLayout_3.addItem(self.horizontalSpacer)
+
+
+        self.verticalLayout.addLayout(self.horizontalLayout_3)
+
+        self.horizontalLayout_4 = QHBoxLayout()
+        self.horizontalLayout_4.setObjectName(u"horizontalLayout_4")
+        self.label_8 = QLabel(Search)
+        self.label_8.setObjectName(u"label_8")
+        self.label_8.setMinimumSize(QSize(60, 0))
+        self.label_8.setMaximumSize(QSize(60, 16777215))
+
+        self.horizontalLayout_4.addWidget(self.label_8)
+
         self.tagList = QWidget(Search)
         self.tagList.setObjectName(u"tagList")
-        self.tagList.setStyleSheet(u"QPushButton {\n"
+        self.tagList.setStyleSheet(u"\n"
+"QPushButton {\n"
 "    background-color:rgb(251, 239, 243);\n"
 "    color: rgb(196, 95, 125);\n"
 "	border:2px solid red;\n"
@@ -101,15 +211,24 @@ class Ui_Search(object):
 "	border-color:rgb(196, 95, 125);\n"
 "}\n"
 "/* \u9f20\u6807\u5728\u6309\u94ae\u4e0a\u65f6\uff0c\u6309\u94ae\u989c\u8272 */\n"
+" QPushButton:checked \n"
+"{\n"
+"    background-color:rgb(240, 240, 240);\n"
+"    border-radius: 10px;\n"
+"    color: rgb(0, 0, 0);\n"
+"}\n"
+"/* \u9f20\u6807\u5728\u6309\u94ae\u4e0a\u65f6\uff0c\u6309\u94ae\u989c\u8272 */\n"
 "QPushButton:hover \n"
 "{\n"
 "    background-color:rgb(21, 85, 154);\n"
 "    border-radius: 10px;\n"
 "    color: rgb(0, 0, 0);\n"
-"}\n"
-"")
+"}")
 
-        self.verticalLayout.addWidget(self.tagList)
+        self.horizontalLayout_4.addWidget(self.tagList)
+
+
+        self.verticalLayout.addLayout(self.horizontalLayout_4)
 
         self.bookList = ComicListWidget(Search)
         self.bookList.setObjectName(u"bookList")
@@ -174,6 +293,22 @@ class Ui_Search(object):
 #endif // QT_CONFIG(tooltip)
         self.label_2.setText(QCoreApplication.translate("Search", u"\u641c\u7d22\uff1a", None))
         self.searchButton.setText(QCoreApplication.translate("Search", u"\u641c\u7d22", None))
+        self.label_7.setText(QCoreApplication.translate("Search", u"\u9ad8\u7ea7\uff1a", None))
+        self.f_sh.setText(QCoreApplication.translate("Search", u"\u663e\u793a\u5df2\u5220\u9664\u7684\u753b\u5eca", None))
+        self.label_3.setText(QCoreApplication.translate("Search", u"\u9875\u6570\u8303\u56f4 \uff1a", None))
+        self.label_4.setText(QCoreApplication.translate("Search", u"-", None))
+        self.label_5.setText(QCoreApplication.translate("Search", u"\u8bc4\u5206\uff1a", None))
+        self.f_srdd.setItemText(0, QCoreApplication.translate("Search", u"\u65e0", None))
+        self.f_srdd.setItemText(1, QCoreApplication.translate("Search", u"2\u661f", None))
+        self.f_srdd.setItemText(2, QCoreApplication.translate("Search", u"3\u661f", None))
+        self.f_srdd.setItemText(3, QCoreApplication.translate("Search", u"4\u661f", None))
+        self.f_srdd.setItemText(4, QCoreApplication.translate("Search", u"5\u661f", None))
+
+        self.label_6.setText(QCoreApplication.translate("Search", u"\u7981\u7528\u7b5b\u9009\uff1a", None))
+        self.f_sfl.setText(QCoreApplication.translate("Search", u"\u8bed\u8a00", None))
+        self.f_sfu.setText(QCoreApplication.translate("Search", u"\u4e0a\u4f20\u8005", None))
+        self.f_sft.setText(QCoreApplication.translate("Search", u"\u6807\u7b7e", None))
+        self.label_8.setText(QCoreApplication.translate("Search", u"\u5206\u7c7b\uff1a", None))
         self.label.setText(QCoreApplication.translate("Search", u"\u9875\uff1a0/0", None))
         self.jumpPage.setText(QCoreApplication.translate("Search", u"\u4e0b\u4e00\u9875", None))
     # retranslateUi

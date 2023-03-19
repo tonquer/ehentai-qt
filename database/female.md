@@ -26,7 +26,7 @@ copyright: >
   本文的其他内容，遵循知识共享(Creative Commons) 署名-非商业性使用-相同方式共享 3.0 协议提供。
 rules:
   - >-
-    为方便查找理解同类性癖的标签，请尽量按恋物标签分类(https://ehwiki.org/wiki/Fetish_Listing)归类存放，将类别写成注释。
+    为方便查找理解同类性癖的标签，请尽量按[恋物标签分类](https://ehwiki.org/wiki/Fetish_Listing)归类存放，将类别写成注释。
   - 若有属于多个分类的，放入最相关的那一个分类。
 example:
   raw: tanlines
@@ -46,7 +46,7 @@ example:
 | age regression | 返老还童 | 幼化，返老还童，通常是调教中的一环。不要与`shrinking`混淆。 |  |
 | infantilism | 幼稚型 | 将成年人当作小孩对待。 |  |
 |  | 思念峡湾(pining for the fjords)的来源：[英语吧](http://tieba.baidu.com/p/742519695) | 也就是放里站啦 |  |
-| lolicon | 萝莉 | 有性的情景或裸体的未成年少女。不与一般年轻女孩混淆；应该拥有未充分发育的的身体。标记时，只考虑外观。是`oppai loli`、`low lolicon`的前置标签。<br>画廊只需要包含一张这种性质的图片就需要打上此标签。将发送画廊到思念峡湾。<br>![图](# "https://ehgt.org/9f/22/9f225fabfed15fb25857b023f6a3ab785d94a4d7-320921-1024-768-jpg_l.jpg")![图](# "https://ehgt.org/0d/77/0d770340cd3647cd9a23337820d57dfb012bd949-636217-956-1270-jpg_l.jpg") |  |
+| lolicon | 萝莉 | 有性的情景或裸体的未成年少女。不与一般年轻女孩混淆；应该拥有未充分发育的的身体。标记时，只考虑外观。是`oppai loli`、`low lolicon`的前置标签。<br>图库只需要包含一张这种性质的图片就需要打上此标签。将发送图库到思念峡湾。<br>![图](# "https://ehgt.org/9f/22/9f225fabfed15fb25857b023f6a3ab785d94a4d7-320921-1024-768-jpg_l.jpg")![图](# "https://ehgt.org/0d/77/0d770340cd3647cd9a23337820d57dfb012bd949-636217-956-1270-jpg_l.jpg") |  |
 | milf | 熟女 | 看上去像30-50岁的女性，不一定是`mother`。不得与`old lady`混淆。 |  |
 | old lady | 老女人 | 看起来在50岁以上的女性。不得与`milf`混淆。 |  |
 | toddlercon | 幼女 | 学步的儿童。 |  |
@@ -258,7 +258,7 @@ example:
 | eyemask | 眼部面具 | 覆盖眼睛周围区域但露出其余脸部的面具。<br>![图](https://ehgt.org/59/de/59de44fefdbc230438c6ab14c7b13f69446598a1-2404665-2480-3508-jpg_l.jpg) |  |
 | eyepatch | 眼罩 | 覆盖一只眼睛的布或其他材料。<br>![图](# "https://ehgt.org/2a/a7/2aa78cba66643df31776d42e458610dce641c01d-545598-970-1340-jpg_l.jpg") |  |
 | glasses | 眼镜👓 | 用于改善双眼的视力的透明框架眼镜。需要佩戴在眼前才能添加此标签。不应与`sunglasses`混淆。<br>![图](# "https://ehgt.org/dd/8f/dd8f977b3f7e56f1f53b321c89abc102d4c9f61f-638175-1024-768-png_l.jpg") |  |
-| heterochromia | 异色瞳 | 一个人的虹膜是不同颜色。仅单张图片不符合，角色需要清晰地在整个画廊保持这种特点。<br>![图](# "https://ehgt.org/76/30/7630dfa09dd71f8c7050d26f172bb84319bee875-3327854-2045-3025-jpg_l.jpg")![图](# "https://ehgt.org/3d/75/3d75c68fcf25baacf4fddbdf36dc8e53624fb7bd-257472-1258-1817-jpg_l.jpg")![图](# "https://ehgt.org/ce/78/ce781c13ef9deb30e053bfeca4410bf16fa75776-4765333-2591-3624-jpg_l.jpg")![图](# "https://ehgt.org/ad/a9/ada91cd7292b5c4aa6923db0236deb85413ca5b8-10533332-8483-12000-jpg_l.jpg") |  |
+| heterochromia | 异色瞳 | 一个人的虹膜是不同颜色。仅单张图片不符合，角色需要清晰地在整个图库保持这种特点。<br>![图](# "https://ehgt.org/76/30/7630dfa09dd71f8c7050d26f172bb84319bee875-3327854-2045-3025-jpg_l.jpg")![图](# "https://ehgt.org/3d/75/3d75c68fcf25baacf4fddbdf36dc8e53624fb7bd-257472-1258-1817-jpg_l.jpg")![图](# "https://ehgt.org/ce/78/ce781c13ef9deb30e053bfeca4410bf16fa75776-4765333-2591-3624-jpg_l.jpg")![图](# "https://ehgt.org/ad/a9/ada91cd7292b5c4aa6923db0236deb85413ca5b8-10533332-8483-12000-jpg_l.jpg") |  |
 | monoeye | 独眼 | 一个单眼的人形角色。一个双眼的人物因为任何原因失去了眼睛（除了`transformation`）不符合条件。需要`monster girl`或`alien girl`标签。<br>![图](https://ehgt.org/53/40/5340807b916db91a820350831843e103b4948aa0-382780-800-600-jpg_l.jpg) |  |
 | sunglasses | 太阳镜🕶 | 用于改善在阳光下视力的有色框架眼镜。需要佩戴在眼前才能添加此标签。不应与`glasses`混淆。 |  |
 | unusual pupils | 异瞳 | 瞳孔是或包含奇怪的形状，如心形、星形。除非是意想不到的形状，否则不应该用于动物/恶魔的眼睛。<br>![图](https://ehgt.org/39/a7/39a73ccf93ecd2d670ee59d521539b46228334e8-616787-707-1000-jpg_l.jpg)![图](https://ehgt.org/e5/f3/e5f31191374c6c8761876723163fe85bb44f28a5-536896-1061-1510-jpg_l.jpg)![图](https://ehgt.org/88/f2/88f2a17ee62ddbde6653e0aa5aa2846dd34a84f4-1983254-1902-2706-png_l.jpg)![图](# "https://ehgt.org/2b/8b/2b8b9fe2b564240f931aa31df4e542f4881b7b90-302767-1200-1702-jpg_l.jpg")![图](# "https://ehgt.org/c4/0b/c40b6f702793c17d0ec46953410d71e9c40ec389-881104-1075-1518-jpg_l.jpg") |  |
@@ -436,7 +436,7 @@ example:
 | clown | 小丑🤡 | 白面与皱褶领和衣服。通常强调面部特征，例如大的红色鼻子和嘴唇以及醒目的彩色头发。 |  |
 | condom | 避孕套 | 塑料套，旨在保护使用者和其伙伴免受不必要的性病以及怀孕。 |  |
 | corset | 紧身胸衣 | 用于保持和塑造躯干的衣服，通常形成沙漏形状，尤指旧时妇女束腰的紧身内衣。 |  |
-| cosplaying | Cosplay | 角色打扮成另一个角色。不包括一般的角色扮演，如`schoolgirl uniform`、`nurse`、`maid`。不用于 `cosplay` 画廊。 |  |
+| cosplaying | Cosplay | 角色打扮成另一个角色。不包括一般的角色扮演，如`schoolgirl uniform`、`nurse`、`maid`。不用于 `cosplay` 图库。 |  |
 | crossdressing | 异性装 | 女性男装。只在明确表示穿着像男性的情况下才应该加上此标签。不应与`gender change`混淆。<br>![图](# "https://ehgt.org/84/13/8413cbc4d4d8905e9048c5b5a8a5e0676c011ca8-1905865-1200-1200-png_l.jpg")![图](# "https://ehgt.org/4d/2d/4d2d5424eb0e2052e0dfc6d14c982eb5f01952ae-142895-800-600-jpg_l.jpg")![图](# "https://ehgt.org/24/38/2438d21f31d1cb96f55fc883d0a00d64ac83b057-126074-800-600-jpg_l.jpg") |  |
 | detached sleeves | 分离袖子 | 一种上衣没有肩部分，袖子与衣服主体分离同时不以手套样式穿着的服饰。不应与`gloves`混淆。<br>![图](https://ehgt.org/7f/0e/7f0ee9e9b54ca575c57b63befd627d7aaa93dd43-1791186-1213-1865-png_l.jpg) | [萌娘百科](https://zh.moegirl.org.cn/分离袖子) |
 | diaper | 尿布 | 一种用来承接大小便的内衣，往往被婴儿穿戴。经常与`age regression`、`scat`、`infantilism`或`urination`配对。<br>![图](# "https://ehgt.org/8a/88/8a887ab1962fd4d3ece6978f00821b8c088df60b-12755157-2116-3012-png_l.jpg") |  |
@@ -589,7 +589,7 @@ example:
 | cbt | 虐屌 | CBT, Cock and Ball Torture. 以任何方式折磨阴茎区域。不需要`torture`标签 |  |
 | cuntbusting | 阴道破坏 | 物理攻击阴道的行为。 |  |
 | dismantling | 拆解 | 拆除部件，损毁或破坏机械生物。需要`robot`标签。 |  |
-| guro | 猎奇 | 英语グロテスク（Grotesque）的日式缩写グロ（guro）。原指恶心怪异，奇怪，不自然的猎奇事物。现常用于色情领域，全称エログロ（eroguro），常表现为血腥暴力，残害，肉体切割，扭曲变态，有点恶心又怪异的异常性行为或色情事物，常与`amputee`、`ryona`、`blood`、`snuff`、`rape`等标签并用，不用于温和的`blood`或`ryona`。不应与`snuff`混淆。对于大多数涉及`robot`的情况，请改用`dismantling`。<br>画廊只需要包含一张这种性质的图片即可获得此标签。<br><br>![恶](## "https://ehgt.org/a1/03/a1037f38d3841d9126257c95cf7ebf44645d6e1f-815087-1634-1743-jpg_250.jpg")![恶](## "https://ehgt.org/9c/30/9c30becd74eebfc9cc621cda75f096166e930b44-78256-733-500-jpg_250.jpg")![恶](## "https://ehgt.org/e9/53/e953213efaea1fc681824b601317c0a45872a309-124477-640-853-jpg_l.jpg") |  |
+| guro | 猎奇 | 英语グロテスク（Grotesque）的日式缩写グロ（guro）。原指恶心怪异，奇怪，不自然的猎奇事物。现常用于色情领域，全称エログロ（eroguro），常表现为血腥暴力，残害，肉体切割，扭曲变态，有点恶心又怪异的异常性行为或色情事物，常与`amputee`、`ryona`、`blood`、`snuff`、`rape`等标签并用，不用于温和的`blood`或`ryona`。不应与`snuff`混淆。对于大多数涉及`robot`的情况，请改用`dismantling`。<br>图库只需要包含一张这种性质的图片即可获得此标签。<br><br>![恶](## "https://ehgt.org/a1/03/a1037f38d3841d9126257c95cf7ebf44645d6e1f-815087-1634-1743-jpg_250.jpg")![恶](## "https://ehgt.org/9c/30/9c30becd74eebfc9cc621cda75f096166e930b44-78256-733-500-jpg_250.jpg")![恶](## "https://ehgt.org/e9/53/e953213efaea1fc681824b601317c0a45872a309-124477-640-853-jpg_l.jpg") |  |
 | electric shocks | 电击 | 用电力引起疼痛或快感。 |  |
 | ryona | 凌虐 | 对角色实施痛击、电击、束缚。通常低于`torture`的程度。不应与`wrestling`混淆。 |  |
 | snuff | 杀害 | 杀害人类或`furry`。不应与`guro`混淆。<br>![恶](## "https://ehgt.org/d5/1b/d51b8f11d4892a73660d8e9b3c2727fabc701e29-707033-806-631-png_250.jpg")![恶](## "https://ehgt.org/70/01/7001de6f5c26f60c51d64583f503e8c49d5dca7c-137717-460-620-jpg_250.jpg")![恶](## "https://ehgt.org/9d/48/9d48f33ccfeecebfaaa0712f536dcead0b208910-342661-1215-1721-jpg_l.jpg") |  |
@@ -608,14 +608,14 @@ example:
 |  | == 残疾 == |  |  |
 | blind | 失明 | 眼睛根本不能发挥作用的人。不应与`blindfold`混淆。 |  |
 | handicapped | 残疾 | 一个不能依靠自己的力量移动自己的一个或多个肢体的人。不应与`amputee`或`bondage`混淆。 |  |
-| mute | 哑巴 | 一个不能说话的人。不应用于不愿说话的人或戴`gag`的人。不用于`speechless`画廊。 |  |
+| mute | 哑巴 | 一个不能说话的人。不应用于不愿说话的人或戴`gag`的人。不用于`speechless`图库。 |  |
 |  | == 性别 == |  |  |
 | futanari | ![扶她图标](# "https://raw.githubusercontent.com/wiki/EhTagTranslation/Database/database-icon/futanari.webp")扶她 | 同时具有男性和女性生殖器的女孩。此标签或`shemale`是`dickgirl on male`、`male on dickgirl`、`dickgirl on dickgirl`的前置标签。那些缺乏阴道但有睾丸的使用`shemale`表示。女性和扶她之间的性行为不应该被标记成`yuri`或`females only`。类似阴茎形状的阴蒂变大应该使用`big clit`表示。<br>同义词：阴茎女孩(dickgirl)、雌雄同体(hermaphrodite)<br>![图](# "https://ehgt.org/53/f0/53f023baa573e46fb156918ba1673987359cca9e-182586-800-600-jpg_l.jpg")![](# "https://ehgt.org/93/77/9377cb26b6f34c22d075b4f3724687bb9c3f350e-141970-950-830-jpg_l.jpg")![图](# "https://ehgt.org/60/10/6010599e0531b224fd3950fe46efab32fb909d39-162421-877-1260-jpg_250.jpg")![图](# "https://ehgt.org/51/47/5147b5240e3b1eb72216946694a16da9399bee6b-181872-573-800-jpg_250.jpg")![图](# "https://ehgt.org/b8/aa/b8aaf736592b39d978e5befb0e5c6aa888b83c72-23311-400-244-jpg_l.jpg")![图](# "https://ehgt.org/94/4a/944aa2561c8211435493b3f5e6304d9429bd5cef-109150-567-800-jpg_l.jpg")![](# "https://ehgt.org/d4/05/d405c4d7e1e7b85550e0154deddf35beeaac78d3-245727-1200-1600-jpg_l.jpg")![图](# "https://ehgt.org/b9/ba/b9ba030c480df8dac26a980e50c029800caef8d7-243147-1024-600-jpg_l.jpg")![图](# "https://ehgt.org/f7/b4/f7b4c1113e508f6b4caaafb597acf0d471967393-649355-960-1360-jpg_l.jpg")![图](# "https://ehgt.org/7b/3c/7b3cca232696a9f268211628cbaf6c21176a9730-162161-800-793-jpg_l.jpg")![图](# "https://ehgt.org/60/f7/60f78810ae9b3dabc8ee9f9184d6800131f0609c-211513-640-480-jpg_l.jpg")![图](# "https://ehgt.org/cc/a7/cca7426f8503c1a1752120441cc3320541be41f2-665155-500-699-gif_l.jpg")![图](# "https://ehgt.org/5f/22/5f220029a9517fb3328d79cd0f1b568c65be18f0-78490-640-480-jpg_l.jpg")![图](# "https://ehgt.org/17/64/17643d04f6fe2b118f59bbf7c8e065b441bb802a-530197-800-600-jpg_l.jpg")![图](# "https://ehgt.org/1b/5b/1b5b4fd4c1a7a7e4b8f6cc49a782e3034cf10371-444866-800-600-jpg_l.jpg")![图](# "https://ehgt.org/ad/66/ad6663fd8974ef3d26b9d69325749a673e25f6d0-136344-640-480-jpg_l.jpg")![图](# "https://ehgt.org/d5/24/d5247703c62a9218345714f29b25b6bb2bb568b1-639185-960-1356-jpg_l.jpg")![图](# "https://ehgt.org/1b/9a/1b9a25d648940b393a2b37a4e340befffd9208cc-543295-1024-1024-jpg_l.jpg")![图](# "https://ehgt.org/2f/fe/2ffe4fa1ae9a52d4781abf96d5641ad5eff7469f-480667-800-600-jpg_l.jpg")![图](# "https://ehgt.org/31/4a/314a88b74bfa62ef6cd500875b726e122202258c-96672-800-600-jpg_l.jpg")![图](# "https://ehgt.org/bf/1a/bf1a4156b7c377e1f2fe6ac84cb2a8fe38b3a598-1399971-1196-1200-jpg_l.jpg") |  |
 | gender change | 性转换 | 一个角色通过任何方式改变了他们通常的性别。（例如：`gender morph`，`possession`和`body swap`）。<br>不应与`crossdressing`混淆。女性变为`futanari`不符合条件。<br>![我要成为XXX](# "https://ehgt.org/f7/e1/f7e1fa9f70a46036b162aeaf52646323327e5752-1116921-1014-1455-jpg_l.jpg") |  |
 | gender morph | 男体化 | 角色的身体通过身体变形改变了原来的性别。如果显示为序列而不是突然变化，则可能会调用`transformation`。<br>需要`gender change`标签。不应与`possession`和`body swap`相混淆。女性变为`futanari`不符合条件。 |  |
 | shemale | 人妖♂ | 有女性外观和胸部，但有男性生殖器，却没有阴道的女孩。一般情况下，内容里没有特别声明是`shemale`的时候，应默认为`futanari`，此标签常与`futanari`标签混淆，有些标题甚至内容设定是`futanari`的作品未能明显展现阴道而被标上`shemale`标签是不合理的，详情请参照`mogiki hayami`的人妖作品。此标签或`futanari`是`dickgirl on male`，`male on dickgirl`，`dickgirl on dickgirl`的前置标签。那些有阴道的使用`futanari`表示。<br>同义词：伪娘(newhalf)、变性人(transsexual).<br>![图](# "https://ehgt.org/98/c7/98c7d4b80647273e2a85b8713d1516de9b721618-1076700-2148-3035-jpg_l.jpg") ![图](# "https://ehgt.org/3b/d5/3bd5a6f92cda31a90359a4c3689bed00d15a2d64-18638066-4200-6000-jpg_l.jpg") ![图](# "https://ehgt.org/ef/0f/ef0f230d8fc4508e88260116af01d90ebb273f53-651265-1074-1516-jpg_250.jpg") ![图](# "https://ehgt.org/06/3e/063ea195fbbcde933611eca420eade29dc40129d-695039-1074-1517-jpg_l.jpg") |  |
 |  | === 性别 > 性别间关系 === |  |  |
-| bisexual | 双性恋 | 画廊中有与同性和异性都发生性行为的参与者。不应用于`dickgirl on dickgirl`。 |  |
+| bisexual | 双性恋 | 图库中有与同性和异性都发生性行为的参与者。不应用于`dickgirl on dickgirl`。 |  |
 | dickgirl on dickgirl | ![扶上扶图标](# "https://raw.githubusercontent.com/wiki/EhTagTranslation/Database/database-icon/dickgirl%20on%20dickgirl.webp")扶上扶 | 有阴茎的女性间的性行为。需要`futanari`或`shemale`标签。<br>![图](# "https://ehgt.org/c8/ec/c8ec5f245bd46c38fb16882b39c8f1ced397e47a-970288-1024-1280-jpg_l.jpg")![图](# "https://ehgt.org/85/75/8575321f67330b968fb1df6b06bcf197f17c0da9-39095-640-480-jpg_l.jpg")![图](# "https://ehgt.org/48/ca/48cada188724c5706b5c13b435c0f276920ca754-315037-640-885-jpg_l.jpg")![图](# "https://ehgt.org/d2/44/d244daed4005b13d3ff8764bc193f642acfbab09-213425-755-800-jpg_l.jpg")![图](# "https://ehgt.org/0d/d6/0dd6b0ad6ce4c77c64be08b4ada610d8f8b81e30-477913-1550-1385-jpg_l.jpg")![图](# "https://ehgt.org/f8/96/f8969371111c9ce577b1c91cdc5ff69ed4ffdaab-420415-982-1024-jpg_l.jpg")![图](# "https://ehgt.org/b8/3f/b83f7cc94c89a594d58da3cd11a4ba39e7abc4c2-166749-1024-768-jpg_l.jpg")![图](# "https://ehgt.org/5f/29/5f29abd83834581b73b77471ef13fc2ba3fce9a4-207295-706-1000-jpg_l.jpg")![图](# "https://ehgt.org/76/80/7680e43cf3619076386435d5ba710c95ac7b85ac-6628736-461-259-gif_l.jpg")![图](# "https://ehgt.org/6f/c3/6fc3c65a826574ccf6668fe0b15459f852a04990-1025584-1024-1280-jpg_l.jpg")![图](# "https://ehgt.org/3b/68/3b68d2c130e585f42c7f658eb9613d0e72da9a57-1807426-2497-2992-jpg_l.jpg")![图](# "https://ehgt.org/47/db/47dbe6545a5109bfcbf8b21d7f89ee29d423cb2b-325402-1038-1200-jpg_l.jpg")![图](# "http://s16.picimge.com/kkPIC/xfgtdq4xxlr.jpg")![图](# "http://s16.picimge.com/kkPIC/kika5fo1mqg.jpg")![图](# "http://s16.picimge.com/kkPIC/4vxdgrpyxj2.jpg")![图](# "http://s16.picimge.com/kkPIC/ffhuo4vtz2h.jpg")![图](# "http://s16.picimge.com/kkPIC/pc2k05z2rit.jpg")![图](# "http://s16.picimge.com/kkPIC/fpawgl01p5k.jpg")![图](# "http://s16.picimge.com/kkPIC/w0n5ln5z5kz.jpg")![图](# "http://s16.picimge.com/kkPIC/pwgiiwfljjg.jpg") |  |
 | male on dickgirl | 男上扶 | 男性插入有阴茎的女性，无论是阴道、`anal`还是`blowjob`。需要`futanari`或`shemale`标签。<br>![图](# "https://ehgt.org/e1/df/e1df91fe0654a425d6f5227ae76862b2b0f59c5a-726890-1024-600-png_l.jpg") |  |
 |  | == 技术 == |  |  |
@@ -630,14 +630,14 @@ example:
 | tomboy | 假小子 | 一个女孩模仿男性的穿着、行为和言辞，但没有掩饰自己的性别。当她试图掩饰自己的性别时，有可能与`crossdressing`共存。 |  |
 | tutor | 家庭教师 | 向校外的学生提供私人学术援助的人士。 |  |
 | vtuber | 虚拟主播 | 主要出现于在线视频平台的原创虚拟化身。 |  |
-| widow | 寡妇 | 另一半（婚配或长期相处）已经死亡的女性。必须在画廊本身中以文本或视觉方式明确确定死者及其死亡。 |  |
+| widow | 寡妇 | 另一半（婚配或长期相处）已经死亡的女性。必须在图库本身中以文本或视觉方式明确确定死者及其死亡。 |  |
 | yandere | 病娇 | 动机来自于强迫的爱的精神病的行为。包括骚扰或劫持感兴趣的人；恐吓或伤害感知到的对手。如果有任何性活动，此人必须直接参与其中。 |  |
 | yuri | ![百合花图标](https://raw.githubusercontent.com/wiki/EhTagTranslation/Database/database-icon/yuri.webp)百合 | 至少两个女性之间的性行为。不用于`futanari`/`shemale`和女性间的性行为或非色情内容。如果有一幕场景揭示一个角色是扶她，以前的仍然可以算作百合。不用于混合性别`group`。<br>同义词：女同性恋(dyke)、女上女(girl on girl)和蕾丝边(lesbians)<br>![图](# "https://ehgt.org/d5/c4/d5c4b4200236de185597b699bc34f92af9c7ad65-12259079-2132-3028-png_l.jpg")![图](# "https://ehgt.org/d4/93/d493b6addbac0ef3111497b52a00ac2d4a877a42-746063-1200-1684-jpg_l.jpg")![图](# "https://ehgt.org/5f/da/5fda36473f20f35f18183f10c151fa4b027dbdd1-1196044-4355-3000-jpg_l.jpg")![图](# "https://ehgt.org/4e/7b/4e7b15a24f525cc511cd7a174caeb7d3f05bb93b-1235318-2124-3000-jpg_l.jpg") |  |
-|  | === 上下文 > 全画廊 === |  |  |
-| dickgirls only | 纯扶她 | 在画廊中的所有性行为、迷恋或亲密的性交互之间都严格限定为扶她。要求至少两个扶她进行交互。 |  |
-| females only | 纯女性⚢ | 在画廊中的所有性行为、迷恋或亲密的性交互之间都严格限定为女性。要求至少两个女性进行交互。`futanari`和`shemale`不算在内。<br>![图](# "https://ehgt.org/52/05/520502597b498281b359d33aa1fa087d32853f18-231578-350-500-jpg_l.jpg")![图](https://ehgt.org/96/93/969337239526475abf4de645576256bc11c14ba0-3084919-1425-2000-png_l.jpg)![图](https://ehgt.org/2b/e2/2be25ce7bafbc429d3e3ab852a9f11960b22dd6a-7572892-1800-2527-png_l.jpg) |  |
-| sole dickgirl | 单扶她 | 只有一个`futanari`或`shemale`参与了整个画廊的所有性爱或恋物癖活动。 |  |
-| sole female | 单女主 | 只有一个女性参与了整个画廊的所有性爱或恋物癖活动。`futanari`或`shemale`不算在内。 |  |
+|  | === 上下文 > 全图库 === |  |  |
+| dickgirls only | 纯扶她 | 在图库中的所有性行为、迷恋或亲密的性交互之间都严格限定为扶她。要求至少两个扶她进行交互。 |  |
+| females only | 纯女性⚢ | 在图库中的所有性行为、迷恋或亲密的性交互之间都严格限定为女性。要求至少两个女性进行交互。`futanari`和`shemale`不算在内。<br>![图](# "https://ehgt.org/52/05/520502597b498281b359d33aa1fa087d32853f18-231578-350-500-jpg_l.jpg")![图](https://ehgt.org/96/93/969337239526475abf4de645576256bc11c14ba0-3084919-1425-2000-png_l.jpg)![图](https://ehgt.org/2b/e2/2be25ce7bafbc429d3e3ab852a9f11960b22dd6a-7572892-1800-2527-png_l.jpg) |  |
+| sole dickgirl | 单扶她 | 只有一个`futanari`或`shemale`参与了整个图库的所有性爱或恋物癖活动。 |  |
+| sole female | 单女主 | 只有一个女性参与了整个图库的所有性爱或恋物癖活动。`futanari`或`shemale`不算在内。 |  |
 |  | === 上下文 > 不忠 === |  |  |
 | cheating | 出轨 | 另一半与别人的伴侣发生性关系。如果性行为是违背自己的意愿（例如`rape`），不应标记。不用于`swinging`。不应与`netorare`混淆。（性主角这方是主动的） |  |
 | netorare | NTR | 另一个人的配偶/伴侣不忠并且被戴绿帽子的意识到的情况。或这个故事显然是为了引发被戴绿帽子的人的嫉妒或同感时也可以接受。不应与`cheating`混淆。（性主角这方是被动的） |  |
@@ -667,6 +667,6 @@ example:
 | low scat | 低存在排便 | 表示`scat`的情况没有通过存在规则(presence rule)。需要`scat`标签。 |  |
 | low smegma | 低存在阴垢 | 表示`smegma`的情况没有通过存在规则(presence rule)。需要`smegma`标签。 |  |
 |  | == 高存在 == |  |  |
-| focus anal | 高存在肛交 | 画廊超过 50% 的内容为`anal`。需要`anal`标签。 |  |
-| focus blowjob | 高存在口交 | 画廊超过 50% 的内容为`blowjob`。需要`blowjob`标签。 |  |
-| focus paizuri | 高存在乳交 | 画廊超过 50% 的内容为`paizuri`。需要`paizuri`标签。 |  |
+| focus anal | 高存在肛交 | 图库超过 50% 的内容为`anal`。需要`anal`标签。 |  |
+| focus blowjob | 高存在口交 | 图库超过 50% 的内容为`blowjob`。需要`blowjob`标签。 |  |
+| focus paizuri | 高存在乳交 | 图库超过 50% 的内容为`paizuri`。需要`paizuri`标签。 |  |

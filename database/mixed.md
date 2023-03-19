@@ -26,7 +26,7 @@ copyright: >
   本文的其他内容，遵循知识共享(Creative Commons) 署名-非商业性使用-相同方式共享 3.0 协议提供。
 rules:
   - >-
-    为方便查找理解同类性癖的标签，请尽量按恋物标签分类(https://ehwiki.org/wiki/Fetish_Listing)归类存放，将类别写成注释。
+    为方便查找理解同类性癖的标签，请尽量按[恋物标签分类](https://ehwiki.org/wiki/Fetish_Listing)归类存放，将类别写成注释。
   - 若有属于多个分类的，放入最相关的那一个分类。
 example:
   raw: group

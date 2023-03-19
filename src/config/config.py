@@ -36,10 +36,10 @@ Issues1 = "https://github.com/tonquer/ehentai-qt/issues"
 Issues2 = "https://hub.ggo.icu/tonquer/ehentai-qt/issues"
 Issues3 = "https://hub.fastgit.xyz/tonquer/ehentai-qt/issues"
 
-UpdateVersion = "v1.1.0"
-RealVersion = "v1.1.0"
+UpdateVersion = "v1.1.1"
+RealVersion = "v1.1.1"
 Waifu2xVersion = "1.1.6"
-TimeVersion = "2023-2-26"
+TimeVersion = "2023-3-19"
 
 CurSite = "e-hentai"   # 当前站点
 CurLoginName = ""      # 当前登录名

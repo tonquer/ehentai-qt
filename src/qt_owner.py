@@ -45,17 +45,17 @@ class QtOwner(Singleton):
         return MsgLabel.ShowErrorEx(self.owner, str(msg))
 
     def ShowMsg(self, msg):
-        return MsgLabel.ShowMsgEx(self.owner, msg)
+        return MsgLabel.ShowMsgEx(self.owner, str(msg))
 
     def ShowMsgOne(self, msg):
         if not hasattr(self.owner, "msgLabel"):
             return
-        return self.owner.msgLabel.ShowMsg(msg)
+        return self.owner.msgLabel.ShowMsg(str(msg))
 
     def ShowErrOne(self, msg):
         if not hasattr(self.owner, "msgLabel"):
             return
-        return self.owner.msgLabel.ShowError(msg)
+        return self.owner.msgLabel.ShowError(str(msg))
 
     def ShowLoading(self):
         self.owner.loadingDialog.show()

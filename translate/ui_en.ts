@@ -491,27 +491,27 @@
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/ui_help.ui" line="144"/>
+        <location filename="../ui/ui_help.ui" line="237"/>
         <source>打开控制台</source>
         <translation>Open Console</translation>
     </message>
     <message>
-        <location filename="../ui/ui_help.ui" line="151"/>
+        <location filename="../ui/ui_help.ui" line="144"/>
         <source>打开日志目录</source>
         <translation>Open the log directory</translation>
     </message>
     <message>
-        <location filename="../ui/ui_help.ui" line="169"/>
+        <location filename="../ui/ui_help.ui" line="162"/>
         <source>waifu2x版本:</source>
         <translation>Waifu2x version:</translation>
     </message>
     <message>
-        <location filename="../ui/ui_help.ui" line="230"/>
+        <location filename="../ui/ui_help.ui" line="223"/>
         <source>2021-11-27</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/ui_help.ui" line="237"/>
+        <location filename="../ui/ui_help.ui" line="230"/>
         <source>接受Beta版本更新</source>
         <translation>Accept Beta Update</translation>
     </message>
@@ -531,22 +531,22 @@
         <translation>Version number:</translation>
     </message>
     <message>
-        <location filename="../ui/ui_help.ui" line="176"/>
+        <location filename="../ui/ui_help.ui" line="169"/>
         <source>检测更新</source>
         <translation>Check for updates</translation>
     </message>
     <message>
-        <location filename="../ui/ui_help.ui" line="188"/>
+        <location filename="../ui/ui_help.ui" line="181"/>
         <source>v1.2.8</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/ui_help.ui" line="206"/>
+        <location filename="../ui/ui_help.ui" line="199"/>
         <source>日志:</source>
         <translation>Log:</translation>
     </message>
     <message>
-        <location filename="../ui/ui_help.ui" line="218"/>
+        <location filename="../ui/ui_help.ui" line="211"/>
         <source>上次更新时间：</source>
         <translation>Last update time:</translation>
     </message>
@@ -823,12 +823,12 @@
     <message>
         <location filename="../ui/component/ui_login_proxy_widget.ui" line="228"/>
         <source>178.175.132.20</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">5 stars {178.175.132.20?}</translation>
     </message>
     <message>
         <location filename="../ui/component/ui_login_proxy_widget.ui" line="252"/>
         <source>81.171.10.48</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">5 stars {81.171.10.48?}</translation>
     </message>
     <message>
         <location filename="../ui/component/ui_login_proxy_widget.ui" line="262"/>
@@ -838,7 +838,7 @@
     <message>
         <location filename="../ui/component/ui_login_proxy_widget.ui" line="269"/>
         <source>178.175.128.252</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">5 stars {178.175.128.252?}</translation>
     </message>
     <message>
         <location filename="../ui/component/ui_login_proxy_widget.ui" line="279"/>
@@ -848,17 +848,17 @@
     <message>
         <location filename="../ui/component/ui_login_proxy_widget.ui" line="286"/>
         <source>178.162.147.246</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">5 stars {178.162.147.246?}</translation>
     </message>
     <message>
         <location filename="../ui/component/ui_login_proxy_widget.ui" line="296"/>
         <source>172.67.0.127</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">5 stars {172.67.0.127?}</translation>
     </message>
     <message>
         <location filename="../ui/component/ui_login_proxy_widget.ui" line="320"/>
         <source>104.20.135.21</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">5 stars {104.20.135.21?}</translation>
     </message>
     <message>
         <location filename="../ui/component/ui_login_proxy_widget.ui" line="358"/>
@@ -873,7 +873,7 @@
     <message>
         <location filename="../ui/component/ui_login_proxy_widget.ui" line="375"/>
         <source>104.20.134.21</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">5 stars {104.20.134.21?}</translation>
     </message>
     <message>
         <location filename="../ui/component/ui_login_proxy_widget.ui" line="388"/>
@@ -888,27 +888,27 @@
     <message>
         <location filename="../ui/component/ui_login_proxy_widget.ui" line="398"/>
         <source>37.48.89.16</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">5 stars {37.48.89.16?}</translation>
     </message>
     <message>
         <location filename="../ui/component/ui_login_proxy_widget.ui" line="408"/>
         <source>178.175.129.252</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">5 stars {178.175.129.252?}</translation>
     </message>
     <message>
         <location filename="../ui/component/ui_login_proxy_widget.ui" line="418"/>
         <source>81.171.10.55</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">5 stars {81.171.10.55?}</translation>
     </message>
     <message>
         <location filename="../ui/component/ui_login_proxy_widget.ui" line="428"/>
         <source>178.162.139.24</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">5 stars {178.162.139.24?}</translation>
     </message>
     <message>
         <location filename="../ui/component/ui_login_proxy_widget.ui" line="445"/>
         <source>37.48.89.44</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">5 stars {37.48.89.44?}</translation>
     </message>
     <message>
         <location filename="../ui/component/ui_login_proxy_widget.ui" line="469"/>
@@ -1059,34 +1059,67 @@
         <translation>Search</translation>
     </message>
     <message>
-        <location filename="../ui/component/ui_navigation.ui" line="361"/>
+        <location filename="../ui/component/ui_navigation.ui" line="369"/>
+        <source>排行榜</source>
+        <translation type="unfinished">Rank</translation>
+    </message>
+    <message>
+        <location filename="../ui/component/ui_navigation.ui" line="411"/>
         <source>其他</source>
         <translation>Other</translation>
     </message>
     <message>
-        <location filename="../ui/component/ui_navigation.ui" line="383"/>
+        <location filename="../ui/component/ui_navigation.ui" line="433"/>
         <source>下载</source>
         <translation>Download</translation>
     </message>
     <message>
-        <location filename="../ui/component/ui_navigation.ui" line="424"/>
+        <location filename="../ui/component/ui_navigation.ui" line="474"/>
         <source>本地漫画</source>
         <translation>Local comic</translation>
     </message>
     <message>
-        <location filename="../ui/component/ui_navigation.ui" line="465"/>
+        <location filename="../ui/component/ui_navigation.ui" line="515"/>
         <source>Waifu2x</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/component/ui_navigation.ui" line="530"/>
+        <location filename="../ui/component/ui_navigation.ui" line="580"/>
         <source>帮助</source>
         <translation>Help</translation>
     </message>
     <message>
-        <location filename="../ui/component/ui_navigation.ui" line="574"/>
+        <location filename="../ui/component/ui_navigation.ui" line="624"/>
         <source>设置</source>
         <translation>Setting</translation>
+    </message>
+</context>
+<context>
+    <name>Rank</name>
+    <message>
+        <location filename="../ui/ui_rank.ui" line="14"/>
+        <source>排行榜</source>
+        <translation>Rank</translation>
+    </message>
+    <message>
+        <location filename="../ui/ui_rank.ui" line="24"/>
+        <source>昨日</source>
+        <translation>Yesterday</translation>
+    </message>
+    <message>
+        <location filename="../ui/ui_rank.ui" line="34"/>
+        <source>上月</source>
+        <translation>Past Month</translation>
+    </message>
+    <message>
+        <location filename="../ui/ui_rank.ui" line="44"/>
+        <source>去年</source>
+        <translation>Past Year</translation>
+    </message>
+    <message>
+        <location filename="../ui/ui_rank.ui" line="54"/>
+        <source>全部</source>
+        <translation>All</translation>
     </message>
 </context>
 <context>
@@ -1347,12 +1380,87 @@
         <translation>Search:</translation>
     </message>
     <message>
-        <location filename="../ui/ui_search.ui" line="209"/>
+        <location filename="../ui/ui_search.ui" line="165"/>
+        <source>高级：</source>
+        <translation>Advanced:</translation>
+    </message>
+    <message>
+        <location filename="../ui/ui_search.ui" line="172"/>
+        <source>显示已删除的画廊</source>
+        <translation>Browse Expunged Galleries</translation>
+    </message>
+    <message>
+        <location filename="../ui/ui_search.ui" line="186"/>
+        <source>页数范围 ：</source>
+        <translation>Pages Rang:</translation>
+    </message>
+    <message>
+        <location filename="../ui/ui_search.ui" line="200"/>
+        <source>-</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../ui/ui_search.ui" line="221"/>
+        <source>评分：</source>
+        <translation>Minimum Rating:</translation>
+    </message>
+    <message>
+        <location filename="../ui/ui_search.ui" line="229"/>
+        <source>无</source>
+        <translation>None</translation>
+    </message>
+    <message>
+        <location filename="../ui/ui_search.ui" line="234"/>
+        <source>2星</source>
+        <translation>2 stars</translation>
+    </message>
+    <message>
+        <location filename="../ui/ui_search.ui" line="239"/>
+        <source>3星</source>
+        <translation>3 stars</translation>
+    </message>
+    <message>
+        <location filename="../ui/ui_search.ui" line="244"/>
+        <source>4星</source>
+        <translation>4 stars</translation>
+    </message>
+    <message>
+        <location filename="../ui/ui_search.ui" line="249"/>
+        <source>5星</source>
+        <translation>5 stars</translation>
+    </message>
+    <message>
+        <location filename="../ui/ui_search.ui" line="264"/>
+        <source>禁用筛选：</source>
+        <translation>Disable custom filters for:</translation>
+    </message>
+    <message>
+        <location filename="../ui/ui_search.ui" line="271"/>
+        <source>语言</source>
+        <translation>Language</translation>
+    </message>
+    <message>
+        <location filename="../ui/ui_search.ui" line="278"/>
+        <source>上传者</source>
+        <translation>Uploader</translation>
+    </message>
+    <message>
+        <location filename="../ui/ui_search.ui" line="285"/>
+        <source>标签</source>
+        <translation>Tags</translation>
+    </message>
+    <message>
+        <location filename="../ui/ui_search.ui" line="321"/>
+        <source>分类：</source>
+        <translation>Classification:</translation>
+    </message>
+    <message>
+        <location filename="../ui/ui_search.ui" line="395"/>
         <source>页：0/0</source>
         <translation>Page: 0/0</translation>
     </message>
     <message>
-        <location filename="../ui/ui_search.ui" line="242"/>
+        <location filename="../ui/ui_search.ui" line="428"/>
         <source>下一页</source>
         <translation>Next page</translation>
     </message>
@@ -2062,7 +2170,7 @@
     <message>
         <location filename="../ui/ui_waifu2x_tool.ui" line="519"/>
         <source>设置为头像</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Set Head</translation>
     </message>
 </context>
 </TS>

@@ -105,6 +105,11 @@ class BookMgr(Singleton):
         books = self.books.get(config.CurSite, {})
         return books.get(bookId)
 
+    def RemoveBook(self, bookId, site):
+        books = self.books.get(site, {})
+        if bookId in books:
+            del books[bookId]
+
     def GetBookBySite(self, bookId, site) -> BookInfo:
         books = self.books.get(site, {})
         return books.get(bookId)

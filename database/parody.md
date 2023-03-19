@@ -13,7 +13,7 @@ copyright: >
   对于标有(**)的条目，其描述文本复制/翻译自萌娘百科，遵循原始许可协议（即知识共享(Creative Commons) 署名-非商业性使用-相同方式共享
   3.0 协议）进行二次分发。
 rules:
-  - 优先写公认的中文翻译，不知道的也可以写日文原名。
+  - 优先写官方的中文名称，当无官方中译时可以使用公认的中文名称，本命名空间**暂不接受日文名称**。
   - 第一推荐萌娘百科，也可以用百度百科或维基百科查译名。
   - 描述图片尽量出现尽可能多的主角，或者其他易于辨识的作品标志物。
 example:
@@ -2106,6 +2106,13 @@ example:
 | spy kyoushitsu | 间谍教室 | 《间谍教室》（日语：スパイ教室）是竹町所著的日本轻小说系列，由Tomari担纲插画。2020年1月开始出版至今共12卷（本篇9卷、短篇集3卷），由KADOKAWA旗下的富士见Fantasia文库发行。第32届Fantasia大奖得奖作品。《这本轻小说真厉害！2021》文库类别以及新作类别第2位。 | [维基百科](https://zh.wikipedia.org/wiki/間諜教室) |
 | galaxy cyclone braiger | 银河旋风 | 《银河旋风》（原题：銀河旋風ブライガー）是由国际映画社所制作的机器人动画，并在东京电视台于1981年10月6日至1982年6月25日期间播出，全39集。为“J9系列”三部曲的第一部作品。 | [维基百科](https://zh.wikipedia.org/wiki/銀河旋風) |
 | mahou shoujo nante mouiidesukara. | 魔法少女什么的已经够了啦。 |  |  |
+| tom clancys rainbow six | 彩虹六号 |  |  |
+| sangoku rensenki | 三国恋战记~少女的兵法 | 本作为2010年3月发售的乙女向AVG游戏，后来移植ps2，psp，psv等多个平台。故事讲述的是一个高中女生（山田花）因为在图书馆寻找三国志报告题目的相关资料而无意间因为一本书穿越到一个和“三国志”相似的世界，并藉由书的力量以军师身份卷入群雄争霸的三国世界的故事。 | [维基百科（日语）](https://ja.wikipedia.org/wiki/三国恋戦記〜オトメの兵法!〜) [百度百科](https://baike.baidu.com/item/三国恋战记~少女的兵法/46485) |
+| epic seven | 第七史诗 |  | [Fandom](https://epic-seven.fandom.com/wiki/Epic_Seven_Wiki) [wiki](https://epic7.gamekee.com/) |
+| godzilla | 哥斯拉 |  |  |
+| cloud meadow | 云端牧场 | 兼具农场模拟器、角色扮演游戏和视觉小说，讲述了学会与怪物盟友合作，以便建立新家园和探索未知土地的故事！ | [HP](https://www.cloudmeadowgame.com/) [Steam](https://steamcommunity.com/app/1223750) |
+| ookami kodomo no ame to yuki | 狼的孩子雨和雪 | 《狼的孩子雨和雪》（日语：おおかみこどもの雨と雪）是由细田守导演、Studio地图和MADHOUSE制作的一部动画电影。细田守的第二部长篇原创作品。主题是“亲子”，讲述19岁的少女与“狼人”相遇并相爱，直到他们生下的狼人姐弟成长并独立的13年间发生的故事。<br><br>作品于2012年7月21日在日本上映。 | [萌娘百科](https://zh.moegirl.org.cn/狼的孩子雨和雪) [维基百科](https://zh.wikipedia.org/wiki/狼的孩子雨和雪) |
+| akiba maid sensou | 秋叶原冥途战争 | 1999年的春季，憧憬成为可爱女仆的少女和平奈古美，为追逐梦想来到了竞争激烈的秋叶原，她会遇到怎样的人和事呢？这是Cygames×P.A.WORKS献上的，关于“萌与暴力”的故事。一起萌萌心动吧！<br>![](https://static.wikia.nocookie.net/akibamaidwar/images/0/02/Key_Visual_2.png) | [萌娘百科](https://zh.moegirl.org.cn/zh/秋叶原冥途战争) [维基百科](https://zh.wikipedia.org/zh/秋葉原冥途戰爭) [Fandom](https://akibamaidwar.fandom.com/wiki/Akiba_Maid_War) |
 
 <!--TEMPLATE: 
 |  |  |  | [维基百科]() (*) |

@@ -87,6 +87,7 @@
           <item>
            <widget class="AnimationStackWidget" name="subStackWidget">
             <widget class="SearchView" name="searchView"/>
+            <widget class="RankView" name="rankView"/>
             <widget class="HelpView" name="helpView"/>
             <widget class="SettingView" name="settingView"/>
             <widget class="DownloadView" name="downloadView"/>
@@ -186,6 +187,12 @@
    <class>CommentView</class>
    <extends>QWidget</extends>
    <header location="global">view.comment.comment_view.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>RankView</class>
+   <extends>QWidget</extends>
+   <header location="global">view.search.rank_view.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

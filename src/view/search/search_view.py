@@ -41,16 +41,29 @@ class SearchView(QWidget, Ui_Search, QtTaskBase):
         Ui_Search.retranslateUi(self, search)
         search.ClearTags()
         for key, value in ToolUtil.Category.items():
+            keyID = ToolUtil.CategoryId.get(key)
             if Setting.Language.autoValue == 3:
-                search.AddTags(key)
+                search.AddTags(key, keyID)
             else:
-                search.AddTags(value)
+                search.AddTags(value, keyID)
 
-    def AddTags(self, name):
+    def GetTagsKeyId(self):
+        allKeyId = 0
+        for v in range(self.flowLayout.count()):
+            box = self.flowLayout.itemAt(v).widget()
+            keyId = getattr(box, "key_id")
+            if box.isChecked():
+                allKeyId |= keyId
+        return allKeyId
+
+    def AddTags(self, name, keyID):
         box = QPushButton(name)
+        setattr(box, "key_id", keyID)
+        box.setCheckable(True)
+        box.setChecked(False)
         # box.setMinimumWidth(160)
         # self.allBox[text] = box
-        box.clicked.connect(self.ClickTagsItem)
+        # box.clicked.connect(self.ClickTagsItem)
         self.flowLayout.addWidget(box)
         return
 
@@ -167,7 +180,15 @@ class SearchView(QWidget, Ui_Search, QtTaskBase):
             page = self.bookList.page+1
         else:
             page = 1
-        self.AddHttpTask(req.GetIndexInfoReq(nextId, self.text), self.SendSearchBack, page)
+        keyId = self.GetTagsKeyId()
+        f_sh = bool(self.f_sh.checkState())
+        f_spf = self.f_spf.value()
+        f_spt = self.f_spt.value()
+        f_srdd = self.f_srdd.currentIndex()+1 if self.f_srdd.currentIndex() > 1 else ""
+        f_sfl = bool(self.f_sfl.checkState())
+        f_sfu = bool(self.f_sfu.checkState())
+        f_sft = bool(self.f_sft.checkState())
+        self.AddHttpTask(req.GetIndexInfoReq(nextId, self.text, keyId, f_sh=f_sh, f_spf=f_spf, f_spt=f_spt, f_srdd=f_srdd, f_sfl=f_sfl, f_sfu=f_sfu, f_sft=f_sft), self.SendSearchBack, page)
 
     def JumpPage(self):
         if self.bookList.page >= self.bookList.pages:

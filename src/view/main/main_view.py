@@ -63,6 +63,15 @@ class MainView(Main, QtTaskBase):
         self.searchView.searchTab.hide()
         self.searchView2.searchWidget.hide()
         self.searchView2.tagList.hide()
+        for v in range(self.searchView2.horizontalLayout_3.count()):
+            item = self.searchView2.horizontalLayout_3.itemAt(v)
+            if item and item.widget():
+                item.widget().hide()
+        for v in range(self.searchView2.horizontalLayout_4.count()):
+            item = self.searchView2.horizontalLayout_4.itemAt(v)
+            if item and item.widget():
+                item.widget().hide()
+
         self.myTrayIcon = MySystemTrayIcon()
         self.myTrayIcon.show()
 
@@ -91,6 +100,7 @@ class MainView(Main, QtTaskBase):
         self.navigationWidget.historyButton.clicked.connect(partial(self.SwitchWidgetAndClear, self.subStackWidget.indexOf(self.historyView)))
         self.navigationWidget.waifu2xButton.clicked.connect(partial(self.SwitchWidgetAndClear, self.subStackWidget.indexOf(self.waifu2xToolView)))
         self.navigationWidget.localReadButton.clicked.connect(partial(self.SwitchWidgetAndClear, self.subStackWidget.indexOf(self.localReadView)))
+        self.navigationWidget.rankButton.clicked.connect(partial(self.SwitchWidgetAndClear, self.subStackWidget.indexOf(self.rankView)))
 
     def RetranslateUi(self):
         Main.retranslateUi(self, self)

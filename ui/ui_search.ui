@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>740</width>
+    <width>765</width>
     <height>551</height>
    </rect>
   </property>
@@ -146,9 +146,187 @@
     </widget>
    </item>
    <item>
-    <widget class="QWidget" name="tagList" native="true">
-     <property name="styleSheet">
-      <string notr="true">QPushButton {
+    <layout class="QHBoxLayout" name="horizontalLayout_3">
+     <item>
+      <widget class="QLabel" name="label_7">
+       <property name="minimumSize">
+        <size>
+         <width>60</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>60</width>
+         <height>16777215</height>
+        </size>
+       </property>
+       <property name="text">
+        <string>高级：</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QCheckBox" name="f_sh">
+       <property name="text">
+        <string>显示已删除的画廊</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="Line" name="line">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="label_3">
+       <property name="text">
+        <string>页数范围 ：</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QSpinBox" name="f_spf">
+       <property name="maximum">
+        <number>9999</number>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="label_4">
+       <property name="text">
+        <string>-</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QSpinBox" name="f_spt">
+       <property name="maximum">
+        <number>9999</number>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="Line" name="line_2">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="label_5">
+       <property name="text">
+        <string>评分：</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QComboBox" name="f_srdd">
+       <item>
+        <property name="text">
+         <string>无</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>2星</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>3星</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>4星</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>5星</string>
+        </property>
+       </item>
+      </widget>
+     </item>
+     <item>
+      <widget class="Line" name="line_3">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="label_6">
+       <property name="text">
+        <string>禁用筛选：</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QCheckBox" name="f_sfl">
+       <property name="text">
+        <string>语言</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QCheckBox" name="f_sfu">
+       <property name="text">
+        <string>上传者</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QCheckBox" name="f_sft">
+       <property name="text">
+        <string>标签</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer name="horizontalSpacer">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout_4">
+     <item>
+      <widget class="QLabel" name="label_8">
+       <property name="minimumSize">
+        <size>
+         <width>60</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>60</width>
+         <height>16777215</height>
+        </size>
+       </property>
+       <property name="text">
+        <string>分类：</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QWidget" name="tagList" native="true">
+       <property name="styleSheet">
+        <string notr="true">
+QPushButton {
     background-color:rgb(251, 239, 243);
     color: rgb(196, 95, 125);
 	border:2px solid red;
@@ -156,15 +334,23 @@
 	border-color:rgb(196, 95, 125);
 }
 /* 鼠标在按钮上时，按钮颜色 */
+ QPushButton:checked 
+{
+    background-color:rgb(240, 240, 240);
+    border-radius: 10px;
+    color: rgb(0, 0, 0);
+}
+/* 鼠标在按钮上时，按钮颜色 */
 QPushButton:hover 
 {
     background-color:rgb(21, 85, 154);
     border-radius: 10px;
     color: rgb(0, 0, 0);
-}
-</string>
-     </property>
-    </widget>
+}</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
    </item>
    <item>
     <widget class="ComicListWidget" name="bookList"/>

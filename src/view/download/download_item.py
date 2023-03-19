@@ -292,13 +292,14 @@ class DownloadItem(QtTaskBase):
 
     def GetConvertPath(self):
         if not self.convertPath and Setting.SavePath.value:
-            path = os.path.join(Setting.SavePath.value, config.SavePathDir)
-            if Setting.SaveNameType.value == SaveNameType.TitleType:
-                path2 = os.path.join(path, ToolUtil.GetCanSaveName(self.title))
-                self.convertPath = os.path.join(path2, "waifu2x")
-            elif Setting.SaveNameType.value == SaveNameType.TypeTitle:
-                path2 = os.path.join(path, "waifu2x")
-                self.convertPath = os.path.join(path2, ToolUtil.GetCanSaveName(self.title))
+            self.convertPath = self.savePath.replace("default", "waifu2x")
+            # path = os.path.join(Setting.SavePath.value, config.SavePathDir)
+            # if Setting.SaveNameType.value == SaveNameType.TitleType:
+            #     path2 = os.path.join(path, ToolUtil.GetCanSaveName(self.title))
+            #     self.convertPath = os.path.join(path2, "waifu2x")
+            # elif Setting.SaveNameType.value == SaveNameType.TypeTitle:
+            #     path2 = os.path.join(path, "waifu2x")
+            #     self.convertPath = os.path.join(path2, ToolUtil.GetCanSaveName(self.title))
 
         loadPath = os.path.join(self.savePath, "{:04}".format(self.curPreConvertId + 1))
         savePath = os.path.join(self.convertPath, "{:04}".format(self.curPreConvertId + 1))

@@ -207,7 +207,7 @@ class GetBookImgUrl2(ServerReq):
 
 # 获得首页
 class GetIndexInfoReq(ServerReq):
-    def __init__(self, nextId='', f_search="", site=""):
+    def __init__(self, nextId='', f_search="", f_cats="", f_sh="", f_spf="", f_spt="", f_srdd="", f_sfl="", f_sfu="", f_sft="", site=""):
         self.site = config.CurSite
         if site:
             self.site = site
@@ -219,7 +219,47 @@ class GetIndexInfoReq(ServerReq):
 
         if f_search:
             data['f_search'] = str(f_search)
+        if f_cats:
+            data["f_cats"] = str(f_cats)
+        if f_sh:
+            data["f_sh"] = "on"
+        if f_spf:
+            data["f_spf"] = str(f_spf)
+        if f_spt:
+            data["f_spt"] = str(f_spt)
+        if f_srdd:
+            data["f_srdd"] = str(f_srdd)
+        if f_sfl:
+            data["f_sfl"] = "on"
+        if f_sfu:
+            data["f_sfu"] = "on"
+        if f_sft:
+            data["f_sft"] = "on"
+        if f_sh or f_spf or f_spt or f_srdd or f_sfl or f_sfu or f_sft:
+            data["advsearch"] = "1"
+
         data["inline_set"] = "dm_l"
+        param = ToolUtil.DictToUrl(data)
+        if param:
+            url += "/?" + param
+        method = "GET"
+        super(self.__class__, self).__init__(url, ToolUtil.GetHeader(url, method),
+                                             {}, method)
+
+
+# 获得排行
+class GetRankInfoReq(ServerReq):
+    def __init__(self, tl="", p=1, site=""):
+        self.site = config.CurSite
+        if site:
+            self.site = site
+
+        url = config.Url + "/toplist.php"
+        data = {}
+        if tl:
+            data["tl"] = str(tl)
+        if p > 1:
+            data["p"] = p-1
         param = ToolUtil.DictToUrl(data)
         if param:
             url += "/?" + param

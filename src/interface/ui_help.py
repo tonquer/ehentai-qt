@@ -37,7 +37,7 @@ class Ui_Help(object):
         self.scrollArea.setWidgetResizable(True)
         self.scrollAreaWidgetContents = QWidget()
         self.scrollAreaWidgetContents.setObjectName(u"scrollAreaWidgetContents")
-        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 508, 632))
+        self.scrollAreaWidgetContents.setGeometry(QRect(0, -36, 508, 602))
         self.verticalLayout_3 = QVBoxLayout(self.scrollAreaWidgetContents)
         self.verticalLayout_3.setObjectName(u"verticalLayout_3")
         self.horizontalLayout = QHBoxLayout()
@@ -96,11 +96,6 @@ class Ui_Help(object):
 
         self.gridLayout.addWidget(self.waifu2x, 2, 1, 1, 1)
 
-        self.openCmd = QPushButton(self.widget_2)
-        self.openCmd.setObjectName(u"openCmd")
-
-        self.gridLayout.addWidget(self.openCmd, 5, 1, 1, 1)
-
         self.logButton = QPushButton(self.widget_2)
         self.logButton.setObjectName(u"logButton")
 
@@ -147,6 +142,11 @@ class Ui_Help(object):
         self.preCheckBox.setObjectName(u"preCheckBox")
 
         self.gridLayout.addWidget(self.preCheckBox, 0, 2, 1, 1)
+
+        self.openCmd = QPushButton(self.widget_2)
+        self.openCmd.setObjectName(u"openCmd")
+
+        self.gridLayout.addWidget(self.openCmd, 3, 1, 1, 1)
 
 
         self.verticalLayout_2.addWidget(self.widget_2)
@@ -211,7 +211,6 @@ class Ui_Help(object):
         self.pushButton.setText(QCoreApplication.translate("Help", u"Github Issue", None))
         self.label_4.setText(QCoreApplication.translate("Help", u"\u7248\u672c\u53f7:", None))
         self.waifu2x.setText(QCoreApplication.translate("Help", u"v1.0.8", None))
-        self.openCmd.setText(QCoreApplication.translate("Help", u"\u6253\u5f00\u63a7\u5236\u53f0", None))
         self.logButton.setText(QCoreApplication.translate("Help", u"\u6253\u5f00\u65e5\u5fd7\u76ee\u5f55", None))
         self.label_6.setText(QCoreApplication.translate("Help", u"waifu2x\u7248\u672c:", None))
         self.verCheck.setText(QCoreApplication.translate("Help", u"\u68c0\u6d4b\u66f4\u65b0", None))
@@ -220,6 +219,7 @@ class Ui_Help(object):
         self.label_9.setText(QCoreApplication.translate("Help", u"\u4e0a\u6b21\u66f4\u65b0\u65f6\u95f4\uff1a", None))
         self.upTimeLabel.setText(QCoreApplication.translate("Help", u"2021-11-27", None))
         self.preCheckBox.setText(QCoreApplication.translate("Help", u"\u63a5\u53d7Beta\u7248\u672c\u66f4\u65b0", None))
+        self.openCmd.setText(QCoreApplication.translate("Help", u"\u6253\u5f00\u63a7\u5236\u53f0", None))
         self.label_10.setText(QCoreApplication.translate("Help", u"\u65b0\u7248\u672c\uff1a", None))
         self.updateLabel.setText("")
         self.updateButton.setText(QCoreApplication.translate("Help", u"\u524d\u5f80\u66f4\u65b0", None))

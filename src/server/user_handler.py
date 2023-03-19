@@ -165,6 +165,7 @@ class HomeReqHandler(object):
 
 
 @handler(req.GetIndexInfoReq)
+@handler(req.GetRankInfoReq)
 @handler(req.GetCategoryInfoReq)
 class GetIndexInfoReqHandler(object):
     def __call__(self, task: Task):

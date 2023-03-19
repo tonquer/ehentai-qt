@@ -49,6 +49,7 @@
 	<file>icon/loading/loading_9.png</file>
 	<file>icon/loading/loading_10.png</file>
     <file>icon/new.svg</file>
+    <file>icon/loading.svg</file>
 
   </qresource>
   <qresource prefix="icon">

@@ -504,4 +504,7 @@ class DownloadView(QtWidgets.QWidget, Ui_Download, DownloadStatus):
             if download.status == download.Error:
                 reDownload.append(download)
         for download in reDownload:
+            # 删除bookInfo,
+            from tools.book import BookMgr
+            BookMgr().RemoveBook(download.bookId, download.site)
             self.SetNewStatus(download, DownloadItem.Waiting)

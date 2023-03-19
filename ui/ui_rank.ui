@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Rank</class>
+ <widget class="QWidget" name="Rank">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>536</width>
+    <height>379</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>排行榜</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <widget class="QTabWidget" name="tabWidget">
+     <property name="currentIndex">
+      <number>0</number>
+     </property>
+     <widget class="QWidget" name="widget_1">
+      <attribute name="title">
+       <string>昨日</string>
+      </attribute>
+      <layout class="QVBoxLayout" name="verticalLayout_2">
+       <item>
+        <widget class="ComicListWidget" name="dayBookList"/>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="widget_2">
+      <attribute name="title">
+       <string>上月</string>
+      </attribute>
+      <layout class="QVBoxLayout" name="verticalLayout_3">
+       <item>
+        <widget class="ComicListWidget" name="monthBookList"/>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="widget_3">
+      <attribute name="title">
+       <string>去年</string>
+      </attribute>
+      <layout class="QVBoxLayout" name="verticalLayout_4">
+       <item>
+        <widget class="ComicListWidget" name="yearBookList"/>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="widget_4">
+      <attribute name="title">
+       <string>全部</string>
+      </attribute>
+      <layout class="QVBoxLayout" name="verticalLayout_5">
+       <item>
+        <widget class="ComicListWidget" name="allBookList"/>
+       </item>
+      </layout>
+     </widget>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>ComicListWidget</class>
+   <extends>QListWidget</extends>
+   <header location="global">component.list.comic_list_widget.h</header>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>

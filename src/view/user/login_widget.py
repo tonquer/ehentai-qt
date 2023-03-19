@@ -43,11 +43,12 @@ class LoginWidget(QtWidgets.QWidget, Ui_LoginWidget, QtTaskBase):
         self.Login()
 
     def Login(self):
-        QtOwner().ShowLoading()
         ipb_member_id = self.memberId.text()
         ipb_pass_hash = self.passHash.text()
         if not ipb_member_id or not ipb_pass_hash:
             return
+
+        QtOwner().ShowLoading()
         Server().isLogin = True
         Setting.IpbMemberId.SetValue(ipb_member_id)
         Setting.IpbPassHash.SetValue(ipb_pass_hash)

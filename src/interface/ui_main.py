@@ -26,6 +26,7 @@ from view.download.download_view import DownloadView
 from view.help.help_view import HelpView
 from view.info.book_info_view import BookInfoView
 from view.read.read_view import ReadView
+from view.search.rank_view import RankView
 from view.search.search_view import SearchView
 from view.setting.setting_view import SettingView
 from view.tool.local_read_view import LocalReadView
@@ -87,6 +88,9 @@ class Ui_Main(object):
         self.searchView = SearchView()
         self.searchView.setObjectName(u"searchView")
         self.subStackWidget.addWidget(self.searchView)
+        self.rankView = RankView()
+        self.rankView.setObjectName(u"rankView")
+        self.subStackWidget.addWidget(self.rankView)
         self.helpView = HelpView()
         self.helpView.setObjectName(u"helpView")
         self.subStackWidget.addWidget(self.helpView)

@@ -34,6 +34,7 @@ class ComicListWidget(BaseListWidget):
         self.isGame = False
         self.isLocal = False
         self.isMoveMenu = False
+        self.openMenu = False
 
     def SelectMenuBook(self, pos):
         index = self.indexAt(pos)
@@ -65,11 +66,12 @@ class ComicListWidget(BaseListWidget):
                 action = popMenu.addAction(Str.GetStr(Str.Delete))
                 action.triggered.connect(partial(self.DelHandler, index))
             if self.isMoveMenu:
-                action = popMenu.addAction(Str.GetStr(Str.OpenDir))
-                action.triggered.connect(partial(self.OpenDirHandler, index))
 
                 action = popMenu.addAction(Str.GetStr(Str.Move))
                 action.triggered.connect(partial(self.MoveHandler, index))
+            if self.openMenu:
+                action = popMenu.addAction(Str.GetStr(Str.OpenDir))
+                action.triggered.connect(partial(self.OpenDirHandler, index))
             popMenu.exec_(QCursor.pos())
         return
 
