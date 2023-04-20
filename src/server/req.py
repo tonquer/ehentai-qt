@@ -3,7 +3,7 @@ import json
 from config import config
 from config.setting import Setting
 from tools.tool import ToolUtil
-
+import urllib.request
 
 def get_url(site=""):
     if not site:
@@ -35,7 +35,14 @@ class ServerReq(object):
         if Setting.IsHttpProxy.value == 1:
             self.proxy = {"http": Setting.HttpProxy.value, "https": Setting.HttpProxy.value}
         elif Setting.IsHttpProxy.value == 3:
+            proxy = urllib.request.getproxies()
             self.proxy = {}
+            if not Setting.IsUseHttpsProxy.value:
+                if "http" in proxy:
+                    self.proxy["http"] = proxy.get("http")
+                if "https" in proxy:
+                    self.proxy["https"] = proxy.get("https").replace("https", "http")
+
         else:
             self.proxy = {"http": None, "https": None}
 
