@@ -31,6 +31,7 @@ class ServerReq(object):
         self.method = method
         self.isParseRes = False
         self.isUseHttps = True
+        self.isUseHttps = bool(Setting.IsUseHttps.value)
         self.timeout = 5
         if Setting.IsHttpProxy.value == 1:
             self.proxy = {"http": Setting.HttpProxy.value, "https": Setting.HttpProxy.value}
