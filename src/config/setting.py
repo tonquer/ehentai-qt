@@ -110,6 +110,7 @@ class Setting:
     ProxyApiIndex = SettingValue("ProxySetting", 1, False)
     ProxyExIndex = SettingValue("ProxySetting", 1, False)
     ProxyEhIndex = SettingValue("ProxySetting", 1, False)
+    ProxyExaIndex = SettingValue("ProxySetting", 1, False)
 
     # 下载与缓存
     SavePath = SettingValue("DownloadSetting", "", False)

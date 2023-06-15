@@ -42,6 +42,10 @@ class LoginProxyWidget(QtWidgets.QWidget, Ui_LoginProxyWidget, QtTaskBase):
         self.ehGroup.setId(self.radio_eh_2, 2)
         self.ehGroup.setId(self.radio_eh_3, 3)
 
+        self.exaGroup.setId(self.radio_exa_1, 1)
+        self.exaGroup.setId(self.radio_exa_2, 2)
+        self.exaGroup.setId(self.radio_exa_3, 3)
+
         self.LoadSetting()
         self.UpdateServer()
 
@@ -79,6 +83,9 @@ class LoginProxyWidget(QtWidgets.QWidget, Ui_LoginProxyWidget, QtTaskBase):
         self.radio_eh_2.setEnabled(enabled)
         self.radio_eh_3.setEnabled(enabled)
 
+        self.radio_exa_1.setEnabled(enabled)
+        self.radio_exa_2.setEnabled(enabled)
+        self.radio_exa_3.setEnabled(enabled)
         self.httpsBox.setEnabled(enabled)
         self.ipDirect.setEnabled(enabled)
 
@@ -96,10 +103,13 @@ class LoginProxyWidget(QtWidgets.QWidget, Ui_LoginProxyWidget, QtTaskBase):
             label.setText("")
             label = getattr(self, "label_eh_" + str(i))
             label.setText("")
+            label = getattr(self, "label_exa_" + str(i))
+            label.setText("")
             self.speedTest.append(("e", "", False, False, i))
             self.speedTest.append(("ex", "", False, False, i))
             self.speedTest.append(("api", "", False, False, i))
             self.speedTest.append(("eh", "", False, False, i))
+            self.speedTest.append(("exa", "", False, False, i))
 
         self.SetEnabled(False)
         self.needBackNum = 0
@@ -192,9 +202,16 @@ class LoginProxyWidget(QtWidgets.QWidget, Ui_LoginProxyWidget, QtTaskBase):
         button.setChecked(True)
         button = getattr(self, "radio_eh_{}".format(Setting.ProxyEhIndex.value))
         button.setChecked(True)
+        button = getattr(self, "radio_exa_{}".format(Setting.ProxyExaIndex.value))
+        button.setChecked(True)
 
     def UpdateServer(self):
-        for adressName, index in [("e", Setting.ProxyEIndex.value), ("ex", Setting.ProxyExIndex.value), ("api", Setting.ProxyApiIndex.value), ("eh", Setting.ProxyEhIndex.value)]:
+        for adressName, index in [("e", Setting.ProxyEIndex.value),
+                                  ("ex", Setting.ProxyExIndex.value),
+                                  ("api", Setting.ProxyApiIndex.value),
+                                  ("eh", Setting.ProxyEhIndex.value),
+                                  ("exa", Setting.ProxyExaIndex.value),
+                                  ]:
             domain = getattr(self, "label_{}".format(adressName)).text()
             ip =  getattr(self, "radio_{}_{}".format(adressName, index)).text()
             Server().UpdateDns(domain, ip)
@@ -212,6 +229,7 @@ class LoginProxyWidget(QtWidgets.QWidget, Ui_LoginProxyWidget, QtTaskBase):
         Setting.ProxyExIndex.SetValue(self.exGroup.checkedId())
         Setting.ProxyApiIndex.SetValue(self.apiGroup.checkedId())
         Setting.ProxyEhIndex.SetValue(self.ehGroup.checkedId())
+        Setting.ProxyExaIndex.SetValue(self.exaGroup.checkedId())
         # QtOwner().settingView.SetSettingV("Proxy/ProxySelectIndex", config.ProxySelectIndex)
         # QtOwner().settingView.SetSettingV("Proxy/PreferCDNIP", config.PreferCDNIP)
         # QtOwner().settingView.SetSettingV("Proxy/Http", httpProxy)

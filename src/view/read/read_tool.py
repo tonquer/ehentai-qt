@@ -484,6 +484,7 @@ class ReadTool(QtWidgets.QWidget, Ui_ReadImg):
         self.imgFrame.InitHelp()
         
     def ChangeReadMode2(self, index):
+        self.imgFrame.isLastPageMode = False
         self.stripModel = ReadMode(index)
         self.scrollArea.initReadMode = self.stripModel
         self.ScalePicture2(100)

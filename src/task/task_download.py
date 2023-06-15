@@ -176,6 +176,9 @@ class TaskDownload(TaskBase, QtTaskBase):
             #             return
             if task.status == task.Reading:
                 isReset or self.SetTaskStatus(taskId, backData, task.ReadingPicture)
+                if not info.pageInfo.showKey:
+                    self.AddHttpTask(req.GetBookImgUrl(task.bookId, 1, task.site), self.HandlerDownload)
+                    return
                 imgUrl = info.pageInfo.picRealUrl.get(task.index + 1)
                 # 如果不存在url
                 if not imgUrl:

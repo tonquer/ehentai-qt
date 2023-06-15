@@ -32,9 +32,9 @@
       <property name="geometry">
        <rect>
         <x>0</x>
-        <y>-109</y>
+        <y>-187</y>
         <width>458</width>
-        <height>572</height>
+        <height>650</height>
        </rect>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout">
@@ -205,64 +205,6 @@
        </item>
        <item>
         <layout class="QGridLayout" name="gridLayout_2">
-         <item row="1" column="2">
-          <widget class="QLabel" name="label_6">
-           <property name="text">
-            <string>延迟</string>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignCenter</set>
-           </property>
-          </widget>
-         </item>
-         <item row="9" column="2">
-          <widget class="QLabel" name="label_ex_2">
-           <property name="text">
-            <string/>
-           </property>
-          </widget>
-         </item>
-         <item row="9" column="1">
-          <widget class="QRadioButton" name="radio_ex_2">
-           <property name="text">
-            <string>178.175.132.20</string>
-           </property>
-           <attribute name="buttonGroup">
-            <string notr="true">exGroup</string>
-           </attribute>
-          </widget>
-         </item>
-         <item row="4" column="2">
-          <widget class="QLabel" name="label_e_3">
-           <property name="text">
-            <string/>
-           </property>
-          </widget>
-         </item>
-         <item row="10" column="2">
-          <widget class="QLabel" name="label_ex_3">
-           <property name="text">
-            <string/>
-           </property>
-          </widget>
-         </item>
-         <item row="12" column="1">
-          <widget class="QRadioButton" name="radio_eh_2">
-           <property name="text">
-            <string>81.171.10.48</string>
-           </property>
-           <attribute name="buttonGroup">
-            <string notr="true">ehGroup</string>
-           </attribute>
-          </widget>
-         </item>
-         <item row="8" column="0">
-          <widget class="QLabel" name="label_ex">
-           <property name="text">
-            <string>exhentai.org</string>
-           </property>
-          </widget>
-         </item>
          <item row="10" column="1">
           <widget class="QRadioButton" name="radio_ex_3">
            <property name="text">
@@ -273,42 +215,18 @@
            </attribute>
           </widget>
          </item>
-         <item row="11" column="0">
-          <widget class="QLabel" name="label_eh">
+         <item row="13" column="1">
+          <widget class="QRadioButton" name="radio_eh_3">
            <property name="text">
-            <string>ehgt.org</string>
-           </property>
-          </widget>
-         </item>
-         <item row="6" column="1">
-          <widget class="QRadioButton" name="radio_api_2">
-           <property name="text">
-            <string>178.162.147.246</string>
+            <string>178.162.139.24</string>
            </property>
            <attribute name="buttonGroup">
-            <string notr="true">apiGroup</string>
+            <string notr="true">ehGroup</string>
            </attribute>
           </widget>
          </item>
-         <item row="4" column="1">
-          <widget class="QRadioButton" name="radio_e_3">
-           <property name="text">
-            <string>172.67.0.127</string>
-           </property>
-           <attribute name="buttonGroup">
-            <string notr="true">eGroup</string>
-           </attribute>
-          </widget>
-         </item>
-         <item row="8" column="2">
-          <widget class="QLabel" name="label_ex_1">
-           <property name="text">
-            <string/>
-           </property>
-          </widget>
-         </item>
-         <item row="7" column="2">
-          <widget class="QLabel" name="label_api_3">
+         <item row="12" column="2">
+          <widget class="QLabel" name="label_eh_2">
            <property name="text">
             <string/>
            </property>
@@ -324,8 +242,175 @@
            </attribute>
           </widget>
          </item>
+         <item row="5" column="0">
+          <widget class="QLabel" name="label_api">
+           <property name="text">
+            <string>api.e-hentai.org</string>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="0">
+          <widget class="QLabel" name="label_e">
+           <property name="text">
+            <string>e-hentai.org</string>
+           </property>
+          </widget>
+         </item>
+         <item row="14" column="2">
+          <widget class="QLabel" name="label_exa_1">
+           <property name="text">
+            <string/>
+           </property>
+          </widget>
+         </item>
+         <item row="8" column="1">
+          <widget class="QRadioButton" name="radio_ex_1">
+           <property name="text">
+            <string>178.175.129.252</string>
+           </property>
+           <attribute name="buttonGroup">
+            <string notr="true">exGroup</string>
+           </attribute>
+          </widget>
+         </item>
+         <item row="5" column="1">
+          <widget class="QRadioButton" name="radio_api_1">
+           <property name="toolTip">
+            <string>所以分流不可使用时，自动解锁</string>
+           </property>
+           <property name="text">
+            <string>37.48.89.16</string>
+           </property>
+           <attribute name="buttonGroup">
+            <string notr="true">apiGroup</string>
+           </attribute>
+          </widget>
+         </item>
+         <item row="1" column="1">
+          <widget class="QLabel" name="label_2">
+           <property name="text">
+            <string>IP</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignCenter</set>
+           </property>
+          </widget>
+         </item>
+         <item row="5" column="2">
+          <widget class="QLabel" name="label_api_1">
+           <property name="text">
+            <string/>
+           </property>
+          </widget>
+         </item>
+         <item row="14" column="0">
+          <widget class="QLabel" name="label_exa">
+           <property name="text">
+            <string>s.exhentai.org</string>
+           </property>
+          </widget>
+         </item>
+         <item row="6" column="2">
+          <widget class="QLabel" name="label_api_2">
+           <property name="text">
+            <string/>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="0">
+          <widget class="QLabel" name="label_3">
+           <property name="text">
+            <string>IP直连配置</string>
+           </property>
+          </widget>
+         </item>
+         <item row="11" column="1">
+          <widget class="QRadioButton" name="radio_eh_1">
+           <property name="text">
+            <string>37.48.89.44</string>
+           </property>
+           <attribute name="buttonGroup">
+            <string notr="true">ehGroup</string>
+           </attribute>
+          </widget>
+         </item>
+         <item row="4" column="1">
+          <widget class="QRadioButton" name="radio_e_3">
+           <property name="text">
+            <string>172.67.0.127</string>
+           </property>
+           <attribute name="buttonGroup">
+            <string notr="true">eGroup</string>
+           </attribute>
+          </widget>
+         </item>
+         <item row="1" column="2">
+          <widget class="QLabel" name="label_6">
+           <property name="text">
+            <string>延迟</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignCenter</set>
+           </property>
+          </widget>
+         </item>
+         <item row="11" column="2">
+          <widget class="QLabel" name="label_eh_1">
+           <property name="text">
+            <string/>
+           </property>
+          </widget>
+         </item>
+         <item row="13" column="2">
+          <widget class="QLabel" name="label_eh_3">
+           <property name="text">
+            <string/>
+           </property>
+          </widget>
+         </item>
+         <item row="6" column="1">
+          <widget class="QRadioButton" name="radio_api_2">
+           <property name="text">
+            <string>178.162.147.246</string>
+           </property>
+           <attribute name="buttonGroup">
+            <string notr="true">apiGroup</string>
+           </attribute>
+          </widget>
+         </item>
          <item row="3" column="2">
           <widget class="QLabel" name="label_e_2">
+           <property name="text">
+            <string/>
+           </property>
+          </widget>
+         </item>
+         <item row="9" column="1">
+          <widget class="QRadioButton" name="radio_ex_2">
+           <property name="text">
+            <string>178.175.132.20</string>
+           </property>
+           <attribute name="buttonGroup">
+            <string notr="true">exGroup</string>
+           </attribute>
+          </widget>
+         </item>
+         <item row="7" column="2">
+          <widget class="QLabel" name="label_api_3">
+           <property name="text">
+            <string/>
+           </property>
+          </widget>
+         </item>
+         <item row="11" column="0">
+          <widget class="QLabel" name="label_eh">
+           <property name="text">
+            <string>ehgt.org</string>
+           </property>
+          </widget>
+         </item>
+         <item row="8" column="2">
+          <widget class="QLabel" name="label_ex_1">
            <property name="text">
             <string/>
            </property>
@@ -338,34 +423,24 @@
            </property>
           </widget>
          </item>
-         <item row="5" column="2">
-          <widget class="QLabel" name="label_api_1">
+         <item row="4" column="2">
+          <widget class="QLabel" name="label_e_3">
            <property name="text">
             <string/>
            </property>
           </widget>
          </item>
-         <item row="6" column="2">
-          <widget class="QLabel" name="label_api_2">
+         <item row="9" column="2">
+          <widget class="QLabel" name="label_ex_2">
            <property name="text">
             <string/>
            </property>
           </widget>
          </item>
-         <item row="2" column="0">
-          <widget class="QLabel" name="label_e">
+         <item row="8" column="0">
+          <widget class="QLabel" name="label_ex">
            <property name="text">
-            <string>e-hentai.org</string>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="1">
-          <widget class="QLabel" name="label_2">
-           <property name="text">
-            <string>IP</string>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignCenter</set>
+            <string>exhentai.org</string>
            </property>
           </widget>
          </item>
@@ -382,36 +457,6 @@
            </attribute>
           </widget>
          </item>
-         <item row="5" column="0">
-          <widget class="QLabel" name="label_api">
-           <property name="text">
-            <string>api.e-hentai.org</string>
-           </property>
-          </widget>
-         </item>
-         <item row="5" column="1">
-          <widget class="QRadioButton" name="radio_api_1">
-           <property name="toolTip">
-            <string>所以分流不可使用时，自动解锁</string>
-           </property>
-           <property name="text">
-            <string>37.48.89.16</string>
-           </property>
-           <attribute name="buttonGroup">
-            <string notr="true">apiGroup</string>
-           </attribute>
-          </widget>
-         </item>
-         <item row="8" column="1">
-          <widget class="QRadioButton" name="radio_ex_1">
-           <property name="text">
-            <string>178.175.129.252</string>
-           </property>
-           <attribute name="buttonGroup">
-            <string notr="true">exGroup</string>
-           </attribute>
-          </widget>
-         </item>
          <item row="7" column="1">
           <widget class="QRadioButton" name="radio_api_3">
            <property name="text">
@@ -422,52 +467,65 @@
            </attribute>
           </widget>
          </item>
-         <item row="13" column="1">
-          <widget class="QRadioButton" name="radio_eh_3">
+         <item row="12" column="1">
+          <widget class="QRadioButton" name="radio_eh_2">
            <property name="text">
-            <string>178.162.139.24</string>
+            <string>81.171.10.48</string>
            </property>
            <attribute name="buttonGroup">
             <string notr="true">ehGroup</string>
            </attribute>
           </widget>
          </item>
-         <item row="11" column="2">
-          <widget class="QLabel" name="label_eh_1">
+         <item row="16" column="2">
+          <widget class="QLabel" name="label_exa_3">
            <property name="text">
             <string/>
            </property>
           </widget>
          </item>
-         <item row="11" column="1">
-          <widget class="QRadioButton" name="radio_eh_1">
+         <item row="10" column="2">
+          <widget class="QLabel" name="label_ex_3">
            <property name="text">
-            <string>37.48.89.44</string>
+            <string/>
+           </property>
+          </widget>
+         </item>
+         <item row="15" column="2">
+          <widget class="QLabel" name="label_exa_2">
+           <property name="text">
+            <string/>
+           </property>
+          </widget>
+         </item>
+         <item row="14" column="1">
+          <widget class="QRadioButton" name="radio_exa_1">
+           <property name="text">
+            <string>178.175.129.254</string>
            </property>
            <attribute name="buttonGroup">
-            <string notr="true">ehGroup</string>
+            <string notr="true">exaGroup</string>
            </attribute>
           </widget>
          </item>
-         <item row="12" column="2">
-          <widget class="QLabel" name="label_eh_2">
+         <item row="15" column="1">
+          <widget class="QRadioButton" name="radio_exa_2">
            <property name="text">
-            <string/>
+            <string>178.175.132.22</string>
            </property>
+           <attribute name="buttonGroup">
+            <string notr="true">exaGroup</string>
+           </attribute>
           </widget>
          </item>
-         <item row="13" column="2">
-          <widget class="QLabel" name="label_eh_3">
+         <item row="16" column="1">
+          <widget class="QRadioButton" name="radio_exa_3">
            <property name="text">
-            <string/>
+            <string>178.175.128.254</string>
            </property>
-          </widget>
-         </item>
-         <item row="1" column="0">
-          <widget class="QLabel" name="label_3">
-           <property name="text">
-            <string>IP直连配置</string>
-           </property>
+           <attribute name="buttonGroup">
+            <string notr="true">exaGroup</string>
+           </attribute>
           </widget>
          </item>
         </layout>
@@ -516,10 +574,11 @@
   <slot>OpenUrl()</slot>
  </slots>
  <buttongroups>
-  <buttongroup name="eGroup"/>
-  <buttongroup name="exGroup"/>
-  <buttongroup name="apiGroup"/>
   <buttongroup name="radioProxyGroup"/>
   <buttongroup name="ehGroup"/>
+  <buttongroup name="exGroup"/>
+  <buttongroup name="apiGroup"/>
+  <buttongroup name="eGroup"/>
+  <buttongroup name="exaGroup"/>
  </buttongroups>
 </ui>

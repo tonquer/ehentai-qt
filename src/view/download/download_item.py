@@ -1,4 +1,5 @@
 import os
+import time
 
 from config import config
 from config.setting import Setting
@@ -27,6 +28,7 @@ class DownloadItem(QtTaskBase):
         self.bookId = ""             # 书籍id
         self.token = ""
         self.title = ""              # 标题
+        self.tick = int(time.time())                #
         # self.author = ""              # 作者名
         self.site = ""
         self.size = 0
@@ -48,7 +50,7 @@ class DownloadItem(QtTaskBase):
         self.speedDownloadLen = 0
         self.downloadReset = 0
         self.convertReset = 0
-        self.tick = 0
+        self.cvTick = 0
         self.dirty = True
 
         self.maxDownloadPic = 0
@@ -87,7 +89,7 @@ class DownloadItem(QtTaskBase):
 
     @property
     def convertTick(self):
-        return str(self.tick) + 's'
+        return str(self.cvTick) + 's'
 
     # @property
     # def curConvertCnt(self):
@@ -266,9 +268,9 @@ class DownloadItem(QtTaskBase):
 
         return self.Converting
 
-    def ConvertSucCallBack(self, tick):
+    def ConvertSucCallBack(self, cvTick):
         self.dirty = True
-        self.tick = tick
+        self.cvTick = cvTick
         # self.curConvertEpsInfo.dirty = True
         # self.curConvertEpsInfo.curPreConvertId += 1
         # while True:

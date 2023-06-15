@@ -54,7 +54,7 @@ class Ui_Favority(object):
         self.comboBox.addItem("")
         self.comboBox.addItem("")
         self.comboBox.setObjectName(u"comboBox")
-        self.comboBox.setMinimumSize(QSize(100, 0))
+        self.comboBox.setMinimumSize(QSize(200, 0))
 
         self.horizontalLayout.addWidget(self.comboBox)
 
