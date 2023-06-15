@@ -103,7 +103,6 @@ class Setting:
     IsOpenDohPicture = SettingValue("ProxySetting", 0, False)
     IsCloseSNI = SettingValue("ProxySetting", 1, False)
     DohAddress = SettingValue("ProxySetting", "https://101.6.6.6:8443/dns-query", True)
-    IsUseHttpsProxy = SettingValue("ProxySetting", 0, False)
 
     IpDirect = SettingValue("ProxySetting", 1, False)
     ProxyEIndex = SettingValue("ProxySetting", 1, False)
