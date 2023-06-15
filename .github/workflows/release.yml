@@ -88,6 +88,7 @@ jobs:
         # rm -rf dist/EHentai
         # cp Icon.icns dist/
         # ln -s /Applications/   dist/Applications
+        xattr -cr dist/EHentai.app
         create-dmg --volname "EHentai" --volicon "Icon.icns" --icon "EHentai.app" 200 190 \
             --window-pos 200 120 \
             --window-size 800 400 \
