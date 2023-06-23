@@ -8,6 +8,7 @@ from interface.ui_login import Ui_Login
 from qt_owner import QtOwner
 from task.qt_task import QtTaskBase
 from tools.str import Str
+from view.user.login_host_widget import LoginHostWidget
 
 
 class LoginView(BaseMaskDialog, Ui_Login, QtTaskBase):
@@ -35,11 +36,15 @@ class LoginView(BaseMaskDialog, Ui_Login, QtTaskBase):
 
     @property
     def loginWidget(self):
-        return self.tabWidget.widget(0)
+        return self.tab
 
     @property
     def loginProxyWidget(self):
-        return self.tabWidget.widget(1)
+        return self.tab_3
+
+    @property
+    def loginHostWidget(self):
+        return self.tab_2
 
     def closeEvent(self, arg__1) -> None:
         self.timer.stop()
@@ -58,11 +63,15 @@ class LoginView(BaseMaskDialog, Ui_Login, QtTaskBase):
             self.loginButton.setText(Str.GetStr(Str.Login))
         elif self.tabWidget.widget(index) == self.loginProxyWidget:
             self.loginButton.setText(Str.GetStr(Str.Save))
+        elif self.tabWidget.widget(index) == self.loginHostWidget:
+            self.loginButton.setText(Str.GetStr(Str.Save))
         self.tabWidget.widget(index).Init()
 
     def _ClickButton(self):
         index = self.tabWidget.currentIndex()
         self.tabWidget.widget(index).ClickButton()
+        if self.tabWidget.widget(index) == self.loginHostWidget:
+            self.loginProxyWidget.UpdateServer()
 
     # def event(self, event) -> bool:
     #     return BaseMaskDialog.event(event)

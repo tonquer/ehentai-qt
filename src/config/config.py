@@ -36,13 +36,14 @@ Issues1 = "https://github.com/tonquer/ehentai-qt/issues"
 Issues2 = "https://hub.ggo.icu/tonquer/ehentai-qt/issues"
 Issues3 = "https://hub.fastgit.xyz/tonquer/ehentai-qt/issues"
 
-UpdateVersion = "v1.1.2"
-RealVersion = "v1.1.2"
+UpdateVersion = "v1.1.3"
+RealVersion = "v1.1.3"
 Waifu2xVersion = "1.1.6"
-TimeVersion = "2023-6-15"
+TimeVersion = "2023-6-23"
 
 CurSite = "e-hentai"   # 当前站点
 CurLoginName = ""      # 当前登录名
+IsLogin=False
 
 # waifu2x
 CanWaifu2x = False
@@ -73,3 +74,5 @@ DomainMapping = {
     "forums.e-hentai.org": "e-hentai.org"
 }
 
+Hosts = {
+}

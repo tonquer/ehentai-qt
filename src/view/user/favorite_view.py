@@ -25,7 +25,7 @@ class FavoriteView(QtWidgets.QWidget, Ui_Favority, QtTaskBase):
 
     def SwitchCurrent(self, **kwargs):
         refresh = kwargs.get("refresh")
-        if not config.CurLoginName:
+        if not config.IsLogin:
             QtOwner().ShowError(Str.GetStr(Str.NotLogin))
             return
         if refresh:

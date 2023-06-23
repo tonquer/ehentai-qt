@@ -9,6 +9,7 @@ from config.setting import Setting
 from tools.log import Log
 from tools.singleton import Singleton
 from tools.tool import ToolUtil
+from util.str import Str
 
 
 class QtOwner(Singleton):
@@ -42,7 +43,13 @@ class QtOwner(Singleton):
         return self.owner.setSubTitle(text)
     
     def ShowError(self, msg):
-        return MsgLabel.ShowErrorEx(self.owner, str(msg))
+        if isinstance(msg, dict):
+            if "errorMsg" in msg:
+                return MsgLabel.ShowErrorEx(self.owner, str(msg["errorMsg"]))
+            else:
+                return MsgLabel.ShowErrorEx(self.owner, Str.GetStr((msg.get("st"))))
+        else:
+            return MsgLabel.ShowErrorEx(self.owner, str(msg))
 
     def ShowMsg(self, msg):
         return MsgLabel.ShowMsgEx(self.owner, str(msg))

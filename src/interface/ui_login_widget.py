@@ -15,15 +15,15 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QFont, QFontDatabase, QGradient, QIcon,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
-from PySide6.QtWidgets import (QApplication, QCheckBox, QHBoxLayout, QLabel,
-    QLineEdit, QSizePolicy, QSpacerItem, QVBoxLayout,
-    QWidget)
+from PySide6.QtWidgets import (QApplication, QButtonGroup, QCheckBox, QHBoxLayout,
+    QLabel, QLineEdit, QRadioButton, QSizePolicy,
+    QSpacerItem, QVBoxLayout, QWidget)
 
 class Ui_LoginWidget(object):
     def setupUi(self, LoginWidget):
         if not LoginWidget.objectName():
             LoginWidget.setObjectName(u"LoginWidget")
-        LoginWidget.resize(400, 300)
+        LoginWidget.resize(403, 334)
         self.verticalLayout_2 = QVBoxLayout(LoginWidget)
         self.verticalLayout_2.setSpacing(12)
         self.verticalLayout_2.setObjectName(u"verticalLayout_2")
@@ -83,6 +83,31 @@ class Ui_LoginWidget(object):
 
         self.verticalLayout_2.addLayout(self.horizontalLayout)
 
+        self.label_3 = QLabel(LoginWidget)
+        self.label_3.setObjectName(u"label_3")
+
+        self.verticalLayout_2.addWidget(self.label_3)
+
+        self.horizontalLayout_2 = QHBoxLayout()
+        self.horizontalLayout_2.setObjectName(u"horizontalLayout_2")
+        self.eRadio = QRadioButton(LoginWidget)
+        self.buttonGroup = QButtonGroup(LoginWidget)
+        self.buttonGroup.setObjectName(u"buttonGroup")
+        self.buttonGroup.addButton(self.eRadio)
+        self.eRadio.setObjectName(u"eRadio")
+        self.eRadio.setChecked(True)
+
+        self.horizontalLayout_2.addWidget(self.eRadio)
+
+        self.exRadio = QRadioButton(LoginWidget)
+        self.buttonGroup.addButton(self.exRadio)
+        self.exRadio.setObjectName(u"exRadio")
+
+        self.horizontalLayout_2.addWidget(self.exRadio)
+
+
+        self.verticalLayout_2.addLayout(self.horizontalLayout_2)
+
         self.verticalSpacer_2 = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
 
         self.verticalLayout_2.addItem(self.verticalSpacer_2)
@@ -102,5 +127,8 @@ class Ui_LoginWidget(object):
         self.igneous.setPlaceholderText(QCoreApplication.translate("LoginWidget", u"\u53ef\u9009", None))
         self.loginOpen.setText(QCoreApplication.translate("LoginWidget", u"\u542f\u52a8\u540e\u6253\u5f00\u767b\u5f55", None))
         self.autoBox.setText(QCoreApplication.translate("LoginWidget", u"\u81ea\u52a8\u767b\u5f55", None))
+        self.label_3.setText(QCoreApplication.translate("LoginWidget", u"\u9ed8\u8ba4\u7ad9\u70b9\u9009\u62e9:", None))
+        self.eRadio.setText(QCoreApplication.translate("LoginWidget", u"e-hentai", None))
+        self.exRadio.setText(QCoreApplication.translate("LoginWidget", u"exhentai", None))
     # retranslateUi
 

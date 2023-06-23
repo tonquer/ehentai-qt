@@ -432,6 +432,7 @@ example:
 | gymshorts | 运动短裤 | 短的运动裤子，颜色和长度可以改变。不应与`bloomers`或`bike shorts`混淆。<br>![图](# "https://ehgt.org/5d/13/5d13fffb1cb16c99d3eb77c53ff3e57985723fa5-3645640-2149-3035-jpg_l.jpg")![图](https://ehgt.org/a1/2f/a12fdf19d1ebdac40a1ca5a00c88374ef6774e30-543473-1024-768-png_l.jpg)![图](https://ehgt.org/39/1e/391e16bc04b9bb369ab9d438172d3366eb6893fb-103453-648-865-jpg_250.jpg) |  |
 |  | haigure高叉装 | 穿着在胳膊和腿部弯曲的紧身衣服的女孩，强调阴部的位置。 |  |
 | headphones | 头戴式耳机 | 头上戴耳机或者脖子上挂耳机的人。耳壳必须足够大，可以盖住耳朵。 |  |
+| high heels | 高跟鞋 | 通常是细高跟鞋，将穿着者的脚后跟抬高到脚掌顶部以上。仅适用于高跟鞋，不适用于标准鞋跟，例如普通学校鞋。需要`crossdressing`标签。 |  |
 | hijab | 头巾 | 一个覆盖头部和胸部的面纱，主要用于遮盖头发。需要`crossdressing`标签。 |  |
 | hotpants | 热裤 | 短的，突出臀部和腿部。不应与`bike shorts`、`bloomers`或`gymshorts`混淆。<br>![图](# "https://ehgt.org/36/82/3682e6eaf2bd56cbd040ceab913ce0f0a6fe09d8-1066447-1583-2211-jpg_l.jpg")![图](# "https://ehgt.org/d5/b0/d5b0e6b1ea48edcb602d0e941c9c85fde7a46666-6458880-2140-3000-png_l.jpg")![图](# "https://ehgt.org/42/1e/421ed5fc2646003024de98d281a16ab36e6a7e63-4741499-1600-2282-jpg_l.jpg") |  |
 | kimono | 和服👘 | 日本传统服装，有大丝带和不同的图案。 |  |

@@ -75,7 +75,7 @@ class CommentWidget(QtWidgets.QWidget, Ui_Comment, QtTaskBase):
         data = self.commentLine.text()
         if not data:
             return
-        if not config.CurLoginName:
+        if not config.IsLogin:
             QtOwner().ShowError(Str.GetStr(Str.NotLogin))
             return
         QtOwner().ShowLoading()

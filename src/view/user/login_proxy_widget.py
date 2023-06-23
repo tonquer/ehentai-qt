@@ -1,3 +1,4 @@
+import urllib
 from copy import deepcopy
 
 from PySide6 import QtWidgets
@@ -29,22 +30,27 @@ class LoginProxyWidget(QtWidgets.QWidget, Ui_LoginProxyWidget, QtTaskBase):
         self.eGroup.setId(self.radio_e_1, 1)
         self.eGroup.setId(self.radio_e_2, 2)
         self.eGroup.setId(self.radio_e_3, 3)
+        self.eGroup.setId(self.radio_e_4, 4)
 
         self.exGroup.setId(self.radio_ex_1, 1)
         self.exGroup.setId(self.radio_ex_2, 2)
         self.exGroup.setId(self.radio_ex_3, 3)
+        self.exGroup.setId(self.radio_ex_4, 4)
 
         self.apiGroup.setId(self.radio_api_1, 1)
         self.apiGroup.setId(self.radio_api_2, 2)
         self.apiGroup.setId(self.radio_api_3, 3)
+        self.apiGroup.setId(self.radio_api_4, 4)
 
         self.ehGroup.setId(self.radio_eh_1, 1)
         self.ehGroup.setId(self.radio_eh_2, 2)
         self.ehGroup.setId(self.radio_eh_3, 3)
+        self.ehGroup.setId(self.radio_eh_4, 4)
 
         self.exaGroup.setId(self.radio_exa_1, 1)
         self.exaGroup.setId(self.radio_exa_2, 2)
         self.exaGroup.setId(self.radio_exa_3, 3)
+        self.exaGroup.setId(self.radio_exa_4, 4)
 
         self.LoadSetting()
         self.UpdateServer()
@@ -53,10 +59,15 @@ class LoginProxyWidget(QtWidgets.QWidget, Ui_LoginProxyWidget, QtTaskBase):
         self.radioProxyGroup.setId(self.proxy_1, 1)
         self.radioProxyGroup.setId(self.proxy_2, 2)
         self.radioProxyGroup.setId(self.proxy_3, 3)
-        self.maxNum = 3
+        self.maxNum = 4
 
     def Init(self):
         self.LoadSetting()
+        proxy = urllib.request.getproxies()
+        if isinstance(proxy, dict) and proxy.get("http"):
+            self.checkLabel.setVisible(False)
+        else:
+            self.checkLabel.setVisible(True)
 
     def ClickButton(self):
         self.SaveSetting()
@@ -72,20 +83,25 @@ class LoginProxyWidget(QtWidgets.QWidget, Ui_LoginProxyWidget, QtTaskBase):
         self.radio_api_1.setEnabled(enabled)
         self.radio_api_2.setEnabled(enabled)
         self.radio_api_3.setEnabled(enabled)
+        self.radio_api_4.setEnabled(enabled)
         self.radio_e_1.setEnabled(enabled)
         self.radio_e_2.setEnabled(enabled)
         self.radio_e_3.setEnabled(enabled)
+        self.radio_e_4.setEnabled(enabled)
         self.radio_ex_1.setEnabled(enabled)
         self.radio_ex_2.setEnabled(enabled)
         self.radio_ex_3.setEnabled(enabled)
+        self.radio_ex_4.setEnabled(enabled)
 
         self.radio_eh_1.setEnabled(enabled)
         self.radio_eh_2.setEnabled(enabled)
         self.radio_eh_3.setEnabled(enabled)
+        self.radio_eh_4.setEnabled(enabled)
 
         self.radio_exa_1.setEnabled(enabled)
         self.radio_exa_2.setEnabled(enabled)
         self.radio_exa_3.setEnabled(enabled)
+        self.radio_exa_4.setEnabled(enabled)
         self.httpsBox.setEnabled(enabled)
         self.ipDirect.setEnabled(enabled)
 
@@ -128,6 +144,17 @@ class LoginProxyWidget(QtWidgets.QWidget, Ui_LoginProxyWidget, QtTaskBase):
 
         domain = getattr(self, "label_"+str(addressName)).text()
         ip = getattr(self, "radio_{}_{}".format(addressName, i)).text()
+        # 自定义IPs
+        if i == 4:
+            ip = config.Hosts.get(domain)
+
+        if not ip:
+            self.speedPingNum += 1
+            key = "{}_{}".format(addressName, i)
+            label = getattr(self, "label_{}".format(key))
+            label.setText("无")
+            self.StartSpeedPing()
+            return
 
         request = req.SpeedTestPingReq(ip, domain)
         request.isUseHttps = self.httpsBox.isChecked()
@@ -206,6 +233,8 @@ class LoginProxyWidget(QtWidgets.QWidget, Ui_LoginProxyWidget, QtTaskBase):
         button.setChecked(True)
 
     def UpdateServer(self):
+        allAdress = set()
+        Server().ClearDns()
         for adressName, index in [("e", Setting.ProxyEIndex.value),
                                   ("ex", Setting.ProxyExIndex.value),
                                   ("api", Setting.ProxyApiIndex.value),
@@ -213,10 +242,21 @@ class LoginProxyWidget(QtWidgets.QWidget, Ui_LoginProxyWidget, QtTaskBase):
                                   ("exa", Setting.ProxyExaIndex.value),
                                   ]:
             domain = getattr(self, "label_{}".format(adressName)).text()
-            ip =  getattr(self, "radio_{}_{}".format(adressName, index)).text()
+            ip = getattr(self, "radio_{}_{}".format(adressName, index)).text()
+            allAdress.add(domain)
+            if index == 4:
+                ip = config.Hosts.get(domain, "")
+
             Server().UpdateDns(domain, ip)
-            QtOwner().settingView.SetSock5Proxy()
             Log.Info("update proxy, domain: {}, ip: {}".format(domain, ip))
+
+        for k, v in config.Hosts.items():
+            if k in allAdress:
+                continue
+            Server().UpdateDns(domain, ip)
+            Log.Info("update proxy2, domain: {}, ip: {}".format(domain, ip))
+
+        QtOwner().settingView.SetSock5Proxy()
 
     def SaveSetting(self):
         Setting.IsHttpProxy.SetValue(int(self.radioProxyGroup.checkedId()))

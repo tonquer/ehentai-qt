@@ -225,11 +225,12 @@ class MainView(Main, QtTaskBase):
         if Setting.LoginOpen.value:
             self.navigationWidget.OpenLoginView()
         else:
-            self.LoginSucBack("")
+            self.LoginSucBack("", False)
 
-    def LoginSucBack(self, userName):
-        if userName:
+    def LoginSucBack(self, userName, isSuc):
+        if isSuc:
             self.navigationWidget.isLogin = True
+            config.IsLogin = True
         self.navigationWidget.SetUserName(userName)
         # self.favorityView.InitFavorite()
         self.SwitchWidgetAndClear(self.subStackWidget.indexOf(self.searchView))

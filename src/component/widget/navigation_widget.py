@@ -10,7 +10,7 @@ from task.qt_task import QtTaskBase
 from tools.status import Status
 from tools.str import Str
 from view.user.login_view import LoginView
-from server import req, Server
+from server import req, Server, Log
 
 
 class NavigationWidget(QWidget, Ui_Navigation, QtTaskBase):
@@ -57,6 +57,27 @@ class NavigationWidget(QWidget, Ui_Navigation, QtTaskBase):
             self.AddHttpTask(req.GetIndexInfoReq(site="exhentai"), self.SwitchSiteBack, "exhentai")
         return
 
+    def SetSwitchSite(self, site):
+        config.CurSite = site
+        self.siteLabel.setText(config.CurSite)
+        self.UpdateSwitchSite()
+
+    def UpdateSwitchSite(self):
+        self.AddHttpTask(req.GetUserIdReq(), self._UpdateSwitchSiteBack)
+        return
+
+    def _UpdateSwitchSiteBack(self, data):
+        # QtOwner().owner.loadingForm.close()
+        st = data["st"]
+        if st != Status.Ok:
+            Log.Warn("get user name fail")
+        else:
+            Log.Warn("get user name  success, {}".format(data))
+            userName = data.get("userName", "")
+            self.SetUserName(userName)
+        return
+
+
     def SwitchSiteBack(self, data, newSite):
         QtOwner().CloseLoading()
         st = data["st"]
@@ -76,7 +97,7 @@ class NavigationWidget(QWidget, Ui_Navigation, QtTaskBase):
             else:
                 QtOwner().ShowError(Str.GetStr(Str.NotIgneous))
         else:
-            QtOwner().ShowError(Str.GetStr(st))
+            QtOwner().ShowError(data)
         return
 
     def SetUserName(self, userName):
@@ -113,7 +134,10 @@ class NavigationWidget(QWidget, Ui_Navigation, QtTaskBase):
         self.isLogin = False
         self.pushButton.setText(Str.GetStr(Str.Login))
         self.SetUserName("")
-        self.SwitchSiteBack({"st": Status.Ok}, "e-hentai")
+        config.IsLogin = False
+        # self.SwitchSiteBack({"st": Status.Ok}, "e-hentai")
+        config.CurSite = "e-hentai"
+        self.siteLabel.setText(config.CurSite)
         return
 
     def LoginSucBack(self):
@@ -122,6 +146,7 @@ class NavigationWidget(QWidget, Ui_Navigation, QtTaskBase):
 
     def ShowUserImg(self, data, st):
         if st == Status.Ok:
+
             self.picData = data
             self.SetPicture(data)
         return

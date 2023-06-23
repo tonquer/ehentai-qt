@@ -303,7 +303,7 @@ class BookInfoView(QtWidgets.QWidget, Ui_BookInfo, QtTaskBase):
             return super(self.__class__, self).eventFilter(obj, event)
 
     def AddFavorite(self):
-        if not config.CurLoginName:
+        if not config.IsLogin:
             QtOwner().ShowError(Str.GetStr(Str.NotLogin))
             return
         QtOwner().OpenFavoriteInfo(self.bookId, self.bookName)

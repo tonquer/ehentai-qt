@@ -1,4 +1,5 @@
 import json
+import urllib
 
 from config import config
 from config.setting import Setting
@@ -32,12 +33,17 @@ class ServerReq(object):
         self.isParseRes = False
         self.isUseHttps = True
         self.timeout = 5
+        self.printProxy = ""
         if Setting.IsHttpProxy.value == 1:
             self.proxy = {"http": Setting.HttpProxy.value, "https": Setting.HttpProxy.value}
+            self.printProxy = Setting.HttpProxy.value
         elif Setting.IsHttpProxy.value == 3:
             self.proxy = {}
+            proxy = urllib.request.getproxies()
+            self.printProxy = proxy.get("http", "") if isinstance(proxy, dict) else ""
         else:
             self.proxy = {"http": None, "https": None}
+            self.printProxy = None
 
     def __str__(self):
         # if Setting.LogIndex.value == 0:
@@ -51,8 +57,8 @@ class ServerReq(object):
             host = self.headers["host"]
         else:
             host = ""
-        haveProxy = bool(self.proxy) and self.proxy.get("http") != None
-        return "{}, url:{}, host:{}, proxy:{}, method:{}, params:{}".format(self.__class__.__name__, self.url, host, haveProxy, self.method, params)
+        # haveProxy = bool(self.proxy) and self.proxy.get("http") != None
+        return "{}, url:{}, host:{}, proxy:{}, method:{}, params:{}".format(self.__class__.__name__, self.url, host, self.printProxy, self.method, params)
 
 
 # 下载图片

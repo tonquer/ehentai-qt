@@ -819,7 +819,7 @@ class ReadView(QtWidgets.QWidget, QtTaskBase):
             assert isinstance(self.cacheBook, LocalData)
             self.AddLocalTaskLoadPicture(self.cacheBook, i, callBack=self.CompleteDownloadPic, backparam=i)
         elif not self.isOffline:
-            self.AddDownloadBook(self.bookId, i, token=self.token,
+            self.AddDownloadBook(self.bookId, i, token=self.token, domain=self.site,
                                  downloadCallBack=self.UpdateProcessBar,
                                  completeCallBack=self.CompleteDownloadPic,
                                  backParam=i, loadPath=loadPath)

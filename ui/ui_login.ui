@@ -62,6 +62,11 @@
        </property>
       </layout>
      </widget>
+     <widget class="LoginHostWidget" name="tab_2">
+      <attribute name="title">
+       <string>自定义IP</string>
+      </attribute>
+     </widget>
      <widget class="LoginProxyWidget" name="tab_3">
       <attribute name="title">
        <string>分流</string>
@@ -118,6 +123,12 @@
    <class>LoginProxyWidget</class>
    <extends>QWidget</extends>
    <header location="global">view.user.login_proxy_widget.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>LoginHostWidget</class>
+   <extends>QWidget</extends>
+   <header location="global">view.user.login_host_widget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

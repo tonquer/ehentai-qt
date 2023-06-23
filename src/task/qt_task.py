@@ -68,10 +68,12 @@ class QtTaskBase:
     # downloadCallBack(data, laveFileSize)
     # downloadCompleteBack(data, st)
     # downloadCompleteBack(data, st, backParam)
-    def AddDownloadBook(self, bookId, index, token="", domain=config.CurSite, statusBack=None, downloadCallBack=None, completeCallBack=None, backParam=None, loadPath="", cachePath="", savePath="", cleanFlag="", isInit=False):
+    def AddDownloadBook(self, bookId, index, token="", domain="", statusBack=None, downloadCallBack=None, completeCallBack=None, backParam=None, loadPath="", cachePath="", savePath="", cleanFlag="", isInit=False):
         from task.task_download import TaskDownload
         if not cleanFlag:
             cleanFlag = self.__taskFlagId
+        if not domain:
+            domain = config.CurSite
         if not cachePath and not savePath:
             if Setting.SavePath.value:
                 path = "{}/{}_{}/{}".format(domain, bookId, token, index+ 1)

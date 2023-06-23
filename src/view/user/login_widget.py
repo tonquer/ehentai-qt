@@ -26,6 +26,14 @@ class LoginWidget(QtWidgets.QWidget, Ui_LoginWidget, QtTaskBase):
         self.autoBox.clicked.connect(partial(self.CheckButtonEvent, Setting.AutoLogin, self.autoBox))
         self.loginOpen.clicked.connect(partial(self.CheckButtonEvent, Setting.LoginOpen, self.loginOpen))
         # self.saveBox.clicked.connect(partial(self.CheckButtonEvent, Setting.SavePassword, self.saveBox))
+        self.buttonGroup.setId(self.eRadio, 0)
+        self.buttonGroup.setId(self.exRadio, 1)
+        self.buttonGroup.buttonClicked.connect(self.SaveRadio)
+        if Setting.LoginExType.value:
+            self.exRadio.setChecked(True)
+
+    def SaveRadio(self):
+        Setting.LoginExType.SetValue(self.buttonGroup.checkedId())
 
     def CheckButtonEvent(self, setItem, button):
         assert isinstance(setItem, SettingValue)
@@ -50,12 +58,42 @@ class LoginWidget(QtWidgets.QWidget, Ui_LoginWidget, QtTaskBase):
 
         QtOwner().ShowLoading()
         Server().isLogin = True
-        Setting.IpbMemberId.SetValue(ipb_member_id)
-        Setting.IpbPassHash.SetValue(ipb_pass_hash)
-        Setting.Igneous.SetValue(self.igneous.text())
-        self.AddHttpTask(req.GetUserIdReq(), self._GetUserBack)
+        if Setting.LoginExType.value:
+            Setting.IpbMemberId.SetValue(ipb_member_id)
+            Setting.IpbPassHash.SetValue(ipb_pass_hash)
+            Setting.Igneous.SetValue(self.igneous.text())
+            self.AddHttpTask(req.GetIndexInfoReq(site="exhentai"), self._GetExBack)
+        else:
+            Setting.IpbMemberId.SetValue(ipb_member_id)
+            Setting.IpbPassHash.SetValue(ipb_pass_hash)
+            Setting.Igneous.SetValue(self.igneous.text())
+            self.AddHttpTask(req.GetUserIdReq(), self._GetUserBack)
         # self.close()
         # self.owner().show()
+
+    def _GetExBack(self, data):
+        QtOwner().CloseLoading()
+        st = data["st"]
+        newSite = "exhentai"
+        if st == Status.Ok:
+            QtOwner().owner.navigationWidget.SetSwitchSite(newSite)
+            igneous = data.get("igneous")
+            if igneous and igneous != "mystery":
+                Setting.Igneous.SetValue(igneous)
+            QtOwner().ShowMsg(Str.GetStr(Str.Ok))
+            QtOwner().owner.LoginSucBack("", True)
+            Server().isLogin = True
+            self.parent().parent().parent().parent().close()
+            # QtOwner().owner.SwitchWidgetAndClear(QtOwner().owner.subStackWidget.indexOf(QtOwner().owner.searchView))
+        elif data.get("igneous") is not None:
+            igneous = data.get("igneous")
+            if igneous == "mystery":
+                QtOwner().ShowError(Str.GetStr(Str.IgneousMystery))
+            else:
+                QtOwner().ShowError(Str.GetStr(Str.NotIgneous))
+        else:
+            QtOwner().ShowError(Str.GetStr(st))
+        return
 
     def _GetUserBack(self, data):
         # QtOwner().owner.loadingForm.close()
@@ -68,7 +106,7 @@ class LoginWidget(QtWidgets.QWidget, Ui_LoginWidget, QtTaskBase):
         else:
             Log.Warn("login success, {}".format(data))
             userName = data.get("userName", "")
-            QtOwner().owner.LoginSucBack(userName)
+            QtOwner().owner.LoginSucBack(userName, True)
             Server().isLogin = True
             self.parent().parent().parent().parent().close()
             # if load_cookies:

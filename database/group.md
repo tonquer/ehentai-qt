@@ -14,7 +14,7 @@ copyright: >
   对于标有(**)的条目，其描述文本复制/翻译自萌娘百科，遵循原始许可协议（即知识共享(Creative Commons) 署名-非商业性使用-相同方式共享
   3.0 协议）进行二次分发。
 rules:
-  - 有官方或公认的中文名称时优先写中文名，否则写日文名。
+  - 有官方或公认的中文名称时**优先写中文名**，否则写日文名。
   - 日文名中有汉字者优先写含汉字的名称。
   - >-
     可以依据[规则](https://zh.wikipedia.org/wiki/Wikipedia:汉字文化圈语言专有名词中译规则#日本语专有名词的中译)将日文名转写为中文名，但**不要混合中文汉字与假名**。
@@ -5965,7 +5965,7 @@ example:
 | ikasumiya | 烏賊墨屋 |  |  |
 | ikechika | いけちか |  |  |
 | ikeda jun kikakushitsu | 池田淳企画室 |  |  |
-| ikemen teikoku | イケメン帝国 |  |  |
+| ikemen teikoku | イケメン帝国 |  | [pixiv](https://www.pixiv.net/users/1162167) |
 | ikennabi | イケンナビ |  |  |
 | ikibata 49ers | いきばた49ERS |  |  |
 | ikigire shoukai | いきぎれ商会 |  |  |
@@ -7725,7 +7725,7 @@ example:
 | mica | MICA |  |  |
 | michinakaba | 三血中吐 |  |  |
 | michinoku hitori tabi | みちのく一人旅 |  |  |
-| micro page | みくろぺえじ |  |  |
+| micro page | みくろぺえじ | 画师`kuromotokun`所属社团 |  |
 | microbeurre | Microbeurre |  |  |
 | microbit | Microbit |  |  |
 | microdat | マイクロ脱兎 |  |  |
@@ -8069,7 +8069,7 @@ example:
 | moorusu | モール巣 |  |  |
 | mopuo oyakata | もぷお親方 |  |  |
 | mor | MOR |  |  |
-| moradolog | モラードログ |  |  |
+| moladolog | モラードログ |  |  |
 | morgue | morgue |  |  |
 | mori no kumasan yuugekitai | 森のくまさん遊撃隊 |  |  |
 | mori no mushi | 森の蟲 |  |  |
@@ -9377,7 +9377,7 @@ example:
 | ponkotuna potunoya | ぽんこつなぽつの屋 |  |  |
 | ponpon-o | ぽんぽんお |  |  |
 | ponte | Ponte |  |  |
-| pony farm | 仔馬牧場 |  |  |
+| pony farm | 仔马牧场 | 画师`bonnie`所属社团 |  |
 | pony roll | PONY ROLL |  |  |
 | ponyfarm | ポニー牧場 |  |  |
 | ponys bridle | PONY'S BRIDLE |  |  |
@@ -10160,7 +10160,7 @@ example:
 | seiyou tanka | 西洋短歌 |  |  |
 | seizousha | 性造社 |  |  |
 | sekai chizu wa chi no ato | 世界地図は血の跡 |  |  |
-| sekai kakumei club | 世界革命倶楽部 |  |  |
+| sekai kakumei club | 世界革命俱乐部 |  |  |
 | sekai no hate ni hanataba o. | 世界の果てに花束を。 |  |  |
 | sekai no tomizawa | 世界のTOMIZAWA |  |  |
 | sekai saiko | 世界最古 |  |  |
@@ -10496,7 +10496,7 @@ example:
 | siop | 単一統合作戦計画 |  |  |
 | sippo-soft | SIPPO-SOFT |  |  |
 | siratama nikukyuu | しらたま肉球 |  |  |
-| siratamadon | 白玉丼 |  |  |
+| siratamadon | 白玉井 |  |  |
 | sirius. | SIRIUS. |  |  |
 | sirojio | 白塩 |  |  |
 | siropome | しろぽめ |  |  |
@@ -12079,7 +12079,7 @@ example:
 | yakan honpo | 薬缶本舗 |  |  |
 | yakata | 館 |  |  |
 | yaki lemon | 焼きレモン |  |  |
-| yaki tomahawk steak | 焼きトマホークステーキ |  |  |
+| yaki tomahawk steak | 烧きトマホークステーキ | 画师`yakitomato`所属社团 |  |
 | yakihata nyuugyou | 焼畑乳業 |  |  |
 | yakihebi | やきへび |  |  |
 | yakimisomura | ヤキミソ村 |  |  |
@@ -12504,7 +12504,7 @@ example:
 | kakuzatou | 角砂糖 |  |  |
 | gyuunyuu shoujo seisakusho | 牛乳少女制作所 |  |  |
 | abukumadou | 阿武隈堂 |  |  |
-| hakutamayu | 白玉湯 |  |  |
+| hakutamayu | 白玉汤 |  |  |
 | nodomaru biyori | のどまる日和 |  |  |
 | itabira yasai | イタビラ野菜 |  |  |
 | maria planet | マリアプラネット |  |  |
@@ -12571,6 +12571,32 @@ example:
 | gahahahahahaha | がはははははは! |  |  |
 | marshmalloya | ましゅまろや |  |  |
 | nanadou | 七堂 |  |  |
+| ayawasuca | 文忘蚊 |  | [pixiv](https://www.pixiv.net/users/65258852) |
+| sugomori bird | 巣ごもりバード |  |  |
+| gensou pump | 幻想ポンプ | 画师`fukumoto masahisa`所属社团 |  |
+| elizabeth collar | エリザベスカラー | 画师`tobiume sayu`所属社团 |  |
+| toropucchi | とろぷっち | ![twitter](https://pbs.twimg.com/profile_images/1473562632460582912/CJJj_8pg_400x400.jpg)<br><br>**作者推特头像** | [twitter](https://twitter.com/Srm5tKdfhWnGY0K) |
+| satou mitsu | さとうみつ | 画师`omitsu`所属社团 |  |
+| mannen dokodoko dondodoko | まんねんドコドコドンドドコ | 画师`tottotonero tarou.`所属社团 |  |
+| uruudoki | うるうどき |  |  |
+| shironekoya | 白猫屋 |  |  |
+| mugen karaage | 無限からあげ |  |  |
+| yonaka works | ヨナカWorks |  |  |
+| touketsu shamen | 卜ウケツ斜面 |  | [pixiv](https://www.pixiv.net/users/64953199)<br>[Twitter](https://twitter.com/two_ketsu) |
+| koutetsu shabon dama | 钢铁しゃぼん玉 | 画师`tamayura banko`所属社团 |  |
+| hogeramu | ほげらむ |  |  |
+| mizushirazu | みずしらず |  |  |
+| yakitori teishoku | 焼きトリ定食 |  |  |
+| dakkoku kidoutai s.a.c | 脱壳机动队 S.A.C |  |  |
+| mitsumitsuniku | ミツミツにく |  |  |
+| akirerushoujo | アキレルショウジョ |  |  |
+| fuzume | ふずめ |  |  |
+| hitakamoya | ひたかもや |  |  |
+| kasokuiki | 過疎区域 |  | [Twitter](https://twitter.com/in_ksk) |
+| khaos distance | カオス距離 |  |  |
+| tohosanhun | 徒歩三分 | 茶户老师的R18用马甲 | [Twitter](https://twitter.com/tohosanhun)<br>[Twitter](https://twitter.com/tohoni) （本体） |
+| morunchi | モルチ |  |  |
+| gutsutoma | ぐつとま |  |  |
 
 <!--TEMPLATE: 
 |  |  |  |  |

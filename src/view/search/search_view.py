@@ -168,7 +168,7 @@ class SearchView(QWidget, Ui_Search, QtTaskBase):
                     self.bookList.AddBookItem(_id, title, Str.GetStr(Str.Classify) + ":" + category, url, path, "", token=token)
                 # self.CheckCategoryShowItem()
             else:
-                QtOwner().ShowError(Str.GetStr(st))
+                QtOwner().ShowError(data)
 
         except Exception as es:
             Log.Error(es)

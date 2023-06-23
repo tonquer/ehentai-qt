@@ -163,6 +163,8 @@ class Setting:
     IsGrabGesture: SettingValue = SettingValue("Other", 0, True)
     IsReDownload = SettingValue("Other", 0, False)
     IsPreUpdate = SettingValue("Other", 0, False)
+    LoginExType = SettingValue("Other", 0, False)
+    OwnerHosts = SettingValue("Other", "api.e-hentai.org:178.162.139.18", False)
 
     @staticmethod
     def InitLoadSetting():

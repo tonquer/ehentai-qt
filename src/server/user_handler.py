@@ -186,6 +186,10 @@ class GetIndexInfoReqHandler(object):
                             if igneous:
                                 data["igneous"] = igneous
                                 break
+                if task.res.raw.status_code != 200:
+                    data["st"] = Status.Error
+                    data["errorMsg"] = task.res.raw.text
+                    return
                 if not task.res.raw.text:
                     data["st"] = Status.Error
                     return
