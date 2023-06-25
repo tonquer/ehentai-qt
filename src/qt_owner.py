@@ -8,8 +8,8 @@ from component.label.msg_label import MsgLabel
 from config.setting import Setting
 from tools.log import Log
 from tools.singleton import Singleton
+from tools.str import Str
 from tools.tool import ToolUtil
-from util.str import Str
 
 
 class QtOwner(Singleton):
