@@ -432,4 +432,4 @@ class SpeedTestPingReq(ServerReq):
         header['pragma'] = 'no-cache'
         super(self.__class__, self).__init__(url, header,
                                              {}, method)
-        self.timeout = 2
+        self.timeout = 3

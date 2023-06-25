@@ -238,6 +238,8 @@ class Server(Singleton, threading.Thread):
             r = self.session.post(request.url, proxies=request.proxy, headers=request.headers, data=request.params, timeout=task.timeout, verify=False, cookies=cookie, allow_redirects=False)
             if r.status_code == 302 or r.status_code == 301:
                 next = r.headers.get('Location')
+                if ToolUtil.GetUrlHost(next) == "":
+                    next = "https://" + ToolUtil.GetUrlHost(request.url) + next
                 request.url = next
                 history.append(r)
                 self.__DealHeaders(request, "")
@@ -265,6 +267,8 @@ class Server(Singleton, threading.Thread):
             r = self.session.get(request.url, proxies=request.proxy, headers=request.headers, timeout=task.timeout, verify=False, cookies=cookie, allow_redirects=False)
             if r.status_code == 302 or r.status_code == 301:
                 next = r.headers.get('Location')
+                if ToolUtil.GetUrlHost(next) == "":
+                    next = "https://" + ToolUtil.GetUrlHost(request.url) + next
                 request.url = next
                 history.append(r)
                 self.__DealHeaders(request, "")

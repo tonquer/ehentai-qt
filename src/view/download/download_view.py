@@ -57,6 +57,7 @@ class DownloadView(QtWidgets.QWidget, Ui_Download, DownloadStatus):
         self.tableWidget.horizontalHeader().sectionClicked.connect(self.Sort)
         self.order = {}
         self.radioButton.setChecked(Setting.DownloadAuto.value)
+        self.redownloadRadio.setChecked(Setting.IsReDownload.value)
         self.redownloadRadio.clicked.connect(self.SwitchReDownload)
         self.downloadNumBox.setCurrentIndex(Setting.DownloadNum.value-1)
         self.downloadNumBox.currentIndexChanged.connect(self.UpdateDownloadNum)
