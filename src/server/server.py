@@ -240,7 +240,7 @@ class Server(Singleton, threading.Thread):
                 next = r.headers.get('Location')
                 request.url = next
                 history.append(r)
-                self.__DealHeaders(request)
+                self.__DealHeaders(request, "")
             else:
                 break
         r.history = history
@@ -267,7 +267,7 @@ class Server(Singleton, threading.Thread):
                 next = r.headers.get('Location')
                 request.url = next
                 history.append(r)
-                self.__DealHeaders(request)
+                self.__DealHeaders(request, "")
             else:
                 break
         r.history = history
