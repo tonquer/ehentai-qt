@@ -44,7 +44,7 @@ class QtOwner(Singleton):
     
     def ShowError(self, msg):
         if isinstance(msg, dict):
-            if "errorMsg" in msg:
+            if msg.get('errorMsg'):
                 return MsgLabel.ShowErrorEx(self.owner, str(msg["errorMsg"]))
             else:
                 return MsgLabel.ShowErrorEx(self.owner, Str.GetStr((msg.get("st"))))
