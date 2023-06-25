@@ -232,7 +232,18 @@ class Server(Singleton, threading.Thread):
         else:
             cookie = {}
         task.res = res.BaseRes("", False)
-        r = self.session.post(request.url, proxies=request.proxy, headers=request.headers, data=request.params, timeout=task.timeout, verify=False, cookies=cookie)
+
+        history = []
+        for i in range(10):
+            r = self.session.post(request.url, proxies=request.proxy, headers=request.headers, data=request.params, timeout=task.timeout, verify=False, cookies=cookie, allow_redirects=False)
+            if r.status_code == 302 or r.status_code == 301:
+                next = r.headers.get('Location')
+                request.url = next
+                history.append(r)
+                self.__DealHeaders(request)
+            else:
+                break
+        r.history = history
         task.res = res.BaseRes(r, request.isParseRes)
         return task
 
@@ -249,7 +260,17 @@ class Server(Singleton, threading.Thread):
         else:
             cookie = {}
         task.res = res.BaseRes("", False)
-        r = self.session.get(request.url, proxies=request.proxy, headers=request.headers, timeout=task.timeout, verify=False, cookies=cookie)
+        history = []
+        for i in range(10):
+            r = self.session.get(request.url, proxies=request.proxy, headers=request.headers, timeout=task.timeout, verify=False, cookies=cookie, allow_redirects=False)
+            if r.status_code == 302 or r.status_code == 301:
+                next = r.headers.get('Location')
+                request.url = next
+                history.append(r)
+                self.__DealHeaders(request)
+            else:
+                break
+        r.history = history
         task.res = res.BaseRes(r, request.isParseRes)
         return task
 
