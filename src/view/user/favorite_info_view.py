@@ -20,6 +20,7 @@ class FavoriteInfoView(BaseMaskDialog, Ui_FavoriteInfo, QtTaskBase):
         # self.closeButton.clicked.connect(self.close)
         self.bookId = ""
         self.isUpdate = True
+        self.pushButton_2.clicked.connect(self.close)
 
     def OpenFavorite(self, bookId, bookName):
         QtOwner().ShowLoading()

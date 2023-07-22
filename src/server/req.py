@@ -58,7 +58,11 @@ class ServerReq(object):
         else:
             host = ""
         # haveProxy = bool(self.proxy) and self.proxy.get("http") != None
-        return "{}, url:{}, host:{}, proxy:{}, method:{}, params:{}".format(self.__class__.__name__, self.url, host, self.printProxy, self.method, params)
+        if Setting.LogIndex.value == 2:
+            return "{}, url:{}, host:{}, proxy:{}, method:{}, params:{}, header:{}".format(self.__class__.__name__, self.url, host, self.printProxy, self.method, params, self.headers)
+        else:
+            return "{}, url:{}, host:{}, proxy:{}, method:{}, params:{}".format(self.__class__.__name__, self.url, host,
+                                                                                self.printProxy, self.method, params)
 
 
 # 下载图片
@@ -70,7 +74,14 @@ class DownloadBookReq(ServerReq):
         self.cachePath = cachePath
         self.savePath = savePath
         self.isReload = isReload
-        super(self.__class__, self).__init__(url, ToolUtil.GetHeader(url, method),
+        header =  ToolUtil.GetHeader(url, method)
+        host = ToolUtil.GetUrlHost(config.Url)
+        host2 = ToolUtil.GetUrlHost(config.ExUrl)
+        if host in url:
+            header['Referer'] = get_url(host) + "/"
+        elif host2 in url:
+            header['Referer'] = get_url(host2) + "/"
+        super(self.__class__, self).__init__(url, header,
                                              {}, method)
 
 
@@ -108,6 +119,7 @@ class HomeReq(ServerReq):
 
         header = ToolUtil.GetHeader(url, method)
         data = dict()
+        header['Referer'] = config.Url + "/"
         super(self.__class__, self).__init__(url, header, data, method)
 
 
@@ -163,10 +175,12 @@ class BookInfoReq(ServerReq):
             params["nw"] = "always"
         params["inline_set"] = "ts_l"
         data = ToolUtil.DictToUrl(params)
+        method = "GET"
         if data:
             url += "/?" + data
-        method = "GET"
-        super(self.__class__, self).__init__(url, ToolUtil.GetHeader(url, method), {}, method)
+        header = ToolUtil.GetHeader(url, method)
+        header['Referer'] = get_url(site) + "/"
+        super(self.__class__, self).__init__(url, header, {}, method)
 
 
 # 图片信息
@@ -181,8 +195,12 @@ class GetBookImgUrl(ServerReq):
 
         info = BookMgr().GetBookBySite(bookId, self.site)
         url = info.pageInfo.picUrl.get(index)
+        ref = get_url(site) + "/g/{}/{}/".format(bookId, info.baseInfo.token)
+
         method = "Get"
-        super(self.__class__, self).__init__(url, ToolUtil.GetHeader(url, method), {}, method)
+        header = ToolUtil.GetHeader(url, method)
+        header['Referer'] = ref
+        super(self.__class__, self).__init__(url, header, {}, method)
 
 
 # 图片信息Api
@@ -208,6 +226,8 @@ class GetBookImgUrl2(ServerReq):
         }
         header = ToolUtil.GetHeader(url, method)
         header["Content-Type"] = "application/json; charset=UTF-8"
+        header['Origin'] = get_url(site)
+        header['Referer'] = get_url(site) + "/"
         super(self.__class__, self).__init__(url, header, json.dumps(data), method)
 
 
@@ -249,8 +269,9 @@ class GetIndexInfoReq(ServerReq):
         if param:
             url += "/?" + param
         method = "GET"
-        super(self.__class__, self).__init__(url, ToolUtil.GetHeader(url, method),
-                                             {}, method)
+        header = ToolUtil.GetHeader(url, method)
+        header['Referer'] = get_url(site) + "/"
+        super(self.__class__, self).__init__(url, header, {}, method)
 
 
 # 获得排行
@@ -270,7 +291,9 @@ class GetRankInfoReq(ServerReq):
         if param:
             url += "/?" + param
         method = "GET"
-        super(self.__class__, self).__init__(url, ToolUtil.GetHeader(url, method),
+        header = ToolUtil.GetHeader(url, method)
+        header['Referer'] = config.Url + "/"
+        super(self.__class__, self).__init__(url, header,
                                              {}, method)
 
 
@@ -288,7 +311,9 @@ class GetCategoryInfoReq(ServerReq):
             url += "/?" + param
         method = "GET"
         self.site = config.CurSite
-        super(self.__class__, self).__init__(url, ToolUtil.GetHeader(url, method),
+        header = ToolUtil.GetHeader(url, method)
+        header['Referer'] = get_url() + "/"
+        super(self.__class__, self).__init__(url, header,
                                              {}, method)
 
 
@@ -308,7 +333,9 @@ class GetFavoritesReq(ServerReq):
             url += "/?" + param
         method = "GET"
         self.site = config.CurSite
-        super(self.__class__, self).__init__(url, ToolUtil.GetHeader(url, method),
+        header = ToolUtil.GetHeader(url, method)
+        header['Referer'] = get_url(self.site) + "/"
+        super(self.__class__, self).__init__(url, header,
                                              {}, method)
 
 
@@ -319,7 +346,9 @@ class AddFavoritesReq(ServerReq):
         info = BookMgr().GetBook(bookId)
         url = get_url() + "/gallerypopups.php?gid={}&t={}&act=addfav".format(bookId, info.baseInfo.token)
         method = "GET"
-        super(self.__class__, self).__init__(url, ToolUtil.GetHeader(url, method),
+        header = ToolUtil.GetHeader(url, method)
+        header['Referer'] = get_url() + "/"
+        super(self.__class__, self).__init__(url, header,
                                              {}, method)
 
 
@@ -341,6 +370,7 @@ class AddFavorites2Req(ServerReq):
             data["apply"] = "Apply Changes"
         else:
             data["apply"] = "Add to Favorites"
+        header['Referer'] = get_url() + "/"
         super(self.__class__, self).__init__(url, header,
                                              ToolUtil.DictToUrl(data), method)
 
@@ -357,6 +387,7 @@ class DelFavoritesReq(ServerReq):
         data["modifygids[]"] = bookId
         data["apply"] = "Confirm"
         data["ddact"] = "delete"
+        header['Referer'] = get_url() + "/"
         super(self.__class__, self).__init__(url, header,
                                              ToolUtil.DictToUrl(data), method)
 
@@ -377,6 +408,7 @@ class SendCommentReq(ServerReq):
         header["content-type"] = "application/x-www-form-urlencoded"
         data = dict()
         data["commenttext_new"] = comment
+        header['Referer'] = get_url() + "/"
         super(self.__class__, self).__init__(url, header,
                                              ToolUtil.DictToUrl(data), method)
 
@@ -400,6 +432,7 @@ class BookScoreReq(ServerReq):
         }
         header = ToolUtil.GetHeader(url, method)
         header["Content-Type"] = "application/json"
+        header['Referer'] = get_url() + "/"
         super(self.__class__, self).__init__(url, header, json.dumps(data), method)
 
 
@@ -430,6 +463,7 @@ class SpeedTestPingReq(ServerReq):
         header['cache-control'] = 'no-cache'
         header['expires'] = '0'
         header['pragma'] = 'no-cache'
+        header['Referer'] = get_url() + "/"
         super(self.__class__, self).__init__(url, header,
                                              {}, method)
         self.timeout = 3

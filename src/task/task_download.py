@@ -264,7 +264,7 @@ class TaskDownload(TaskBase, QtTaskBase):
         return self.taskId
 
     def HandlerTask(self, downloadId, laveFileSize, data, isCallBack=True):
-        Log.Debug("download back, taskId:{}, laveSize:{}".format(downloadId, laveFileSize))
+        # Log.Debug("download back, taskId:{}, laveSize:{}".format(downloadId, laveFileSize))
         info = self.tasks.get(downloadId)
         if not info:
             return

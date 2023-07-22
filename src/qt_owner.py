@@ -165,7 +165,7 @@ class QtOwner(Singleton):
         from view.user.favorite_info_view import FavoriteInfoView
         info = FavoriteInfoView(QtOwner().owner)
         info.OpenFavorite(bookId, bookName)
-        info.exec_()
+        info.show()
         return
 
     def OpenBookInfo(self, bookId, token="", site=""):

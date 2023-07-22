@@ -26,7 +26,7 @@ class Ui_LoginProxyWidget(object):
     def setupUi(self, LoginProxyWidget):
         if not LoginProxyWidget.objectName():
             LoginProxyWidget.setObjectName(u"LoginProxyWidget")
-        LoginProxyWidget.resize(495, 483)
+        LoginProxyWidget.resize(450, 486)
         LoginProxyWidget.setMinimumSize(QSize(450, 0))
         self.gridLayout = QGridLayout(LoginProxyWidget)
         self.gridLayout.setSpacing(12)
@@ -36,7 +36,7 @@ class Ui_LoginProxyWidget(object):
         self.scrollArea.setWidgetResizable(True)
         self.scrollAreaWidgetContents = QWidget()
         self.scrollAreaWidgetContents.setObjectName(u"scrollAreaWidgetContents")
-        self.scrollAreaWidgetContents.setGeometry(QRect(0, -353, 458, 816))
+        self.scrollAreaWidgetContents.setGeometry(QRect(0, -56, 413, 816))
         self.verticalLayout = QVBoxLayout(self.scrollAreaWidgetContents)
         self.verticalLayout.setObjectName(u"verticalLayout")
         self.horizontalLayout_11 = QHBoxLayout()
@@ -206,7 +206,6 @@ class Ui_LoginProxyWidget(object):
 
         self.label_eh = QLabel(self.scrollAreaWidgetContents)
         self.label_eh.setObjectName(u"label_eh")
-        self.label_eh.setTextInteractionFlags(Qt.TextSelectableByMouse)
 
         self.gridLayout_2.addWidget(self.label_eh, 17, 0, 1, 1)
 
@@ -227,7 +226,6 @@ class Ui_LoginProxyWidget(object):
 
         self.label_ex = QLabel(self.scrollAreaWidgetContents)
         self.label_ex.setObjectName(u"label_ex")
-        self.label_ex.setTextInteractionFlags(Qt.TextSelectableByMouse)
 
         self.gridLayout_2.addWidget(self.label_ex, 12, 0, 1, 1)
 
@@ -319,7 +317,6 @@ class Ui_LoginProxyWidget(object):
 
         self.label_exa = QLabel(self.scrollAreaWidgetContents)
         self.label_exa.setObjectName(u"label_exa")
-        self.label_exa.setTextInteractionFlags(Qt.TextSelectableByMouse)
 
         self.gridLayout_2.addWidget(self.label_exa, 22, 0, 1, 1)
 

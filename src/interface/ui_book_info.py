@@ -17,13 +17,14 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QPalette, QPixmap, QRadialGradient, QTransform)
 from PySide6.QtWidgets import (QApplication, QFrame, QGridLayout, QHBoxLayout,
     QLabel, QListWidgetItem, QPushButton, QScrollArea,
-    QSizePolicy, QSpacerItem, QTabWidget, QVBoxLayout,
-    QWidget)
+    QSizePolicy, QSpacerItem, QTabWidget, QToolButton,
+    QVBoxLayout, QWidget)
 
 from component.button.icon_tool_button import IconToolButton
 from component.list.comic_list_widget import ComicListWidget
 from component.list.tag_list_widget import TagListWidget
 from component.scroll_area.smooth_scroll_area import SmoothScrollArea
+import images_rc
 import images_rc
 
 class Ui_BookInfo(object):
@@ -247,6 +248,7 @@ class Ui_BookInfo(object):
         self.favoriteButton.setIcon(icon)
         self.favoriteButton.setIconSize(QSize(50, 50))
         self.favoriteButton.setCheckable(False)
+        self.favoriteButton.setToolButtonStyle(Qt.ToolButtonTextBesideIcon)
 
         self.horizontalLayout_2.addWidget(self.favoriteButton)
 
@@ -272,8 +274,20 @@ class Ui_BookInfo(object):
         icon2.addFile(u":/png/icon/ic_get_app_black_36dp.png", QSize(), QIcon.Normal, QIcon.Off)
         self.downloadButton.setIcon(icon2)
         self.downloadButton.setIconSize(QSize(50, 50))
+        self.downloadButton.setToolButtonStyle(Qt.ToolButtonTextBesideIcon)
 
         self.horizontalLayout_2.addWidget(self.downloadButton)
+
+        self.clearButton = QToolButton(self.scrollAreaWidgetContents)
+        self.clearButton.setObjectName(u"clearButton")
+        self.clearButton.setMinimumSize(QSize(40, 40))
+        icon3 = QIcon()
+        icon3.addFile(u":/png/icon/clear_off.png", QSize(), QIcon.Normal, QIcon.Off)
+        self.clearButton.setIcon(icon3)
+        self.clearButton.setIconSize(QSize(50, 50))
+        self.clearButton.setToolButtonStyle(Qt.ToolButtonTextBesideIcon)
+
+        self.horizontalLayout_2.addWidget(self.clearButton)
 
         self.startRead = QPushButton(self.scrollAreaWidgetContents)
         self.startRead.setObjectName(u"startRead")
@@ -351,6 +365,7 @@ class Ui_BookInfo(object):
         self.downloadButton.clicked.connect(BookInfo.AddDownload)
         self.startRead.clicked.connect(BookInfo.StartRead)
         self.commentButton.clicked.connect(BookInfo.OpenComment)
+        self.clearButton.clicked.connect(BookInfo.ClearCache)
 
         self.tabWidget.setCurrentIndex(1)
 
@@ -373,9 +388,10 @@ class Ui_BookInfo(object):
         self.label_13.setText(QCoreApplication.translate("BookInfo", u"\u6536\u85cf\u6570\uff1a", None))
         self.favoriteLabel.setText("")
         self.updateTick.setText(QCoreApplication.translate("BookInfo", u"TextLabel", None))
-        self.favoriteButton.setText("")
-        self.commentButton.setText("")
-        self.downloadButton.setText("")
+        self.favoriteButton.setText(QCoreApplication.translate("BookInfo", u"\u6536\u85cf", None))
+        self.commentButton.setText(QCoreApplication.translate("BookInfo", u"\u8bc4\u8bba", None))
+        self.downloadButton.setText(QCoreApplication.translate("BookInfo", u"\u4e0b\u8f7d", None))
+        self.clearButton.setText(QCoreApplication.translate("BookInfo", u"\u6e05\u7406", None))
         self.startRead.setText(QCoreApplication.translate("BookInfo", u"\u5f00\u59cb\u9605\u8bfb", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab), QCoreApplication.translate("BookInfo", u"Tags", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_2), QCoreApplication.translate("BookInfo", u"\u9884\u89c8", None))

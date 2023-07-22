@@ -1,11 +1,13 @@
 import json
+import os
+import shutil
 from functools import partial
 
 from PySide6 import QtWidgets, QtCore, QtGui
 from PySide6.QtCore import Qt, QSize, QEvent, Signal
 from PySide6.QtGui import QColor, QFont, QPixmap, QIcon
 from PySide6.QtWidgets import QListWidgetItem, QLabel, QPushButton, QVBoxLayout, QSpacerItem, \
-    QSizePolicy, QScroller, QScrollerProperties
+    QSizePolicy, QScroller, QScrollerProperties, QMessageBox
 
 import config.config
 from component.layout.flow_layout import FlowLayout
@@ -69,12 +71,35 @@ class BookInfoView(QtWidgets.QWidget, Ui_BookInfo, QtTaskBase):
             propertiesOne.setScrollMetric(QScrollerProperties.HorizontalOvershootPolicy, QScrollerProperties.OvershootAlwaysOff)
             QScroller.scroller(self.tagScrollArea).setScrollerProperties(propertiesOne)
 
+    def UpdateFavoriteIcon(self):
+        path = os.path.join(os.path.join(Setting.SavePath.value, config.CachePathDir), "{}/{}_{}".format(config.CurSite, self.bookId, self.token))
+        waifuPath = os.path.join(os.path.join(Setting.SavePath.value, config.CachePathDir), "waifu2x/{}/{}_{}".format(config.CurSite, self.bookId, self.token))
+        if os.path.isdir(path) or os.path.isdir(waifuPath):
+            self.clearButton.setIcon(QIcon(":/png/icon/clear_on.png"))
+        else:
+            self.clearButton.setIcon(QIcon(":/png/icon/clear_off.png"))
+
     def Clear(self):
         self.ClearTask()
         self.preListWidget.clear()
         # self.epsListWidget.clear()
         self.nameToTag.clear()
         self.tabWidget.setCurrentIndex(0)
+
+    def ClearCache(self):
+        isClear = QMessageBox.information(self, '清除缓存', "是否清除本书所有缓存", QtWidgets.QMessageBox.Yes|QtWidgets.QMessageBox.No)
+        if isClear == QtWidgets.QMessageBox.Yes:
+            if not Setting.SavePath.value:
+                return
+            path = os.path.join(os.path.join(Setting.SavePath.value, config.CachePathDir),
+                                "{}/{}_{}".format(config.CurSite, self.bookId, self.token))
+            waifuPath = os.path.join(os.path.join(Setting.SavePath.value, config.CachePathDir),
+                                     "waifu2x/{}/{}_{}".format(config.CurSite, self.bookId, self.token))
+            if os.path.isdir(path):
+                shutil.rmtree(path, True)
+            if os.path.isdir(waifuPath):
+                shutil.rmtree(waifuPath, True)
+        self.UpdateFavoriteIcon()
 
     def SwitchCurrent(self, **kwargs):
         bookId = kwargs.get("bookId")
@@ -189,6 +214,7 @@ class BookInfoView(QtWidgets.QWidget, Ui_BookInfo, QtTaskBase):
 
             self.lastEpsId = -1
             self.LoadHistory()
+            self.UpdateFavoriteIcon()
         else:
             msg = data.get("msg")
             if msg:
