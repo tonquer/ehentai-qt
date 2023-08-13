@@ -177,11 +177,10 @@ class ReadTool(QtWidgets.QWidget, Ui_ReadImg):
         # bookInfo = BookMgr().books.get(bookId)
 
         if self.curIndex >= self.maxPic -1:
-
-            # if epsId + 1 < len(bookInfo.eps):
-            #     QtMsgLabel.ShowMsgEx(self.readImg, Str.GetStr(Str.AutoSkipNext))
-            #     self.OpenNextEps()
-            #     return
+            if self.readImg.isLocal:
+                QtOwner().ShowMsg(Str.GetStr(Str.AutoSkipNext))
+                self.OpenNextEps()
+                return
             self.CloseScrollAndTurn()
             QtOwner().ShowMsg(Str.GetStr(Str.AlreadyNextPage))
             return
@@ -215,7 +214,7 @@ class ReadTool(QtWidgets.QWidget, Ui_ReadImg):
         bookId = self.readImg.bookId
 
         if self.curIndex <= 0:
-            if epsId - 1 >= 0:
+            if self.readImg.isLocal:
                 QtOwner().ShowMsg(Str.GetStr(Str.AutoSkipLast))
                 self.OpenLastEps()
                 return
