@@ -30,6 +30,7 @@ from view.read.read_view import ReadView
 from view.search.rank_view import RankView
 from view.search.search_view import SearchView
 from view.setting.setting_view import SettingView
+from view.tool.local_read_eps_view import LocalReadEpsView
 from view.tool.local_read_view import LocalReadView
 from view.tool.waifu2x_tool_view import Waifu2xToolView
 from view.user.favorite_view import FavoriteView
@@ -96,6 +97,9 @@ class Ui_MainWindows(object):
         self.helpView = HelpView()
         self.helpView.setObjectName(u"helpView")
         self.subStackWidget.addWidget(self.helpView)
+        self.localReadEpsView = LocalReadEpsView()
+        self.localReadEpsView.setObjectName(u"localReadEpsView")
+        self.subStackWidget.addWidget(self.localReadEpsView)
         self.rankView = RankView()
         self.rankView.setObjectName(u"rankView")
         self.subStackWidget.addWidget(self.rankView)

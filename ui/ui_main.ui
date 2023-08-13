@@ -87,6 +87,7 @@
           <item>
            <widget class="AnimationStackWidget" name="subStackWidget">
             <widget class="SearchView" name="searchView"/>
+            <widget class="LocalReadEpsView" name="localReadEpsView"/>
             <widget class="RankView" name="rankView"/>
             <widget class="HelpView" name="helpView"/>
             <widget class="SettingView" name="settingView"/>
@@ -193,6 +194,12 @@
    <class>RankView</class>
    <extends>QWidget</extends>
    <header location="global">view.search.rank_view.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>LocalReadEpsView</class>
+   <extends>QWidget</extends>
+   <header location="global">view.tool.local_read_eps_view.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

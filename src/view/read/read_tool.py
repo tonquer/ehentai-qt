@@ -326,7 +326,14 @@ class ReadTool(QtWidgets.QWidget, Ui_ReadImg):
         self.gpuLabel.setText(QtOwner().settingView.GetGpuName())
 
     def OpenLastEps(self):
-        pass
+        epsId = self.readImg.epsId
+        epsId -= 1
+        if self.readImg.isLocal:
+            if epsId < 0:
+                QtOwner().ShowMsg(Str.GetStr(Str.AlreadyLastChapter))
+                return
+            self.readImg.OpenLocalPage(self.readImg._cacheBook, epsId, 9999)
+            return
     #     epsId = self.readImg.epsId
     #     bookId = self.readImg.bookId
     #     bookInfo = BookMgr().books.get(bookId)
@@ -346,7 +353,13 @@ class ReadTool(QtWidgets.QWidget, Ui_ReadImg):
     #     return
     #
     def OpenNextEps(self):
-        pass
+        epsId = self.readImg.epsId
+        if self.readImg.isLocal:
+            if epsId >= len(self.readImg._cacheBook):
+                QtOwner().ShowMsg(Str.GetStr(Str.AlreadyNextChapter))
+                return
+            self.readImg.OpenLocalPage(self.readImg._cacheBook, epsId, 0)
+            return
     #     epsId = self.readImg.epsId
     #     bookId = self.readImg.bookId
     #     bookInfo = BookMgr().books.get(bookId)

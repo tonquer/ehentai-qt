@@ -62,9 +62,17 @@ class ReadView(QtWidgets.QWidget, QtTaskBase):
         self.pageIndex = -1
         self.isOffline = False
         self.isLocal = False
-        self.cacheBook = None
+        self._cacheBook = None
         self.lastPath = ""
         # QtOwner().owner.WindowsSizeChange.connect(self.qtTool.ClearQImage)
+
+    @property
+    def cacheBook(self):
+        if self._cacheBook:
+            if self._cacheBook.eps:
+                if self.epsId >= 0 and self.epsId < len(self._cacheBook.eps):
+                    return self._cacheBook.eps[self.epsId]
+        return self._cacheBook
 
     @property
     def scrollArea(self):
@@ -202,7 +210,7 @@ class ReadView(QtWidgets.QWidget, QtTaskBase):
         self.token = token
         self.site = site
         self.isLocal = False
-        self.cacheBook = None
+        self._cacheBook = None
         self.Clear()
         # info = BookMgr().GetBook(bookId)
         # if info:
@@ -224,7 +232,6 @@ class ReadView(QtWidgets.QWidget, QtTaskBase):
             QtOwner().owner.showFullScreen()
             self.qtTool.fullButton.setText(Str.GetStr(Str.ExitFullScreen))
 
-        self.epsName = name
         QtOwner().ShowLoading()
 
         # 开始加载
@@ -234,14 +241,19 @@ class ReadView(QtWidgets.QWidget, QtTaskBase):
             config.IsTips = 0
             self.frame.InitHelp()
 
-    def OpenLocalPage(self, v):
+    def OpenLocalPage(self, v, epsId=0, pageIndex=-1):
         if not v:
             return
+        self.Clear()
         assert isinstance(v, LocalData)
-        self.cacheBook = v
+        self.epsId = epsId
+        self._cacheBook = v
+        self.pageIndex = self.cacheBook.lastIndex
+        if pageIndex >= 0:
+           self.pageIndex = pageIndex
+
         self.isOffline = False
         self.isLocal = True
-        self.Clear()
 
         self.qtTool.checkBox.setChecked(Setting.IsOpenWaifu.value)
         self.qtTool.preDownWaifu2x.setChecked(Setting.PreDownWaifu2x.value)
@@ -250,10 +262,7 @@ class ReadView(QtWidgets.QWidget, QtTaskBase):
         self.qtTool.SetData()
 
         # self.qtTool.show()
-        self.bookId = v.id
-        self.epsId = 0
-
-        self.pageIndex = v.lastIndex
+        self.bookId = self.cacheBook.id
 
         self.qtTool.isMaxFull = self.window().isMaximized()
         if Setting.LookReadFull.value:
@@ -726,7 +735,12 @@ class ReadView(QtWidgets.QWidget, QtTaskBase):
             assert isinstance(self.cacheBook, LocalData)
             self.cacheBook.lastIndex = self.curIndex
             self.cacheBook.lastReadTime = int(time.time())
-            QtOwner().localReadView.AddDataToDB(self.cacheBook.id)
+            if self._cacheBook.eps:
+                self._cacheBook.lastReadTime = int(time.time())
+                QtOwner().localReadView.UpdateLastTick(self._cacheBook.id)
+                QtOwner().localReadView.AddEpsDataToDB(self._cacheBook.id, self.cacheBook.id)
+            else:
+                QtOwner().localReadView.AddDataToDB(self.cacheBook.id)
         else:
         	url = QtOwner().bookInfoView.url
         	site = QtOwner().bookInfoView.site

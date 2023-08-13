@@ -157,9 +157,9 @@ class QtOwner(Singleton):
         self.owner.totalStackWidget.setCurrentIndex(1)
         self.owner.readView.OpenPage(bookId, token, site, name, pageIndex=pageIndex, isOffline=QtOwner().isOfflineModel)
 
-    def OpenLocalReadView(self, v):
+    def OpenLocalReadView(self, v, epsId=0):
         self.owner.totalStackWidget.setCurrentIndex(1)
-        self.owner.readView.OpenLocalPage(v)
+        self.owner.readView.OpenLocalPage(v, epsId)
 
     def OpenFavoriteInfo(self, bookId, bookName):
         from view.user.favorite_info_view import FavoriteInfoView
@@ -174,6 +174,9 @@ class QtOwner(Singleton):
 
     def OpenLocalBook(self, bookId):
         self.owner.localReadView.OpenLocalBook(bookId)
+
+    def OpenLocalEpsBook(self, bookId):
+        self.owner.localReadEpsView.OpenLocalBook(bookId)
 
     def OpenBookInfoExt(self, task):
         arg = {"task": task}
@@ -198,6 +201,10 @@ class QtOwner(Singleton):
         # self.owner.subCommentView.SetOpenEvent(commentId, widget)
         arg = {"data": data}
         self.owner.SwitchWidget(self.owner.waifu2xToolView, **arg)
+
+    def OpenLocalEpsView(self, bookId):
+        arg = {"bookId": bookId}
+        self.owner.SwitchWidget(self.owner.localReadEpsView, **arg)
 
     def CloseReadView(self):
         self.owner.totalStackWidget.setCurrentIndex(0)
