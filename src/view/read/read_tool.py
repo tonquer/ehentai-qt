@@ -354,7 +354,7 @@ class ReadTool(QtWidgets.QWidget, Ui_ReadImg):
     def OpenNextEps(self):
         epsId = self.readImg.epsId
         if self.readImg.isLocal:
-            if epsId >= len(self.readImg._cacheBook):
+            if epsId >= len(self.readImg._cacheBook.eps):
                 QtOwner().ShowMsg(Str.GetStr(Str.AlreadyNextChapter))
                 return
             self.readImg.OpenLocalPage(self.readImg._cacheBook, epsId, 0)
